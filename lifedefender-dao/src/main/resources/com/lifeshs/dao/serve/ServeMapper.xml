@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lifeshs.dao.serve.ServeDao">
+
+    <!--根据ID获取二级服务类型-->
+    <select id="getServeType" resultType="com.lifeshs.pojo.serve.ServeTypeSecondDTO">
+        SELECT t2.id,t2.name,t2.code,t1.id as firstId,t1.name as firstName,t1.code as firstCode FROM t_data_serve_type2 t2 INNER JOIN t_data_serve_type t1 ON t2.serveId=t1.id  WHERE t2.id = #{id}
+    </select>
+
+    <!--根据ID获取二级服务类型-->
+    <select id="listServeType" resultType="com.lifeshs.pojo.serve.ServeTypeSecondDTO">
+        SELECT t2.id,t2.name,t2.code,t1.id as firstId,t1.name as firstName,t1.code as firstCode FROM t_data_serve_type2 t2 INNER JOIN t_data_serve_type t1 ON t2.serveId=t1.id
+    </select>
+
+    <!--根据ID获取二级服务类型-->
+    <select id="listServeTypeByParentId" resultType="com.lifeshs.pojo.org.service.ServeTypeDTO">
+        SELECT t2.* FROM t_data_serve_type2 t2 INNER JOIN t_data_serve_type t1 ON t2.serveId=t1.id  WHERE t1.code = #{code}
+    </select>
+
+    <!--根据t_order.serveItemId查询所属的服务类别-->
+    <select id="getByServeItemId" resultType="com.lifeshs.pojo.serve.ServeTypeSecondDTO">
+        SELECT t2.id,t2.name,t2.code,t2.id as firstId,t2.name as firstName,t2.code as firstCode
+        FROM t_data_serve_type2 t2 INNER JOIN t_data_serve_type t1 ON t2.serveId=t1.id  WHERE t2.id = (select serveId FROM t_order WHERE serveItemId=#{id})
+    </select>
+
+    <select id="listFirstServeType" resultType="com.lifeshs.pojo.org.service.ServeTypeDTO">
+        SELECT * FROM t_data_serve_type
+    </select>
+
+    <!--服务类型列表-->
+    <select id = "listFullServeType" resultMap="serveDTO">
+        SELECT id, name, code FROM t_data_serve_type
+    </select>
+
+    <resultMap id = "serveDTO" type="com.lifeshs.pojo.org.service.ServeTypeDTO">
+        <id column="id" property="id"/>
+        <result property="name" column="name"/>
+        <result property="code" column="code"/>
+        <collection property="secondaryServe" column="id" ofType="java.util.List" select="listSecondaryServe" />
+    </resultMap>
+
+    <select id = "listSecondaryServe" resultType="com.lifeshs.pojo.org.service.ServeTypeDTO">
+        SELECT id, name,code FROM t_data_serve_type2 WHERE serveId = #{id}
+    </select>
+
+    <select id="getCommonProject" resultMap="commonProject">
+        SELECT * FROM t_project WHERE projectCode = #{projectCode}
+    </select>
+
+    <resultMap type="com.lifeshs.pojo.org.service.ServiceCommonDTO" id="commonProject">
+        <result column="orgId" property="orgId" />
+        <association property="org" column="orgId" select="com.lifeshs.dao.org.OrgDao.getOrg" />
+    </resultMap>
+    
+    <select id="findServeStatistics" resultType="com.lifeshs.vo.serve.ServeStatisticsVO">
+        SELECT
+            s.id,
+            count(o.id) orgCount,
+            s.`name`,
+            count(DISTINCT od.userId) memberCount,
+            st.`name` parentName
+        FROM
+            t_data_serve_type2 s
+        LEFT JOIN t_data_serve_type st ON st.id = s.serveId
+        LEFT JOIN t_order od ON s.id = od.serveId AND od.`status` IN (3, 4)
+        LEFT JOIN t_org_user ou ON od.orgUserId = ou.id
+        LEFT JOIN t_org o ON o.id = ou.orgId
+        <if test="userNo != null">
+            WHERE o.parentId=#{userNo}
+        </if>
+        GROUP BY s.id
+        ORDER BY parentName
+    </select>
+    
+    <insert id="addServe" parameterType="com.lifeshs.po.org.TServerPO">
+        <selectKey resultType="java.lang.Integer" order="AFTER" keyProperty="id">
+            SELECT LAST_INSERT_ID() AS ID
+        </selectKey>
+        INSERT INTO t_serve(name, code, about, profitShare, image, serveType, classify, chargeMode, createDate, projectType)
+        VALUES(#{name}, #{code}, #{about}, #{profitShare}, #{image}, #{serveType}, #{classify}, #{chargeMode}, NOW(), #{projectType})
+    </insert>
+    
+    <update id="updateServe" parameterType="com.lifeshs.po.org.TServerPO">
+        UPDATE t_serve SET
+            <trim suffixOverrides=",">
+                <if test="name != null">name = #{name},</if>
+                <if test="code != null">code = #{code},</if>
+                <if test="about != null">about = #{about},</if>
+                <if test="profitShare != null">profitShare = #{profitShare},</if>
+                <if test="image != null">image = #{image},</if>
+                <if test="serveType != null">serveType = #{serveType},</if>
+                <if test="classify != null">classify = #{classify},</if>
+                <if test="chargeMode != null">chargeMode = #{chargeMode},</if>
+                <if test="projectType != null">projectType = #{projectType},</if>
+            </trim>
+        WHERE id = #{id}
+    </update>
+    
+    <delete id="delServe">
+        DELETE FROM t_serve WHERE id = #{id}
+    </delete>
+</mapper>

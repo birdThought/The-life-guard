@@ -1,0 +1,153 @@
+@charset "utf-8";
+input{font-family:微软雅黑}
+*:before, *:after, * {
+	box-sizing: border-box;
+	-moz-box-sizing: border-box; /* Firefox */
+	-webkit-box-sizing: border-box; /* Safari */
+}
+
+
+/* 注册页面 */
+.content {
+	min-height: 669px;
+	background: #ddd;
+	padding-top: 30px;
+	padding-bottom:30px;
+}
+
+#signupForm {
+	background: #fff;
+	width: 500px;
+	border-radius: 6px;
+	box-shadow:1px 2px 5px #ccc;
+}
+
+#signupForm .title {
+	height: 50px;
+	line-height: 50px;
+	padding-left: 20px;
+	background-color: #f2f2f2;
+	font-size: 18px;
+	border-bottom:1px solid #eee
+}
+
+.input_edit {
+	border-radius: 5px;
+	padding: 0 10px;
+	height: 40px;
+	outline-color: #48c859;
+	background-color: #fff;
+	width: 90%;
+	border: 1px solid #ddd
+}
+
+.control_contain {
+	padding: 15px 20px;
+	min-height: 500px;
+	font-size: 16px
+}
+
+.control_contain .control_item:nth-of-type(n) {
+	margin-bottom: 16px;
+}
+.control_contain .control_item label:not(.error){
+	color:#6c6c6c;
+	font-size:15px;
+	padding-left:5px;
+}
+.control_contain .control_item .control {
+	margin-top: 8px;
+}
+
+.control_contain .control_item .control .uploadCard{
+	display:inline-block;
+	width:278px;
+	height:195px;
+	border-radius:6px;
+	border:1px solid #ccc;
+}
+.control_contain .control_item .control .uploadCard img{
+	width:276px;
+	height:140px;
+	border-radius:6px 6px 0 0;
+}
+.control_contain .control_item .control .uploadCard div{
+	height:55px;line-height:55px;
+}
+.control_contain .control_item .control .upload_notice{
+	font-size:15px;color:#6c6c6c;
+}
+.control_contain .control_item .control .upload_notice:nth-of-type(2){
+	margin-top:10px
+}
+.control_contain .control_item .control .uploadCard .openFile{
+	cursor:pointer;
+	border:1px solid #ccc;
+	padding:6px 25px;
+	margin-left:15px;
+	border-radius:6px;
+	font-size:14px
+}
+.control_contain .control_item .getVerify {
+	padding: 0px 15px;
+	background-color: #48c859;
+	color: white;
+	border-radius: 6px;
+	line-height: 40px;
+	height: 40px;
+	outline: none;
+	border: none;
+	font-family: 微软雅黑;
+	cursor: pointer;
+	margin-left: 15px
+}
+
+.control_contain .regist_btn {
+	height: 40px;
+	line-height: 40px;
+	text-align: center;
+	color: white;
+	border-radius: 6px;
+	background-color: #48c859;
+	margin: 15px 0;
+	cursor: pointer;
+	width:100%;
+	font-size:16px;
+	border:none;
+	outline:none;
+}
+.psw_strenth{
+	text-align:right;
+	padding-right:10%;
+}
+.psw_strenth div{
+	width: 70px;
+	height: 10px;
+	margin-right:8px;
+	background-color:#ddd;
+	display:inline-block;
+}
+.control_contain .regist_btn:hover , .control_contain .control_item .getVerify:hover {
+	opacity: 0.9;
+}
+
+.control_contain .regist_btn:active , .control_contain .control_item .getVerify:active {
+	opacity: 0.7;
+}
+
+.control_contain a {
+	color: #81b2f4;
+}
+
+.control_contain a:hover {
+	text-decoration: underline;
+}
+
+label.error {
+	color: red;
+	font-size:14px;
+}
+
+input.error {
+	border: 1px solid red !important;
+}

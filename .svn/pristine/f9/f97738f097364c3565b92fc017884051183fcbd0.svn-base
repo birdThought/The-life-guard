@@ -1,0 +1,101 @@
+@charset "utf-8";
+body,div,ul,li,ol,h1,h2,h3,h4,h5,h6,input,textarea,select,p,dl,dt,dd,a,img,button,form,table,th,tr,td,tbody,article,aside,details,figcaption,figure,footer,header,hgroup,menu,nav,section{margin:0;padding:0;}
+body{font:normal 14px/1.5 Tahoma,"Lucida Grande",Verdana,"Microsoft Yahei",STXihei,hei;}
+em,i{font-style:normal;}
+strong{font-weight:normal;}
+a{text-decoration:none;color:#666666;font-family:Microsoft yahei,Tahoma,Arial,sans-serif;}
+ul,ol{list-style:none;}
+h1,h2,h3,h4,h5,h6{font-size:100%;font-family:Microsoft yahei;}
+img{border:none;vertical-align:middle;}
+input{outline-color:#48c858}
+/*号码绑定  必要样式*/
+
+.container{
+	width:918px;
+	height:840px;
+	border:1px solid #ddd;
+	margin:20px 40px;
+}
+.container h3{
+	height:60px;
+	line-height:60px;
+	font-size:18px;
+	font-weight:400;
+	margin:0 30px 20px;
+	border-bottom:1px dashed #ddd;
+}
+.container .web-width{margin:30px auto;width:600px;}
+.for-liucheng{width:560px;height:50px;padding:20px 0 0 0;position:relative;}
+.liulist{float:left;width:33%;height:5px;background:#ccc;}
+.liutextbox{position:absolute;width:100%;left:0;top:5px;}
+.liutextbox .liutext{float:left;width:33%;text-align:center;}
+.liutextbox .liutext em{ display:inline-block;width:30px; height:30px;-moz-border-radius: 24px; -webkit-border-radius: 24px;border-radius:24px; background:#ccc; text-align:center; font-size:16px; line-height:30px; font-style:normal; font-weight:bold;color:#fff;}
+.liutextbox .liutext strong{display:inline-block;height:40px;line-height:40px;font-weight:500;}
+.liulist.for-cur{background:#48c858;}
+.liutextbox .for-cur em{ background:#48c858;}
+.faild em{ background:#F0AD4E !important;}
+
+.container .findPsw{margin-top:40px;}
+.findPsw li{
+	margin-bottom: 30px;
+}
+.findPsw li input{
+	margin-left:30px;
+	width:280px;
+	height:40px;
+	border:1px solid #ddd;
+	border-radius:3px;
+	padding:0 8px;
+}
+.findPsw li button.tijiao{
+	height: 40px;
+    border: none;
+    border-radius: 5px;
+    font-family:微软雅黑;
+    outline:none;
+    cursor:pointer;
+    
+}
+.findPsw li button.tijiao:active{
+	background-color:#37b947
+}
+#email{
+	margin-left: 55px;
+}
+.findPsw li .idcode{
+	margin-left:42px;
+}
+.findPsw li #btnCode{
+	width:140px;
+	font-weight:600;
+	color:#48c858;
+	background:#fff;
+	border:1px solid #48c858;
+	cursor:pointer
+}
+.findPsw li .tijiao{
+	margin-left:86px;
+	width:140px;
+	background:#48c858;
+	color:#fff;
+	font-size:16px;
+	border-radius:5px;
+	border:none;
+	outline:none;
+	cursor:pointer;
+	font-family:微软雅黑
+}
+.findPsw li .tijiao:active{
+	background-color:#38ba48
+}
+.success{
+	margin-top:40px;
+	margin-left:180px;
+}
+.success img{float:left;}
+.success ul{
+	margin-left:20px;
+	font-size:16px;
+	float:left;
+	padding-top:10px;
+}

@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lifeshs.dao1.famousDoctor.FamousDoctorDao" >
+    <select id="getFamousDoctor" resultType="com.lifeshs.po.famousDoctor.FamousDoctorPO">
+        SELECT <include refid="FAMOUS_DOCTOR_ALL_COLUMN" />
+        FROM t_famous_doctor
+        WHERE id = #{id}
+    </select>
+
+    <!-- 搜索名医（名字，职业） -->
+    <select id="findFamousDoctorListWithCondition" resultType="com.lifeshs.po.famousDoctor.FamousDoctorPO">
+        SELECT <include refid="FAMOUS_DOCTOR_ALL_COLUMN" />
+        FROM t_famous_doctor
+        <where>
+            <if test="likeName != null">
+                name LIKE CONCAT('%', #{likeName}, '%')
+            </if>
+            <choose>
+                <!-- 如果likeName跟professionKindLikeName相同，只要满足其中一个模糊查询条件就可以（通用模糊查询，两个条件满足其中一个即可） -->
+                <!-- 因为choose-when只会选择其中一条分支，所以先把复杂的条件放在首位去判断 -->
+                <when test="(likeName != null) and (professionKindLikeName != null) and (likeName == professionKindLikeName)">
+                    OR professionKindName LIKE CONCAT('%', #{professionKindLikeName}, '%')
+                </when>
+                <!-- 走到这里说明不是通用的模糊查询，只需要明确，kind的名字（模糊）是否匹配就可以了 -->
+                <when test="professionKindLikeName != null">
+                    AND professionKindName LIKE CONCAT('%', #{professionKindLikeName}, '%')
+                </when>
+            </choose>
+        </where>
+        ORDER BY id
+        LIMIT #{startRow}, #{pageSize}
+    </select>
+    
+    <select id="countFamousDoctorWithCondition" resultType="java.lang.Integer">
+        SELECT COUNT(1)
+        FROM t_famous_doctor
+        <where>
+            <if test="likeName != null">
+                name LIKE CONCAT('%', #{likeName}, '%')
+            </if>
+            <choose>
+                <!-- 如果likeName跟professionKindLikeName相同，只要满足其中一个模糊查询条件就可以（通用模糊查询，两个条件满足其中一个即可） -->
+                <!-- 因为choose-when只会选择其中一条分支，所以先把复杂的条件放在首位去判断 -->
+                <when test="(likeName != null) and (professionKindLikeName != null) and (likeName == professionKindLikeName)">
+                    OR professionKindName LIKE CONCAT('%', #{professionKindLikeName}, '%')
+                </when>
+                <!-- 走到这里说明不是通用的模糊查询，只需要明确，kind的名字（模糊）是否匹配就可以了 -->
+                <when test="professionKindLikeName != null">
+                    AND professionKindName LIKE CONCAT('%', #{professionKindLikeName}, '%')
+                </when>
+            </choose>
+        </where>
+    </select>
+    
+    <select id="findProKindNameList" resultType="java.lang.String">
+        SELECT professionKindName FROM t_famous_doctor GROUP BY professionKindName ORDER BY professionKindName LIMIT #{startRow}, #{pageSize}
+    </select>
+    
+    <select id="findFamousDoctorKind" resultMap="proKindVO">
+        SELECT *, (
+                SELECT COUNT(1) FROM t_famous_doctor
+                WHERE professionKindName = main.professionKindName
+                GROUP BY professionKindName
+            ) AS userCount
+        FROM
+            t_famous_doctor main
+        WHERE (
+            SELECT COUNT(1) FROM t_famous_doctor sub
+            WHERE
+                main.professionKindName = sub.professionKindName
+                AND main.id &gt; sub.id
+        ) &lt; #{maxAvgGroupRow}
+        AND main.professionKindName IN <foreach collection="kindNameList" open="(" close=")" separator="," item="kindName">#{kindName}</foreach>
+        ORDER BY main.professionKindName, main.id
+    </select>
+    
+    <resultMap type="com.lifeshs.vo.famousDoctor.ProfessionKindVO" id="proKindVO">
+        <id property="professionKindName" column="professionKindName"/>
+        <result property="userCount" column="userCount"/>
+        <collection property="doctorList" ofType="com.lifeshs.po.famousDoctor.FamousDoctorPO" notNullColumn="id">
+            <id property="id" column="id"/>
+            <result property="name" column="name"/>
+            <result property="photo" column="photo"/>
+            <result property="professionalName" column="professionalName"/>
+            <result property="professionKindName" column="professionKindName"/>
+            <result property="description" column="description"/>
+            <result property="price" column="price"/>
+            <result property="abbreviatedAddress" column="abbreviatedAddress"/>
+            <result property="address" column="address"/>
+            <result property="longitude" column="longitude"/>
+            <result property="latitude" column="latitude"/>
+            <result property="areaCode" column="areaCode"/>
+            <result property="visitingTime" column="visitingTime"/>
+            <result property="detail" column="detail"/>
+            <result property="createDate" column="createDate"/>
+            <result property="modifyDate" column="modifyDate"/>
+        </collection>
+    </resultMap>
+    
+    <select id="countProKindName" resultType="java.lang.Integer">
+        SELECT COUNT(DISTINCT(professionKindName)) FROM t_famous_doctor
+    </select>
+    
+    <sql id="FAMOUS_DOCTOR_ALL_COLUMN">
+        id, name, photo, professionalName, honorary, professionKindName, description, price, abbreviatedAddress,
+        address, longitude, latitude, areaCode, visitingTime, detail, expert, createDate, modifyDate
+    </sql>
+</mapper>

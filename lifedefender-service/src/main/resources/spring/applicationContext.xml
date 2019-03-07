@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:tx="http://www.springframework.org/schema/tx" xmlns:aop="http://www.springframework.org/schema/aop"
+    xmlns:context="http://www.springframework.org/schema/context" xmlns="http://www.springframework.org/schema/beans"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://www.springframework.org/schema/tx
+       http://www.springframework.org/schema/tx/spring-tx.xsd
+       http://www.springframework.org/schema/aop
+       http://www.springframework.org/schema/aop/spring-aop.xsd
+       http://www.springframework.org/schema/context
+       http://www.springframework.org/schema/context/spring-context.xsd
+    ">
+    <import resource="classpath:mybatis/spring-mybatis.xml"/>
+    <!-- <import resource="classpath:spring/lifedf-component.xml"/> -->
+    <!-- <aop:aspectj-autoproxy /> -->
+    <!--通知spring使用cglib而不是jdk的来生成代理方法,使AOP可以拦截到Controller层 <context:component-scan 
+        base-package="com.*" /> -->
+    <aop:aspectj-autoproxy proxy-target-class="true" />
+    
+    
+    <!-- 引入redis -->
+    <import resource="classpath:spring/applicationContext-redis.xml"/>
+
+    <!-- 自动扫描(自动注入) -->
+    <context:component-scan base-package="com.lifeshs.service.*" />
+    <context:component-scan base-package="com.lifeshs.dao.*" />
+    <!-- 新的自动扫描 -->
+    <context:component-scan base-package="com.lifeshs.service1.*" />
+    <context:component-scan base-package="com.lifeshs.dao1.*" />
+    <context:component-scan base-package="com.lifeshs.thirdservice.*"/>
+
+    <!-- 手动添加 -->
+    <bean class="com.lifeshs.task.TaskPoolService" name="taskPoolService" />
+
+    <bean class="com.lifeshs.thirdservice.HuanXinService">
+        <property name="appKey" value="${huanxin.orgName}#${huanxin.appName}" />
+        <property name="clientId" value="${huanxin.clientId}" />
+        <property name="clientSecret" value="${huanxin.clientSecret}" />
+        <property name="url" value="https://a1.easemob.com/${huanxin.orgName}/${huanxin.appName}" />
+    </bean>
+    <bean class="com.lifeshs.thirdservice.SMSService" />
+    
+    <bean class="com.lifeshs.component.umeng.util.Key" name="appAndroidKey">
+        <property name="appKey" value="${umeng.app.android.key}" />
+        <property name="masterSecret" value="${umeng.app.android.masterSecret}" />
+    </bean>
+    <bean class="com.lifeshs.component.umeng.util.Key" name="appIOSKey">
+        <property name="appKey" value="${umeng.app.ios.key}" />
+        <property name="masterSecret" value="${umeng.app.ios.masterSecret}" />
+    </bean>
+    <bean class="com.lifeshs.component.umeng.util.Key" name="mappAndroidKey">
+        <property name="appKey" value="${umeng.mapp.android.key}" />
+        <property name="masterSecret" value="${umeng.mapp.android.masterSecret}" />
+    </bean>
+    <bean class="com.lifeshs.component.umeng.util.Key" name="mappIOSKey">
+        <property name="appKey" value="${umeng.mapp.ios.key}" />
+        <property name="masterSecret" value="${umeng.mapp.ios.masterSecret}" />
+    </bean>
+    
+    <bean class="com.lifeshs.thirdservice.UMengPushService">
+        <constructor-arg name="appAndroidKey" ref="appAndroidKey" />
+        <constructor-arg name="appIOSKey" ref="appIOSKey" />
+        <constructor-arg name="mappAndroidKey" ref="mappAndroidKey" />
+        <constructor-arg name="mappIOSKey" ref="mappIOSKey" />
+        <constructor-arg name="productionMode" value="${umeng.productionMode}" />
+    </bean>
+    <bean class="com.lifeshs.thirdservice.impl.AlipayServiceImpl"/>
+
+    <bean class="com.lifeshs.thirdservice.RedisService"/>
+
+    <bean class="com.lifeshs.service.alipay.AlipayService"/>
+
+    <bean class="com.lifeshs.thirdservice.WeiXinGZPTApi">
+        <constructor-arg name="grantType" value="client_credential" />
+        <constructor-arg name="appid" value="${weixin.appId}" />
+        <constructor-arg name="secret" value="${weixin.secret}" />
+    </bean>
+
+    <tx:annotation-driven transaction-manager="transactionManager" proxy-target-class="true" order="1"/>
+
+    <!-- 配置事务管理器-->
+    <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <property name="dataSource" ref="dataSource"/>
+    </bean>
+
+    <!-- 拦截器方式配置事物 -->
+    <tx:advice id="transactionAdvice" transaction-manager="transactionManager">
+        <tx:attributes>
+            <tx:method name="add*" propagation="REQUIRED" rollback-for="java.lang.Exception,com.lifeshs.common.exception.common.OperationException"/>
+            <tx:method name="insert*" propagation="REQUIRED" rollback-for="java.lang.Exception,com.lifeshs.common.exception.common.OperationException"/>
+            <tx:method name="save*" propagation="REQUIRED" rollback-for="java.lang.Exception,com.lifeshs.common.exception.common.OperationException"/>
+            <tx:method name="update*" propagation="REQUIRED" rollback-for="java.lang.Exception,com.lifeshs.common.exception.common.OperationException"/>
+            <tx:method name="modify*" propagation="REQUIRED" rollback-for="java.lang.Exception,com.lifeshs.common.exception.common.OperationException"/>
+            <tx:method name="edit*" propagation="REQUIRED" rollback-for="java.lang.Exception,com.lifeshs.common.exception.common.OperationException"/>
+            <tx:method name="del*" propagation="REQUIRED" rollback-for="java.lang.Exception,com.lifeshs.common.exception.common.OperationException"/>
+            <tx:method name="remove*" propagation="REQUIRED" rollback-for="java.lang.Exception,com.lifeshs.common.exception.common.OperationException"/>
+            <tx:method name="repair" propagation="REQUIRED" rollback-for="java.lang.Exception"/>
+            <tx:method name="delAndRepair" propagation="REQUIRED" rollback-for="java.lang.Exception"/>
+            <tx:method name="register*" propagation="REQUIRED" rollback-for="java.lang.Exception"/>
+            <tx:method name="move" propagation="REQUIRED" rollback-for="java.lang.Exception"/>
+            <tx:method name="confirm*" propagation="REQUIRED" rollback-for="java.lang.Exception"/>
+            <tx:method name="get*" read-only="true" propagation="SUPPORTS"/>
+            <tx:method name="find*" read-only="true" propagation="SUPPORTS"/>
+            <tx:method name="load*" read-only="true" propagation="SUPPORTS"/>
+            <tx:method name="search*" read-only="true" propagation="SUPPORTS"/>
+            <tx:method name="list*" read-only="true" propagation="SUPPORTS"/>
+            <tx:method name="datagrid*" propagation="SUPPORTS"/>
+
+        </tx:attributes>
+    </tx:advice>
+
+    <aop:config>
+        <aop:pointcut id="serviceTransactionPointcut" expression="execution(* com.lifeshs.service*..*(..))"/>
+        <aop:advisor advice-ref="transactionAdvice" pointcut-ref="serviceTransactionPointcut" order="0"/>
+    </aop:config>
+
+    <!-- 配置druid监控spring jdbc -->
+    <bean id="druid-stat-interceptor" class="com.alibaba.druid.support.spring.stat.DruidStatInterceptor">
+    </bean>
+
+
+</beans>

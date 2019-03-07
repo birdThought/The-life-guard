@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lifeshs.dao1.data.InvitationDao">
+    <insert id="addInvitation" parameterType="com.lifeshs.po.invitation.InvitationPO">
+        <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+        INSERT INTO t_data_cooperative_agency_invitation_code(agencyId,invitationCode,createDate)
+        VALUES(#{agencyId},#{invitationCode},NOW())
+    </insert>
+    
+    <insert id="addInvitationList">
+        INSERT INTO t_data_cooperative_agency_invitation_code(agencyId,invitationCode,createDate)
+        VALUES
+        <foreach collection="invitationPOList" item="item" separator=",">
+            (#{item.agencyId},#{item.invitationCode},NOW())
+        </foreach>
+    </insert>
+
+    <update id="updateInvitationCodeToUsedByCode">
+        UPDATE t_data_cooperative_agency_invitation_code SET entryDate = NOW() WHERE invitationCode = #{code}
+    </update>
+    
+    <select id="getInvitationCode" resultType="com.lifeshs.po.invitation.InvitationPO">
+        SELECT <include refid="INVITATION_CODE_ALL_COLUMN" /> FROM t_data_cooperative_agency_invitation_code WHERE id = #{id}
+    </select>
+    
+    <select id="getInvitationCodeByCode" resultType="com.lifeshs.po.invitation.InvitationPO">
+        SELECT <include refid="INVITATION_CODE_ALL_COLUMN" /> FROM t_data_cooperative_agency_invitation_code WHERE invitationCode = #{code}
+    </select>
+    
+    <sql id="INVITATION_CODE_ALL_COLUMN">id, agencyId, invitationCode, entryDate, createDate</sql>
+</mapper>

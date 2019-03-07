@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html>
+	<!--step3:填写时间-->
+
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="initial-scale=1,maximum-scale=1, minimum-scale=1">
+		<title></title>
+		<link rel="stylesheet" href="/static/platform/v2.2.0/css/thirdpart/jztx/home_index.css" />
+		<script type="text/javascript" src="/static/platform/v2.2.0/js/thirdpart/jztx/mode.js"></script>
+		<script type="text/javascript" src="/static/platform/v2.2.0/js/thirdpart/jztx/jq.js"></script>
+		<script type="text/javascript" src="/static/platform/v2.2.0/js/thirdpart/jztx/vue.js"></script>
+		<!-- 引入样式 -->
+		<link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+		<!-- 引入组件库 -->
+		<script src="https://unpkg.com/element-ui/lib/index.js"></script>
+		<script>
+			var data = {
+				pickerOptions1: {
+					disabledDate(time) {
+						return time.getTime() > Date.now();
+					},
+					shortcuts: [{
+						text: '今天',
+						onClick(picker) {
+							picker.$emit('pick', new Date());
+						}
+					}, {
+						text: '昨天',
+						onClick(picker) {
+							const date = new Date();
+							date.setTime(date.getTime() - 3600 * 1000 * 24);
+							picker.$emit('pick', date);
+						}
+					}, {
+						text: '一周前',
+						onClick(picker) {
+							const date = new Date();
+							date.setTime(date.getTime() - 3600 * 1000 * 24 * 7);
+							picker.$emit('pick', date);
+						}
+					}]
+				},
+				step3: {
+					//日期
+					date: '',
+					//上下班时间
+					starttime: '',
+					endtime: '',
+					//内容
+					content: '',
+
+					//休息方式及时长
+					restoptions: [{
+						value: '每月',
+						label: '每月'
+					}, {
+						value: '每周',
+						label: '每周'
+					}],
+					restday: '',
+					restway: '',
+					//是否住家，性别，能否自理
+					homeoptions: [{
+						value: '住家',
+						label: '住家'
+					}, {
+						value: '不住家',
+						label: '不住家'
+					}],
+					babysexoptions: [{
+						value: '男',
+						label: '男'
+					}, {
+						value: '女',
+						label: '女'
+					}, {
+						value: '男女都有',
+						label: '男女都有'
+					}],
+					zilioptions: [{
+						value: '完全自理',
+						label: '完全自理'
+					}, {
+						value: '半自理',
+						label: '半自理'
+					}, {
+						value: '不能自理',
+						label: '不能自理'
+					}, {
+						value: '其他',
+						label: '其他'
+					}],
+					babyage:'',
+					ishome: '',
+					babysex: '',
+					zili: ''
+				}
+			};
+		</script>
+
+	</head>
+
+	<body>
+		<div class="bg"></div>
+
+		<div id="block_form" :style="temp==1||temp==3?'height: 42rem;':'height: 32rem;'">
+			<!--表单背景-->
+			<div class="block_form_bg"></div>
+			<!--end 表单背景-->
+
+			<div class="block_img">
+				<img src="img/woman.png" style="width: 5rem;height: 5rem;" />
+			</div>
+
+			<!--提示-->
+			<div class="block_tip">
+				<label style="color: orange;"><b>step 3</b></label>
+				<div>{{title}}</div>
+				<div>请选择您需要的服务项目</div>
+			</div>
+			<!--end 提示-->
+			<!--选择框块-->
+			<div class="block_option" style="text-align: center;">
+				<div class="block">
+					<span class="demonstration">需求日期</span>
+					<el-date-picker style="width: 20rem;" v-model="data.step3.date" type="date" placeholder="选择日期">
+					</el-date-picker>
+				</div>
+			</div>
+			<!--end 选择框块-->
+			<!--上班时间-->
+			<div v-if="temp==2" class="block_option" style="text-align: center;">
+				<span>上班时间</span>
+				<el-time-select style="width: 20rem;" v-model="data.step3.starttime" :picker-options="{start: '00:00',step: '00:60',end: '24:00'}" placeholder="选择时间">
+				</el-time-select>
+			</div>
+			<!--end 上班时间-->
+			<!--下班时间-->
+			<div v-if="temp==2" class="block_option" style="text-align: center;">
+				<span>下班时间</span>
+				<el-time-select style="width: 20rem;" v-model="data.step3.endtime" :picker-options="{start: '00:00',step: '00:60',end: '24:00'}" placeholder="选择时间">
+				</el-time-select>
+			</div>
+			<!--end 下班时间-->
+
+			<!--休息：住家、陪护、育婴-->
+			<div v-if="temp==1|temp==4|temp==5" class="block_option" style="text-align: center;">
+				<span>休息方式</span>
+				<el-input v-model="data.step3.restday" placeholder="请输入休息天数" style="display: inline-block;width: 10rem;"></el-input>
+				<el-select v-model="data.step3.restway" placeholder="请选择" style="width: 10rem;">
+					<el-option v-for="item in data.step3.restoptions" :key="item.value" :label="item.label" :value="item.value">
+					</el-option>
+				</el-select>
+			</div>
+			<!--end 休息：住家、陪护、育婴-->
+
+			<!--宝宝：陪护、育婴-->
+			<div v-if="temp==4||temp==5" class="block_option" style="text-align: center;">
+				<span class="demonstration">具体服务</span>
+				<el-select v-model="data.step3.ishome" placeholder="是否住家" style="width: 6.52rem;">
+					<el-option v-for="item in data.step3.homeoptions" :key="item.value" :label="item.label" :value="item.value">
+					</el-option>
+				</el-select>
+				<el-select v-model="data.step3.babysex" placeholder="照顾者性别" style="width: 6.52rem;">
+					<el-option v-for="item in data.step3.babysexoptions" :key="item.value" :label="item.label" :value="item.value">
+					</el-option>
+				</el-select>
+				
+				<el-select v-if="temp==4" v-model="data.step3.zili" placeholder="自理能力" style="width: 6.52rem;">
+					<el-option v-for="item in data.step3.zilioptions" :key="item.value" :label="item.label" :value="item.value">
+					</el-option>
+				</el-select>
+				<el-input v-if="temp==5" v-model="data.step3.babyage" placeholder="请输入宝宝年龄" style="display: inline-block;width: 6.52rem;"></el-input>
+				
+			</div>
+			<!--end 宝宝：陪护、育婴-->
+
+			<!--时长-->
+			<div v-if="temp==3" class="block_option" style="text-align: center;">
+				<span class="demonstration">工作天数</span>
+				<el-input v-model="data.step3.content" placeholder="请输入工作天数" style="display: inline-block;width: 20rem;"></el-input>
+			</div>
+			<div v-if="temp!=3&&temp!=6" class="block_option" style="text-align: center;">
+				<span class="demonstration">工作月数</span>
+				<el-input v-model="data.step3.content" placeholder="请输入工作月数" style="display: inline-block;width: 20rem;"></el-input>
+			</div>
+			<div v-if="temp!=3&&temp==6" class="block_option" style="text-align: center;">
+				<span class="demonstration">月嫂时长</span>
+				<el-input v-model="data.step3.content" placeholder="请输入月嫂工作天数" style="display: inline-block;width: 20rem;"></el-input>
+			</div>
+			<!--end 时长-->
+
+		</div>
+
+		<!--按钮块-->
+		<div id="block_btn" class="block_btn">
+			<div>
+				<div @click="back($event)">上一步</div>
+			</div>
+			<div>
+				<div @click="forword($event)">下一步</div>
+			</div>
+		</div>
+		<!--end 按钮块-->
+
+		<script>
+			var temp = sessionStorage.getItem('step1_temp');
+			var title = sessionStorage.getItem('title');
+
+			var vue = new Vue({
+				el: '#block_form',
+				data: {
+					data,
+					temp,
+					title
+				}
+			});
+			var block_btn = new Vue({
+				el: '#block_btn',
+				methods: {
+					back: function(event) {
+						sessionStorage.setItem("isStep1", false);
+						window.location = 'home.html';
+					},
+					forword: function(event) {
+						sessionStorage.setItem('step3', JSON.stringify(data.step3));
+						window.location = 'textarea.html';
+					}
+				}
+			});
+		</script>
+	</body>
+
+</html>

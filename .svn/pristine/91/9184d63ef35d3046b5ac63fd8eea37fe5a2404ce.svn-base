@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?><project-modules id="moduleCoreId" project-version="1.5.0">
+    <wb-module deploy-name="lifedefender-mobile">
+        <wb-resource deploy-path="/" source-path="/target/m2e-wtp/web-resources"/>
+        <wb-resource deploy-path="/" source-path="/src/main/webapp" tag="defaultRootSource"/>
+        <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/main/java"/>
+        <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/main/resources"/>
+        <dependent-module archiveName="lifedefender-common-1.0-SNAPSHOT.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/lifedefender-common/lifedefender-common">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="lifedefender-service-1.0-SNAPSHOT.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/lifedefender-service/lifedefender-service">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="lifedefender-model-1.0-SNAPSHOT.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/lifedefender-model/lifedefender-model">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="lifedefender-component-1.0-SNAPSHOT.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/lifedefender-component/lifedefender-component">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="lifedefender-dao-1.0-SNAPSHOT.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/lifedefender-dao/lifedefender-dao">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="lifedefender-security-1.0-SNAPSHOT.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/lifedefender-security/lifedefender-security">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <property name="context-root" value="lifedefender-mobile"/>
+        <property name="java-output-path" value="/lifedefender-mobile/target/classes"/>
+    </wb-module>
+</project-modules>

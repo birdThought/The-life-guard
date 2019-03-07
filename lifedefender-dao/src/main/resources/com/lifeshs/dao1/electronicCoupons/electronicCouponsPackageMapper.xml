@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lifeshs.dao1.electronicCoupons.ElectronicCouponsPackageDao">
+
+    <insert id="addPackage" useGeneratedKeys="true" keyProperty="id" parameterType="com.lifeshs.po.electronicCoupons.ElectronicCouponsPackagePO">
+        INSERT INTO t_electronic_coupons_package(name, price, code, instructions, businessId, createDate)
+        VALUES(#{name}, #{price}, #{code}, #{instructions}, #{businessId}, NOW())
+    </insert>
+
+    <update id="updatePackage" parameterType="com.lifeshs.po.electronicCoupons.ElectronicCouponsPackagePO">
+        UPDATE t_electronic_coupons_package SET
+        <if test="name != null">
+            name = #{name},
+        </if>
+        <if test="price != null">
+            price = #{price},
+        </if>
+        <if test="code!= null">
+            code = #{code},
+        </if>
+        <if test="instructions != null">
+            instructions = #{instructions},
+        </if>
+        <if test="deleted != null">
+            deleted = #{deleted},
+        </if>
+        <if test="businessId != null">
+            businessId = #{businessId},
+        </if>
+        modifyDate = NOW()
+        WHERE id = #{id}
+    </update>
+
+    <select id="getPackage" resultMap="packageVO">
+        SELECT <include refid="packageVOAllColumn" />
+        FROM t_electronic_coupons_package p
+            LEFT JOIN t_electronic_coupons_package_templet_relation r ON r.packageId = p.id
+            LEFT JOIN t_electronic_coupons_templet t ON t.id = r.templetId
+            LEFT JOIN t_org o ON o.id = t.orgId
+        WHERE
+            p.id = #{id}
+        ORDER BY t.id
+    </select>
+
+    <select id="findPackageByCode" resultMap="packageVO">
+        SELECT <include refid="packageVOAllColumn" />
+        FROM t_electronic_coupons_package p
+        LEFT JOIN t_electronic_coupons_package_templet_relation r ON r.packageId = p.id
+        LEFT JOIN t_electronic_coupons_templet t ON t.id = r.templetId
+        LEFT JOIN t_org o ON o.id = t.orgId
+        WHERE
+            p.code = #{code}
+            AND p.deleted = FALSE
+        ORDER BY t.id
+    </select>
+
+    <select id="countPackageWithCondition" resultType="java.lang.Integer">
+        SELECT COUNT(1) FROM t_electronic_coupons_package
+        WHERE deleted = FALSE
+    </select>
+
+    <select id="findPackageListWithCondition" resultMap="packageVO">
+        SELECT <include refid="packageVOAllColumn" />
+        FROM (
+            SELECT id, name, price, code, instructions, businessId, deleted, createDate, modifyDate
+            FROM t_electronic_coupons_package
+            WHERE deleted = FALSE
+            ORDER BY id DESC
+            LIMIT #{startRow}, #{pageSize}
+        ) AS p
+        LEFT JOIN t_electronic_coupons_package_templet_relation r ON r.packageId = p.id
+        LEFT JOIN t_electronic_coupons_templet t ON t.id = r.templetId
+        LEFT JOIN t_org o ON o.id = t.orgId
+        ORDER BY
+        p.id DESC, t.id
+    </select>
+
+    <resultMap type="com.lifeshs.vo.electronicCoupons.ElectronicCouponsPackageVO" id="packageVO">
+        <id property="id" column="pId" />
+        <result property="name" column="pName" />
+        <result property="price" column="pPrice" />
+        <result property="code" column="pCode" />
+        <result property="instructions" column="pInstructions"/>
+        <result property="businessId" column="pBusinessId"/>
+        <result property="deleted" column="pDeleted" />
+        <result property="createDate" column="pCreateDate" />
+        <result property="modifyDate" column="pModifyDate" />
+        <collection property="templetList" notNullColumn="tId"
+            ofType="com.lifeshs.vo.electronicCoupons.CouponsTempletVO">
+            <id property="id" column="tId" />
+            <result property="name" column="tName" />
+            <result property="price" column="tPrice" />
+            <result property="orgId" column="tOrgId" />
+            <result property="serveCode" column="tServeCode" />
+            <result property="serveItemId" column="tServeItemId" />
+            <result property="projectCode" column="tProjectCode" />
+            <result property="overdueModel" column="tOverdueModel" />
+            <result property="validDay" column="tValidDay" />
+            <result property="endDate" column="tEndDate" />
+            <result property="deleted" column="tDeleted" />
+            <result property="createDate" column="tCreateDate" />
+            <result property="modifyDate" column="tModifyDate" />
+            <result property="orgName" column="oName"/>
+            <result property="projectName" column="tProjectName"/>
+            <result property="serveItemName" column="tServeItemName"/>
+        </collection>
+    </resultMap>
+
+    <sql id="packageVOAllColumn">
+        p.id AS pId, p.name AS pName, p.price AS pPrice, p.instructions AS pInstructions,
+        p.code AS pCode, p.businessId AS pBusinessId, p.deleted AS pDeleted, p.createDate AS pCreateDate,
+        p.modifyDate AS pModifyDate,
+        t.id AS tId, t.name AS tName, t.price AS tPrice, t.orgId AS tOrgId, t.serveCode AS tServeCode,
+        t.serveItemId AS tServeItemId, t.projectCode AS tProjectCode, t.overdueModel AS tOverdueModel,
+        t.validDay AS tValidDay, t.endDate AS tEndDate, t.deleted AS tDeleted, t.createDate AS tCreateDate,
+        t.modifyDate AS tModifyDate, t.serveItemName AS tServeItemName, t.projectName AS tProjectName,
+        o.orgName AS oName
+    </sql>
+</mapper>

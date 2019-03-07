@@ -1,0 +1,22 @@
+
+<div>
+    <label>Menu name:</label> <input #menuName />
+    <button (click)="add(menuName.value); menuName.value=''">
+        Add
+    </button>
+</div>
+<ul class="menus">
+    <li *ngFor="let menu of menus"
+        [class.selected]="menu === selectedMenu"
+        (click)="onSelect(menu)">
+        <span class="badge">{{menu.id}}</span> {{menu.name}}
+        <button class="delete"
+                (click)="delete(menu); $event.stopPropagation()">x</button>
+    </li>
+</ul>
+<div *ngIf="selectedMenu">
+    <h2>
+        {{selectedMenu.name | uppercase}} is my menu
+    </h2>
+    <button (click)="gotoDetail()">View Details</button>
+</div>

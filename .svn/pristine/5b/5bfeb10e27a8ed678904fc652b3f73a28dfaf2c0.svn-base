@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lifeshs.dao1.user.AdminRoleDao">
+
+    <select id="findByAdminRoleData" resultType="com.lifeshs.po.customer.CustomerRole">
+        SELECT id,`name`,remark FROM  t_admin_role 
+    	<if test="dlsId != null">
+    		where type = #{dlsId}
+    	</if>
+    	LIMIT #{page},#{size}
+    </select>
+
+    <delete id="delete" parameterType="int">
+        DELETE FROM t_admin_role WHERE id =#{id}
+    </delete>
+
+    <update id="update">
+        UPDATE t_admin_role
+        SET `name` = #{name},remark = #{remark}
+        WHERE id =#{id}
+    </update>
+
+    <insert id="save">
+        INSERT INTO t_admin_role(name,type,remark)VALUES (#{name},#{type},#{remark})
+    </insert>
+    
+    <select id="findByIdRole" resultType="com.lifeshs.po.customer.CustomerRole">
+        SELECT r.id,r.name FROM t_admin_user_role ur INNER JOIN t_admin_role r ON ur.roleId=r.id WHERE userId=#{userId}
+    </select>
+    
+    <select id="queryRolePermission" resultType="com.lifeshs.po.admin.RolePermissionPo">
+       SELECT
+		*
+		FROM
+		t_admin_role_permission;
+    </select>
+    
+    <select id="queryRolePermission2" resultType="com.lifeshs.po.admin.RolePermissionPo">
+       SELECT
+		*
+		FROM
+		t_admin_role_permission
+		WHERE roleId = #{roleId};
+    </select>
+    
+    
+    <update id="updateRolePermission">
+        UPDATE t_admin_role_permission
+		SET permission = #{str1}
+		WHERE
+		id = #{id};
+    </update>
+    
+    <insert id="insertPemission">
+    	INSERT INTO t_admin_role_permission (id, roleId, permission)
+		VALUE
+		(NULL, 
+		<if test="roleId != null">#{roleId}</if>
+		<if test="roleId == null">null</if>
+		, #{st});
+    </insert>
+    
+	<update id="delRolePermission">
+		UPDATE t_admin_role_permission
+		SET permission = #{str1}
+		WHERE
+		id = #{id};   
+	</update>
+		
+	<delete id="delRolePermissionByItem">
+	DELETE
+	FROM
+		t_admin_role_permission
+	WHERE
+		permission LIKE '${item}%'
+	</delete>
+	
+	<delete id="delRolePermissionByRoleId">
+	DELETE
+	FROM
+		t_admin_role_permission
+	WHERE
+		roleId = #{roleId}
+	</delete>
+	
+	<select id="getRoleSize" resultType="Integer">
+		 SELECT count(*) FROM  t_admin_role 
+    	<if test="dlsId != null">
+    		where type = #{dlsId}
+    	</if>
+	</select>
+	
+	<insert id="addRolePermission2">
+		INSERT into t_admin_role_permission (roleId,permission) 
+		VALUE (#{roleId},#{item})
+	</insert>
+	
+	<delete id="delectRolePermission2">
+		DELETE
+		FROM
+			t_admin_role_permission
+		WHERE
+			roleId = #{roleId} and permission LIKE '${item}%'
+	
+	</delete>
+	
+	
+	
+	
+	
+</mapper>

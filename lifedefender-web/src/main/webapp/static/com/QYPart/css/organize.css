@@ -1,0 +1,67 @@
+
+.dialog_contain {
+	background: #fff;
+	padding: 20px;
+	margin: 0 auto;
+	width: 550px;
+	position: relative
+}
+
+.dialog_contain .user_head {
+	width: 150px;
+	min-height: 280px;
+	position: absolute;
+	text-align: center;
+	padding-top: 30px
+}
+
+.dialog_contain .user_head img {
+	border-radius: 50%;
+	width: 100px;
+	height: 100px
+}
+
+.dialog_contain .msg_contain {
+	width: 380px;
+	position: relative;
+	left: 150px;
+	min-height: 280px;
+	padding: 20px;
+}
+
+.dialog_contain .msg_contain ul {
+	font-size: 16px;
+	line-height: 35px
+}
+
+.dialog_contain .dialog_btn_group {
+	padding: 15px 0
+}
+
+.dialog_contain .dialog_btn_group button {
+	font-family: 'Microsoft YaHei';
+	border: none;
+	outline: none;
+	border-radius: 3px;
+	padding: 5px 20px;
+	cursor: pointer;
+}
+
+.dialog_contain .dialog_btn_group  .edit {
+	background: #3598dc;
+	color: #fff;
+}
+
+.dialog_contain .dialog_btn_group  .edit:hover {
+	background: #328ac4;
+}
+
+.dialog_contain .dialog_btn_group  .details {
+	border: 1px solid #ccc;
+	background-color: #fff;
+	margin-left: 30px;
+}
+
+.dialog_contain .dialog_btn_group  .details:hover {
+	background: #f1f1f1;
+}

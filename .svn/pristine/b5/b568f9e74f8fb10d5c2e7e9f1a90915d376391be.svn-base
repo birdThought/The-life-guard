@@ -1,0 +1,8 @@
+"use strict";
+var HelpColumn = (function () {
+    function HelpColumn() {
+    }
+    return HelpColumn;
+}());
+exports.HelpColumn = HelpColumn;
+//# sourceMappingURL=help-column.js.map

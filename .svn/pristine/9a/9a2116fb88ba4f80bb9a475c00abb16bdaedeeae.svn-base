@@ -1,0 +1,7 @@
+h1.title{
+    font-family: Helvetica;
+    color:#44c660;
+    text-align: center;
+    font-size:18px;
+}
+.clear{clear: both}

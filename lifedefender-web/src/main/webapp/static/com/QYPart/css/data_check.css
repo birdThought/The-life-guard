@@ -1,0 +1,239 @@
+.custom_renzheng {
+	display: inline-block;
+	position: relative;
+	margin-left: 30px;
+	margin-right: 15px;
+}
+
+.custom_renzheng img {
+	position: absolute;
+	left: -12px;
+	top: 6px;
+	height: 23px;
+}
+
+.custom_renzheng span {
+	padding: 1px 15px;
+	border-radius: 3px;
+	border: 1px solid #ccc;
+	border-left: none;
+	font-size: 13px;
+}
+
+.information_contain {
+	height: 160px;
+	border: 1px solid #ddd;
+	padding: 8px 20px;
+	line-height: 33px;
+}
+
+.information_contain .avater {
+	float: left;
+	width: 120px;
+	height: 120px;
+	margin-top: 12px;
+}
+
+.information_contain .info {
+	float: left;
+	padding-top: 17px;
+	padding-left: 15px;
+}
+
+.information_contain .info h1.company {
+	font-size: 20px;
+	margin-bottom: 6px;
+}
+
+.information_contain .info .other_info {
+	font-size: 17px;
+	color: #1e1d1d;
+}
+
+.information_contain .info .other_info .admin {
+	color: #0ab9f2;
+	margin-left: 8px;
+	margin-right: 8px;
+}
+
+.information_contain .info .other_info .level_icon {
+	position: relative;
+	top: -2px;
+	margin-right: 25px;
+}
+
+.information_contain .info .other_info .level {
+	position: relative;
+	border-radius: 15px;
+	background-color: #ddd;
+	width: 250px;
+	height: 15px;
+	display: inline-block;
+	top: 2px;
+	margin: 0 15px;
+}
+
+.information_contain .info .other_info .level div {
+	position: absolute;
+	width: 0%;
+	background-color: #f6ac4b;
+	border-radius: 15px;
+	height: 15px;
+}
+
+.information_contain .info .other_info .level_text {
+	color: #f6ac4b;
+}
+
+.column_contain {
+	height: 230px;
+	border: 1px solid #ddd;
+	padding: 0px 0px;
+	margin-top: 30px;
+}
+
+.column_contain .column_title {
+	height: 50px;
+	border-bottom: 1px solid #ddd;
+	padding: 15px;
+	font-size: 16px;
+}
+
+.transform_data {
+	height: 200px;
+}
+
+.column_contain .column_title .date_count {
+	float: right;
+}
+
+.column_contain .column_title .unit {
+	float: right;
+	color: #6c6c6c
+}
+
+.column_contain .column_title .date_count button {
+	background: #fff;
+	padding: 3px 15px;
+	color: #6c6c6c;
+	font-family: 'Microsoft YaHei';
+	border: none;
+	outline: none;
+	margin-left: 10px;
+	font-size: 15px;
+	cursor: pointer;
+}
+
+.column_contain .column_title .date_count button.action {
+	background: #3598dc;
+	color: #fff;
+}
+
+.column_contain .column_title .more {
+	float: right;
+	color: #3598dc;
+}
+
+.column_contain .column_title .more:hover {
+	text-decoration: underline;
+}
+
+.column_contain .column_title h2 {
+	padding-left: 15px;
+	border-left: 6px solid #3598dc;
+}
+
+.column_contain .company_item_contain {
+	height: 180px;
+	padding: 25px 22px;
+}
+
+.column_contain .company_item_contain .company_item {
+	display: inline-block;
+	margin-right: 40px;
+}
+
+.column_contain .company_item_contain .company_item .item_logo {
+	display: inline-block;
+	width: 120px;
+	height: 120px;
+	background: #f6ac4b;
+	text-align: center;
+	line-height: 120px;
+	float: left;
+}
+
+.column_contain .company_item_contain .company_item .data_analysis_img {
+	width: 100px;
+	height: 100px;
+	line-height: 100px;
+	border-radius: 50%;
+}
+
+.column_contain .company_item_contain .company_item .msg {
+	float: left;
+	font-size: 16px;
+	padding: 25px 20px 0;
+	line-height: 35px;
+}
+
+.column_contain .company_item_contain .company_item .msg p {
+	color: #6c6c6c;
+}
+
+.column_contain .news_list {
+	font-size: 16px;
+	color: #6c6c6c;
+	padding: 10px 15px;
+	line-height: 30px;
+}
+
+.column_contain .news_list li {
+	cursor: pointer;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+
+.column_contain .news_list li:hover {
+	text-decoration: underline;
+}
+
+.transform_data .transform_msg_data {
+	height: 149px;
+}
+
+.transform_data .data {
+	padding-top: 20px;
+}
+
+.liuliang_noresult {
+	text-align: center;
+	line-height: 149px;
+	font-size: 16px;
+}
+
+.liuliang_noresult h2 {
+	font-size: 20px;
+	display: inline;
+}
+
+.liuliang_noresult h2 .count {
+	color: #e02509;
+	font-size: 30px;
+}
+
+.msg_data_list li {
+	width: 25%;
+	float: left;
+	text-align: center;
+	font-size: 16px;
+	line-height: 35px;
+	color: #6c6c6c
+}
+
+.msg_data_list li span {
+	font-weight: bold;
+	font-size: 25px;
+	color: #000
+}

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lifeshs.dao1.data.HobbyDao" >
+    <select id="getHobby" resultType="com.lifeshs.po.data.HobbyPO">
+        SELECT <include refid="T_DATA_HOBBY_ALL_COLUMN" /> FROM t_data_hobby WHERE id = #{id} AND deleted = FALSE
+    </select>
+
+    <select id="findHobbyList" resultType="com.lifeshs.po.data.HobbyPO">
+        SELECT <include refid="T_DATA_HOBBY_ALL_COLUMN" /> FROM t_data_hobby WHERE deleted = FALSE
+        ORDER BY id
+    </select>
+
+    <select id="findHobbyByIdList" resultType="com.lifeshs.po.data.HobbyPO">
+        SELECT <include refid="T_DATA_HOBBY_ALL_COLUMN" /> FROM t_data_hobby
+        WHERE id IN <foreach collection="idList" open="(" close=")" item="id" separator=",">#{id}</foreach>
+           AND deleted = FALSE
+        ORDER BY id
+    </select>
+
+    <select id="findModifyHobbyList" resultType="com.lifeshs.po.data.HobbyPO">
+        SELECT <include refid="T_DATA_HOBBY_ALL_COLUMN" /> FROM t_data_hobby
+        WHERE createDate &gt; #{datePoint}
+        AND IF (
+            modifyDate IS NOT NULL,
+            modifyDate &gt; #{datePoint},
+            '1=1'
+        )
+    </select>
+
+    <!-- hobby -->
+    <sql id="T_DATA_HOBBY_ALL_COLUMN">id, name, image, createDate, modifyDate, deleted</sql>
+</mapper>

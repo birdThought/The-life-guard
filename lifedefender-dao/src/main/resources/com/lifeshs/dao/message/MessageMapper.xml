@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lifeshs.dao.message.MessageDao" >
+    <select id="listMessage" resultType="com.lifeshs.pojo.message.MessageDTO">
+        SELECT <include refid="messageAllColumn" /> FROM t_message
+        WHERE <include refid="listMessageConditionSQL" />
+        ORDER BY `read`,createDate DESC LIMIT #{startIndex}, #{pageSize}
+    </select>
+    
+    <select id="countMessage" resultType="java.lang.Integer">
+        SELECT COUNT(1) FROM t_message
+        WHERE <include refid="listMessageConditionSQL" />
+    </select>
+    
+    <update id="deleteMessage">
+        UPDATE t_message SET `display` = FALSE, modifyDate = NOW()
+        WHERE id IN
+            <foreach collection="ids" item="id" open="(" close=")" separator=",">
+                #{id}
+            </foreach>
+            AND userType = #{userType}
+            AND userId = #{userId}
+            <if test="msgType != null">
+                AND msgType = #{msgType}
+            </if>
+    </update>
+    
+    <!-- 信息的全字段 -->
+    <sql id="messageAllColumn">
+        id, userType, title, content, `read`, msgType, createDate, modifyDate, sendId, openType, openTarget, openAttach, openTargetIOS, openAttachIOS
+    </sql>
+    
+    <!-- 分页获取信息的条件 -->
+    <sql id="listMessageConditionSQL">
+        userId = #{userId} AND userType = #{userType} AND `display` = TRUE
+        <if test="read != null">AND `read` = #{read}</if>
+        <!--<if test="msgTypeList != null">AND msgType IN <foreach collection="msgTypeList" item="t" open="(" close=")" separator=",">#{t}</foreach></if>-->
+    </sql>
+    
+    <update id="updateMessage" parameterType="com.lifeshs.pojo.message.MessageDTO">
+        UPDATE t_message SET modifyDate = NOW()
+        <if test="title != null">,title = #{title}</if>
+        <if test="content != null">,content = #{content}</if>
+        <if test="read != null">,`read` = #{read}</if>
+        <if test="msgType != null">,msgType = #{msgType}</if>
+        WHERE id = #{id} AND userId = #{userId} AND userType = #{userType}
+    </update>
+    
+    <insert id="saveMessage" parameterType="com.lifeshs.pojo.message.MessageDTO">
+        <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+        INSERT INTO t_message(userId, userType, title, content, msgType, createDate, sendId, openType, openTarget, openAttach, openTargetIOS, openAttachIOS)
+        VALUES(#{userId}, #{userType}, #{title}, #{content}, #{msgType}, NOW(), #{sendId}, #{openType}, #{openTarget}, #{openAttach}, #{openTargetIOS}, #{openAttachIOS})
+    </insert>
+    
+    <insert id="saveMessageList" parameterType="com.lifeshs.pojo.message.MessageDTO">
+        INSERT INTO t_message(userId, userType, title, content, msgType, createDate, sendId, openType, openTarget, openAttach, openTargetIOS, openAttachIOS)
+        VALUES
+            <foreach collection="datas" item="d" separator=",">
+                (#{d.userId}, #{d.userType}, #{d.title}, #{d.content}, #{d.msgType}, NOW(), #{d.sendId}, #{d.openType}, #{d.openTarget}, #{d.openAttach}, #{d.openTargetIOS}, #{d.openAttachIOS})
+            </foreach>
+    </insert>
+    
+</mapper>

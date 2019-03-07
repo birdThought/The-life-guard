@@ -1,0 +1,408 @@
+@charset "UTF-8";
+
+.item > label {
+    float: left;
+}
+input,select {
+    outline:none;
+}
+.item > select {
+    float: left;
+}
+.WellForm{
+    line-height:21px;
+}
+.WellForm .SelectL,.WellForm .SelectR,.WellForm .WellSelect
+{
+    background:url(/static/images/WellForm.gif) no-repeat;
+}
+.WellForm .SelectL,.WellForm .SelectR,.WellForm .WellSelect{
+    float:left;
+    height:21px;
+}
+.WellForm .SelectL{
+    width:3px;background-position:0 -300px;
+}
+.WellForm .SelectR{
+    width:16px;
+    cursor:pointer;
+    background-position:right -84px;
+    margin-right:5px;
+}
+.WellForm .WellSelect{
+    position:relative;
+    cursor:pointer;
+    background-repeat:repeat-x;
+    background-position:0 -300px;
+}
+.WellForm .WellSelect select{
+    display:none;
+}
+.WellForm .WellSelect em{
+    position:absolute;
+    top:0;
+    left:3px;
+    color:#fff;
+    height:21px;
+    display:block;
+    line-height:21px;
+    font-style:normal;
+}
+.WellForm .WellSelect ul{
+    list-style-type:none;
+    position:absolute;
+    top:18px;left:0;
+    z-index:1000;
+    display:none;
+    background:#6C6D70;
+}
+.WellForm .WellSelect ul li {
+    color:#fff;
+    height:20px;
+    cursor:pointer;
+    line-height:20px;
+    padding-left:3px;
+}
+.WellForm .WellSelect ul li.hover{
+    background:#333;
+}
+form .item{
+    float:left;
+    clear:both;
+    width:100%;
+    margin-bottom:10px;
+}
+.WellForm label{
+    float:left;
+    width:5em;
+    height:21px;
+    text-align:right;
+}
+.WellForm-i {
+    float: left;
+    margin:0 5px;
+}
+.content-right-middle {
+    width:100%;
+    height:auto;
+    overflow:auto;
+    /*overflow-y: hidden;*/
+    /*overflow-x:hidden;*/
+    position: relative;
+}
+.content-right-middle > table {
+    width:1200px;
+    text-align: center;
+    border-collapse:collapse;
+    position: relative;
+}
+.content-right-middle > table > thead tr {
+    background: #eee;
+}
+.content-right-middle > table td {
+    border:1px solid #ccd;
+    height:60px;
+    padding:10px;
+}
+.content-right-middle > table td:last-child {
+    width:290px;
+    padding-left: 20px;
+}
+.content-right-middle > table td:last-child > a {
+    margin-right:20px;
+}
+.scroll {
+    width:970px;
+    height:16px;
+    background: url("/static/images/scroll.png");
+}
+.scrollBar {
+    position: absolute;
+    bottom:3px;
+    width:80px;
+    height:10px;
+    left:30px;
+    background: #dde3ed;
+    border-radius: 2px;
+    cursor: pointer;
+    background-image: linear-gradient(0deg,
+    rgba(185, 200, 217, 1) 0%,
+    rgba(238, 239, 243, 1) 100%),
+    linear-gradient(
+            rgba(221, 227, 237, 1),
+            rgba(221, 227, 237, 1));
+    background-blend-mode: normal,
+    normal;
+}
+.pageCount {
+    width:80%;
+    margin-left:10%;
+    height:auto;
+    margin-top:20px;
+}
+.pageCount > li {
+    width:auto;
+    height: auto;
+    border:1px solid #eee;
+    text-align: center;
+    padding:10px 15px;
+    margin-right: 10px;
+    display: inline-block;
+    cursor: pointer;
+}
+.layui-layer-title {
+    text-align: left !important;
+    /*margin-bottom:30px;*/
+}
+#popup {
+    width:100%;
+    height:100%;
+    background-color: #fff;
+    border-radius: 6px;
+}
+.layer-service {
+    margin:0px 30px 5px 20px;
+    border-bottom: 1px solid #ccc;
+}
+.ServiceRecord {
+    color:deepskyblue;
+}
+#popup > table {
+    border:1px solid #ccc;
+    border-collapse: collapse;
+    width:80%;
+    margin-left:10%;
+    border-radius:6px;
+}
+#popup>table  td{
+    border:1px solid #ccc;
+    text-align: center;
+    line-height:66px;
+}
+#popup  > h5 {
+    text-align: center;
+    width: 106px;
+    height:36px;
+    font-size:14px;
+    color: #59C2FF;
+    background: #D7F1FE;
+    border:1px solid #59C2FF;
+    border-top: none;
+    margin-left:300px;
+    line-height:36px;
+    cursor: pointer;
+}
+#HealthData {
+    width:100%;
+    height:100%;
+    padding:0 52px 0 32px;
+    position: relative;
+}
+#HealthData > .health-data-top {
+    width:100%;
+    height:34px;
+}
+.health-data-top ul:nth-of-type(1){
+    width:100%;
+    height:100%;
+}
+.health-data-top ul:nth-of-type(1) li{
+    float: left;
+    width:112px;
+    height:34px;
+    text-align: center;
+    color: #333;
+}
+.health-data-top ul:nth-of-type(1) li:last-child {
+    float: right;
+    width:132px;
+    height:34px;
+    color: blueviolet;
+    cursor: pointer;
+    line-height:34px;
+
+}
+.health-data-top ul:nth-child(1) li a {
+    display: inline-block;
+    width:100%;
+    height:100%;
+    font-size:14px;
+    line-height:34px;
+    border-bottom: 1px solid #ddd;
+}
+.health-data-top ul:nth-of-type(1) li:first-child a{
+    border:1px solid #ddd;
+    border-bottom:none;
+    color: #10bb71;
+}
+.health-data-top ul:nth-of-type(2) {
+    margin-top:34px;
+}
+.health-data-top ul:nth-of-type(2) li:first-child {
+    float: left;
+}
+.health-data-top ul:nth-of-type(2) li:first-child span {
+    color: #10bb71;
+}
+.health-data-top ul:nth-of-type(2) li:last-child {
+    float: right;
+    width:240px;
+}
+.health-data-top ul:nth-of-type(2) li:last-child span {
+    float: left;
+    margin:4px 4px 0px 4px;
+}
+.health-data-top ul:nth-of-type(2) li:last-child input {
+    width:111px;
+    height:25px;
+    border-radius: 4px;
+    float: left;
+}
+.health-data-top-line {
+    height:1px;
+    width:280px;
+    position: absolute;
+    right:34px;
+    top:33px;
+    background: #ddd;
+}
+.health-data-bottom {
+    padding-left: 30px;
+}
+.health-data-bottom > .list button[type=button] {
+    width: 90px;
+    height: 26px;
+    border-radius: 4px;
+    border:1px solid #10bb71;
+    margin-left:50px;
+    background-color: #fff;
+}
+.health-data-bottom > .list button[type=button]:nth-of-type(1) {
+    color: #fff;
+    margin-top:34px;
+    background-color: #10bb71;
+}
+.bloodPressure {
+    color: #999;
+    font-size:14px;
+    font-family:fzlthk gbk1;
+    line-height:32px;
+    margin-left:10px;
+}
+.health-data-bottom {
+    border-bottom:1px solid #f1f1f1;
+    height:auto;
+    width:100%;
+}
+.health-data-bottom-left,.health-data-bottom-right  {
+    width:48%;
+    margin-top:26px;
+    height:auto;
+}
+.health-data-bottom-left {
+    float: left;
+    border-right: 2px solid #ccc;
+}
+.health-data-bottom-left p,
+.health-data-bottom-right p
+{
+    width:100%;
+    float: left;
+    line-height:36px;
+    color: #666;
+}
+.health-data-bottom-right {
+    width:50%;
+    padding-left:10px;
+    float: right;
+}
+.health-data-bottom-left p:first-child span{
+    color: #f40;
+}
+.health-data-bottom-left p:first-child,
+.health-data-bottom-right p:first-child
+{
+    position: relative;
+    font-size:14px;
+}
+.health-data-bottom-left p:first-child::after,
+.health-data-bottom-right p:first-child::after
+{
+    content: '异常';
+    position: absolute;
+    width:46px;
+    height:16px;
+    border-radius: 8px;
+    background: #ff2626;
+    color: #fff;
+    top:10px;
+    left:130px;
+    text-align: center;
+    line-height:16px;
+    font-size:12px;
+}
+.health-data-bottom-right p:first-child::after {
+    background: #44c660;
+    content: '正常';
+}
+.health-data-bottom-left p span,
+.health-data-bottom-right span
+{
+    color: #10bb71;
+    display: inline-block;
+    font-size:16px;
+}
+.health-data-bottom-left p:nth-child(4),
+.health-data-bottom-right p:nth-child(4)
+{
+    color: #ff3d3d;
+}
+.health-data-bottom-left p:nth-child(5),
+.health-data-bottom-right p:nth-child(5)
+{
+    font-size:14px;
+    color: #10bb71;
+}
+.health-data-bottom-left p:nth-child(5) input,
+.health-data-bottom-right p:nth-child(5) input
+{
+    outline:none;
+    border:1px solid #ccc;
+    width:208px;
+    height:27px;
+    border-radius: 2px;
+    background: linear-gradient(#dee 0%,#fff 15%,#fff 100%);
+    margin-left:5px;
+    padding-left: 15px;
+}
+.last {
+    width:90%;
+    background-color: #DDD;
+    height:1px;
+    position: absolute;
+    bottom:40px;
+    left:5%;
+}
+.highcharts-legend-item,
+.highcharts-axis-title,
+.highcharts-credits{
+    display: none;
+}
+.scroll_area {
+    width: 6px;
+    height: 76%;
+    position: absolute;
+    top: 126px;
+    right: 32px;
+    background-color: #eee;
+}
+.bar {
+    width: 100%;
+    height: 60px;
+    background-color: red;
+    cursor: pointer;
+    border-radius: 10px;
+    position: absolute;
+    top: 80px;
+    left: 0;
+}

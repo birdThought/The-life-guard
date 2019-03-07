@@ -1,0 +1,159 @@
+body {
+	background-color: #f5f5f5;
+}
+
+
+/*定义首页块级*/
+
+.main {
+	width: 100%;
+	background-color: white;
+	margin-bottom: 1rem;
+	/*outline: 1px solid red;*/
+}
+
+
+/*定义选项栅格及按钮块*/
+
+.option_div {
+	margin: 0;
+	padding: 0;
+	list-style-type: none;
+	display: table;
+	width: 100%;
+}
+
+
+/*1.柵格系統4個成行*/
+/*2.item內部中心居中*/
+
+.option_item {
+	position: relative;
+	float: left;
+	/*display: table-cell;*/
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	width: 33.3%;
+	height: 4rem;
+	text-align: center;
+}
+
+
+/*3.居中块(包含点击及文本)*/
+
+.option_item>div {
+	display: inline-block;
+	height: 4rem;
+	text-align: center;
+}
+
+
+/*4.具体居中块*/
+
+.option_item>div>span {
+	display: block;
+	border-radius: 3.5rem;
+	width: 4rem;
+	height: 4rem;
+	line-height: 4rem;
+	z-index: 10;
+	background-size: cover;
+	text-align: center;
+}
+.option_item>div>label{
+	font-size: 1rem;
+}
+
+
+/*块商品：商品标题*/
+
+.scroll_view {
+	margin-bottom: 8.5rem;
+}
+
+.product_header {
+	height: 4rem;
+	padding: 1rem 1rem 1rem 1rem;
+	border-left: 0.3rem solid #44c660;
+	border-bottom: 1px solid #efefef;
+}
+
+.header_left {
+	float: left;
+}
+
+.header_right {
+	float: right;
+}
+
+
+/*商品滑动条*/
+
+.box {
+	position: relative;
+	white-space: nowrap;
+	overflow-x: auto;
+}
+
+.box::-webkit-scrollbar {
+	width: 0;
+	height: 0;
+	display: none;
+}
+
+
+/*.box div{
+	display: inline-block;
+	width: 8rem;
+	height: 8rem;
+	
+}*/
+
+
+/*图片居中*/
+
+.product_item {
+	position: relative;
+	display: inline-block;
+	margin-top: 0.5rem;
+	margin-left: 0.25rem;
+	margin-right: 0.25rem;
+	height: 8rem;
+	width: 12rem;
+	min-width: 12rem;
+}
+
+.product_img {
+	display: table-cell;
+	vertical-align: middle;
+	text-align: center;
+	border-radius: 1rem;
+	border: 1px solid #efefef;
+}
+
+.product_img img {
+	vertical-align: middle;
+}
+
+.product_title {
+	display: table-cell;
+	width: 6rem;
+}
+
+
+/*信息框--標題*/
+
+.product_title_content {
+	border: 0;
+	padding: 0;
+	resize: none;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	display: -webkit-box;
+	-webkit-box-orient: vertical;
+	-webkit-line-clamp: 2;
+}
+
+
+/*块底部导航*/

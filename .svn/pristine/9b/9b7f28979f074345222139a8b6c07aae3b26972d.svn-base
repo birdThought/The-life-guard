@@ -1,0 +1,267 @@
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<link rel="stylesheet" href="/static/css/reportanalysis/report-analysis.css?v=1.0.0">
+<style>
+    .layui-layer-content {
+        height: auto !important;
+        padding-bottom: 34px;
+    }
+
+    #orderCenterPopup section span, #orderCenterPopup2 section span {
+        display: inline-block;
+        width: 90px;
+        text-align: center;
+        line-height: 36px;
+    }
+
+    .layui-layer-page {
+        width: 630px !important
+    }
+
+    #orderCenterPopup section:nth-of-type(2) {
+        margin-left: 0
+    }
+
+    #orderCenterPopup2 section:nth-of-type(2) {
+        margin-left: 0
+    }
+</style>
+<div class="orderCenter" ng-controller="foodController" ng-init="init()" style="padding: 16px 0 0 20px;">
+    <div class="titleShow">
+        <label style="border-left:2px solid #0093ff;padding-left: 6px;margin-bottom: 10px;display: block;font-size: 18px;color: #0093ff;"
+               class="action">
+            食物管理
+        </label>
+        <p class="orderDate" style="display: inline-block;">
+            <span class="small-tip">食物种类</span>
+            <select class="Select-Options" style=" width: 140px;border: 1px solid #ddd;padding: 6px 10px;"
+                    ng-model="conditions.kind">
+                <option value="">食物种类</option>
+                <option ng-repeat="f in foodKind" ng-value='f.id'>{{f.name}}</option>
+            </select>
+            <span class="small-tip" style="display: inline-block;margin-left: 60px;">食物名称</span>
+            <input style="width: 240px;border: 1px solid #ddd;padding: 7px 5px;" type="text" placeholder="请输入食物名称"
+                   ng-model="conditions.name">
+            <!--           		 <button class="button_blue" style="margin-left: 50%" ng-click="search()"> -->
+            <!--                 <i class="layui-icon">&#xe615;</i> 查询 -->
+            <!--            		</button> -->
+
+        </p>
+
+        <div style="display: inline-block;">
+            <button style="margin: 14px 0 8px 100px;float: none;position:static;background: #3a87fc;color: #fff;padding: 4px 10px;text-align: center;border:none;"
+                    class="search search-btn cursor-pointer" ng-click="addDialog()">添加食物
+            </button>
+        </div>
+    </div>
+
+    <div class="orderCenterBottom" ng-cloak>
+        <table border="0" cellpadding="0" cellspacing="0">
+            <thead>
+            <tr>
+                <td>食物图片</td>
+                <td>食物名称</td>
+                <td>食物种类</td>
+                <td>卡路里/kcal</td>
+                <td>编辑</td>
+                <td>删除</td>
+            </tr>
+            </thead>
+
+            <tbody>
+            <tr ng-repeat="f in food">
+                <td style="width:130px"><img style="width:90px;height:90px" src="{{f.image}}"></td>
+                <td>{{f.name}}</td>
+                <td>{{f.foodKind.name}}</td>
+                <td>{{f.kcal}}</td>
+                <td><span class="ny" ng-click="EditDialog(f)"><i class="layui-icon"
+                                                                 style="font-size:20px;color:#3cbaff">&#xe642;</i></span>
+                </td>
+                <td><span class="ny" ng-click="DeleteDialog(f)"><i class="layui-icon" style="font-size:20px;color:blue">&#xe640;</i></span>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+        <div id="page" style="text-align: center; margin-top: 20px"></div>
+    </div>
+    <!-- 删除 -->
+    <div id="deleteContent" style="display: none;text-align: center;">
+        <p style="color:#222;line-height: 36px;font-size: 16px;text-align: center">确认删除?</p>
+        <button style="border: none;font-size: 14px;text-align: center;margin-top: 30px;color:#FFF;width: 80px;height: 30px;line-height: 30px;background: #3cbaff"
+                ng-click="deletefood()"
+        >确认
+        </button>
+    </div>
+
+    <!-- 添加食物 -->
+    <div id="orderCenterPopup" class="orderPopup ">
+        <section class="clearfix">
+
+        </section>
+
+        <section class="clearfix" style="margin-top: 15px;">
+            <span class="small-tip">
+               食物名称
+            </span>
+            <input id="food_name" class="doctor-sign Select-Options" placeholder="请输入食物名称">
+        </section>
+
+        <section class="clearfix" style="margin-top: 15px;">
+            <span class="small-tip">
+                卡路里
+            </span>
+            <input id="food_kcal" class="doctor-sign Select-Options" placeholder="请输入卡路里">
+        </section>
+
+        <section class="clearfix" style="margin-top: 15px;">
+            <span class="small-tip" style="line-height: 38px">
+                食物种类
+            </span>
+            <select class="doctor-sign Select-Options" name="select" id="food_kind" class="xla_k">
+                <option ng-repeat="f in foodKind" ng-value='f.id'>{{f.name}}</option>
+            </select>
+            </ul>
+            <li style="margin-top: 15px; text-align:center">
+                <img id="portrait" style="width: 110px;
+                margin-top: 16px;
+    height: 110px;
+    border-radius: 50%;" src="">
+                <input id="upload_img" type="button" value="选择图片" style="width: 150px;border-radius: 2px;height: 38px;
+    border: 1px solid #369239;
+    background-color: #369239;
+    line-height: 38px;
+    text-align: center;
+    color: #fff;
+    outline: none;
+    cursor: pointer;
+    margin-top:16px;">
+            </li>
+            <!--  <section style="margin-top: 15px;">
+              <span class="small-tip">
+                  食物图片：
+              </span> -->
+            </ul>
+
+
+            <section class="clearfix" style="text-align: center; margin-top: 15px;">
+                <input style="background-color:#3cbaff;color:#fff;width:120px;height:40px;border-raidus:6px"
+                       type="button" ng-class="currentOrder.status == 3 ? 'button_blue_1' : 'button_blue_2'"
+                       value="提交数据" ng-click="addfood()">
+            </section>
+    </div>
+
+    <!--编辑种类 -->
+    <div id="orderCenterPopup2" class="orderPopup ">
+        <section class="clearfix">
+
+        </section>
+
+        <section class="clearfix" style="margin-top: 15px;">
+            <span class="small-tip">
+               食物名称
+            </span>
+            <input id="food_name" class="doctor-sign Select-Options" placeholder="修改食物名称" ng-model="edit.name">
+        </section>
+
+        <section class="clearfix" style="margin-top: 15px;">
+            <span class="small-tip">
+                卡路里
+            </span>
+            <input id="food_kcal" class="doctor-sign Select-Options" placeholder="修改卡路里" ng-model="edit.kcal">
+        </section>
+
+        <section class="clearfix" style="margin-top: 15px;">
+            <span class="small-tip" style="line-height: 38px">
+                食物种类
+            </span>
+            <select class="doctor-sign Select-Options" name="select" id="food_kind" class="xla_k" ng-model="edit.kind">
+                <option ng-repeat="f in foodKind" ng-value='f.id'>{{f.name}}</option>
+            </select>
+        </section>
+
+        <section class="clearfix" style="margin-top: 15px;">
+            </ul>
+            <li style="margin-top: 15px; text-align:center">
+                <img id="portrait-one" style="width: 110px;
+    height: 110px;
+    border-radius: 50%;margin-top: 16px" src="">
+                <input id="upload_img_two" type="button" value="选择图片" style="width: 150px;border-radius: 2px;height: 38px;
+    border: 1px solid #369239;
+    background-color: #369239;
+    line-height: 38px;
+    text-align: center;
+    color: #fff;
+    outline: none;
+    cursor: pointer;
+    margin-right: 0 auto;">
+            </li>
+            <!--  <section style="margin-top: 15px;">
+              <span class="small-tip">
+                  食物图片：
+              </span> -->
+            </ul>
+        </section>
+
+
+        <section class="clearfix" style="text-align: center; margin-top: 15px;">
+            <input style="background-color:#3cbaff;color:#fff;width:120px;height:40px;border-raidus:6px" type="button"
+                   ng-class="currentOrder.status == 3 ? 'button_blue_1' : 'button_blue_2'"
+                   value="提交数据" ng-click="editfood()">
+        </section>
+    </div>
+</div>
+<script>
+    $(document).ready(function () {
+        upload.uploadFile('/data/food/uploadFile/img'
+            , $('#upload_img'), 'POST', function (res) {
+                $('#portrait').attr('src', res.obj)
+            });
+        upload.uploadFile2('/data/food/uploadFile/img'
+            , $('#upload_img_two'), 'POST', function (res) {
+                $('#portrait-one').attr('src', res.obj)
+            });
+    });
+    var upload = {};
+    upload.uploadFile = function (url, elem, method, callback) {
+        layui.use('upload', function () {
+            var upload = layui.upload;
+            var uploadInst = upload.render({
+                elem: elem,
+                url: url,
+                unwrap: true,
+                done: function (res) {
+                    if (res.success == true) {
+                        if (typeof callback == "function") {
+                            callback(res)
+                        }
+                    }
+                },
+                error: function () {
+                    layer.msg('上传失败，请重新上传')
+                }
+            })
+        })
+
+    }
+    upload.uploadFile2 = function (url, elem, method, callback) {
+        layui.use('upload', function () {
+            var upload = layui.upload;
+            var uploadInst = upload.render({
+                elem: elem,
+                url: url,
+                unwrap: true,
+                done: function (res) {
+                    if (res.success == true) {
+                        if (typeof callback == "function") {
+                            callback(res)
+                        }
+                    }
+                },
+                error: function () {
+                    layer.msg('上传失败，请重新上传')
+                }
+            })
+        })
+
+    }
+
+</script>

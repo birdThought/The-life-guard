@@ -1,0 +1,395 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lifeshs.dao.serve.consult.ConsultDao">
+
+    <select id="findLagerNumberOfBuyerList" resultMap="serveUserVOWithComment">
+        SELECT
+          <include refid="serveUserVOWithCommentAllColumn" />
+        FROM (
+          <include refid="serveUserBasicSQL" />
+          GROUP BY sid
+          LIMIT #{limit}
+        ) AS a
+        <!-- 显示用户评论 -->
+        LEFT JOIN t_order AS o ON o.projectCode = a.projectCode AND o.orgUserId = a.userId AND o.`status` IN (3, 4)
+        LEFT JOIN t_order_comments AS oc ON oc.orderId = o.id
+        LEFT JOIN t_user AS u ON u.id = o.userId
+        ORDER BY buyerCount DESC, a.scoreAvg DESC
+    </select>
+
+    <resultMap type="com.lifeshs.vo.serve.consult.ServeUserVO" id="serveUserVOWithComment">
+        <id column="sid" property="sid"/>
+        <result column="userId" property="userId"/>
+        <result column="realName" property="realName"/>
+        <result column="professionalName" property="professionalName"/>
+        <result column="expertise" property="expertise"/>
+        <result column="photo" property="photo"/>
+        <result column="projectName" property="projectName"/>
+        <result column="orgName" property="orgName"/>
+        <result column="price" property="price"/>
+        <result column="monthPrice" property="monthPrice"/>
+        <result column="yearPrice" property="yearPrice"/>
+        <result column="buyerCount" property="buyerCount"/>
+        <result column="scoreTotal" property="scoreTotal"/>
+        <result column="commentCount" property="commentCount"/>
+        <result column="projectCode" property="projectCode"/>
+        <!-- <result column="pChargeMode" property="chargeMode"/> -->
+        <result column="userCode" property="userCode"/>
+        <result column="serveId" property="serveId"/>
+        <collection property="comment" ofType="com.lifeshs.vo.order.comment.CommentVO" notNullColumn="ocId">
+            <id column="ocId"/>
+            <result column="ocScore" property="score"/>
+            <result column="ocPhoto" property="head"/>
+            <result column="ocRealName" property="name"/>
+        </collection>
+    </resultMap>
+
+    <sql id="serveUserBasicSQL">
+        SELECT
+            r.id AS sid,
+            r.price,
+            r.monthPrice,
+            r.yearPrice,
+            r.projectCode,
+            o.chargeMode,
+            ou.id AS userId,
+            ou.realName,
+            ou.professionalName,
+            ou.expertise,
+            ou.photo,
+            ou.userCode,
+            p.`name` AS projectName,
+            <!-- p.chargeMode AS pChargeMode, -->
+            p.serveId,
+            org.orgName,
+            COUNT(DISTINCT(o.userId)) AS buyerCount,
+            COUNT(oc.id) AS commentCount,
+            SUM(oc.score) AS scoreTotal,
+            AVG(oc.score) AS scoreAvg
+        FROM
+            t_project_orguser_relation AS r
+        INNER JOIN t_project_consult AS p ON p.`code` = r.projectCode AND p.`status` = 2
+        INNER JOIN t_org_user AS ou ON ou.id = r.orgUserId AND ou.`status` = 0
+        INNER JOIN t_org AS org ON org.id = ou.orgId AND org.`status` = 0 AND org.orgVerified = 1 AND org.isPublic=0
+        INNER JOIN t_data_serve_type2 AS st ON p.serveId = st.id
+        INNER JOIN t_data_serve_type AS st1 ON st1.Id = st.serveId
+        LEFT JOIN t_order AS o ON o.projectCode = r.projectCode AND o.orgUserId = r.orgUserId AND o.`status` IN (3, 4)
+        LEFT JOIN t_order_comments oc ON oc.orderId = o.id
+    </sql>
+
+    <select id="countConsultServeUserWithCondition" resultType="java.lang.Integer">
+        SELECT COUNT(r.id)
+        FROM
+            t_project_orguser_relation r
+        INNER JOIN t_project_consult p ON r.projectCode = p.`code` AND p.`status` = 2
+        INNER JOIN t_org_user ou ON ou.id = r.orgUserId AND ou.`status` = 0
+        INNER JOIN t_org org ON ou.orgId = org.id AND org.`status` = 0 AND org.isPublic=0
+        INNER JOIN t_data_serve_type2 AS st ON p.serveId = st.id
+        INNER JOIN t_data_serve_type AS st1 ON st1.Id = st.serveId
+        <where>
+            <include refid="searchConsultCondition" />
+        </where>
+    </select>
+
+    <select id="findConsultServeUserWithConditionList" resultMap="serveUserVOWithComment">
+        SELECT
+            <include refid="serveUserVOWithCommentAllColumn" />
+        FROM (
+            <include refid="serveUserBasicSQL" />
+            <!-- 价格筛选 -->
+            <where>
+                <include refid="searchConsultCondition" />
+            </where>
+            GROUP BY sid
+            <include refid="orderSQL" />
+            LIMIT #{startIndex}, #{pageSize}
+        ) AS a
+        <!-- 显示用户评论 -->
+        LEFT JOIN t_order AS o ON o.projectCode = a.projectCode AND o.orgUserId = a.userId AND o.`status` IN (3, 4)
+        LEFT JOIN t_order_comments AS oc ON oc.orderId = o.id
+        LEFT JOIN t_user AS u ON u.id = o.userId
+        <include refid="orderSQL" />
+    </select>
+    
+    <sql id="orderSQL">
+        <!-- 默认排序 -->
+        <if test="sort.value == 0">
+                ORDER BY buyerCount DESC, scoreAvg DESC
+        </if>
+        <if test="sort.value == 1">
+                ORDER BY buyerCount DESC, scoreAvg DESC
+        </if>
+        <if test="sort.value == 2">
+                ORDER BY scoreAvg DESC, buyerCount DESC
+        </if>
+    </sql>
+    
+    <sql id="serveUserVOWithCommentAllColumn">
+        a.sid,
+        a.userId,
+        a.realName,
+        a.professionalName,
+        a.expertise,
+        a.photo,
+        a.projectName,
+        a.orgName,
+        a.price,
+        a.monthPrice,
+        a.yearPrice,
+        a.chargeMode,
+        a.buyerCount,
+        a.scoreTotal,
+        a.commentCount,
+        a.projectCode,
+        <!-- a.pChargeMode, -->
+        a.serveId,
+        a.userCode,
+        oc.id AS ocId,
+        u.realName AS ocRealName,
+        u.photo AS ocPhoto,
+        oc.score AS ocScore,
+        oc.`comment` AS ocComment
+    </sql>
+    
+    <select id="findConsultServeUserByOrgIdList" resultMap="serveUserVOWithComment">
+        SELECT
+            <include refid="serveUserVOWithCommentAllColumn" />
+        FROM (
+            <include refid="serveUserBasicSQL" />
+            WHERE org.id = #{orgId}
+            GROUP BY r.id
+        ) AS a
+        <!-- 显示用户评论 -->
+        LEFT JOIN t_order AS o ON o.projectCode = a.projectCode AND o.orgUserId = a.userId AND o.`status` IN (3, 4)
+        LEFT JOIN t_order_comments AS oc ON oc.orderId = o.id
+        LEFT JOIN t_user AS u ON u.id = o.userId
+    </select>
+
+    <select id="findConsultServeUserByServeUserIdList" resultMap="serveUserVOWithComment">
+        SELECT
+            <include refid="serveUserVOWithCommentAllColumn" />
+        FROM (
+            <!-- <include refid="serveUserBasicSQL" />  没有重用，因为服务师扫码查询时允许isPublic不为0的服务被显示 -->
+            SELECT
+            r.id AS sid,
+            r.price,
+            r.monthPrice,
+            r.yearPrice,
+            o.chargeMode,
+            r.projectCode,
+            ou.id AS userId,
+            ou.realName,
+            ou.professionalName,
+            ou.expertise,
+            ou.photo,
+            ou.userCode,
+            p.`name` AS projectName,
+            <!-- p.chargeMode AS pChargeMode, -->
+            p.serveId,
+            org.orgName,
+            COUNT(DISTINCT(o.userId)) AS buyerCount,
+            COUNT(oc.id) AS commentCount,
+            SUM(oc.score) AS scoreTotal,
+            AVG(oc.score) AS scoreAvg
+            FROM
+            t_project_orguser_relation AS r
+            INNER JOIN t_project_consult AS p ON p.`code` = r.projectCode AND p.`status` = 2
+            INNER JOIN t_org_user AS ou ON ou.id = r.orgUserId AND ou.`status` = 0
+            INNER JOIN t_org AS org ON org.id = ou.orgId AND org.`status` = 0 AND org.orgVerified = 1
+            INNER JOIN t_data_serve_type2 AS st ON p.serveId = st.id
+            INNER JOIN t_data_serve_type AS st1 ON st1.Id = st.serveId
+            LEFT JOIN t_order AS o ON o.projectCode = r.projectCode AND o.orgUserId = r.orgUserId AND o.`status` IN (3, 4)
+            LEFT JOIN t_order_comments oc ON oc.orderId = o.id
+            WHERE r.orgUserId = #{serveUserId}
+            GROUP BY r.id
+        ) AS a
+        <!-- 显示用户评论 -->
+        LEFT JOIN t_order AS o ON o.projectCode = a.projectCode AND o.orgUserId = a.userId AND o.`status` IN (3, 4)
+        LEFT JOIN t_order_comments AS oc ON oc.orderId = o.id
+        LEFT JOIN t_user AS u ON u.id = o.userId
+    </select>
+    
+    <select id="findServeUser" resultMap="serveUserVOWithComment">
+        SELECT
+            <include refid="serveUserVOWithCommentAllColumn" />
+        FROM (
+            SELECT
+            r.id AS sid,
+            r.price,
+            r.monthPrice,
+            r.yearPrice,
+            o.chargeMode,
+            r.projectCode,
+            ou.id AS userId,
+            ou.realName,
+            ou.professionalName,
+            ou.expertise,
+            ou.photo,
+            ou.userCode,
+            p.`name` AS projectName,
+           <!--  p.chargeMode AS pChargeMode, -->
+            p.serveId,
+            org.orgName,
+            COUNT(DISTINCT(o.userId)) AS buyerCount,
+            COUNT(oc.id) AS commentCount,
+            SUM(oc.score) AS scoreTotal,
+            AVG(oc.score) AS scoreAvg
+            FROM
+            t_project_orguser_relation AS r
+            INNER JOIN t_project_consult AS p ON p.`code` = r.projectCode AND p.`status` = 2
+            INNER JOIN t_org_user AS ou ON ou.id = r.orgUserId AND ou.`status` = 0
+            INNER JOIN t_org AS org ON org.id = ou.orgId AND org.`status` = 0 AND org.orgVerified = 1
+            INNER JOIN t_data_serve_type2 AS st ON p.serveId = st.id
+            INNER JOIN t_data_serve_type AS st1 ON st1.Id = st.serveId
+            LEFT JOIN t_order AS o ON o.projectCode = r.projectCode AND o.orgUserId = r.orgUserId AND o.`status` IN (3, 4)
+            LEFT JOIN t_order_comments oc ON oc.orderId = o.id
+            WHERE r.id = #{id}
+            GROUP BY sid
+        ) AS a
+        <!-- 显示用户评论 -->
+        LEFT JOIN t_order AS o ON o.projectCode = a.projectCode AND o.orgUserId = a.userId AND o.`status` IN (3, 4)
+        LEFT JOIN t_order_comments AS oc ON oc.orderId = o.id
+        LEFT JOIN t_user AS u ON u.id = o.userId
+    </select>
+    
+    <select id="findServeUserByUserIdAndProjectCode" resultMap="serveUserVOWithComment">
+        SELECT
+            <include refid="serveUserVOWithCommentAllColumn" />
+        FROM (
+            <include refid="serveUserBasicSQL" />
+            WHERE r.orgUserId = #{serveUserId} AND r.projectCode = #{projectCode}
+        ) AS a
+        <!-- 显示用户评论 -->
+        LEFT JOIN t_order AS o ON o.projectCode = a.projectCode AND o.orgUserId = a.userId AND o.`status` IN (3, 4)
+        LEFT JOIN t_order_comments AS oc ON oc.orderId = o.id
+        LEFT JOIN t_user AS u ON u.id = o.userId
+    </select>
+    
+    <sql id="searchConsultCondition">
+        <!-- 价格筛选 -->
+        <if test="priceType != null">
+            <choose>
+                <when test="priceType == 'equals'">
+                    r.price = #{startPrice}
+                </when>
+                <when test="priceType == 'notEquals'">
+                    r.price &lt;&gt; #{startPrice}
+                </when>
+                <when test="priceType == 'between'">
+                    (#{startPrice} &lt;= r.price AND r.price &lt;= #{endPrice})
+                </when>
+                <when test="priceType == 'over'">
+                    r.price &gt; #{endPrice}
+                </when>
+                <when test="priceType == 'overInclude'">
+                    r.price &gt;= #{endPrice}
+                </when>
+                <when test="priceType == 'under'">
+                    r.price &lt; #{startPrice}
+                </when>
+                <when test="priceType == 'underInclude'">
+                    r.price &lt;= #{startPrice}
+                </when>
+            </choose>
+        </if>
+        <!-- 类型筛选 -->
+        <if test="type != null and type.length()==4">
+            AND st.code = #{type}
+        </if>
+        <if test="type != null and type.length()==2">
+            AND st1.code = #{type}
+        </if>
+        <!-- 课堂名称筛选 -->
+        <if test="likeName != null">
+            AND ou.realName LIKE CONCAT('%', #{likeName}, '%')
+        </if>
+    </sql>
+    
+    <resultMap type="com.lifeshs.vo.serve.consult.ServeUserVO" id="ServeUserVO">
+        <result column="sid" property="sid" />
+        <result column="userId" property="userId" />
+        <result column="realName" property="realName" />
+        <result column="professionalName" property="professionalName" />
+        <result column="expertise" property="expertise" />
+        <result column="photo" property="photo" />
+        <result column="projectName" property="projectName" />
+        <result column="orgName" property="orgName" />
+        <result column="price" property="price" />
+        <result column="buyerCount" property="buyerCount" />
+        <result column="scoreTotal" property="scoreTotal" />
+        <result column="commentCount" property="commentCount" />
+        <result column="projectCode" property="projectCode" />
+        <!-- <result column="pChargeMode" property="chargeMode"/> -->
+        <result column="userCode" property="userCode"/>
+    </resultMap>
+    
+    <sql id="ServeUserSQL">
+        SELECT
+            r.id AS sid,
+            u.id AS userId,
+            u.realName,
+            u.professionalName,
+            u.expertise,
+            u.photo,
+            p.`name` AS projectName,
+            r.projectCode,
+            org.orgName,
+            r.price,
+            COUNT(DISTINCT(o.userId)) AS buyerCount,
+            COUNT(c.id) AS commentCount,
+            IFNULL(SUM(c.score), 0) AS scoreTotal,
+            (SUM(c.score)/COUNT(c.id)) AS score,
+            <!-- p.chargeMode AS pChargeMode, -->
+            u.userCode
+        FROM
+            t_project_orguser_relation r
+        INNER JOIN t_project_consult p ON r.projectCode = p.`code` AND p.`status` = 2
+        INNER JOIN t_org_user u ON u.id = r.orgUserId AND u.`status` = 0
+        INNER JOIN t_org org ON u.orgId = org.id AND org.`status` = 0 AND org.orgVerified = 1
+        LEFT JOIN t_order o ON o.`status` IN (3, 4) AND o.projectCode = r.projectCode AND o.orgUserId = r.orgUserId
+        LEFT JOIN t_order_comments c ON c.orderId = o.id
+    </sql>
+    
+    
+    <select id="listComboOrgUserByComboId" resultType="com.lifeshs.vo.serve.consult.OrgUserVO">
+        SELECT
+            r.id,
+            u.id AS userId,
+            u.realName,
+            u.professionalName,
+            u.expertise,
+            u.photo,
+            u.userCode as huanxinUserName,
+            org.orgName,
+            org.street
+        FROM
+           t_vip_combo_orguser_relation r 
+        INNER JOIN t_org_user u on r.orgUserId = u.id AND u.`status` = 0
+        INNER JOIN t_org org ON u.orgId = org.id AND org.`status` = 0 AND org.orgVerified = 1 
+        where 1=1 and r.vipComboId = #{comboId}  
+        <if test="comboItemId!=0 and comboItemId!=null ">and r.vipComboItemId =#{comboItemId}</if>
+        
+    </select>
+    
+
+    <!--获取单个咨询服务-->
+    <select id="findConsult" resultType="com.lifeshs.po.ConsultPO">
+        SELECT * FROM t_project_consult WHERE code = #{code}
+    </select>
+
+    <!--修改咨询服务项目-->
+    <update id="updateConsult" parameterType="com.lifeshs.po.ConsultPO">
+        UPDATE t_project_consult
+        <trim prefix="set" suffixOverrides=",">
+            <if test="image!=null">image=#{image},</if>
+            <if test="name!=null">name=#{name},</if>
+            <if test="serveId!=null">serveId=#{serveId},</if>
+            modifyDate = NOW()
+        </trim>
+        WHERE code = #{code}
+    </update>
+    
+    <select id="listConsultServeUser" resultMap="ServeUserVO">
+    	<include refid="ServeUserSQL"/>
+    </select>
+</mapper>

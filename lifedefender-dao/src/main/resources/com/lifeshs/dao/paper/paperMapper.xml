@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lifeshs.dao.paper.IPaperDao">
+    <select id="listPaper" resultMap = "paper">
+        SELECT 
+        	q.id, q.special, q.name, t.name, q.topicType, q.gender
+        FROM 
+        	t_service_paper q, t_service_paper_type t
+        WHERE 
+        	q.paperType = t.id
+        AND
+        	t.name = #{name}
+    </select>
+
+	<resultMap type="com.lifeshs.pojo.paper.PaperDTO" id="paper">
+		<id property="id" column="id"/>
+		<collection property="options" ofType="com.lifeshs.pojo.paper.PaperOptionDTO" column="id" select="listPaperOptionDTO"/>
+	</resultMap>
+
+	<select id="listPaperOptionDTO" resultType="com.lifeshs.pojo.paper.PaperOptionDTO">
+		SELECT
+        	q.id, q.score, q.name
+        FROM
+        	t_service_paper_option q
+        WHERE
+        	q.paperId = #{id}
+	</select>
+
+    
+    <select id="listPaperOption" resultType="com.lifeshs.pojo.paper.PaperOptionDTO">
+        SELECT 
+        	q.id, q.score, q.name 
+        FROM 
+        	t_service_paper_option q, t_service_paper_type t
+        WHERE 
+        	q.type = t.id
+        AND
+        	t.name = #{name}
+    </select>
+    
+    <insert id = "addPaperResult" parameterType = "com.lifeshs.pojo.paper.PaperResultDTO">
+   		<selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER">
+           SELECT LAST_INSERT_ID()
+       </selectKey>
+	   	INSERT INTO 
+	   		t_service_paper_result(userId, IP, result, paperType, createDate)
+	   	VALUES
+	   		(#{userId}, #{ip}, #{result}, #{paperType}, NOW())
+   </insert>
+   
+   <select id = "listPaperType" resultType="com.lifeshs.pojo.paper.PaperTypeDTO">
+	   SELECT 
+	   		id, name, parentId
+	   FROM 
+	   		t_service_paper_type
+   </select>
+   
+   <select id = "getPaperSubHealthStandard" resultType="com.lifeshs.pojo.paper.PaperSubHealthStandardDTO" parameterType = "java.lang.Integer">
+   		SELECT 
+   			basicDescription, suggestion, intervalNumber
+   		FROM 
+   			t_service_paper_subhealth_standard 
+   		WHERE
+   			startScore &lt;= #{score} 
+   		AND 
+   			endScore &gt;= #{score}
+   </select>
+   
+   <select id = "getPaperPhysicalStandard" resultType="com.lifeshs.pojo.paper.PaperPhysicalStandardDTO">
+   		SELECT 
+   			physicalName, cause, symptoms, manifestations, susceptibleDisease, suggestion  
+   		FROM 
+   			t_service_paper_physical_standard 
+   		WHERE
+   			physicalName = #{physicalName}
+   </select>
+
+    <select id = "getPaperStrokeStandard" resultType="com.lifeshs.pojo.paper.PaperStrokeStandardDTO">
+        SELECT
+            id, basicDescription, suggestion
+        FROM
+            t_service_paper_stroke_standard
+        WHERE
+            basicDescription = #{basicDescription}
+    </select>
+   
+</mapper>

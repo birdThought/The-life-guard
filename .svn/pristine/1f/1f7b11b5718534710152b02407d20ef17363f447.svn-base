@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lifeshs.dao.common.IBaseDao">
+
+    <!--新增操作 useGeneratedKeys="true" keyProperty="id" -->
+    <insert id="insert" parameterType="java.util.HashMap">
+        <selectKey resultType="java.lang.Integer" order="AFTER" keyProperty="id">
+            SELECT LAST_INSERT_ID() AS ID
+        </selectKey>
+        insert into ${table}(
+        <foreach collection="column.keys" item="key" index="index" separator=",">
+            ${key}
+        </foreach>
+        ) values (
+        <foreach collection="column.keys" item="key" index="index" separator=",">
+            #{column[${key}]}
+        </foreach>
+        )
+    </insert>
+
+    <!--批量新增操作  -->
+    <insert id="batchInsert" parameterType="java.util.HashMap">
+        insert into ${table} (
+            <foreach collection="columnNames" item="item" index="index" separator=",">
+                ${item}
+            </foreach>
+        ) values
+            <foreach collection="columns" item="item" index="index" separator=",">
+                <foreach collection="item" item="value" index="indexs" separator="," open="(" close=")">
+                    #{value}
+                </foreach>
+            </foreach>
+    </insert>
+
+    <!-- 删除操作 -->
+    <delete id="delete" parameterType="java.util.HashMap">
+        delete from ${table}
+        <where>
+            <foreach collection="column.keys" item="key" index="index" separator="and">
+                ${key} = #{column[${key}]}
+            </foreach>
+        </where>
+    </delete>
+
+    <!-- 批量删除操作 -->
+    <delete id="batchDelete" parameterType="java.util.HashMap">
+        delete from ${table}
+        <where>
+            <foreach collection="column" item="item" index="index" separator="or">
+                (
+                <foreach collection="item.keys" item="key" separator="and">
+                    ${key} = ${item[key]}
+                </foreach>
+                )
+            </foreach>
+        </where>
+    </delete>
+
+    <!-- 更新操作 -->
+    <update id="update" parameterType="java.util.HashMap">
+        update ${table} set
+        <foreach collection="column.keys" item="key" index="index" separator=",">
+            ${key} = #{column[${key}]}
+        </foreach>
+        <where>
+            <foreach collection="condition.keys" item="key" index="index" separator="and">
+                ${key} = #{condition[${key}]}
+            </foreach>
+        </where>
+    </update>
+
+    <!-- 查询 -->
+    <select id="select" parameterType="java.util.HashMap" resultType="java.util.HashMap">
+        select ${columnNames} from ${table}
+        <where>
+            <foreach collection="condition.keys" item="key" index="index" separator="and">
+                ${key} = #{condition[${key}]}
+            </foreach>
+        </where>
+        <!--<if test="table == 't_user_contacts'">-->
+            <!--order by isSOS DESC-->
+        <!--</if>-->
+    </select>
+
+    <!-- 查询 By Map-->
+    <select id="selectByMap" parameterType="java.util.HashMap" resultType="java.util.HashMap">
+        select ${columnNames} from ${table}
+        <where>
+            <foreach collection="condition.keys" item="key" index="index" separator="and">
+                ${key} = #{condition[${key}]}
+            </foreach>
+        </where>
+    </select>
+
+    <select id="selectEntityAmount" resultType="java.lang.Integer">
+        SELECT COUNT(1) FROM ${table} WHERE ${key} = #{value}
+    </select>
+
+    <!-- 根据查询条件查询出总数 -->
+    <select id="getCount" parameterType="java.util.HashMap" resultType="int">
+        select count(1) from ${table}
+        <where>
+            <foreach collection="condition.keys" item="key" index="index" separator="and">
+                <choose>
+                    <when test="key=='createDate'">
+                        DATE_FORMAT(createDate,'%Y-%m-%d') = #{condition[${key}]}
+                    </when>
+                    <when test="key=='deviceType'">
+                        deviceType LIKE CONCAT(#{condition[${key}]}, '%')
+                    </when>
+                    <when test="key=='userType'">
+                        userType IN (#{condition[${key}]},2)
+                    </when>
+                    <otherwise>
+                        ${key} = #{condition[${key}]}
+                    </otherwise>
+                </choose>
+            </foreach>
+        </where>
+    </select>
+    <!--分页查询实体-->
+    <select id="findEntityByPage" parameterType="java.util.HashMap" resultType="java.util.HashMap">
+        select ${columnNames} from ${table}
+        <where>
+            <foreach collection="condition.keys" item="key" index="index" separator="and">
+                ${key} = #{condition[${key}]}
+            </foreach>
+        </where>
+        <if test="desc!=null">
+            ORDER BY ${desc} desc
+        </if>
+        limit #{startPage},#{maxLimit}
+    </select>
+</mapper>

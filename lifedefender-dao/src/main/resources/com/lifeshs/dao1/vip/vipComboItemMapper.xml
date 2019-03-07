@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lifeshs.dao1.combo.ComboItemDao" >
+
+    <!--获取vip套餐项目列表-->
+    <select id="listComboItem" resultType="com.lifeshs.po.vip.VipComboItemPO">
+        SELECT i.id,i.`name`,i.createDate,i.modifyDate,i.remark,i.icon,i.itemDetail 
+        FROM  t_vip_combo_item i 
+        order by i.createDate desc 
+        LIMIT #{startRow},#{pageSize}
+    </select>
+    
+    <!-- 统计套餐项目数量 -->
+    <select id="countComboItem" resultType="java.lang.Integer">
+        SELECT COUNT(*) FROM t_vip_combo_item 
+    </select>
+    
+    <!--添加套餐项目 -->
+    <insert id="addComboItem" parameterType="com.lifeshs.po.vip.VipComboItemPO">
+        <selectKey resultType="java.lang.Integer" order="AFTER" keyProperty="id">
+            SELECT LAST_INSERT_ID() AS ID
+        </selectKey>
+        INSERT INTO
+        t_vip_combo_item
+        (`name`,createDate,remark,icon,itemDetail)
+        VALUES
+        (#{name},NOW(),#{remark},#{icon},#{itemDetail})
+    </insert>
+
+    <!-- 更改套餐 -->
+    <update id="updateComboItem">
+        UPDATE t_vip_combo_item SET
+        <if test="name != null">
+            name = #{name},
+        </if>
+        <if test="remark != null">
+            remark = #{remark},
+        </if>
+        <if test="icon != null">
+            icon = #{icon},
+        </if>
+        <if test="itemDetail != null">
+            itemDetail = #{itemDetail},
+        </if>
+        modifyDate = NOW()
+        WHERE id = #{id}
+    </update>
+    
+    <!-- 删除套餐 -->
+    <delete id="delComboItem" parameterType="int">
+        DELETE FROM t_vip_combo_item 
+        WHERE id = #{comboItemId}
+    </delete>
+    
+    
+</mapper>

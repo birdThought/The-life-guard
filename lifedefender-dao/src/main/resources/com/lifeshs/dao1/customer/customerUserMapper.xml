@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lifeshs.dao1.customer.ICustomerUserDao" >
+
+    <!--根据用户名获取用户-->
+    <select id="getUserByUserName" resultType="com.lifeshs.po.customer.CustomerUserPO">
+        SELECT <include refid="findByCustomer"></include> FROM t_admin_user WHERE userName = #{userName}
+    </select>
+
+    <!--根据id获取用户-->
+    <select id="getUser" resultType="com.lifeshs.po.customer.CustomerUserPO">
+        SELECT * FROM t_admin_user u WHERE u.id = #{id}
+    </select>
+    
+    <!--根据参数获取用户-->
+    <select id="getUserByParam" resultType="com.lifeshs.po.customer.CustomerUserPO">
+        SELECT * FROM t_admin_user u 
+        WHERE 1=1 
+        <if test="id != null"> and u.id = #{id} </if>
+        <if test="userNo != null"> and u.userNo = #{userNo} </if>
+        <if test="userName != null"> and u.userName = #{userName} </if>
+    </select>
+    
+    <!--根据参数获取代理商-->
+    <select id="getAgentByCity" resultType="com.lifeshs.po.customer.CustomerUserPO">
+        SELECT * FROM t_admin_user u 
+        WHERE 1=1 and agentId = 1  
+        <if test="province != null"> and u.provinceCode = #{province} </if>
+        <if test="city != null"> and u.cityCode = #{city} </if>
+        <if test="area != null"> and u.areaCode = #{area} </if>
+        <if test="area == null"> and left(u.areaCode, 1)!=8 </if>
+    </select>
+    
+    
+
+    <!--修改密码-->
+    <update id="updatePassword">
+        UPDATE t_admin_user SET password = #{password}, modifyDate = NOW()
+        WHERE id = #{id}
+    </update>
+    
+    <select id = "findUserListByUserCodeList" resultType="com.lifeshs.po.customer.CustomerUserPO">
+        SELECT * FROM t_admin_user
+        WHERE userCode IN <foreach collection="userCodeList" open="(" close=")" separator="," item="userCode">#{userCode}</foreach>
+    </select>
+    
+    <!-- 添加客服 -->
+    <insert id="addUser" parameterType="com.lifeshs.po.customer.CustomerUserPO">
+        <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+        INSERT INTO t_admin_user 
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="password != null">password,</if>
+            <if test="userCode != null">userCode,</if>
+            <if test="name != null">name,</if>
+            <if test="photo != null">photo,</if>
+            <if test="status != null">status,</if>
+            <if test="parentId != null">parentId,</if>
+            <if test="type != null">type,</if>
+            <if test="agentId != null">agentId,</if>
+            <if test="moblie != null">moblie,</if>
+            <if test="provinceCode != null">provinceCode,</if>
+            <if test="cityCode != null">cityCode,</if>
+            <if test="areaCode != null">areaCode,</if>
+            <if test="address != null">address,</if>
+            <if test="agentNum != 0">agentNum,</if>
+            <if test="userName != null">userName,</if>
+            LastLoginTime,
+            userNo,
+            createDate
+        </trim>
+        <trim prefix="VALUES(" suffix=")" suffixOverrides=",">
+            <if test="password != null">#{password},</if>
+            <if test="userCode != null">#{userCode},</if>
+            <if test="name != null">#{name},</if>
+            <if test="photo != null">#{photo},</if>
+            <if test="status != null">#{status},</if>
+            <if test="parentId != null">#{parentId},</if>
+            <if test="type != null">#{type},</if>
+            <if test="agentId != null">#{agentId},</if>
+            <if test="moblie != null">#{moblie},</if>
+            <if test="provinceCode != null">#{provinceCode},</if>
+            <if test="cityCode != null">#{cityCode},</if>
+            <if test="areaCode != null">#{areaCode},</if>
+            <if test="address != null">#{address},</if>
+            <if test="agentNum != 0">#{agentNum},</if>
+            <if test="userName != null">#{userName},</if>
+            NOW(),
+            <if test="agentId == 0">CONCAT('A',(SELECT Auto_increment FROM information_schema.tables WHERE table_schema in ('lifekeepers_v2','lifekeepers_test','lifekeepers_dev') and TABLE_NAME='t_admin_user')),</if>
+            <if test="agentId == 1">CONCAT('D',(SELECT Auto_increment FROM information_schema.tables WHERE table_schema in ('lifekeepers_v2','lifekeepers_test','lifekeepers_dev') and TABLE_NAME='t_admin_user')),</if>
+            <if test="agentId == 2">CONCAT('Y',(SELECT Auto_increment FROM information_schema.tables WHERE table_schema in ('lifekeepers_v2','lifekeepers_test','lifekeepers_dev') and TABLE_NAME='t_admin_user')),</if>
+            NOW()
+        </trim>
+    </insert>
+    
+    <!-- 获取客服总记录数 -->
+    <select id="getUserTotalRecord" resultType="int">
+        SELECT COUNT(*) FROM t_admin_user  where agentId=0 
+    </select>
+    
+    <!-- 获取客服列表 -->
+    <select id="findUserList" resultType="com.lifeshs.po.customer.CustomerUserPO">
+        SELECT id,userName,`name`,createDate FROM t_admin_user where agentId=0  LIMIT #{startRow},#{pageSize}
+    </select>
+
+	<!-- 添加agentId,agentNum -->
+    <sql id="findByCustomer">
+        id,userNo,userName,password,userCode,name,photo,status,agentId,agentNum
+    </sql>
+    
+    <!-- 业务员数量 -->
+    <select id="countMemberOffline" resultType="java.lang.Integer">
+        select count(1) as b from t_admin_user a 
+        LEFT JOIN t_data_area area1 ON CONCAT(a.provinceCode, "0000") = area1.code
+        LEFT JOIN t_data_area area2 ON CONCAT(a.provinceCode, a.cityCode, "00") = area2.code 
+        where a.status = 0   and a.parentId = #{userNo} and a.userNo like 'Y%'  
+        <if test="realName != null"> and a.name LIKE CONCAT('%',#{realName},'%' )</if>
+        <!-- <if test="mobile != null"> and a.moblie LIKE CONCAT('%',#{mobile},'%' )</if> -->
+    </select>
+    <!-- 获取业务员列表 -->
+    <select id="findMemberOfflineList" resultType="com.lifeshs.po.customer.CustomerUserOfflinePO">
+        select a.userName,a.id,a.userNo as userNo,a.`name` as realName,a.moblie as mobile,area1.name as proviceName,area2.name as cityName, 
+            a.agentId uType,a.createDate as createDate 
+            from t_admin_user a 
+            LEFT JOIN t_data_area area1 ON CONCAT(a.provinceCode, "0000") = area1.code
+            LEFT JOIN t_data_area area2 ON CONCAT(a.provinceCode, a.cityCode, "00") = area2.code 
+            where a.status = 0 and a.parentId = #{userNo}  and a.userNo like 'Y%'  
+            <if test="realName != null"> and a.name LIKE CONCAT('%',#{realName},'%' )</if>
+            <!-- <if test="mobile != null"> and a.moblie LIKE CONCAT('%',#{mobile},'%' )</if> -->
+         order by createDate desc 
+         limit #{startRow},#{pageSize};
+    </select>
+</mapper>

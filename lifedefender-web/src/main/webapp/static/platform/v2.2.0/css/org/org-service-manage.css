@@ -1,0 +1,219 @@
+
+*,*:before,*:after{
+	box-sizing: border-box;
+}
+.main-content{
+	padding-top: 60px;
+	padding-left: 20px;
+}
+.items-nav{
+	border-bottom: 2px solid #10bb71;
+	position: relative;
+}
+.items-nav li{
+	display: inline-block;
+	width: 112px;
+	height: 34px;
+	text-align: center;
+	line-height: 34px;
+	color:#333;
+}
+.items-nav li.current{
+	background: #10bb71;
+	color:#fff;
+}
+.items-nav span{
+	right: 30px;
+	bottom:10px;
+	position: absolute;
+	height: 40px;
+	line-height: 40px;
+	text-align: center;
+	color:#fff;
+	width: 128px;
+	background-color:#10bb71;
+	border-radius: 6px;
+}
+.items-content{
+	padding-top: 20px;
+}
+table{
+	width: 100%;
+	border-collapse:collapse;
+	/*border-bottom: 1px solid #ddd;*/
+}
+table th{
+	color:#333;
+	font-size: 14px;
+	font-weight: 500;
+	height: 52px;
+	border-left:1px solid #ddd;
+}
+table tr{
+	border-top: 1px solid #ddd;
+}
+table td{
+	border-left: 1px solid #ddd;
+}
+table td{
+	color:#666;
+	font-size:14px;
+	text-align: center;
+}
+table th:nth-of-type(1){
+	width:260px;
+}
+table th:nth-of-type(2){
+	width: 90px;
+}
+table th:nth-of-type(3){
+	width: 102px;
+}
+table th:nth-of-type(4){
+	width: 174px;
+}
+table th:nth-of-type(5){
+	width: 220px;
+}
+table th:nth-of-type(6){
+	width: 143px;
+}
+table tr td:nth-of-type(1) {
+
+}
+table tr td:nth-of-type(1) div{
+	float: left;
+}
+table tr td:nth-of-type(1) div img{
+	width: 80px;
+	height: 64px;
+}
+table tr td:nth-of-type(1) div:first-child{
+	width:92px;
+}
+table tr td:nth-of-type(1) div:last-child{
+	width: 250px;
+	text-align: left;
+	line-height: 34px;
+}
+table tr td:nth-of-type(5) p{
+	line-height: 34px;
+	color:#10bb71;
+	cursor: pointer;
+}
+table tr td:nth-of-type(5){
+	padding: 20px 24px;
+}
+.items-content table tbody tr {
+	height: 143px;
+}
+
+.chose-type{
+	position:fixed;
+	left:50%;
+	top:50%;
+	background-color:#fff;
+	-webkit-transform: translate(-50%,-50%);
+	-moz-transform: translate(-50%,-50%);
+	-ms-transform: translate(-50%,-50%);
+	-o-transform: translate(-50%,-50%);
+	transform: translate(-50%,-50%);
+	width:1000px;
+	height:470px;
+	border-radius:10px;
+	padding:40px;
+	/* box-shadow:0 2px 0 10px rgba(0,0,0,.2); */
+}
+.chose-type ul{
+	display:flex;
+}
+.chose-type ul li{
+	padding-left: 35px;
+	padding-right:10px;
+}
+.chose-type ul li div{
+	display:flex;
+	justify-content:center;
+	position:relative;
+}
+.chose-type ul li div span{
+	position:absolute;
+	left: 22%;
+	bottom:0;
+	font-size: 16px;
+	color:#333;
+}
+.chose-type ul li i{
+	width:190px;
+	height:180px;
+	display:block;
+}
+.chose-type ul li:nth-of-type(1) i{
+	background-image:url(/static/platform/v2.2.0/images/org/online.png);
+}
+.chose-type ul li:nth-of-type(2) i{
+	background-image:url(/static/platform/v2.2.0/images/org/online.png);
+}
+.chose-type ul li:nth-of-type(3) i{
+	background-image:url(/static/platform/v2.2.0/images/org/offline.png);
+}
+.chose-type ul li:nth-of-type(4) i{
+	background-image:url(/static/platform/v2.2.0/images/org/visit.png);
+}
+.chose-type ul li:nth-of-type(1) i:hover {
+	background-position:left -192px;
+}
+.chose-type ul li:nth-of-type(2) i:hover {
+	background-position:left -192px;
+}
+.chose-type ul li:nth-of-type(3) i:hover {
+	background-position:left -192px;
+}
+.chose-type ul li p{
+	text-align: center;
+	line-height: 2;
+	margin-top: 20px;
+	color:#666;
+	font-size: 14px;
+}
+.chose-type h3{
+	color:#10bb71;
+	font-size: 20px;
+	font-weight: 500;
+	text-align: center;
+	margin-bottom: 40px;
+}
+.type-search{
+	height:76px;
+	line-height: 76px;
+}
+.type-search div:first-child select{
+	width:100px;
+	height:20px;
+	border:1px solid #10bb71;
+	outline:none;
+	margin-left: 10px;
+}
+.type-search div:last-child{
+	margin-right: 20px;
+}
+.type-search div:last-child input{
+	width: 208px;
+	height: 36px;
+	border: 1px solid #10bb71;
+	background: #10bb71 url(/static/platform/v2.2.0/images/org/org-magnifier.png) no-repeat right 10px center;
+	color: #fff;
+	border-radius: 18px;
+	padding-left: 20px;
+	padding-right: 20px;
+	outline: none;
+}
+.type-search input::-webkit-input-placeholder{
+	color:#fff;
+}
+.type-search input::-moz-placeholder{
+	color:#fff;
+}
+.type-search input::-ms-input-placeholder{
+	color:#fff;
+}

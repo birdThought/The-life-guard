@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lifeshs.dao1.business.IBusinessCardDao" >
+
+    <!--新增渠道商vip邀请码-->
+    <insert id="addBusinessCard" parameterType="com.lifeshs.po.business.BusinessCardPO">
+        <selectKey resultType="java.lang.Integer" order="AFTER" keyProperty="id">
+            SELECT LAST_INSERT_ID() AS ID
+        </selectKey>
+        INSERT INTO t_business_card
+        (businessId, code, vipComboId, status, createDate)
+        VALUES(#{businessId}, #{code}, #{vipComboId}, 0, NOW())
+    </insert>
+
+    <!--更新邀请码状态-->
+    <update id="updateBusinessCardSatatus">
+        UPDATE t_business_card
+        SET modifyDate = NOW()
+        <if test="status != null">
+            ,status = #{status}
+        </if>
+        WHERE code = #{code}
+    </update>
+
+    <!--获取vip邀请码列表-->
+    <select id="findBusinessCardList" resultMap="businessCardVO">
+        SELECT c.*, vc.price, vc.id as combo_id, vc.name as combo_name, vc.validDay AS combo_validDay, u.id AS u_id, u.userName AS u_userName,
+        u.realName AS u_realName, u.mobile AS u_mobile, bu.id as businessId, bu.name as businessName
+        FROM t_business_card c
+        INNER JOIN t_vip_combo vc ON c.vipComboId = vc.id
+        LEFT JOIN t_order_vip ov ON c.id = ov.businessCardId
+        LEFT JOIN t_user u ON ov.userId = u.id
+        LEFT JOIN t_business bu ON c.businessId = bu.id
+        WHERE  c.status = #{status}
+        <choose>
+            <when test="businessId != null">
+                AND c.businessId = #{businessId}
+                <if test="keyword != null">
+                    AND c.code LIKE CONCAT("%", #{keyword}, "%")
+                </if>
+            </when>
+            <otherwise>
+                <if test="keyword != null">
+                    AND (bu.name LIKE CONCAT("%", #{keyword}, "%")
+                    OR c.code LIKE CONCAT("%", #{keyword}, "%"))
+                </if>
+            </otherwise>
+        </choose>
+        limit #{pageIndex}, #{pageSize}
+    </select>
+
+    <!--vip邀请码vo实体映射-->
+    <resultMap id="businessCardVO" type="com.lifeshs.vo.business.BusinessCardVO">
+        <id property="id" column="id"/>
+        <result property="businessId" column="businessId"/>
+        <result property="businessName" column="businessName"/>
+        <result property="code" column="code"/>
+        <result property="status" column="status"/>
+        <result property="price" column="price"/>
+        <result property="createDate" column="createDate"/>
+        <result property="modifyDate" column="modifyDate"/>
+        <association property="vipComboPO" javaType="com.lifeshs.po.vip.VipComboPO" notNullColumn="combo_id">
+            <id property="id" column="combo_id"/>
+            <!--暂获取部分属性，可添加-->
+            <result property="name" column="combo_name"/>
+            <result property="validDay" column="combo_validDay"/>
+        </association>
+        <association property="userPO" javaType="com.lifeshs.po.UserPO">
+            <id property="id" column="u_id"/>
+            <result property="userName" column="u_userName"/>
+            <result property="realName" column="u_realName"/>
+            <result property="mobile" column="u_mobile"/>
+        </association>
+    </resultMap>
+
+    <!--获取vip邀请码数量-->
+    <select id="countBusinessCard" resultType="java.lang.Integer">
+        SELECT COUNT(1)
+        FROM t_business_card c
+        LEFT JOIN t_business bu ON c.businessId = bu.id
+        WHERE c.status = #{status}
+        <choose>
+            <when test="businessId != null">
+                AND c.businessId = #{businessId}
+                <if test="keyword != null">
+                    AND c.code LIKE CONCAT("%", #{keyword}, "%")
+                </if>
+            </when>
+            <otherwise>
+                <if test="keyword != null">
+                    AND (bu.name LIKE CONCAT("%", #{keyword}, "%")
+                    OR c.code LIKE CONCAT("%", #{keyword}, "%"))
+                </if>
+            </otherwise>
+        </choose>
+    </select>
+    
+    <select id="findBusinessCardByCode" resultMap="businessCardVO">
+        SELECT c.*, ov.price, vc.id as combo_id, vc.name as combo_name, vc.validDay AS combo_validDay, u.id AS u_id, u.userName AS u_userName,
+        u.realName AS u_realName, u.mobile AS u_mobile
+        FROM t_business_card c
+        INNER JOIN t_vip_combo vc ON c.vipComboId = vc.id
+        LEFT JOIN t_order_vip ov ON c.id = ov.businessCardId
+        LEFT JOIN t_user u ON ov.userId = u.id
+        LEFT JOIN t_business bu ON c.businessId = bu.id
+        WHERE  c.code = #{code}
+    </select>
+</mapper>

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lifeshs.dao1.data.RecommendOrgServeDao" >
+    <select id="findServeByServeIdList" resultType="com.lifeshs.po.data.RecommendOrgServePO">
+        SELECT <include refid="T_DATA_RECOMMEND_ORG_SERVE_ALL_COLUMN" /> FROM t_data_recommend_org_serve
+        WHERE
+            serveId = #{serveId}
+            AND deleted = FALSE
+        ORDER BY weight ASC
+        <if test="limit != null">LIMIT #{limit}</if>
+    </select>
+
+    <select id="findModifyRecommendOrgServeList" resultType="com.lifeshs.po.data.RecommendOrgServePO">
+        SELECT <include refid="T_DATA_RECOMMEND_ORG_SERVE_ALL_COLUMN" /> FROM t_data_recommend_org_serve
+        WHERE
+            createDate &gt; #{datePoint}
+            AND IF (
+                modifyDate IS NOT NULL,
+                modifyDate &gt; #{datePoint},
+                '1=1'
+            )
+            <if test="serveId != null">
+                AND serveId = #{serveId}
+            </if>
+    </select>
+
+    <!-- 推荐(机构)服务表全字段 -->
+    <sql id="T_DATA_RECOMMEND_ORG_SERVE_ALL_COLUMN">id, orgServeId, serveId, createDate, modifyDate, deleted</sql>
+</mapper>

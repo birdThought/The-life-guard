@@ -1,0 +1,114 @@
+##这份文件用于快速更换系统配置环境
+##js文件需要手动修改，/lifedefender-web/src/main/webapp/static/plugins/hx/webim.config.js
+#
+#本地环境 特指内网
+
+#数据库相关
+jdbcUrl=jdbc:mysql://192.168.0.200:3306/lifekeepers_dev?useUnicode=true&characterEncoding=UTF-8&zeroDateTimeBehavior=convertToNull&allowMultiQueries=true
+jdbcUsername=root
+jdbcPassword=123456
+
+#APP图片前缀
+photoPrefix=http://192.168.0.105
+
+#APP充值通知地址 (内网无法接收到通知，将通知地址定位开发环境避免异常报错)
+appRechargeNotifyUrl=http://apit.lifeshs.com
+#支付宝异步通知地址
+alipayNotifyUrl=http://test.lifeshs.com/commonControl/aliNotify
+#支付宝返回地址
+alipayReturnUrl=http://test.lifeshs.com/commonControl/aliReturn
+
+#微信通知地址 服务器异步通知页面路径  需http://格式的完整路径，不能加?id=123这类自定义参数，必须外网可以正常访问
+weChatConfig.notify_url = https://www.lifeshs.com/app/wxpay/notify
+
+#ImageUtilV2(图片工具)保存图片的根路径
+imageSaveRootPath=E:\\var\\tomcat\\lifekeepers_files
+
+#环信聊天相关
+huanxin.orgName = lifeshs
+huanxin.appName = testapp
+huanxin.clientId = YXA6P_p8cBQnEee-QhEQBkOkwg
+huanxin.clientSecret = YXA6VjMoJokmLT8XIUddr70UlyUiWQA
+
+#友盟推送相关
+umeng.productionMode = false
+
+#健客接口地址
+jianke.interface_url = http://218.107.9.125:8086/openapi/openApis/main
+jianke.loginName = smsh001
+jianke.loginPwd = 123456
+
+
+#开发环境 特指域名为test.lifeshs.com的测试环境
+
+#数据库相关
+#jdbcUrl=jdbc:mysql://112.74.97.163:3306/lifekeepers_test?useUnicode=true&characterEncoding=UTF-8&zeroDateTimeBehavior=convertToNull&allowMultiQueries=true
+#jdbcUsername=root
+#jdbcPassword=test2016
+
+#APP图片前缀
+#photoPrefix=http://apit.lifeshs.com
+
+#APP充值通知地址
+#appRechargeNotifyUrl=http://apit.lifeshs.com
+#支付宝异步通知地址
+#alipayNotifyUrl=http://test.lifeshs.com/commonControl/aliNotify
+#支付宝返回地址
+#alipayReturnUrl=http://test.lifeshs.com/commonControl/aliReturn
+
+#微信通知地址 服务器异步通知页面路径  需http://格式的完整路径，不能加?id=123这类自定义参数，必须外网可以正常访问
+#weChatConfig.notify_url = https://www.lifeshs.com/app/wxpay/notify
+
+#ImageUtilV2(图片工具)保存图片的根路径
+#imageSaveRootPath=/home/gztz/upload
+
+#环信聊天相关
+#huanxin.orgName = lifeshs
+#huanxin.appName = testapp
+#huanxin.clientId = YXA6P_p8cBQnEee-QhEQBkOkwg
+#huanxin.clientSecret = YXA6VjMoJokmLT8XIUddr70UlyUiWQA
+
+#友盟推送相关
+#umeng.productionMode = false
+
+#健客接口地址
+#jianke.interface_url = http://218.107.9.125:8086/openapi/openApis/main
+#jianke.loginName = smsh001
+#jianke.loginPwd = 123456
+
+#生产环境 特指www.lifekeepers.cn的正式环境
+
+##数据库相关
+#jdbcUrl=jdbc:mysql://120.76.77.36:3306/lifekeepers_v2?useUnicode=true&characterEncoding=UTF-8&zeroDateTimeBehavior=convertToNull&allowMultiQueries=true
+#jdbcUsername=root
+#jdbcPassword=gztz2015
+#
+##APP图片前缀
+#photoPrefix=http://csc.lifekeepers.cn
+#
+##APP充值通知地址
+#appRechargeNotifyUrl=http://www.lifekeepers.cn/app/aliNotify
+##支付宝异步通知地址
+#alipayNotifyUrl=http://www.lifekeepers.cn/commonControl/aliNotify
+##支付宝返回地址
+#alipayReturnUrl=http://www.lifekeepers.cn/commonControl/aliReturn
+#
+##微信通知地址 服务器异步通知页面路径  需http://格式的完整路径，不能加?id=123这类自定义参数，必须外网可以正常访问
+#weChatConfig.notify_url = https://www.lifeshs.com/app/wxpay/notify
+#
+##ImageUtilV2(图片工具)保存图片的根路径
+#imageSaveRootPath=/life/lifeshs/lifekeepers_files
+#
+##环信聊天相关
+#huanxin.orgName = lifeshs
+#huanxin.appName = lifekeepers
+#huanxin.clientId = YXA6bJM_wHMxEeaYOwGRHFMYAw
+#huanxin.clientSecret = YXA6RCbw7DAtqAV_xTmRkvqNs2X6qrU
+#
+##友盟推送相关
+#umeng.productionMode = true
+#
+##健客接口地址
+#jianke.interface_url = http://218.107.9.125:8086/openapi/openApis/main
+#jianke.loginName = smsh001
+#jianke.loginPwd = 123456

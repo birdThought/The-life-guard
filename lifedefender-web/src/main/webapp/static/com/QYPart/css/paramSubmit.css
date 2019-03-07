@@ -1,0 +1,206 @@
+.jedatebox .jedatetop, .jedatebox .jedatebot .jedatebtn span, .jedatebox .jedaul li:hover,
+	.jedatebtn span, .jedatebox .jedaul li.action, .jedatebox .jedatesety .ymdropul li.action,
+	.jedatebox .jedatesetm .ymdropul li.action, .jedatebox .jedaul li.action,
+	.jedatebox .jedatesety .ymdropul li.action:hover, .jedatebox .jedatesetm .ymdropul li.action:hover,
+	.jedatebox .jedatetopym p span.jedateymchle, .jedatebox .jedatetopym p span.jedateymchri,
+	.jedatebox .jedatetopym p span.jedateymchok {
+	background-color: #3598dc
+}
+
+.jedatebox .jedatebot .jedatebtn span:hover, .jedatebox .jedatesety .ymdropul li:hover,
+	.jedatebox .jedatesetm .ymdropul li:hover, .jedatebox .jedatetopym p span.jedateymchle:hover,
+	.jedatebox .jedatetopym p span.jedateymchri:hover, .jedatebox .jedatetopym p span.jedateymchok:hover,
+	.jedatebox .jedateym .prev:hover, .jedatebox .jedateym .next:hover {
+	background-color: #328ac4
+}
+
+.jedatebox .jedaul li.other {
+	color: #3598dc
+}
+
+.jedatebox {
+	border: 2px solid #3598dc
+}
+
+.item_contain {
+	
+}
+
+.item_title {
+	height: 40px;
+	line-height: 40px;
+	font-size: 16px;
+	border-bottom: 1px solid #ddd;
+	margin-bottom: 10px;
+}
+
+.item_title label.title {
+	border-bottom: 2px solid #3598dc;
+	height: 40px;
+	line-height: 40px;
+	text-align: center;
+	display: inline-block;
+	padding: 0 20px;
+	font-size: 17px;
+}
+
+.checkBox {
+	width: 23px;
+	height: 23px;
+	position: absolute;
+	right: 0;
+	border: 2px solid #ccc;
+	display: inline-block;
+	background: #fff;
+	border-right: none;
+	border-top: none;
+	cursor: pointer;
+}
+
+.checkBox img {
+	position: relative;
+	top: -12px;
+}
+
+.part_select {
+	padding: 15px;
+	font-size: 15px;
+}
+
+.part_select .select_box {
+	display: inline-block;
+	width: 350px;
+	height: 120px;
+	border: 2px solid #ccc;
+	margin-right: 20px;
+}
+
+.part_select .select_box .top {
+	height: 40px;
+	line-height: 40px;
+	background-color: #dddddd;
+	padding: 0 15px;
+	position: relative;
+}
+
+.part_select .select_box .content {
+	color: #6c6c6c;
+	padding: 13px;
+}
+
+.part_select .select_box_action {
+	display: inline-block;
+	width: 350px;
+	height: 120px;
+	border: 2px solid #3598dc;
+	margin-right: 20px;
+}
+
+.part_select .select_box_action .top {
+	height: 40px;
+	line-height: 40px;
+	padding: 0 15px;
+	position: relative;
+	background: #c6e8ff;
+}
+
+.part_select .select_box_action .content {
+	color: #6c6c6c;
+	padding: 13px;
+}
+
+.part_select .select_box_action .checkBox {
+	border-bottom: 2px solid #3598dc;
+	border-left: 2px solid #3598dc;
+}
+
+.param_set {
+	margin-bottom: 15px;
+	font-size: 15px
+}
+
+.param_set label.param {
+	margin-right: 10px;
+	font-weight: bold;
+	display: inline-block;
+	text-align: right;
+	width: 100px;
+}
+
+.param_set .select_photo_btn {
+	cursor: pointer;
+	outline: none;
+	width: 150px;
+	height: 150px;
+	background-color: #e1eef5;
+	margin-left: 20px;
+	border: 2px dashed #3598dc;
+	color: #3598dc;
+	font-size: 16px;
+	font-family: 'Microsoft YaHei';
+	float:left
+}
+
+.param_set .select_photo_btn img {
+	margin-bottom: 10px;
+}
+
+.param_set .warn {
+	color: #ce3232;
+	margin-right: 3px;
+	font-weight: normal;
+}
+
+.param_set input[type=text], .param_set input[type=password] {
+	padding: 5px 8px;
+	border: 1px solid #ccc;
+	font-size: 15px;
+	width: 250px;
+	outline-color: #3598dc;
+}
+
+.param_set .select-btn {
+	padding: 4px 8px;
+	font-family: 'Microsoft YaHei';
+	border: 1px solid #ccc;
+	margin-right: 10px;
+	min-width: 120px;
+}
+
+.save {
+	border: none;
+	outline: none;
+	border-radius: 3px;
+	padding: 5px 20px;
+	background: #3598dc;
+	color: #fff;
+	cursor: pointer;
+}
+
+.save:hover {
+	background: #328ac4;
+}
+
+.back {
+	border: none;
+	outline: none;
+	border-radius: 3px;
+	padding: 5px 20px;
+	border: 1px solid #ccc;
+	background-color: #fff;
+	margin-left: 30px;
+	cursor: pointer;
+}
+
+.back:hover {
+	background: #f1f1f1;
+}
+
+.big-txt-area{
+	resize:none;padding:8px;width:350px;border:1px solid #ccc;font-family:Microsoft YaHei
+}
+
+form {
+	padding-left: 20px;
+	padding-top: 20px
+}

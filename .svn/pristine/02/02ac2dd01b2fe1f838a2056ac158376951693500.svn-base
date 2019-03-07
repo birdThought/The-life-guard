@@ -1,0 +1,33 @@
+.dialog-content {
+    width: 800px;
+    min-height: 500px;
+    background: #fff;
+    padding: 30px;
+    padding-left: 120px;
+    font-size: 16px;
+    line-height: 35px;
+}
+
+.dialog-content .org-head {
+    position: absolute;
+    width: 100px;
+    height: 100px;
+    right: 70px;
+    top: 55px;
+    border-radius: 50%
+}
+
+.dialog-content .commit-btn {
+    padding-left: 80px
+}
+
+.dialog-content .commit-btn button {
+    border-radius: 3px;
+    padding: 5px 20px;
+    cursor: pointer;
+    font-family: 'Microsoft YaHei';
+    margin-top: 15px;
+}
+
+
+.dialog-content .param-item {}

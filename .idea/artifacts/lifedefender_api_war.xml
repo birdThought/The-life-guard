@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="war" name="lifedefender-api:war">
+    <output-path>$PROJECT_DIR$/lifedefender-api/target</output-path>
+    <root id="archive" name="lifedefender-api.war">
+      <element id="artifact" artifact-name="lifedefender-api:war exploded" />
+    </root>
+  </artifact>
+</component>

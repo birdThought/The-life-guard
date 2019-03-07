@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!-- 饮食单独映射表 -->
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lifeshs.dao.record.IRecordDao" >
+	<select id="selectDietByUserIdWithDatePageSplit" parameterType="java.util.HashMap" resultType="java.util.HashMap">
+		SELECT 
+			r.id, r.userId, r.recordDate, r.dietType, r.dietTime, r.energy, r.createDate
+		FROM
+			t_record_diet r
+		WHERE
+			r.userId =#{userId} And date_format(r.recordDate,'%Y-%m-%d')=#{recordDate}
+		ORDER BY
+			r.dietTime,r.id
+		LIMIT 
+			#{page},#{pageSize}
+	</select>
+	<select id="selectDietByUserIdWithDate" parameterType="java.util.HashMap" resultType="java.util.HashMap">
+		SELECT 
+			r.id, r.userId, r.recordDate, r.dietType, r.dietTime, r.energy, r.createDate
+		FROM
+			t_record_diet r
+		WHERE
+			r.userId =#{userId} And date_format(r.recordDate,'%Y-%m-%d')=#{recordDate}
+		ORDER BY
+			CONVERT(r.dietType USING GBK) DESC
+	</select>
+	<select id="selectDietCountByUserId" parameterType="java.util.HashMap" resultType="java.lang.Integer">
+		Select Count(*) From t_record_diet
+		Where userId =#{userId} 
+	</select>
+	<!-- 按日期间隔查询能量 -->
+	<select id="selectDietEnergyByUserIdWithDate" parameterType="java.util.HashMap" resultType="java.util.HashMap">
+		SELECT
+			SUM(energy) AS energy,
+			recordDate
+		FROM
+			t_record_diet
+		WHERE
+			userId = #{userId}
+		<choose>
+			<when test="customSetDate">
+				AND #{startDate} &lt;= DATE(recordDate) AND DATE(recordDate) &lt;= #{endDate}
+			</when>
+			<otherwise>
+				AND DATE_SUB(CURDATE(), INTERVAL 7 DAY) &lt;= DATE(recordDate)
+			</otherwise>
+		</choose>
+		GROUP BY
+			recordDate;
+	</select>
+	<select id="selectFoodByKind" parameterType="java.util.HashMap" resultType="java.util.HashMap">
+		SELECT
+			t_data_food. NAME,
+			t_data_food.ID,
+			t_data_food.KCAL,
+			t_data_food.image
+		FROM
+			t_data_food,
+			t_data_food_kind
+		WHERE
+			t_data_food_kind.id = t_data_food.kind
+		AND t_data_food_kind.`name` = #{kindName}
+	</select>
+	
+	<select id="selectFoodAllKind" resultType="com.lifeshs.entity.record.TDataFoodKind">
+		SELECT
+			id,
+			name
+		FROM
+			t_data_food_kind;
+	</select>
+	
+	<select id="selectCountOfDietGroupByDate" resultType="java.lang.Integer">
+		SELECT
+			COUNT(1)
+		FROM
+			(
+				SELECT
+					d.*
+				FROM
+					t_record_diet d
+				WHERE d.userId = #{userId}
+				GROUP BY
+					d.recordDate
+			) AS c;
+	</select>
+	
+	<select id="selectDietDateGroupByDateWithPageSplit" resultType="java.lang.String">
+		SELECT
+			recordDate
+		FROM
+			t_record_diet d
+		WHERE d.userId = #{userId}
+		GROUP BY
+			recordDate
+		ORDER BY
+			recordDate DESC
+		LIMIT #{startIndex}, #{pageSize};
+	</select>
+	
+	<select id="selectDietsWithDates" resultType="com.lifeshs.pojo.record.DietDetail">
+		SELECT
+			d.id,
+			d.dietType,
+			d.dietTime,
+			d.energy,
+			d.recordDate,
+			f.id AS foodId,
+			f.`name` AS foodName,
+			df.foodWeight,
+			df.kcal,
+			f.image
+		FROM
+			t_record_diet d
+		INNER JOIN t_record_diet_food df ON df.dietId = d.id
+		INNER JOIN t_data_food f ON f.id = df.foodID
+		WHERE
+			d.recordDate IN
+			<foreach collection="recordDates" open="(" close=")" separator="," index="index" item="dd">
+				#{dd}
+			</foreach>
+			AND d.userId = #{userId}
+	</select>
+</mapper>

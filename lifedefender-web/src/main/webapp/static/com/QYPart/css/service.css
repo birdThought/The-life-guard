@@ -1,0 +1,204 @@
+.service_order {
+	min-height: 180px;
+	border: 1px solid #ddd;
+	margin-top: 15px;
+	position: relative
+}
+
+.service_order .left_img {
+	width: 15%;
+	height: 100%;
+	position: absolute;
+	padding-top: 20px
+}
+
+.service_order .left_img div {
+	width: 100px;
+	border-radius: 15px;
+	height: 100px;
+	background: #3598dc;
+	line-height: 100px;
+	text-align: center;
+}
+
+.service_order .service_order_right_content {
+	height: 100%;
+	width: 85%;
+	position: relative;
+	left: 15%;
+}
+
+.service_order .service_order_right_content .top_title {
+	border-bottom: 1px solid #ddd;
+	height: 55px;
+	line-height: 55px;
+	font-size: 17px;
+}
+
+.service_order .service_order_right_content .content_body {
+	font-size: 16px;
+	padding: 10px 10px 20px 0
+}
+
+.service_order .service_order_right_content .content_body .divide_percent
+	{
+	color: #ff6a00
+}
+
+.service_order .service_order_right_content .content_body p.info {
+	color: #6c6c6c;
+	font-size: 15px
+}
+
+.btn_group {
+	margin-top: 15px
+}
+
+.btn_group button {
+	border: none;
+	outline: none;
+	border-radius: 3px;
+	padding: 5px 15px;
+	font-family: 'Microsoft YaHei';
+	cursor: pointer;
+	margin-right: 15px
+}
+
+.btn_group .open {
+	background: #3598dc;
+	color: #fff;
+}
+
+.btn_group .open:hover {
+	background-color: #328ac4;
+}
+
+.btn_group .hasOrder {
+	background: #eaeaea;
+	color: #6c6c6c;
+	border: 1px solid #ccc;
+	padding: 5px 25px;
+}
+
+.btn_group .priceOrder {
+	background: #fff;
+	color: #000;
+	border: 1px solid #ccc;
+}
+
+.btn_group .priceOrder:hover {
+	background: #f1f1f1
+}
+
+.kaitong_explain {
+	margin-top: 100px;
+	border-top: 1px dashed #ccc;
+	padding-top: 30px;
+	margin-bottom: 20px
+}
+
+.kaitong_explain .top_wrap {
+	color: #54c2fa;
+	font-size: 18px;
+}
+
+.kaitong_explain .top_wrap img {
+	margin-right: 15px
+}
+
+.kaitong_explain ul {
+	padding: 10px 5px;
+	font-size: 15px;
+	color: #6c6c6c;
+	line-height: 30px
+}
+
+.kaitong_explain ul li span {
+	display: inline-block;
+	border-radius: 50%;
+	background: #54c2fa;
+	width: 12px;
+	height: 12px;
+	margin-right: 10px;
+}
+
+.checkBox {
+	width: 23px;
+	height: 23px;
+	border: 2px solid #ccc;
+	display: inline-block;
+	background: #fff;
+	cursor: pointer;
+	position: absolute;
+	top: 8px;
+}
+
+.checkBox img {
+	position: relative;
+	top: -12px;
+}
+
+.dialog_contain {
+	background: #fff;
+	padding: 20px;
+	margin: 0 auto;
+	width: 650px
+}
+
+.dialog_contain .block_item {
+	height: 110px;
+	border: 1px solid #ddd;
+	margin-bottom: 15px;
+	position: relative
+}
+
+.dialog_contain .top_msg {
+	height: 40px;
+	background: #f1f1f2;
+	border-bottom: 1px solid #ddd;
+	line-height: 40px;
+	padding-left: 15px;
+	font-weight: bold;
+	font-size: 16px
+}
+
+.dialog_contain .top_msg label {
+	margin-left: 8px;
+	font-size:15px;
+}
+
+.dialog_contain .dialog_contain_price {
+	height: 70px;
+	line-height: 70px;
+	padding-left: 20px;
+}
+
+.dialog_contain .dialog_contain_price label {
+	font-weight: bold
+}
+
+.dialog_input_text {
+	padding: 3px 8px;
+	border: 1px solid #ddd;
+	font-size: 15px;
+	width: 200px;
+	outline-color: #3598dc;
+	margin: 0 10px
+}
+
+.select-btn {
+	padding: 3px 3px;
+	font-family: 'Microsoft YaHei';
+	border: 1px solid #ccc;
+	margin-left: 10px;
+	min-width: 150px;
+}
+
+.divide {
+	margin: 15px 0;
+	font-size: 15px
+}
+
+.divide label {
+	font-weight: bold
+}

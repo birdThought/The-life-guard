@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lifeshs.dao.device.IDeviceDao" >
+
+    <sql id="selectUaColumn">id,userId,status,UA,UAStatusDescription,UAArea,measureDate,deviceType,dataType</sql>
+    
+    <select id="listUa" resultType="com.lifeshs.pojo.healthDevice.UaDTO">
+        SELECT
+            <include refid="selectUaColumn" />
+        FROM t_measure_ua
+        WHERE
+            userId = #{userId}
+            AND deviceType LIKE CONCAT(#{deviceType}, '%')
+        ORDER BY measureDate DESC
+        LIMIT #{startIndex}, #{pageSize}
+    </select>
+
+    <select id="listUaWithLatestDay" resultType="com.lifeshs.pojo.healthDevice.UaDTO">
+        SELECT
+            <include refid="selectUaColumn" />
+        FROM t_measure_ua
+        WHERE
+            userId = #{userId}
+            AND DATE_SUB(CURDATE(), INTERVAL 0 DAY) &lt;= date(measureDate)
+            AND DATE_SUB(CURDATE(), INTERVAL 0 DAY) &gt;= date(measureDate)
+            AND deviceType LIKE CONCAT(#{deviceType}, '%')
+        ORDER BY measureDate DESC
+    </select>
+
+    <select id="listUaWithLatestWeek" resultType="com.lifeshs.pojo.healthDevice.UaDTO">
+        SELECT
+            <include refid="selectUaColumn" />
+        FROM t_measure_ua
+        WHERE
+            userId = #{userId}
+            AND DATE_SUB(CURDATE(), INTERVAL 1 WEEK) &lt; date(measureDate)
+            AND DATE_SUB(CURDATE(), INTERVAL 0 WEEK) &gt;= date(measureDate)
+            AND deviceType LIKE CONCAT(#{deviceType}, '%')
+        ORDER BY measureDate DESC
+    </select>
+
+    <select id="listUaWithLatestMonth" resultType="com.lifeshs.pojo.healthDevice.UaDTO">
+        SELECT
+            <include refid="selectUaColumn" />
+        FROM t_measure_ua
+        WHERE
+            userId = #{userId}
+            AND DATE_SUB(CURDATE(), INTERVAL 1 MONTH) &lt; date(measureDate)
+            AND DATE_SUB(CURDATE(), INTERVAL 0 MONTH) &gt;= date(measureDate)
+            AND deviceType LIKE CONCAT(#{deviceType}, '%')
+        ORDER BY measureDate DESC
+    </select>
+
+    <select id="listUaWithLatestThreeMonth" resultType="com.lifeshs.pojo.healthDevice.UaDTO">
+        SELECT
+            <include refid="selectUaColumn" />
+        FROM t_measure_ua
+        WHERE
+            userId = #{userId}
+            AND DATE_SUB(CURDATE(), INTERVAL 3 MONTH) &lt; date(measureDate)
+            AND DATE_SUB(CURDATE(), INTERVAL 0 MONTH) &gt;= date(measureDate)
+            AND deviceType LIKE CONCAT(#{deviceType}, '%')
+        ORDER BY measureDate DESC
+    </select>
+
+    <insert id="saveUa" parameterType="com.lifeshs.pojo.healthDevice.UaDTO">
+        <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER">
+            SELECT LAST_INSERT_ID();
+        </selectKey>
+        INSERT INTO t_measure_ua(userId,status,UA,UAStatusDescription,UAArea,measureDate,deviceType,dataType,createDate)
+        VALUES(#{userId},#{status},#{UA},#{UAStatusDescription},#{UAArea},#{measureDate},#{deviceType},#{dataType},NOW())
+    </insert>
+
+</mapper>

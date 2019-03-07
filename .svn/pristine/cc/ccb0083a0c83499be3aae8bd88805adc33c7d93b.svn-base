@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lifeshs.dao1.electronicCoupons.ElectronicCouponsPackageRecordDao">
+    <select id="findRecord" resultType="com.lifeshs.po.user.UserElectronicCouponsPackageRecordPO">
+    SELECT id, userId, packageId, createDate FROM t_user_electronic_coupons_package_record
+    WHERE userId = #{userId} AND packageId = #{packageId}
+</select>
+
+    <insert id="addRecord">
+        INSERT INTO t_user_electronic_coupons_package_record(userId, packageId, createDate)
+        VALUES(#{userId}, #{packageId}, NOW())
+    </insert>
+</mapper>

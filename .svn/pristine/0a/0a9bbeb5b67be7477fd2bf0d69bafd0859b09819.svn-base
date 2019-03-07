@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!-- 心率设备单独映射表 -->
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lifeshs.dao.device.IDeviceDao">
+
+    <sql id="selectHeartRateColumn">status,heartRate,heartRateArea,heartRateStatusDescription,measureDate
+    </sql>
+
+    <select id="selectHeartRateWithSplit" parameterType="java.util.HashMap"
+        resultType="java.util.HashMap">
+        SELECT
+        <include refid="selectHeartRateColumn" />
+        FROM t_measure_heartrate WHERE
+        userId = #{userId} AND
+        deviceType LIKE CONCAT(#{deviceType}, '%')
+        ORDER BY measureDate DESC LIMIT #{start},#{pageSize}
+    </select>
+
+    <select id="selectHeartRateWithSpecialDate" parameterType="java.util.HashMap"
+        resultType="java.util.HashMap">
+        SELECT
+        <include refid="selectHeartRateColumn" />
+        FROM t_measure_heartrate
+        <where>
+            userId = #{userId} AND deviceType LIKE CONCAT('%', #{deviceType},
+            '%') AND
+            <choose>
+                <when test="dateType == 'day'">
+                    DATE_FORMAT(measureDate, '%Y-%m-%d') = #{measureDate} ORDER BY measureDate DESC
+                </when>
+                <when test="dateType == 'month'">
+                    DATE_FORMAT(measureDate, '%Y-%m') = #{measureDate} ORDER BY measureDate DESC
+                </when>
+            </choose>
+        </where>
+    </select>
+
+    <select id="selectHeartRateWithDay" parameterType="java.util.HashMap"
+        resultType="java.util.HashMap">
+        SELECT
+        <include refid="selectHeartRateColumn" />
+        FROM t_measure_heartrate
+        <where>
+            userId = #{userId} AND deviceType LIKE CONCAT(#{deviceType}, '%') AND
+            DATE_SUB(CURDATE(), INTERVAL 0 DAY) &lt;= date(measureDate) AND
+            DATE_SUB(CURDATE(), INTERVAL 0 DAY) &gt;= date(measureDate)
+            ORDER BY measureDate DESC
+        </where>
+    </select>
+
+    <select id="selectHeartRateWithWeek" parameterType="java.util.HashMap"
+        resultType="java.util.HashMap">
+        SELECT
+        <include refid="selectHeartRateColumn" />
+        FROM t_measure_heartrate WHERE
+        userId = #{userId} AND
+        DATE_SUB(CURDATE(), INTERVAL 1 WEEK) &lt; date(measureDate) AND
+        DATE_SUB(CURDATE(), INTERVAL 0 WEEK) &gt;= date(measureDate) AND
+        deviceType LIKE CONCAT(#{deviceType}, '%')
+        ORDER BY measureDate DESC
+    </select>
+
+    <select id="selectHeartRateWithMonth" parameterType="java.util.HashMap"
+        resultType="java.util.HashMap">
+        SELECT
+        <include refid="selectHeartRateColumn" />
+        FROM t_measure_heartrate WHERE
+        userId = #{userId} AND
+        DATE_SUB(CURDATE(), INTERVAL 1 MONTH) &lt; date(measureDate) AND
+        DATE_SUB(CURDATE(), INTERVAL 0 MONTH) &gt;= date(measureDate) AND
+        deviceType LIKE CONCAT(#{deviceType}, '%')
+        ORDER BY measureDate DESC
+    </select>
+
+    <select id="selectHeartRateWithThreeMonth" parameterType="java.util.HashMap"
+        resultType="java.util.HashMap">
+        SELECT
+        <include refid="selectHeartRateColumn" />
+        FROM t_measure_heartrate WHERE
+        userId = #{userId} AND
+        DATE_SUB(CURDATE(), INTERVAL 3 MONTH) &lt; date(measureDate) AND
+        DATE_SUB(CURDATE(), INTERVAL 0 MONTH) &gt;= date(measureDate) AND
+        deviceType LIKE CONCAT(#{deviceType}, '%')
+        ORDER BY measureDate DESC
+    </select>
+
+</mapper>

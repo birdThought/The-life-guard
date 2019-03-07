@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lifeshs.dao.shop.goods.SpecDao">
+
+	<resultMap type="com.lifeshs.shop.SpecDTO" id="specWithValuesMap">
+		<id column="id" property="id" />
+		<result column="goodsId" property="goodsId" />
+		<result column="usedNum" property="usedNum" />
+		<result column="name" property="name" />
+		<!-- 规格值 -->
+		<collection property="specValues" ofType="com.lifeshs.shop.SpecValueDTO">
+			<id column="vid" property="id"/>
+			<result column="vname" property="name"/>
+			<result column="used" property="used"/>
+		</collection>
+		
+	</resultMap>
+	
+	<select id="getOneById" resultMap="specWithValuesMap">
+		SELECT s.id,s.`goods_id` AS goodsId,s.`used_num` AS usedNum,s.`name`
+		,sv.`id` AS vid,sv.`name` AS vname,sv.`used`
+		FROM t_shop_spec s
+		INNER JOIN t_shop_spec_value sv
+		ON s.`id`=sv.`spec_id`
+		<where>
+			<if test="id != null">and s.`id`=#{id}</if>
+		</where>
+		limit 1
+	</select>
+	
+	<select id="selectByGoodsId" resultMap="specWithValuesMap">
+		SELECT s.id,s.`goods_id` AS goodsId,s.`used_num` AS usedNum,s.`name`
+		,sv.`id` AS vid,sv.`name` AS vname,sv.`used`
+		FROM t_shop_spec s
+		INNER JOIN t_shop_spec_value sv
+		ON s.`id`=sv.`spec_id`
+		<where>
+			<if test="goodsId != null">
+				AND s.`goods_id`=#{goodsId}
+			</if>
+		</where>
+	</select>
+	
+	<select id="selectSpecFormatByGid" resultType="com.lifeshs.shop.GoodsSpecDTO">
+		select id,goods_id as goodsId,specs_format as specsFormat,deleted
+		from t_shop_goods_spec
+		where goods_id=#{gid} AND deleted=0
+		limit 1
+	</select>
+	
+		<!-- 插入规格: t_shop_spec -->
+	<insert id="saveSpec" parameterType="com.lifeshs.shop.SpecDTO" useGeneratedKeys="true" keyProperty="id">
+		insert into t_shop_spec
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="goodsId != null">goods_id,</if>
+			<if test="name != null">`name`,</if>
+			<if test="usedNum != null">used_num,</if>
+		</trim>
+		VALUES
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="goodsId != null">#{goodsId},</if>
+			<if test="name != null">#{name},</if>
+			<if test="usedNum != null">#{usedNum},</if>
+		</trim>
+	</insert>
+	
+	<insert id="saveSpecValue" parameterType="com.lifeshs.shop.SpecValueDTO" useGeneratedKeys="true" keyProperty="id">
+		INSERT INTO t_shop_spec_value
+			(spec_id,name,used)
+		 VALUES	
+           	(#{specId},#{name},#{used})  
+	</insert>
+	
+	<!-- 批量插入 规格值-->
+	<insert id="batchInsertSpecValue">
+		INSERT INTO t_shop_spec_value
+			(spec_id,name,used)
+		 VALUES	
+		<foreach collection="specValues" item="val" separator=",">
+           	(#{val.specId},#{val.name},#{val.used})  
+        </foreach>
+	</insert>
+	
+	<!--  插入规格 -->
+	<insert id="insertGoodsSpecs" parameterType="com.lifeshs.shop.GoodsSpecDTO">
+		INSERT INTO t_shop_goods_spec
+			(goods_id,specs_format,deleted)
+		VALUES
+		(#{goodsId},#{specsFormat},#{deleted})
+	</insert>
+	
+	<delete id="removeOldSpecsAndValuesByGid">
+		DELETE n.*,v.* FROM t_shop_spec n 
+		LEFT JOIN t_shop_spec_value v ON n.id=v.spec_id
+		WHERE n.goods_id=#{gid}
+	</delete>
+	
+	<update id="busRemoveGoodsSpecByGid">
+		update t_shop_goods_spec set deleted=1 where goods_id=#{gid} AND deleted=0
+	</update>
+	
+	<update id="updateSpecs" parameterType="com.lifeshs.shop.GoodsSpecDTO">
+		update t_shop_goods_spec sp
+		set sp.specs_format=#{specsFormat}
+		where sp.goods_id=#{goodsId}
+	</update>
+</mapper>

@@ -1,0 +1,314 @@
+﻿ table {
+     word-break: break-all;
+     table-layout: fixed
+ }
+ 
+ .service_table {
+     width: 100%;
+     font-size: 15px;
+     text-align: center;
+ }
+
+ .server-ctrl{
+     width:75%;
+ }
+ .right_body {
+     background: #fff;
+     padding: 14px 20px 20px 20px;
+     border: 1px solid #ddd;
+ }
+
+ .service_table tr:nth-child(2n){background: #f6f6f6}
+ .paper-table{
+     width:100%;
+ }
+
+ .paper-type-table{
+     width:50%;
+ }
+
+ .service_table tr:first-child {
+     background-color: #eceeef;
+     font-weight: bold
+ }
+ 
+ .service_table tr {
+     height: 45px;
+ }
+
+ .service_table tr td {
+     border: 1px solid #ddd;
+ }
+ .service_table tr:nth-child(n+2):hover{
+     background: #f1fdf8;
+ }
+ .service_table tr td .jobStatus {
+     color: #45be89
+ }
+ 
+ .service_table tr td span.money {
+     color: #eb6767
+ }
+ 
+ .service_table tr:last-child td {
+     border-bottom: none
+ }
+ 
+ .service_table tr a {
+     color: #0093ff;
+     cursor: pointer;
+ }
+ 
+ select.service_select {
+     padding: 3px 5px;
+     width: 106px;
+     border: 1px solid #ddd;
+     font-size: 14px;
+     margin-right: 10px;
+     font-family: 'Microsoft YaHei';
+     outline-color: #3598dc;
+     height: 32px;
+ }
+ 
+ .outdate {
+     min-width: 200px;
+     border: 1px solid #ddd;
+     display: inline-block;
+     height: 30px;
+     line-height: 30px;
+     box-sizing: content-box;
+     margin-right: 10px
+ }
+ 
+ .outdate label {
+     background-color: #f0f0f0;
+     padding: 0px 10px;
+     display: inline-block;
+     border-right: 1px solid #ddd
+ }
+
+ .outdate input {
+     border: none;
+     outline: none;
+     padding: 0 3px
+ }
+ 
+ .search-btn {
+     border: none;
+     outline: none;
+     padding: 6px 20px;
+     background-color: #3598dc;
+     color: white;
+     font-size: 15px;
+     font-family: 'Microsoft YaHei';
+     cursor: pointer;
+     position: absolute;
+     right: 0
+ }
+ 
+ .search-btn:hover {
+     background-color: #328ac4
+ }
+ 
+ .btn_group {
+     height: 50px;
+     line-height: 50px;
+     background: #eceeef;
+     text-align: right;
+     position: relative;
+     z-index: 10;
+ }
+ 
+ .btn_group button {
+     border: none;
+     outline: none;
+     border-radius: 3px;
+     padding: 5px 15px;
+     font-family: 'Microsoft YaHei';
+     cursor: pointer;
+     margin-right: 8px
+ }
+ 
+ .btn_group .add {
+     background: #3598dc;
+     color: #fff;
+ }
+ 
+ .btn_group .add:hover {
+     background-color: #328ac4;
+ }
+ 
+ .btn_group .edit {
+     background: #fff;
+     color: #000;
+     border: 1px solid #ccc
+ }
+ 
+ .btn_group .edit:hover {
+     background: #f1f1f1
+ }
+ 
+ .main_contain {
+     margin-top: 20px;
+     margin-bottom: 50px
+ }
+ 
+ .bigTitle {
+     margin-bottom: 15px;
+     position: relative
+ }
+ 
+ .bigTitle h3 {
+     font-size: 18px;
+     border-left: 6px solid #3598dc;
+     padding-left: 20px;
+ }
+ 
+ .bigTitle p {
+     color: #6c6c6c;
+     font-size: 15px;
+     margin-top: 8px;
+     padding-left: 5px
+ }
+ 
+ .dialog_btn {
+     border: 1px solid #ccc;
+     border-bottom: none;
+     background: #fff;
+     width: 80px;
+     position: absolute
+ }
+ 
+ .dialog_btn li {
+     height: 35px;
+     line-height: 35px;
+     border-bottom: 1px solid #ccc;
+     text-align: center;
+     cursor: pointer
+ }
+ 
+ .dialog_btn li:hover {
+     background-color: #f1f1f1
+ }
+ 
+ .time-sort {
+     border: solid 5px;
+     border-color: #eceeef #eceeef #000 #eceeef;
+     position: relative;
+     display: inline-block;
+     bottom: 12px;
+     left: 5px;
+     cursor: pointer;
+     outline: none;
+ }
+ 
+ .time-sort:after {
+     content: "";
+     width: 0px;
+     height: 0;
+     border: solid 5px;
+     border-color: #000 #eceeef #eceeef #eceeef;
+     display: inline-block;
+     position: absolute;
+     top: 8px;
+     left: -5px;
+ }
+
+/*添加按钮*/
+ .right_top{
+     position: relative;
+ }
+ .btnSpan{
+     /* position: absolute; */
+     top:0;
+     right:0;
+     padding:2px 10px 2px 30px;
+     border:1px solid #ddd;
+     border-radius:4px;
+     background: url(../images/addto.png) no-repeat center;
+     cursor: pointer;
+     font-size: 15px;
+ }
+ .out-contain{
+     box-sizing: content-box;height: 32px
+ }
+ .out-contain .service_select{
+     margin-right:0px;border: none
+ }
+ .out-contain input{
+     height: 30px;border-left: 1px solid #ddd;padding: 0 8px
+ }
+
+ .healthTable {
+     width: 100%;
+     text-align: center;
+     font-size: 15px;
+ }
+
+ .healthTable tr:first-child {
+     color: #3598dc;
+     font-weight: bold;
+     height: 40px;
+     line-height: 40px;
+ }
+
+ .healthTable tr:not(:first-child ) td {
+     border-bottom: 1px dashed #ddd;
+     font-size: 15px;
+     padding: 8px 0;
+ }
+ .healthTable tr:last-child td{
+     border-bottom:none;
+ }
+ .date_contain {
+     height: 40px;
+     line-height: 40px;
+     background: #eceeef;
+     margin: 10px 0;
+     text-align: center;
+     position: relative;
+     font-size: 15px;
+     font-weight: bold;
+ }
+
+ .date_contain .pre_v {
+     display: inline-block;
+     vertical-align: middle;
+     line-height: 20px;
+     position: absolute;
+     left: 20px;
+     top: 8px;
+     cursor: pointer;
+ }
+
+ .date_contain .next_d {
+     display: inline-block;
+     vertical-align: middle;
+     line-height: 20px;
+     position: absolute;
+     right: 20px;
+     top: 8px;
+     cursor: pointer;
+ }
+
+ .date_contain .next_d img {
+     transform: rotateY(-180deg);
+ }
+ 
+ .tips {
+     margin: 10px;
+    background-color: #fbf7aa;
+    color: #b57d35;
+    font-size: 16px;
+ }
+ .titleShow {
+     border-bottom: 1px dashed #ddd;
+     padding-bottom: 16px;
+ }
+ .small-tip{
+     border: 1px solid #ddd;
+     float: left;
+ }
+ .Select-Options {
+     float: left;
+ }

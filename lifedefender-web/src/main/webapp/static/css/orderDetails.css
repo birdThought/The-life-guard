@@ -1,0 +1,259 @@
+@charset "utf-8";
+*:before,*:after,*{box-sizing:border-box;
+    -moz-box-sizing:border-box; /* Firefox */
+    -webkit-box-sizing:border-box; /* Safari */
+}
+.container{
+    width:918px;
+    min-height:840px;
+    border:1px solid #ddd;
+    margin:20px 40px;
+    padding:0 30px 20px;
+}
+.container h3{
+    font-size:16px;
+    font-weight:500;
+}
+.title{
+    height: 60px;
+    line-height: 60px;
+    font-size: 16px;
+    border-bottom: 1px dashed #ddd;
+}
+.liucheng{
+    position: relative;
+    height: 120px;
+    padding: 20px 72px 25px;
+    color: #6c6c6c;
+}
+.liucheng .line{
+    display: inline-block;
+    height: 6px;
+    background-color: #e2e2e2;
+    position: absolute;
+    width: 48%;
+    left: 130px;
+    top: 60px;
+}
+.liucheng .step{
+    position: relative;
+    display:inline-block;
+    width: 18%;
+    height: 100%;
+    text-align: center;
+    z-index: 10;
+    line-height: 28px;
+}
+.step em{
+    display:inline-block;
+    width:30px;
+    height:30px;
+    line-height:22px;
+    border:4px solid #ddd;
+    border-radius:50%;
+    background-color:#fff;
+}
+.current-pay-state{
+    background-color:#f1f1f2;
+    padding:20px 40px;
+    font-size:14px;
+    margin-bottom:20px;
+}
+.current-pay-state p{
+    margin-bottom:10px;
+}
+.stateBtn{
+    height:30px;
+    overflow: auto;
+    zoom: 1;
+    margin-bottom:20px;
+}
+.stateBtn .alignLeft {
+    float: left;
+}
+.stateBtn .alignRight{
+    float:right;
+}
+.stateBtn strong{
+    font-weight:bold;
+}
+.stateBtn span{
+    padding:4px 14px;
+    background-color:#ff6600;
+    color:#fff;
+    margin-left:10px;
+    border-radius:5px;
+}
+.orderInfor{
+    border:1px solid #ddd;
+    padding:20px 40px;
+    margin-bottom:20px;
+}
+.orderInfor h3{
+    margin-bottom:20px;
+}
+.orderInfor ul li{
+    display:inline-block;
+    width:30%;
+    margin-bottom:10px;
+}
+.orderInfor label{
+    color:#6c6c6c;
+}
+.bought-table{
+    width:814px;
+    border-collapse:collapse;
+}
+.bought-table td{
+    width:86px;
+    text-align:center;
+}
+.bought-table .table-title{
+    background-color:#f1f1f1;
+}
+.bought-table .table-title span{
+    margin-right:16px;
+}
+.bought-table .contentBg{
+    padding:20px 0;
+    width:360px;
+    text-align:left;
+}
+.bought-table td em,
+.priceSum em{
+    color:red;
+    font-size:16px;
+}
+.bought-table td dt{
+    font-weight:600;
+    font-size:15px;
+}
+.bought-table td.count{
+    width:140px;
+    padding-left:10px;
+}
+.item-amount:after{
+    content:" ";
+    display:block;
+    height:0;
+    visibility:hidden;
+    clear:both;
+}
+.item-amount  a{
+    float:left;
+    width:34px;
+    height:24px;
+    border:1px solid #ddd;
+    background-color:#f0f0f0;
+    text-align:center;
+}
+.item-amount input{
+    float:left;
+    height:24px;
+    width:50px;
+    outline-color: #ddd;
+    text-align:center;
+}
+.priceSum ul{
+    text-align:right;
+    float:right;
+    margin-right:10px;
+    margin-bottom: 20px;
+}
+.priceSum:after{
+    content:"";
+    display:block;
+    height:0;
+    clear:both;
+    visibility: hidden;
+}
+.priceSum em{
+    margin-left:100px;
+}
+/*订单详情2*/
+.partPay{
+    font-size:16px;
+    padding:20px 40px;
+    border:1px solid #ddd;
+}
+.partPay li{
+    display:inline-block;
+    margin-right:4px;
+}
+.partPay li span{
+    margin-right:8px;
+    padding:4px 16px;
+    border:1px solid #ddd;
+}
+
+.sum{
+    width:856px;
+    background-color:#f1f1f2;
+    height:40px;
+    line-height:40px;
+    overflow:auto;
+    zoom: 1;
+    margin-top: 20px;
+
+}
+.sum p{
+    float:right;
+}
+.sum p em{
+    margin-left:10px;
+    margin-right:20px;
+}
+.sum p span{
+    color:#fff;
+    padding:10px 16px;
+    background-color:#ff5454;
+}
+/*订单详情3*/
+.stateAlign:after{
+    content:"";
+    display:block;
+    clear:both;
+    height:0;
+    visibility: hidden;
+}
+.stateLeft{
+    float:left;
+}
+.stateRight{
+    font-size:14px;
+    float:right;
+    background-color:#fff;
+    text-align: center;
+    padding:20px 20px 10px;
+}
+.stateRight em{
+    font-size:30px;
+    color:red;
+    letter-spacing: 5px;
+}
+.stateRight p{
+    margin-bottom:30px;
+}
+.stateRight span{
+    background-color:#48c858;
+    color:#fff;
+    border-radius:5px;
+    padding:4px 10px;
+}
+/*订单详情4*/
+.focusService{
+    border: 1px solid #ddd;
+    padding: 20px 40px;
+    margin-bottom: 20px;
+}
+.focusService ul{
+    text-indent:2em;
+    list-style-type: disc;
+    list-style-position:inside;
+}
+.commit-order{
+    background-color:#f1f1f2;height: 45px;position: relative
+}
+.commit-order button{
+    position: absolute;height: 45px;right: 0;background-color:#ff5454;color:#fff;padding: 0 20px;font-size: 16px;outline: none;border: none;font-family: 'Microsoft Yahei';cursor: pointer;
+}

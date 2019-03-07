@@ -1,0 +1,75 @@
+.container {
+    width: 918px;
+}
+
+.container > h3 {
+    height: 60px;
+    line-height: 60px;
+    font-size: 18px;
+    font-weight: 400;
+    margin: 0 30px 20px;
+    border-bottom: 1px dashed #ddd;
+}
+
+.container > .instruction {
+    font-size: 16px;
+    margin-bottom: 20px;
+    padding-left: 30px;
+}
+
+.container > #sms {
+    margin-left: 30px;
+}
+
+.container > #sms > p.bottom-border-dashed {
+    border-bottom: 1px dashed #ddd;
+    padding-bottom: 5px;
+    margin-bottom: 5px;
+}
+
+.smsWarning_add {
+    margin-bottom: 13px;
+}
+
+.smsWarning_add > span {
+    padding: 6px 20px 6px 40px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    cursor: pointer;
+    background: url(../../../static/images/add.png) no-repeat 12px center;
+    float: right;
+    margin-top: -30px;
+    margin-right: 20px;
+}
+
+#receiveLists {
+    border-collapse: collapse;
+    line-height: 40px;
+    width: 700px;
+    text-align: center;
+    word-break: break-all;
+    table-layout: fixed;
+    margin: 20px;
+    margin-bottom: 20px;
+}
+
+#receiveLists > thead {
+    background: #ddd;
+}
+
+#receiveLists th, #receiveLists td {
+    border-bottom: 1px solid #ddd;
+}
+
+#warningList {
+    margin: 10px;
+    padding-bottom: 5px;
+}
+
+#warningList > div {
+    padding: 5px;
+}
+
+#warningList div.icheckbox_minimal-green {
+    margin-right: 5px;
+}

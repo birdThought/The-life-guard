@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lifeshs.dao1.measure.LungInstrumentDao" >
+  <resultMap id="BaseResultMap" type="com.lifeshs.po.LungInstrumentPO" >
+    <constructor >
+      <idArg column="id" jdbcType="INTEGER" javaType="java.lang.Integer" />
+      <arg column="userId" jdbcType="INTEGER" javaType="java.lang.Integer" />
+      <arg column="status" jdbcType="BIGINT" javaType="java.lang.Long" />
+      <arg column="vitalCapacity" jdbcType="SMALLINT" javaType="java.lang.Short" />
+      <arg column="vitalCapacityArea" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="vitalCapacityStatusDescription" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="measureDate" jdbcType="TIMESTAMP" javaType="java.util.Date" />
+      <arg column="deviceType" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="createDate" jdbcType="TIMESTAMP" javaType="java.util.Date" />
+      <arg column="dataType" jdbcType="SMALLINT" javaType="java.lang.Short" />
+    </constructor>
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, userId, status, vitalCapacity, vitalCapacityArea, vitalCapacityStatusDescription, 
+    measureDate, deviceType, createDate, dataType
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_measure_lunginstrument
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from t_measure_lunginstrument
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.lifeshs.po.LungInstrumentPO" >
+    insert into t_measure_lunginstrument (id, userId, status, 
+      vitalCapacity, vitalCapacityArea, vitalCapacityStatusDescription, 
+      measureDate, deviceType, createDate, 
+      dataType)
+    values (#{id,jdbcType=INTEGER}, #{userId,jdbcType=INTEGER}, #{status,jdbcType=BIGINT}, 
+      #{vitalCapacity,jdbcType=SMALLINT}, #{vitalCapacityArea,jdbcType=VARCHAR}, #{vitalCapacityStatusDescription,jdbcType=VARCHAR}, 
+      #{measureDate,jdbcType=TIMESTAMP}, #{deviceType,jdbcType=VARCHAR}, #{createDate,jdbcType=TIMESTAMP}, 
+      #{dataType,jdbcType=SMALLINT})
+  </insert>
+  <insert id="insertSelective" parameterType="com.lifeshs.po.LungInstrumentPO" >
+    insert into t_measure_lunginstrument
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="userId != null" >
+        userId,
+      </if>
+      <if test="status != null" >
+        status,
+      </if>
+      <if test="vitalCapacity != null" >
+        vitalCapacity,
+      </if>
+      <if test="vitalCapacityArea != null" >
+        vitalCapacityArea,
+      </if>
+      <if test="vitalCapacityStatusDescription != null" >
+        vitalCapacityStatusDescription,
+      </if>
+      <if test="measureDate != null" >
+        measureDate,
+      </if>
+      <if test="deviceType != null" >
+        deviceType,
+      </if>
+      <if test="createDate != null" >
+        createDate,
+      </if>
+      <if test="dataType != null" >
+        dataType,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="userId != null" >
+        #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=BIGINT},
+      </if>
+      <if test="vitalCapacity != null" >
+        #{vitalCapacity,jdbcType=SMALLINT},
+      </if>
+      <if test="vitalCapacityArea != null" >
+        #{vitalCapacityArea,jdbcType=VARCHAR},
+      </if>
+      <if test="vitalCapacityStatusDescription != null" >
+        #{vitalCapacityStatusDescription,jdbcType=VARCHAR},
+      </if>
+      <if test="measureDate != null" >
+        #{measureDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="deviceType != null" >
+        #{deviceType,jdbcType=VARCHAR},
+      </if>
+      <if test="createDate != null" >
+        #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="dataType != null" >
+        #{dataType,jdbcType=SMALLINT},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.lifeshs.po.LungInstrumentPO" >
+    update t_measure_lunginstrument
+    <set >
+      <if test="userId != null" >
+        userId = #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=BIGINT},
+      </if>
+      <if test="vitalCapacity != null" >
+        vitalCapacity = #{vitalCapacity,jdbcType=SMALLINT},
+      </if>
+      <if test="vitalCapacityArea != null" >
+        vitalCapacityArea = #{vitalCapacityArea,jdbcType=VARCHAR},
+      </if>
+      <if test="vitalCapacityStatusDescription != null" >
+        vitalCapacityStatusDescription = #{vitalCapacityStatusDescription,jdbcType=VARCHAR},
+      </if>
+      <if test="measureDate != null" >
+        measureDate = #{measureDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="deviceType != null" >
+        deviceType = #{deviceType,jdbcType=VARCHAR},
+      </if>
+      <if test="createDate != null" >
+        createDate = #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="dataType != null" >
+        dataType = #{dataType,jdbcType=SMALLINT},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.lifeshs.po.LungInstrumentPO" >
+    update t_measure_lunginstrument
+    set userId = #{userId,jdbcType=INTEGER},
+      status = #{status,jdbcType=BIGINT},
+      vitalCapacity = #{vitalCapacity,jdbcType=SMALLINT},
+      vitalCapacityArea = #{vitalCapacityArea,jdbcType=VARCHAR},
+      vitalCapacityStatusDescription = #{vitalCapacityStatusDescription,jdbcType=VARCHAR},
+      measureDate = #{measureDate,jdbcType=TIMESTAMP},
+      deviceType = #{deviceType,jdbcType=VARCHAR},
+      createDate = #{createDate,jdbcType=TIMESTAMP},
+      dataType = #{dataType,jdbcType=SMALLINT}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+
+  <select id="selectMeasureDatesByUserId" resultType="com.lifeshs.po.LungInstrumentPO" parameterType="map">
+    SELECT measureDate,status
+    from t_measure_lunginstrument
+    where userId = #{userId}
+    and DATE_ADD(#{queryDate},interval 1 month) &gt;= measureDate
+    and measureDate &gt;= #{queryDate}
+  </select>
+
+  <select id="getLastDateByUserId" resultType="date" parameterType="integer">
+    SELECT measureDate
+    FROM t_measure_lunginstrument
+    WHERE userId = #{userId}
+    Order by measureDate desc
+    limit 1
+  </select>
+
+  <select id="lunginstrumentDate" resultType="com.lifeshs.po.LungInstrumentPO">
+    SELECT * FROM t_measure_heartrate
+    WHERE userId = #{userId}
+    AND  TO_DAYS(measureDate) = TO_DAYS(#{date})
+    limit 1
+  </select>
+</mapper>

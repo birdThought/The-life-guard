@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lifeshs.dao1.data.AppBannerDao" >
+
+    <select id="findBannerByTypeList" resultType="com.lifeshs.po.data.AppBannerPO">
+        SELECT <include refid="T_DATA_APP_BANNER_ALL_COLUMN" /> FROM t_data_app_banner
+        WHERE type = #{type} AND deleted = FALSE
+        ORDER BY weight ASC
+    </select>
+
+    <select id="findModifyBannerList" resultType="com.lifeshs.po.data.AppBannerPO">
+        SELECT <include refid="T_DATA_APP_BANNER_ALL_COLUMN" /> FROM t_data_app_banner
+        WHERE
+            createDate &gt; #{datePoint}
+            AND IF (
+                modifyDate IS NOT NULL,
+                modifyDate &gt; #{datePoint},
+                '1=1'
+            )
+            <if test="type != null">
+                AND type = #{type}
+            </if>
+        ORDER BY weight ASC
+    </select>
+
+    <sql id="T_DATA_APP_BANNER_ALL_COLUMN">
+        id, netPath, type, weight, custom, createDate, modifyDate, deleted
+    </sql>
+
+</mapper>

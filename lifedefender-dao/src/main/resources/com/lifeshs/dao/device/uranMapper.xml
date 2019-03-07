@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lifeshs.dao.device.IDeviceDao" >
+
+    <sql id="selectUranColumn">id,userId,status,LEU,LEUStatusDescription,NIT,NITStatusDescription,UBG,UBGStatusDescription,PRO,PROStatusDescription,pH,pHStatusDescription,pHArea,BLD,BLDStatusDescription,SG,SGStatusDescription,SGArea,KET,KETStatusDescription,BIL,BILStatusDescription,GLU,GLUStatusDescription,VC,VCStatusDescription,measureDate,deviceType,dataType
+    </sql>
+    
+    <select id="listUran" resultType="com.lifeshs.pojo.healthDevice.UranDTO">
+        SELECT
+            <include refid="selectUranColumn"></include>
+        FROM t_measure_uran
+        WHERE
+            userId = #{userId}
+            AND deviceType LIKE CONCAT(#{deviceType}, '%')
+        ORDER BY measureDate DESC
+        LIMIT #{startIndex}, #{pageSize}
+    </select>
+    
+    <select id="listUranWithLatestDay" resultType="com.lifeshs.pojo.healthDevice.UranDTO">
+        SELECT
+            <include refid="selectUranColumn"></include>
+        FROM t_measure_uran
+        WHERE
+            userId = #{userId}
+            AND DATE_SUB(CURDATE(), INTERVAL 0 DAY) &lt;= date(measureDate)
+            AND DATE_SUB(CURDATE(), INTERVAL 0 DAY) &gt;= date(measureDate)
+            AND deviceType LIKE CONCAT(#{deviceType}, '%')
+        ORDER BY measureDate DESC
+    </select>
+    
+    <select id="listUranWithLatestWeek" resultType="com.lifeshs.pojo.healthDevice.UranDTO">
+        SELECT
+            <include refid="selectUranColumn"></include>
+        FROM t_measure_uran
+        WHERE
+            userId = #{userId}
+            AND DATE_SUB(CURDATE(), INTERVAL 1 WEEK) &lt; date(measureDate)
+            AND DATE_SUB(CURDATE(), INTERVAL 0 WEEK) &gt;= date(measureDate)
+            AND deviceType LIKE CONCAT(#{deviceType}, '%')
+        ORDER BY measureDate DESC
+    </select>
+    
+    <select id="listUranWithLatestMonth" resultType="com.lifeshs.pojo.healthDevice.UranDTO">
+        SELECT
+            <include refid="selectUranColumn"></include>
+        FROM t_measure_uran
+        WHERE
+            userId = #{userId}
+            AND DATE_SUB(CURDATE(), INTERVAL 1 MONTH) &lt; date(measureDate)
+            AND DATE_SUB(CURDATE(), INTERVAL 0 MONTH) &gt;= date(measureDate)
+            AND deviceType LIKE CONCAT(#{deviceType}, '%')
+        ORDER BY measureDate DESC
+    </select>
+
+    <select id="listUranWithLatestThreeMonth" resultType="com.lifeshs.pojo.healthDevice.UranDTO">
+        SELECT
+            <include refid="selectUranColumn"></include>
+        FROM t_measure_uran
+        WHERE
+            userId = #{userId}
+            AND DATE_SUB(CURDATE(), INTERVAL 3 MONTH) &lt; date(measureDate)
+            AND DATE_SUB(CURDATE(), INTERVAL 0 MONTH) &gt;= date(measureDate)
+            AND deviceType LIKE CONCAT(#{deviceType}, '%')
+        ORDER BY measureDate DESC
+    </select>
+    
+    <insert id="saveUran" parameterType="com.lifeshs.pojo.healthDevice.UranDTO">
+        <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER">
+            SELECT LAST_INSERT_ID();
+        </selectKey>
+        INSERT INTO t_measure_uran(userId,status,LEU,LEUStatusDescription,NIT,NITStatusDescription,UBG,UBGStatusDescription,PRO,PROStatusDescription,pH,pHStatusDescription,pHArea,BLD,BLDStatusDescription,SG,SGStatusDescription,SGArea,KET,KETStatusDescription,BIL,BILStatusDescription,GLU,GLUStatusDescription,VC,VCStatusDescription,measureDate,deviceType,dataType,createDate)
+        VALUES(#{userId},#{status},#{LEU},#{LEUStatusDescription},#{NIT},#{NITStatusDescription},#{UBG},#{UBGStatusDescription},#{PRO},#{PROStatusDescription},#{pH},#{pHStatusDescription},#{pHArea},#{BLD},#{BLDStatusDescription},#{SG},#{SGStatusDescription},#{SGArea},#{KET},#{KETStatusDescription},#{BIL},#{BILStatusDescription},#{GLU},#{GLUStatusDescription},#{VC},#{VCStatusDescription},#{measureDate},#{deviceType},#{dataType},NOW())
+    </insert>
+
+</mapper>

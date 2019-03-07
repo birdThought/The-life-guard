@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lifeshs.dao1.visitLogs.VisitorLogDao" >
+	
+	<!-- 获取登录记录列表 -->
+	<select id="findUserLog" resultMap="visitLogVo">
+		select
+		(SELECT
+	        count(CASE userType 
+	            WHEN 1 THEN 1 
+	        END ) memberCount
+	    FROM
+	        t_log_login)as memberCount,
+	    (SELECT
+	        count(CASE userType 
+	            WHEN 2 THEN 2 
+	        END ) orderCount
+	    FROM
+	        t_log_login)as orderCount,
+        a.id as aId,
+        a.ip as aIp,
+        a.loginTime as aLoginTime,
+        a.orgId as aOrgId,
+        a.terminalType as aTerminalType,
+        a.userId as aUserId,
+        a.userName as aUserName,
+        a.userType as aUserType,
+        b.id as bId,
+        b.about as bAbout,
+        b.account as bAccount,
+        b.accountType as bAccountType,
+        b.businessLicense as bBusinessLicense,
+        b.city as bCity,
+        b.contactInformation as bContactInformation,
+        b.contacts as bContacts,
+        b.createDate as bCreateDate,
+        b.detail as bDetail,
+        b.district as bDistrict,
+        b.isRecommend as bIsRecommend,
+        b.latitude as bLatitude,
+        b.logo as bLogo,
+        b.longitude as bLongitude,
+        b.modifyDate as bModifyDate,
+        b.orgCode as bOrgCode,
+        b.orgName as bOrgName,
+        b.orgType as bOrgType,
+        b.orgVerified as bOrgVerified,
+        b.parent as bParent,
+        b.province as bProvinc,
+        b.status as bStatus,
+        b.street as bStreet,
+        b.tel as bTel,
+        b.type as bType,
+        b.verifiedCause as bVerifiedCause 
+    from
+        t_log_login a
+    left outer join
+        t_org b
+            on a.orgId=b.id 
+    <where>
+    	<if test="orgId != null">
+    		a.orgId = #{orgId}
+    	</if>
+    	<if test="userType != null">
+    		AND a.userType = #{userType}
+    	</if>
+       	<if test="userType == null and orgId == null">
+       		AND a.userType in(1,2)
+       	</if>
+        <if test="terminalType != null">
+        and a.terminalType = #{terminalType}
+        </if>
+    </where>
+    order by
+        a.loginTime desc limit #{startRow},#{pageSize}
+	</select>
+	
+	<!-- 获取数量 -->
+	<select id="countUserLog" resultType="java.lang.Integer">
+		SELECT COUNT(1)
+		FROM
+			 t_log_login a
+	    left outer join
+	        t_org b
+	            on a.orgId=b.id 
+	    <where>
+	    	<if test="orgId != null">
+	    		a.orgId = #{orgId}
+	    	</if>
+	    	<if test="userType != null">
+	    		AND a.userType = #{userType}
+	    	</if>
+	       	<if test="userType == null and orgId == null">
+	       		AND a.userType in(1,2)
+	       	</if>
+	       	<if test="userType == null and orgId != null">
+	       		AND a.userType =2
+	       	</if>
+	        <if test="terminalType != null">
+	        and a.terminalType = #{terminalType}
+        	</if>
+        </where>
+        	order by
+        	a.loginTime desc
+	</select>
+	
+	<resultMap type="com.lifeshs.vo.visit.VisitLogVo" id="visitLogVo">
+        <id property="id" column="aId"/>   
+        <result property="ip" column="aIp"/>
+        <result property="loginTime" column="aLoginTime"/>
+        <result property="orgId" column="aOrgId"/>
+        <result property="terminalType" column="aTerminalType"/>
+        <result property="userId" column="aUserId"/>
+        <result property="userName" column="aUserName"/>
+        <result property="userType" column="aUserType"/>
+        <result property="memberCount" column="memberCount"/>
+        <result property="orderCount" column="orderCount"/>
+        <association property="orgPo" notNullColumn="bId" javaType="com.lifeshs.po.OrgPO">   
+            <id property="id" column="bId"/>
+            <result property="about" column="bAbout"/>
+            <result property="account" column="bAccount"/>
+            <result property="accountType" column="bAccountType"/>
+            <result property="businessLicense" column="bBusinessLicense"/>
+            <result property="city" column="bCity"/>
+            <result property="contactInformation" column="bContactInformation"/>
+            <result property="createDate" column="bCreateDate"/>
+            <result property="detail" column="bDetail"/>
+            <result property="district" column="bDistrict"/>
+            <result property="isRecommend" column="bIsRecommend"/>
+            <result property="latitude" column="bLatitude"/>
+            <result property="logo" column="bLogo"/>
+            <result property="longitude" column="bLongitude"/>
+            <result property="modifyDate" column="bModifyDate"/>
+            <result property="orgCode" column="bOrgCode"/>
+            <result property="orgName" column="bOrgName"/>
+            <result property="orgType" column="bOrgType"/>
+            <result property="orgVerified" column="bOrgVerified"/>
+            <result property="parent" column="bParent"/>
+            <result property="province" column="bProvinc"/>
+            <result property="status" column="bStatus"/>
+            <result property="street" column="bStreet"/>
+            <result property="tel" column="bTel"/>
+            <result property="type" column="bType"/>
+            <result property="verifiedCause" column="bVerifiedCause"/>
+        </association>
+    </resultMap>
+</mapper>

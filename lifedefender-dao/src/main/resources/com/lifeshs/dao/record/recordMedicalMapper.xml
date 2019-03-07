@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!-- 病历单独映射表 -->
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lifeshs.dao.record.IRecordDao">
+    <select id="selectMedicalByUserId" resultType="java.util.HashMap">
+        Select * From
+        t_record_medical
+        Where userId =#{userId}
+        Order By visitingDate DESC
+    </select>
+    <select id="selectMedicalByMedicalIdAndUserId" resultType="java.util.HashMap">
+        SELECT * FROM t_record_medical
+        WHERE id = #{medicalId} AND userId = #{userId}
+    </select>
+    <select id="selectMedicalByUserIdPageSplit" resultType="java.util.HashMap">
+        Select *
+        From t_record_medical
+        Where userId =#{userId}
+        Order By visitingDate
+        DESC, id DESC LIMIT #{startIndex},#{pageSize}
+    </select>
+
+    <!-- 根据日期与用户ID获取病历信息 -->
+    <select id="selectMedicalByVisitingDateAndUserId" resultType="java.util.HashMap">
+        SELECT
+        m.id,
+        m.title,
+        m.basicCondition,
+        u.realName,
+        ur.gender AS sex,
+        ur.birthday
+        FROM
+        t_record_medical m
+        INNER JOIN t_user u ON u.id = m.userId
+        INNER JOIN t_user_record ur ON ur.userId = u.id
+        WHERE
+        m.visitingDate = #{visitingDate}
+        AND u.id = #{userId};
+    </select>
+</mapper>

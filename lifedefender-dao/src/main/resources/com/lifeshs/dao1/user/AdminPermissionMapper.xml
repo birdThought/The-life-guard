@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lifeshs.dao1.admin.AdminPermissionDao">
+
+    <!--权限数量 -->
+    <select id="countPermission" resultType="java.lang.Integer">
+        SELECT COUNT(1) FROM  T_ADMIN_PERMISSION 
+    </select>
+    
+    <select id="getPermissionList" resultType="com.lifeshs.po.admin.AdminPermissionPO">
+        SELECT id,name,substring_index(item, ':',1) as item,parent_id as parentId,remark FROM  T_ADMIN_PERMISSION 
+        LIMIT #{startRow},#{pageSize}
+    </select>
+    
+    
+    
+    <resultMap type="com.lifeshs.po.admin.RolePermissionOperationPo" id="PermissionAndOperationMap">
+    	
+    	<result column="id2" property="id"/>
+	    <result column="roleId" property="roleId"/>
+	    <result column="permission" property="permission"/>
+	    <result column="name2" property="roleName"/>
+	    <result column="remark" property="roleRemark"/>
+	    <association property="permissions" javaType="com.lifeshs.dto.permission.PermissionAndOperation">
+			<id column="id" property="id"/>
+    		<result column="name" property="name"/>
+    		<result column="item" property="item"/>
+		</association>
+    	<collection property="operationList" javaType="list" ofType="com.lifeshs.po.admin.AdminPermissionOperation">
+    		<id column="id1" property="id"/>
+	    	<result column="name1" property="name"/>
+	    	<!-- <result column="item" property="item"/> -->
+	    	<result column="operation" property="operation"/>
+	    	<result column="pemissionId" property="pemissionId"/>
+	    	<!-- <result column="remark" property="remark"/> -->
+    	</collection>
+    </resultMap>
+    <select id="getPermissionAndOperationList" resultMap="PermissionAndOperationMap">              
+			
+		SELECT
+			tarp.id AS id2,
+			tarp.roleId,
+			tarp.permission,
+			tap.id AS id,
+			tap. NAME AS NAME,
+			tap.item AS item,
+			tapo.id AS id1,
+			tapo. NAME AS name1,
+			tapo.operation,
+			tapo.pemissionId,
+			tar.name as name2,
+			tar.remark
+		FROM
+			t_admin_role_permission tarp
+		LEFT JOIN t_admin_permission tap ON SUBSTRING_INDEX(tarp.permission, ":", 1) = tap.item
+		LEFT JOIN t_admin_permission_operation tapo ON tap.id = tapo.pemissionId
+		LEFT JOIN t_admin_role tar on  tar.id = tarp.roleId
+		<if test="agent != null">
+			WHERE
+			tap.hasAgent = #{agent} and tar.type = #{agent}
+		</if>
+       
+    </select>
+    
+    
+
+    <select id="getPermissionById" resultType="com.lifeshs.po.admin.AdminPermissionPO">
+        SELECT id,name,item,parent_id as parentId,remark FROM  T_ADMIN_PERMISSION WHERE id = #{id} 
+    </select>
+
+    <!-- 根据已知的role获取权限 -->
+    <select id="getPermissionListByRoles" resultType="String">
+        SELECT permission FROM t_admin_role_permission tcp
+        WHERE roleId in
+        <foreach collection="idlist" item="value" open="(" separator="," close=")">
+            #{value}
+        </foreach>
+    </select>
+
+    <!-- 获取所有权限 -->
+    <select id="getPermissionBySuper" resultType="String">
+        SELECT CONCAT(item,':*') as permission FROM t_admin_permission
+    </select>
+    
+    <!-- 获取操作列表 -->
+    <select id="getOperationList" resultType="com.lifeshs.po.admin.OperationCheckedPO">
+        SELECT o.id,o.`name`,o.operation,o.pemissionId,o.remark FROM `t_admin_permission_operation` o  
+        where 1=1 
+        <if test="id!=0">
+            and o.id = #{id} 
+        </if>
+        <if test="permissionId!=0">
+            and o.pemissionId = #{permissionId}
+        </if>
+    </select>
+    
+    <!-- 获取单个权限的操作列表 -->
+    <select id="getOperationByPermissionId" resultType="com.lifeshs.po.admin.AdminPermissionPO">
+        SELECT p.id,p.item,p.`name`,p.parent_id,p.remark FROM t_admin_permission p 
+        WHERE 1=1 
+        <if test="id!=0">
+            and p.id=#{id} 
+        </if>
+        <if test="permissionId!=0">
+            and p.parent_id=#{permissionId}
+        </if>
+    </select>
+    
+    <!-- 修改权限 -->
+    <update id="updatePermissionById">
+        UPDATE t_admin_permission SET name = #{name} 
+        <if test="item != null"> ,item = #{item} </if>
+        <if test="parentId != null"> ,parent_id = #{parentId} </if>
+        <if test="remark != null"> ,remark = #{remark} </if>
+        <if test="hasAgent != null"> ,hasAgent = #{hasAgent} </if>
+         WHERE `id`=#{id};
+    </update>
+    
+    <!-- 插入权限 -->
+    <insert id="addPermission" parameterType="com.lifeshs.po.admin.AdminPermissionPO">
+        <selectKey resultType="java.lang.Integer" order="AFTER" keyProperty="id">
+            SELECT LAST_INSERT_ID() AS ID
+        </selectKey>
+        INSERT INTO `t_admin_permission` (`name`, `item`, `parent_id`,`hasAgent`, `remark`) 
+        VALUES (#{name}, #{item}, #{parentId}, #{hasAgent}, #{remark});
+    </insert>
+    
+    <!-- 插入操作 -->
+    <insert id="addOperation" parameterType="com.lifeshs.po.admin.AdminPermissionOperation">
+        INSERT INTO `t_admin_permission_operation` (`name`, `operation`, `pemissionId`, `remark`) 
+        VALUES (#{name}, #{operation}, #{pemissionId}, #{remark});
+    </insert>
+    
+    <!-- 批量插入操作 -->
+    <insert id="addOperationList" parameterType="com.lifeshs.po.admin.AdminPermissionOperation">
+        INSERT INTO t_admin_permission_operation (`name`, `operation`, `pemissionId`, `remark`) 
+        VALUES
+            <foreach collection="datas" item="d" separator=",">
+                (#{d.name}, #{d.operation}, #{d.pemissionId}, #{d.remark})
+            </foreach>
+    </insert>
+    
+    <delete id="delPermissionById" parameterType="int">
+        delete from t_admin_permission where id=#{id}
+    </delete>
+    
+    <delete id="delOperationByPermissionId" parameterType="int">
+        delete from t_admin_permission_operation where pemissionId=#{permissionId}
+    </delete>
+    
+    <!-- 删除单个操作 -->
+    <delete id="delAnOperation" parameterType="com.lifeshs.po.admin.AdminPermissionOperation">
+        delete from t_admin_permission_operation where pemissionId=#{permissionId} and name=#{name}
+    </delete>
+    
+    <delete id="delOperationList" >
+    		delete
+			FROM
+				t_admin_permission_operation
+			WHERE
+				pemissionId = #{id}
+			AND 
+			<foreach collection="arr" open="operation IN (" close=")" item = "arr" separator=",">
+				#{arr}
+			</foreach>
+    </delete>
+    
+    <select id="getRolePermissionByRoleId" resultType="com.lifeshs.po.admin.RolePermissionPo">
+    	SELECT
+			*
+		FROM
+			t_admin_role_permission
+		WHERE
+			roleId = #{roleId}
+    </select>
+    
+    <update id="updataRolePermissionById">
+    	UPDATE t_admin_role_permission
+		SET permission = #{newStr} where id = #{id}
+    </update>
+    
+</mapper>

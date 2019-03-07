@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lifeshs.dao1.user.UserPhysicalItemDao">
+
+    <insert id="addPhysicalItem" parameterType="com.lifeshs.po.user.PhysicalItemPO">
+        <selectKey resultType="java.lang.Integer" order="AFTER" keyProperty="id">
+            SELECT LAST_INSERT_ID() AS ID
+        </selectKey>
+        INSERT INTO t_user_physical_item(physicalItemId, userId, `status`, reply, replyUserId, createDate)
+        VALUES(#{physicalItemId}, #{userId}, #{status}, #{reply}, #{replyUserId}, NOW())
+    </insert>
+
+    <update id="updatePhysicalItem" parameterType="com.lifeshs.po.user.PhysicalItemPO">
+        UPDATE t_user_physical_item SET
+            <if test="status != null">status = #{status},</if>
+            <if test="reply != null">reply = #{reply},</if>
+            <if test="replyUserId != null">replyUserId = #{replyUserId},</if>
+            modifyDate = NOW()
+        WHERE id = #{id}
+    </update>
+
+    <select id="getPhysicalItem" resultType="com.lifeshs.po.user.PhysicalItemPO">
+        SELECT <include refid="PHYSICAL_ITEM_ALL_COLUMN" /> FROM t_user_physical_item
+        WHERE id = #{id}
+    </select>
+    
+    <select id="findPhysicalItemByUserIdAndPhysicalItemId" resultType="com.lifeshs.po.user.PhysicalItemPO">
+        SELECT <include refid="PHYSICAL_ITEM_ALL_COLUMN" /> FROM t_user_physical_item
+        WHERE userId = #{userId} AND physicalItemId = #{physicalItemId}
+    </select>
+    
+    <select id="countPhysicalItemWithCondition" resultType="java.lang.Integer">
+        SELECT COUNT(1) FROM t_user_physical_item
+        <where>
+            <if test="userId != null">AND userId = #{userId}</if>
+            <if test="physicalItemId != null">AND physicalItemId = #{physicalItemId}</if>
+            <if test="status != null">AND status = #{status}</if>
+            <if test="reply != null">AND reply IS NOT NULL</if>
+        </where>
+    </select>
+
+    <select id="findPhysicalItemWithConditionList" resultType="com.lifeshs.po.user.PhysicalItemPO">
+        SELECT <include refid="PHYSICAL_ITEM_ALL_COLUMN" /> FROM t_user_physical_item
+        <where>
+            <if test="userId != null">AND userId = #{userId}</if>
+            <if test="physicalItemId != null">AND physicalItemId = #{physicalItemId}</if>
+            <if test="status != null">AND status = #{status}</if>
+            <if test="reply != null">AND reply IS NOT NULL</if>
+        </where>
+        ORDER BY id DESC
+        LIMIT #{startRow}, #{pageSize}
+    </select>
+
+    <sql id="PHYSICAL_ITEM_ALL_COLUMN">id, physicalItemId, userId, `status`, reply, replyUserId, createDate, modifyDate</sql>
+</mapper>

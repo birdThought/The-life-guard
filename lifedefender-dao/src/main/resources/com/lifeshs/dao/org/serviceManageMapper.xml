@@ -1,0 +1,471 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--门店-服务项目管理-->
+<mapper namespace="com.lifeshs.dao.org.service.IOrgServiceManageDao">
+
+    <!--获取健康咨询服务-->
+    <select id="listConsultServiceByStatus" resultMap="consultServiceDTO">
+        SELECT
+          c.id, c.`name`, c.modifyDate, c.status, c.image, c.code
+        FROM
+          t_project_consult c
+        WHERE
+          c.orgId = #{orgId}
+        <if test="status != null">
+            AND c.status = #{status}
+        </if>
+        <if test="search != null">
+            AND c.name LIKE CONCAT('%',#{search},'%')
+        </if>
+        limit #{pageStart}, #{pageSize}
+    </select>
+
+    <resultMap type="com.lifeshs.pojo.org.service.OrgServiceDTO" id="consultServiceDTO">
+        <id column="code" property="code"/>
+        <association property="sales" column="code" select="getServiceSales" />
+        <collection property="orgUser" column="code" ofType="java.util.List" select="listConsultOrgUser" />
+    </resultMap>
+
+    <!--获取健康咨询服务的服务师列表-->
+    <select id="listConsultOrgUser" resultType="com.lifeshs.pojo.org.OrgUserDTO">
+        SELECT
+            u.userName, u.id, u.realName
+        FROM
+            t_project_orguser_relation r, t_org_user u
+        WHERE
+            u.id = r.orgUserId
+        AND
+            r.`projectCode` = #{code}
+    </select>
+
+    <!--获取健康咨询服务总条数-->
+    <select id="getCountOfConsultServiceByStatus" resultType="java.lang.Integer">
+        SELECT
+          count(1)
+        FROM
+          t_project_consult c
+        WHERE
+          c.orgId = #{orgId}
+        <if test="status != null">
+            AND c.status = #{status}
+        </if>
+        <if test="search != null">
+            AND c.name LIKE CONCAT('%',#{search},'%')
+        </if>
+    </select>
+
+
+    <!--获取健康课堂服务-->
+    <select id="listLessonServiceByStatus" resultMap="lessonServiceDTO">
+        SELECT
+          c.id, c.`name`, c.modifyDate, c.status, c.image, c.code
+        FROM
+          t_project_lesson c
+        WHERE
+          c.orgId = #{orgId}
+        <if test="status != null">
+            AND c.status = #{status}
+        </if>
+        <if test="search != null">
+            AND c.name LIKE CONCAT('%',#{search},'%')
+        </if>
+        limit #{pageStart}, #{pageSize}
+    </select>
+
+    <resultMap type="com.lifeshs.pojo.org.service.OrgServiceDTO" id="lessonServiceDTO">
+        <id column="code" property="code"/>
+        <association property="sales" column="code" select="getServiceSales" />
+        <collection property="orgUser" column="code" ofType="java.util.List" select="listLessonOrgUser" />
+    </resultMap>
+
+    <!--获取健康课堂服务的服务师列表-->
+    <select id="listLessonOrgUser" resultType="com.lifeshs.pojo.org.OrgUserDTO">
+        SELECT
+            u.userName, u.id, u.realName
+        FROM
+            t_project_lesson l, t_org_group g, t_org_group_orguser gu, t_org_user u
+        WHERE
+            l.lessonId = g.id
+        AND
+		  	g.id = gu.groupId
+		AND
+            u.id = gu.orgUserId
+        AND
+            l.`code` = #{code}
+    </select>
+
+    <!--获取健康课堂服务总条数-->
+    <select id="getCountOfLessonServiceByStatus" resultType="java.lang.Integer">
+        SELECT
+            count(1)
+        FROM
+            t_project_lesson c
+        WHERE
+            c.orgId = #{orgId}
+        <if test="status != null">
+            AND c.status = #{status}
+        </if>
+        <if test="search != null">
+            AND c.name LIKE CONCAT('%',#{search},'%')
+        </if>
+    </select>
+
+
+    <!--获取上门-居家养老服务-->
+    <select id="listVisitServiceByStatus" resultMap="visitServiceDTO">
+        SELECT
+        c.id, c.`name`, c.modifyDate, c.status, c.image, c.code
+        FROM
+        t_project_visit c
+        WHERE
+        c.orgId = #{orgId}
+        <if test="status != null">
+            AND
+            c.status = #{status}
+        </if>
+        <if test="search != null">
+            AND c.name LIKE CONCAT('%',#{search},'%')
+        </if>
+        limit #{pageStart}, #{pageSize}
+    </select>
+
+    <resultMap type="com.lifeshs.pojo.org.service.OrgServiceDTO" id="visitServiceDTO">
+        <id column="code" property="code"/>
+        <association property="sales" column="code" select="getServiceSales" />
+        <collection property="orgUser" column="code" ofType="java.util.List" select="listVisitOrgUser" />
+    </resultMap>
+
+    <!--获取上门-居家养老服务的服务师列表-->
+    <select id="listVisitOrgUser" resultType="com.lifeshs.pojo.org.OrgUserDTO">
+        SELECT
+            u.userName, u.id
+        FROM
+            t_project_visit c, t_project_orguser_relation r, t_org_user u
+        WHERE
+            c.`code` = r.projectCode
+        AND
+            u.id = r.orgUserId
+        AND
+            c.`code` = #{code}
+    </select>
+
+    <!--获取上门-居家养老服务总条数-->
+    <select id="getCountOfVisitServiceByStatus" resultType="java.lang.Integer">
+        SELECT
+            count(1)
+        FROM
+            t_project_visit c
+        WHERE
+            c.orgId = #{orgId}
+        <if test="status != null">
+            AND c.status = #{status}
+        </if>
+        <if test="search != null">
+            AND c.name LIKE CONCAT('%',#{search},'%')
+        </if>
+    </select>
+
+
+    <!--获取服务销量-->
+    <select id="getServiceSales" resultType="java.lang.Integer">
+        SELECT
+            count(1)
+        FROM
+            t_order o
+        WHERE
+            o.projectCode = #{code}
+    </select>
+
+    <!--添加课堂服务项目-->
+    <insert id="addLessonService" parameterType="com.lifeshs.pojo.org.service.LessonServiceDTO">
+        <selectKey resultType="String" keyProperty="code" order="AFTER">
+            SELECT
+            code FROM t_project_lesson WHERE id = LAST_INSERT_ID()
+        </selectKey>
+        INSERT INTO
+            t_project_lesson
+            (serialId, code, name, status, orgId, serveId, price, image, projectType, createDate, modifyDate, qrCode, introduce, creatorId, startDate, endDate, huanxinId, silence, lessonTime)
+        VALUES
+            (#{serialId}, getNextId('pl_seq'), #{name}, #{status}, #{orgId}, #{serveId}, #{price}, #{image}, #{projectType}, NOW(), NOW(), #{qrCode},  #{introduce},  #{creatorId},  #{startDate},  #{endDate},  #{huanxinId},  #{silence}, #{lessonTime})
+    </insert>
+
+    <!--添健康咨询服务项目-->
+    <insert id="addConsultService" parameterType="com.lifeshs.pojo.org.service.ConsultServiceDTO">
+        <selectKey resultType="String" keyProperty="code" order="AFTER">
+            SELECT
+            code FROM t_project_consult WHERE id = LAST_INSERT_ID()
+        </selectKey>
+        INSERT INTO
+        t_project_consult (serialId, code, name, status, orgId, serveId, image, projectType, createDate, modifyDate)
+        VALUES
+        (#{serialId}, getNextId('pc_seq'), #{name}, #{status}, #{orgId}, #{serveId}, #{image}, #{projectType}, NOW(), NOW())
+    </insert>
+
+    <!--添健上门-居家养老服务项目-->
+    <insert id="addVisitService" parameterType="com.lifeshs.pojo.org.service.VisitServiceDTO">
+        <selectKey resultType="String" keyProperty="code" order="AFTER">
+            SELECT
+            code FROM t_project_visit WHERE id = LAST_INSERT_ID()
+        </selectKey>
+        INSERT INTO
+        t_project_visit (serialId, code, name, status, orgId, serveId, introduce, userType, appointment, image, projectType, createDate, modifyDate)
+        VALUES
+        (#{serialId},
+        <if test="projectType == 3">
+            getNextId('pv_seq')
+        </if>
+        <if test="projectType == 2">
+            getNextId('po_seq')
+        </if>
+        , #{name}, #{status}, #{orgId}, #{serveId}, #{introduce}, #{userType}, #{appointment}, #{image}, #{projectType}, NOW(), NOW())
+    </insert>
+
+    <!--添加服务项目-套餐-->
+    <insert id = "addServiceCombo" useGeneratedKeys="true" parameterType="java.util.List">
+        <selectKey resultType="int" keyProperty="id" order="AFTER">
+            SELECT
+            LAST_INSERT_ID()
+        </selectKey>
+        insert into
+        t_project_combo(projectCode, introduce, price, name, marketPrice, createDate)
+        values
+        <foreach collection="combo" item="item" index="index" separator="," >
+            (#{item.projectCode}, #{item.introduce}, #{item.price}, #{item.name}, #{item.marketPrice}, NOW())
+        </foreach>
+    </insert>
+
+    <!--添加服务项目-服务师关系-->
+    <insert id = "addServiceOrgUserRelation" useGeneratedKeys="true" parameterType="java.util.List">
+        <selectKey resultType="int" keyProperty="id" order="AFTER">
+            SELECT
+            LAST_INSERT_ID()
+        </selectKey>
+        insert into
+            t_project_orguser_relation(projectCode, orgUserId, price, monthPrice, yearPrice, createDate)
+        values
+        <foreach collection="orgUser" item="item" index="index" separator="," >
+            (#{item.projectCode}, #{item.orgUserId}, #{item.price}, #{item.monthPrice}, #{item.yearPrice}, NOW())
+        </foreach>
+    </insert>
+
+    <!--添加服务项目-媒体资料-->
+    <insert id = "addServiceMedia" parameterType="com.lifeshs.pojo.org.service.ServiceMediaDTO">
+        <selectKey resultType="int" keyProperty="id" order="AFTER">
+            SELECT
+            LAST_INSERT_ID()
+        </selectKey>
+        INSERT INTO
+            t_project_media (projectCode, pictureOne, pictureTwo, pictureThree, pictureFour, videoOne, videoTwo, createDate)
+        VALUES
+            (#{projectCode}, #{pictureOne}, #{pictureTwo}, #{pictureThree}, #{pictureFour}, #{videoOne}, #{videoTwo}, NOW())
+    </insert>
+
+    <!--服务类型列表-->
+    <select id = "listServe" resultMap="serveDTO">
+        SELECT id, name, code FROM t_data_serve_type
+    </select>
+
+    <resultMap id = "serveDTO" type="com.lifeshs.pojo.org.service.ServeTypeDTO">
+        <id column="id" property="id"/>
+        <result property="name" column="name"/>
+        <result property="code" column="code"/>
+        <collection property="secondaryServe" column="id" ofType="java.util.List" select="listSecondaryServe" />
+    </resultMap>
+
+    <select id = "listSecondaryServe" resultType="com.lifeshs.pojo.org.service.ServeTypeDTO">
+        SELECT id, name,code FROM t_data_serve_type2 WHERE serveId = #{id}
+    </select>
+
+    <!--更新服务咨询项目状态-->
+    <update id = "updateConsultServiceStatus">
+        UPDATE
+            t_project_consult
+        SET
+            `status` = #{status}, modifyDate = NOW()
+        WHERE
+            `code` = #{code}
+    </update>
+
+    <!--更新服务课堂项目状态-->
+    <update id = "updateLessonServiceStatus">
+        UPDATE
+        t_project_lesson
+        SET
+        `status` = #{status}, modifyDate = NOW()
+        WHERE
+        `code` = #{code}
+    </update>
+
+    <!--更新服务上门项目状态-->
+    <update id = "updateVisitServiceStatus">
+        UPDATE
+        t_project_visit
+        SET
+        `status` = #{status}, modifyDate = NOW()
+        WHERE
+        `code` = #{code}
+    </update>
+
+    <!--获取单个上门服务项目信息-->
+    <select id = "getVisitService" resultMap="visitServiceDetailsDTO">
+        SELECT
+            c.id, c.`name`, c.modifyDate, c.status, c.image, c.code, c.userType, c.appointment, c.introduce, c.orgId, c.serveId
+        FROM
+            t_project_visit c
+        WHERE
+            c.orgId = #{orgId}
+        AND
+            c.code = #{code}
+    </select>
+    
+    <select id="getVisitServiceById" resultMap="visitServiceDetailsDTO">
+        SELECT
+            c.id, c.`name`, c.modifyDate, c.status, c.image, c.code, c.userType, c.appointment, c.introduce, c.orgId, c.serveId
+        FROM
+            t_project_visit c
+        WHERE
+            c.id = #{id}
+    </select>
+    
+    <select id="getVisitServiceByCode" resultMap="visitServiceDetailsDTO">
+        SELECT
+            c.id, c.`name`, c.modifyDate, c.status, c.image, c.code, c.userType, c.appointment, c.introduce, c.orgId, c.serveId,c.projectType
+        FROM
+            t_project_visit c
+        WHERE
+            c.code = #{code}
+    </select>
+
+    <resultMap type="com.lifeshs.pojo.org.service.VisitServiceDTO" id="visitServiceDetailsDTO">
+        <id column="code" property="code"/>
+        <result column="orgId" property="orgId" />
+        <result column="serveId" property="serveId" />
+        <result column="projectType" property="projectType" />
+        <association property="media" column="code" javaType = "com.lifeshs.pojo.org.service.ServiceMediaDTO" select="getServiceMedia" />
+        <!-- 17.6.24添加org与serve -->
+        <association property="org" column="orgId" select="com.lifeshs.dao.org.OrgDao.getOrg" />
+        <association property="serveType" column="serveId" select="com.lifeshs.dao.serve.ServeDao.getServeType" />
+        
+        <collection property="orgUser" column="code" ofType="java.util.List" select="listVisitOrgUser" />
+        <collection property="combo" column="code" ofType="java.util.List" select="listServiceCombo" />
+        <!-- 17.6.29添加orderComplete -->
+        <collection property="orderComplete" column="code" select="com.lifeshs.dao.order.IOrderDao.listOrderCompleteByProjectCode" />
+    </resultMap>
+
+    <!--获取项目媒体资料-->
+    <select id="getServiceMedia" resultType="com.lifeshs.pojo.org.service.ServiceMediaDTO">
+        SELECT
+            *
+        FROM
+            t_project_media
+        WHERE
+            projectCode = #{code}
+    </select>
+
+    <!--获取服务项目套餐信息-->
+    <select id = "listServiceCombo" resultType="com.lifeshs.pojo.org.service.ServiceComboDTO">
+        SELECT
+            price, name, introduce,marketPrice ,projectCode 
+        FROM
+            t_project_combo
+        WHERE
+            projectCode = #{projectCode}
+    </select>
+
+    <!--获取服务项目-->
+    <select id = "listService" resultMap="orgServiceDTO">
+        SELECT c.id, c.`name`, c.modifyDate, c.status, c.image, c.projectCode as code ,c.createDate, c.serveId, c.projectType
+        FROM t_project c
+        WHERE
+                c.orgId = #{orgId}
+                <if test="status != null and status != 0 ">
+                    AND c.status = #{status}
+                </if>
+                <if test="search != null">
+                    AND c.name LIKE CONCAT('%',#{search},'%')
+                </if>
+                <if test="type != 0">
+                    AND c.projectType=#{type}
+                </if>
+        ORDER BY createDate DESC
+        LIMIT #{startIndex}, #{pageSize}
+    </select>
+
+    <!--查询服务项目总数-->
+    <select id = "getCountOfService" resultType="java.lang.Integer">
+        SELECT COUNT(*) FROM t_project c WHERE c.orgId = #{orgId}
+        <if test="status != null">
+            AND c.status = #{status}
+        </if>
+        <if test="search != null">
+            AND c.name LIKE CONCAT('%',#{search},'%')
+        </if>
+        <if test="type != 0">
+            AND c.projectType=#{type}
+        </if>
+    </select>
+
+
+    <!--根据serveId的不同返回不同的resultMap-->
+    <resultMap id="orgServiceDTO" type="com.lifeshs.pojo.org.service.OrgServiceDTO">
+        <id column="code" property="code"/>
+        <association property="sales" column="code" select="getServiceSales" />
+        <!--<discriminator javaType="int" column="serveId">
+            <case value="4" resultMap="lessonServiceMap" />
+            <case value="1" resultMap="normalServiceMap" />
+            <case value="2" resultMap="normalServiceMap" />
+            <case value="5" resultMap="normalServiceMap" />
+        </discriminator>-->
+        <collection property="orgUser" column="code" javaType="java.util.List" select="listConsultOrgUser"/>
+    </resultMap>
+
+    <!--返回课堂服务师resultmap-->
+    <resultMap id="lessonServiceMap" type="com.lifeshs.pojo.org.service.OrgServiceDTO" extends="orgServiceDTO">
+        <collection property="orgUser" column="code" javaType="java.util.List" select="listLessonOrgUser"/>
+    </resultMap>
+
+    <!--返回通用服务师resultmap-->
+    <resultMap id="normalServiceMap" type="com.lifeshs.pojo.org.service.OrgServiceDTO" extends="orgServiceDTO">
+        <collection property="orgUser" column="code" javaType="java.util.List" select="listConsultOrgUser"/>
+    </resultMap>
+
+    <!--添加项目到通用表-->
+    <insert id = "addCommonService" parameterType="com.lifeshs.pojo.org.service.ServiceCommonDTO">
+        INSERT INTO t_project(
+            <if test = "projectCode != null">projectCode,</if>
+            <if test = "name != null">name,</if>
+            <if test = "price != null">price,</if>
+            <if test = "image != null">image,</if>
+            <if test = "serveId != null">serveId,</if>
+            <if test = "orgId != null">orgId,</if>
+            <if test = "display != null">display,</if>
+            <if test = "status != null">status,</if>
+            <if test = "huanxinId != null">huanxinId,</if>
+            <if test = "projectType != null">projectType,</if>
+            createDate, modifyDate
+        ) VALUES (
+            <if test = "projectCode != null">#{projectCode},</if>
+            <if test = "name != null">#{name},</if>
+            <if test = "price != null">#{price},</if>
+            <if test = "image != null">#{image},</if>
+            <if test = "serveId != null">#{serveId},</if>
+            <if test = "orgId != null">#{orgId},</if>
+            <if test = "display != null">#{display},</if>
+        <if test = "status != null">#{status},</if>
+        <if test = "huanxinId != null">#{huanxinId},</if>
+        <if test = "projectType != null">#{projectType},</if>
+            NOW(), NOW()
+        )
+    </insert>
+
+    <!--更新通用表项目状态-->
+    <update id = "updateCommonServiceStatus">
+        UPDATE
+        t_project
+        SET
+        `status` = #{status}, modifyDate = NOW()
+        WHERE
+        `projectCode` = #{code}
+    </update>
+
+</mapper>

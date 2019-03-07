@@ -1,0 +1,39 @@
+			body {
+				margin: 0;
+				padding: 0;
+			}
+			/*头部*/
+			
+			.header_shop {
+				position: fixed;
+				width: 100%;
+				list-style-type: none;
+				top: 0;
+				margin: 0;
+				padding: 0;
+				height: 1.5rem;
+				color: black;
+				padding: 1rem 0 1rem 0;
+				border-bottom: 1px solid #f4f4f4;
+				background-color: white;
+			}
+			
+			.header_shop_bg {
+				position: relative;
+				height: 1.5rem;
+				/*padding: 1rem 0 1rem 0;*/
+			}
+			
+			.header_shop>li {
+				float: left;
+			}
+			
+			.header_shop .header_icon {
+				width: 20%;
+				text-align: left;
+			}
+			
+			.header_shop .header_title {
+				width: 60%;
+				text-align: center;
+			}

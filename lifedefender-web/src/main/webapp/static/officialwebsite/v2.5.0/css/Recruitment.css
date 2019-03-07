@@ -1,0 +1,159 @@
+
+.aboutus {
+    line-height:1;
+    margin-top:2.12rem;
+}
+.aboutus > p {
+    font-size:1.6rem;
+}
+.aboutus > p > span {
+    color: #f40;
+    font-size:1.3rem;
+}
+.main-content {
+    margin-top:7.5rem;
+    padding-left: 5%;
+}
+.main-content > h1 {
+    line-height:60px;
+    font-size:2.6rem;
+    color: #3f4f7c;
+    letter-spacing: 1px;
+}
+.main-content > p {
+    font-size:1.4rem;
+    color: #3f4f7c;
+    line-height:2rem;
+}
+.main-content > ul {
+    padding-left: 76px;
+}
+.main-content > ul >li {
+    display: inline-block;
+    width:auto;
+    margin-right: 7rem;
+    margin-top: 8rem;
+}
+.main-content > ul >li > span {
+    display: block;
+    width:100%;
+    text-align: center;
+}
+article > .tab-content {
+	margin-top:3rem;
+}
+.nav-pills > li {
+    float: none;
+    border-bottom:1px solid skyblue;
+}
+#news {
+    margin-top:10rem;
+}
+#news .nav-pills li > a {
+    font-size:1rem;
+    line-height:2rem;
+}
+.tab-content {
+    padding-left: 10%;
+    padding-bottom: 6rem;
+    padding-top: 2rem;
+}
+.job-show > h1{
+    font-size:2.25rem;
+    line-height:1;
+    margin-bottom:3.5rem;
+    color: #3f4f7c;
+}
+.job-show > p {
+    margin-top:1rem;
+    color: #3f4f7c;
+    font-size:1.4rem;
+
+}
+.applyfor {
+    width:106px;
+    height:44px;
+    background-color: #739cff;
+    outline:none;
+    border-radius: 4px;
+    margin-top:44px;
+    display: block;
+    line-height:44px;
+    text-align: center;
+    cursor: pointer;
+}
+.applyfor a {
+    color: #fff;
+}
+.responsibility h4,
+.condition h4
+{
+    color: #3f4f7c;
+    font-size:1.6rem;
+    line-height:1;
+    margin-bottom:2rem;
+}
+.tab-content ul li {
+    line-height:2.1rem;
+    margin-left:1rem;
+    font-size:1rem;
+}
+.condition {
+    margin-top:50px;
+    margin-bottom: 40px;
+}
+.responsibility {
+    margin-top:44px;
+}
+#technology .tab-content 
+.responsibility ul li > i,
+.condition ul li > i{
+    color: #739fff;
+    font-size:10px;
+    margin-right: 0.5rem;
+}
+.aboutus > p > i {
+    font-size:1.2rem;
+}
+nav.navbar  .active {
+    border-bottom: 2px solid #f40;
+    color: #f40;
+}
+
+@media screen and (max-width: 650px){
+    .main-content > ul {
+        padding-left: 0 !important;
+    }
+    .main-content > ul > li {
+        margin-right: 0;
+        width:48%;
+        text-align: center;
+    }
+    .main-content {
+        margin-top:6rem;
+    }
+    .tab-content {
+        padding-left: 4%;
+    }
+}
+@media screen and (max-width: 650px) {
+    .tab-content ul li {
+        font-size:1.4rem;
+        margin-bottom:1rem;
+    }
+
+}
+@media screen and (max-width: 400px) {
+    .main-content > p {
+        font-size:1.2rem;
+    }
+}
+
+
+
+
+
+
+
+
+

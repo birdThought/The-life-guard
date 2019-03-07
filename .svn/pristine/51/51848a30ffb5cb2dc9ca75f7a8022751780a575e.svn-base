@@ -1,0 +1,307 @@
+/**
+ *Name:琛�鑴備华娴嬮噺缁撴灉
+ *CreateDate锛�2017-9-11
+ */
+@charset "UTF-8";
+body{
+    background: #eef1f6;
+}
+header.header {
+    width:100%;
+    height:1.6rem;
+    background: #44c660;
+}
+.header-top{
+    width:100%;
+    height:0.88rem;
+    text-align: center;
+    padding-top: 0.28rem;
+}
+.header-top > img {
+    width: 0.16rem;
+    height:0.28rem;
+    margin-left:0.18rem;
+    float: left;
+}
+.header-top > span {
+    font-size:0.32rem;
+    letter-spacing: 0.18rem;
+    color:#fff;
+    vertical-align: top;
+    line-height:1 ;
+}
+.header-bottom {
+    height:0.72rem;
+    width:100%;
+}
+.header-bottom ul {
+    width:6.06rem;
+    height:.52rem;
+    margin-left:.17rem;
+    border:1px solid #fff;
+    border-radius:0.14rem;
+}
+.header-bottom ul li {
+    width:33.33%;
+    height:100%;
+    float: left;
+    border-right: 1px solid #fff;
+}
+.header-bottom ul li:last-child {
+    border-right: none;
+}
+.header-bottom ul > li > a {
+    display: inline-block;
+    height:100%;
+    width:100%;
+    font-size:.26rem;
+    letter-spacing: 0.016rem;
+    color: #fff;
+    text-align: center;
+    line-height:.52rem;
+    vertical-align: top;
+}
+.content {
+    width:100%;
+    height:auto;
+    /*background: red;*/
+    background: #fff;
+    padding-top: 0.26rem;
+}
+.content-top {
+    width:100%;
+    height:auto;
+}
+.content-top p.bloodfat-unit {
+    width:100%;
+    padding-left: 0.25rem;
+    font-size:0.16rem;
+    color: #999;
+    letter-spacing:0.01rem;
+    text-align: left;
+    line-height:1;
+    margin-bottom:0.28rem;
+}
+#bloodfat_chart {
+    width:100%;
+    height:2.48rem;
+    padding-left: 0.1rem;
+}
+.highcharts-axis-labels > text{
+    font-size: 0.14rem !important;
+}
+.highcharts-axis-title {
+    display: none;
+}
+.content-middle {
+    width:100%;
+    height:0.76rem;
+    margin-top:0.16rem;
+    text-align: center;
+}
+.content-middle > button{
+    width: 1.16rem;
+    height:0.46rem;
+    border-radius:0.1rem;
+    border:0.01rem solid #81cf84;
+    letter-spacing:0.015rem;
+    font-size:0.24rem;
+    color: #81cf84;
+    margin-right:0.56rem;
+    vertical-align:top;
+}
+.content-middle > button:last-child {
+    margin-right:0;
+}
+.lastest {
+    width:100%;
+    height:auto;
+    padding-bottom:0.16rem;
+}
+.lastest-content-left {
+    width:40%;
+    height:3rem;
+    float: left;
+    position:relative;
+}
+.lastest-content-right {
+    float: right;
+    width:60%;
+    padding-top: 0.1rem;
+}
+.lastest-content-right .lastest-right-content {
+    height:auto;
+    width:50%;
+    float: left;
+}
+.lastest-content-right .lastest-right-content li > p {
+    padding-left:10%;
+}
+.partition {
+    width:100%;
+    height:0.18rem;
+    background: #eef1f6;
+}
+.lastest-content-right .lastest-right-content li > p,
+.lastest-content-right .lastest-right-content li > p span{
+    font-size:0.2rem;
+    color: #999;
+    letter-spacing: 0.01rem;
+    line-height:1.8;
+}
+.lastest-content-right .lastest-right-content li > p strong {
+    width:1.3rem;
+    text-align: right;
+    font-weight: normal;
+    display: inline-block;
+}
+.lastest-content-right .lastest-right-content li > p span label {
+    color: #333;
+    letter-spacing: 0.01rem;
+    font-size:0.26rem;
+    margin-right:0.14rem;
+    display: inline-block;
+    width:0.8rem;
+    text-align: right;
+}
+/*--------------------------------------*/
+.wrap,.circle,.percent{
+    position: absolute;
+    width: 1.32rem;
+    height: 1.32rem;
+    border-radius: 50%;
+}
+.wrap{
+    background-color: #d8dfe7;
+    right:0;
+    margin-top:0.28rem;
+}
+.circle{
+    box-sizing: border-box;
+    border:10px solid #d8dfe7;
+    clip:rect(0,1.32rem,1.32rem,0.66rem);
+}
+.clip-auto{
+    clip:rect(auto, auto, auto, auto);
+}
+.measureResult p:nth-of-type(2) {
+    position: absolute;
+    width: 0.76rem;
+    height: 0.01rem;
+    background: #d8dfe7;
+    border-radius: 0.01rem;
+    top: 0.98rem;
+    right: 0.29rem;
+}
+.percent{
+    box-sizing: border-box;
+    top:-10px;
+    left:-10px;
+}
+.left{
+    transition:transform ease;
+    border:10px solid #f50;
+    clip: rect(0,0.66rem,150px,0);
+}
+.right{
+    border:10px solid #f50;
+    clip: rect(0,1.32rem,1.32rem,0.66rem);
+}
+.wth0{
+    width:0;
+}
+.num {
+    position: absolute;
+    box-sizing: border-box;
+    width: 1.1rem;
+    height: 1.1rem;
+    left: 0.11rem;
+    top: 0.11rem;
+    border-radius: 50%;
+    background-color: #fff;
+}
+#num {
+    display: none;
+}
+
+.footer ul li h2 span {
+   
+    left:0.2rem!important;
+}
+.footer {
+    width:100%;
+    height:auto;
+    background: #fff;
+    position: relative;
+
+}
+.footer  ul {
+    padding-bottom: .8rem;
+}
+.footer  ul  li{
+    padding-top: 0.24rem;
+    width:90%;
+    height:auto;
+    float: right;
+    border-bottom: 0.01rem dashed #d4d9de;
+}
+.footer  ul  li  h2 {
+    font-size:0.24rem;
+    letter-spacing: 0.015rem;
+    color: #333;
+    line-height:1;
+    margin-bottom: 0.20rem;
+    position:relative;
+}
+.footer  ul  li  h2 s {
+	width:0.2rem!important;
+	height:0.2rem!important;
+	border-radius:50%;
+	background:#44c660!important;
+	left:-0.42rem!important;
+	top:0!important;
+}
+.footer  ul  li  h5 {
+    color: #999;
+    font-size:0.21rem;
+    letter-spacing: 0.013rem;
+    line-height:1;
+    margin-bottom:0.26rem;
+    font-weight: normal;
+    position: relative;
+    width:2.15rem;
+}
+ .footer  ul  li  h5 span {
+ 	display:inline-block;
+    width: 0.72rem;
+    height:0.3rem;
+    border-radius: 0.13rem;
+    text-align: center;
+    line-height:0.3rem;
+    color: #fff;
+    right:0;
+    font-size:0.16rem;
+    top:-0.04rem;
+ 	background:#44c660;
+}
+.footer  ul  li  p{
+   line-height:1;
+    margin-bottom: 0.16rem;
+    padding-left:1.33rem;
+   font-size:0.19rem;
+}
+.footer  ul  li  p span{
+	color:#666;
+	letter-spacing: 0.012rem;
+	font-size:0.19rem;
+	margin-right:0.1rem;
+}
+.newestdata {
+    font-size: .12rem;
+    position: absolute;
+    letter-spacing: 0.007rem;
+    width: 0.64rem;
+    top: 1.08rem;
+    right: 0.3rem;
+    color: #999;
+}

@@ -1,0 +1,221 @@
+/**
+ * 分析报告
+ */
+.orderCenter {
+    padding: 14px 20px 20px 20px !important;
+    border: 1px solid #ddd;
+    background: #fff;
+    margin-top: 30px
+}
+.orderCenterTop {
+    width:100%;
+    /*margin-top:34px;*/
+    padding-left: 24px;
+}
+.orderCenterTop  li {
+    float: left;
+    /*margin-right:50px;*/
+}
+.orderCenterTop  li:last-child {
+    float: right;
+    width:382px;
+    height:auto;
+}
+.orderCenterTop  li > select{
+    width: 94px;
+    height:32px;
+    border:1px solid #edd;
+    padding-left: 12px;
+    /*cursor: s-resize;*/
+}
+.search > input {
+    float: left;
+    width:302px;
+    height:30px;
+    border:1px solid #edd;
+    text-align: center;
+    color: #ccc;
+    background: linear-gradient(#ccc 0% ,#fff 15% ,#fff 100%);
+    padding-left: 20px;
+}
+.search > span {
+    float: left;
+    background: #3DB9FF;
+    width:78px;
+    height:30px;
+    position: relative;
+    color: #fff;
+    padding-left: 35px;
+    line-height:30px;
+    cursor: pointer;
+}
+.search > span > i {
+    position: absolute;
+    width:14px;
+    height:14px;
+    background: url("/static/images/select-icon.png") -52px -10px;
+    left:10px;
+    top:10px;
+}
+.orderCenterBottom {
+    margin-top:20px;
+
+}
+.orderCenterBottom ul >li:last-child {
+    border-right: 1px solid #ddd;
+}
+.orderCenterBottom table {
+    width:100%;
+    text-align: center;
+    border-collapse:collapse;
+    position: relative;
+}
+.orderCenterBottom table td {
+    border:1px solid #ddd;
+    height:50px;
+}
+.orderCenterBottom table tr:nth-child(2n){
+    background: #f8f8f8;
+}
+.orderCenterBottom table tr:hover {
+    background: #f8f8f8;
+}
+.orderCenterBottom  thead  td {
+    background:#f1f1f1;
+    height:50px;
+}
+.currentColor {
+    color: deepskyblue;
+    cursor: pointer;
+}
+.layer-report {
+}
+.layui-layer-title {
+    height: auto;
+    background: #3cbaff!important;
+    margin-bottom:30px;
+    padding: 0!important;
+}
+.layui-layer-title > p{
+    line-height: 48px!important;
+    color: #fff!important;
+    font-size: 16px!important;
+}
+#orderCenterPopup,#orderCenterPopup1,#orderCenterPopup2,#orderCenterPopup3,#orderCenterPopup4 {
+    width:100%;
+    height:100%;
+    padding-left: 34px;
+    display: none;
+}
+#orderCenterPopup section:nth-of-type(1) > p,#orderCenterPopup1 section:nth-of-type(1) > p,#orderCenterPopup2 section:nth-of-type(1) > p,#orderCenterPopup4 section:nth-of-type(1) > p,
+{
+    position: relative;
+    color: #555;
+    letter-spacing:1.5px;
+}
+#orderCenterPopup section:nth-of-type(1) >p::after,#orderCenterPopup1 section:nth-of-type(1) >p::after,#orderCenterPopup2 section:nth-of-type(1) >p::after,#orderCenterPopup4 section:nth-of-type(1) >p::after {
+    width:54px;
+    height:22px;
+    position: absolute;
+    content: '正常';
+    background: #39BAFE;
+    line-height:22px;
+    text-align: center;
+    color: #fff;
+    left:115px;
+    top:0;
+    border-radius: 11px;
+}
+#orderCenterPopup section:nth-of-type(1) >p.unusual::after,#orderCenterPopup1 section:nth-of-type(1) >p.unusual::after,#orderCenterPopup2 section:nth-of-type(1) >p.unusual::after,#orderCenterPopup4 section:nth-of-type(1) >p.unusual::after {
+    content: '异常';
+    background: #ff2625;
+}
+#orderCenterPopup section:nth-of-type(2),#orderCenterPopup1 section:nth-of-type(2),#orderCenterPopup2 section:nth-of-type(2),#orderCenterPopup3 section:nth-of-type(2),#orderCenterPopup4 section:nth-of-type(2)  {
+    margin-left:35px;
+    margin-top:10px;
+}
+#orderCenterPopup section:nth-of-type(2) ul,#orderCenterPopup2 section:nth-of-type(2) ul,#orderCenterPopup3 section:nth-of-type(2) ul,#orderCenterPopup4 section:nth-of-type(2) ul {
+    float: left;
+    width:160px;
+}
+#orderCenterPopup1 section:nth-of-type(2) ul{
+    width: 240px;
+}
+#orderCenterPopup section:nth-of-type(2) ul li,#orderCenterPopup1 section:nth-of-type(2) ul li,#orderCenterPopup2 section:nth-of-type(2) ul li,#orderCenterPopup3 section:nth-of-type(2) ul li,#orderCenterPopup4 section:nth-of-type(2) ul li {
+    width:100%;
+    line-height:40px;
+    color: #222;
+    font-weight: bold;
+}
+#orderCenterPopup section.reply,#orderCenterPopup1 section.reply,#orderCenterPopup2 section.reply,#orderCenterPopup3 section.reply,#orderCenterPopup4 section.reply{
+    padding-top: 20px;
+}
+#orderCenterPopup section.reply > span,#orderCenterPopup1 section.reply > span,#orderCenterPopup2 section.reply > span,#orderCenterPopup3 section.reply > span,#orderCenterPopup4 section.reply > span {
+    color: deepskyblue;
+    margin-right:4px;
+    vertical-align: top;
+}
+#orderCenterPopup section.reply > textarea,#orderCenterPopup1 section.reply > textarea,#orderCenterPopup2 section.reply > textarea,#orderCenterPopup3 section.reply > textarea,#orderCenterPopup4 section.reply > textarea {
+    resize: none;
+    border:1px solid #ddd;
+    width: 442px;
+    text-align: left;
+    padding:10px;
+}
+
+.ny {
+    color: deepskyblue;
+    cursor: pointer;
+}
+.ny:hover {
+    border-bottom: 1px dashed deepskyblue;
+}
+.doctor-sign {
+    border: 1px solid #ddd;
+    width: 442px;
+    padding: 10px;
+}
+.titleShow {
+    padding-bottom: 10px;
+    margin-bottom: 6px;
+    border-bottom: 1px dashed #ccc;
+}
+textarea#content {
+   height: 350px;
+    width: 750px;
+    padding: 10px;
+    margin-left: 5px;
+    resize: none;
+    border-radius: 10px;
+    box-shadow: 0px 0 20px #cdd;
+    border: 1px solid #dee;
+}
+span.small-tip{
+    border: 1px solid #ddd;
+    border-right: none;
+    line-height: 30px;
+    padding: 0 4px;
+    float: left;
+    background: #f0f0f0;
+    color: #455;
+}
+.Select-Options{
+    float: left;
+}
+@font-face {font-family: "iconfont";
+  src: url('iconfont.eot?t=1515397642690'); /* IE9*/
+  src: url('iconfont.eot?t=1515397642690#iefix') format('embedded-opentype'), /* IE6-IE8 */
+  url('data:application/x-font-woff;charset=utf-8;base64,d09GRgABAAAAAAWYAAsAAAAACDgAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAABHU1VCAAABCAAAADMAAABCsP6z7U9TLzIAAAE8AAAARAAAAFZW7kicY21hcAAAAYAAAABeAAABhpwABr5nbHlmAAAB4AAAAbwAAAIYTJODLWhlYWQAAAOcAAAALgAAADYQEsoKaGhlYQAAA8wAAAAgAAAAJAfgA4NobXR4AAAD7AAAAAwAAAAMC+kAAGxvY2EAAAP4AAAACAAAAAgAdgEMbWF4cAAABAAAAAAfAAAAIAESAG5uYW1lAAAEIAAAAUUAAAJtPlT+fXBvc3QAAAVoAAAALQAAAD6x0hq2eJxjYGRgYOBikGPQYWB0cfMJYeBgYGGAAJAMY05meiJQDMoDyrGAaQ4gZoOIAgCKIwNPAHicY2Bk/sE4gYGVgYOpk+kMAwNDP4RmfM1gxMjBwMDEwMrMgBUEpLmmMDgwVDzbxNzwv4EhhrmBoQEozAiSAwAwkg0eeJzFkMENgDAMAy9t6QMxCA8G4sUcnatDdY1iQnkwQS05VhxLiQIsQBQPMYFdGA9OueZ+ZHU/eSZLjUBptXf1nyqiWXYNKplpsHmr/9i87qPTVyiDOrHVl4QbGo0OVwAAeJxFUMtu00AUnTOu7SQ4TmdsjxOnedimHVBTB2zXXUBSqaVSQShFYhF12e5hmW66KAskqLLgC1ggJMQ/9GcQLFmzagKTpBKj+zj3XN0jnSE6IX9/aDdanTjkAXlMnpFXhMDYRmTTFkKZJ3QbXqh7vmtrMpahGUeJNoAfGa5Ii3zLN0yjBhttZGFayIRK7OZD+gSpaAGNZvCab25w7RMqddl+P39Bv8DrxBu14c78eW/fTbtO6cLivMH5tGToeonStZqNN74o6+WKMf+q1wLvpvOQdmA1ZPDytNpt8rMP+dvWpl8Grq7gNLv2t30WMBWXgXB4w1yvlupBNb7v4uLXvbpjtbZ+EvUWXv+sQasQl3TJI5KTM+U1tmF62e4Qe1kbvkIJ+lBTAqk2bSBUjalVqEiWACxkWhwZZnzHZ14bym6xpy7lUi1mC87P1IHi8H1aHGOEQEy9ACf0uDhKDyg9SLNFpe9uP0c9oBdp58t+e6mdTyQTGKmEYCOVcgWX7P8Zp3TQH48tDnBrPO4P1N8fpukhVvWj0pxdr7TpJNyZPaWT2TWVgkGsz38rCSUj2OROG+7JCimC/ANfAE9aeJxjYGRgYADiIF3XsHh+m68M3CwMIHCt0pkLQf9/yMLILAHkcjAwgUQB5K4IDQAAeJxjYGRgYG7438AQw8LAwPD/PwsjA1AEBTADAHHxBGsEAAAAA+kAAAQAAAAAAAAAAHYBDHicY2BkYGBgZkhiYGUAASYg5gJCBob/YD4DABKgAYEAeJxlj01OwzAQhV/6B6QSqqhgh+QFYgEo/RGrblhUavdddN+mTpsqiSPHrdQDcB6OwAk4AtyAO/BIJ5s2lsffvHljTwDc4Acejt8t95E9XDI7cg0XuBeuU38QbpBfhJto41W4Rf1N2MczpsJtdGF5g9e4YvaEd2EPHXwI13CNT+E69S/hBvlbuIk7/Aq30PHqwj7mXle4jUcv9sdWL5xeqeVBxaHJIpM5v4KZXu+Sha3S6pxrW8QmU4OgX0lTnWlb3VPs10PnIhVZk6oJqzpJjMqt2erQBRvn8lGvF4kehCblWGP+tsYCjnEFhSUOjDFCGGSIyujoO1Vm9K+xQ8Jee1Y9zed0WxTU/3OFAQL0z1xTurLSeTpPgT1fG1J1dCtuy56UNJFezUkSskJe1rZUQuoBNmVXjhF6XNGJPyhnSP8ACVpuyAAAAHicY2BigAAuBuyAmZGJkZmRhYGxQqCwNCUxvzgjMS89vTQxLyeTgQEAVTgHUAAAAA==') format('woff'),
+  url('iconfont.ttf?t=1515397642690') format('truetype'), /* chrome, firefox, opera, Safari, Android, iOS 4.2+*/
+  url('iconfont.svg?t=1515397642690#iconfont') format('svg'); /* iOS 4.1- */
+}
+
+.iconfont {
+  font-family:"iconfont" !important;
+  font-size:16px;
+  font-style:normal;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+.icon-qudaoshangguanli:before { content: "\e6b2"; }
+

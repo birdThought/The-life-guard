@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lifeshs.dao.data.ISportDao" >
+	<select id="getAllSport" resultMap="A">
+		SELECT * FROM t_data_sport_kind
+	</select>
+	
+	<resultMap type="com.lifeshs.entity.data.TDataSportKind" id="A">
+		<id property="id" column="id" />
+		<collection property="sports" ofType="com.lifeshs.entity.data.TDataSport" column="id" select="B" />
+	</resultMap>
+	
+	<select id="B" resultType="com.lifeshs.entity.data.TDataSport">
+		SELECT * FROM t_data_sport WHERE kind = #{id}
+	</select>
+	
+</mapper>

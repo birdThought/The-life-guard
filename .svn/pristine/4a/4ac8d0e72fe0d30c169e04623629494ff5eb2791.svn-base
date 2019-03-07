@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lifeshs.dao.shop.CommodityDao">
+
+	<!-- 首页 获取分类标签 -->
+	<select id="findClassfiyTags" resultType="com.lifeshs.shop.LabelDTO">
+		select id,labelName,sort,icon from t_shop_label order by sort ASC
+	</select>
+
+	<!-- 首页 获取分类商品(findClassfiyCommodity) 获取女性  woman -->
+	<select id="findClassfiyCommodityWoman" resultMap="labelGoodsPictureSku">
+		select 
+		la.id laid,la.labelName lalabelName,la.sort lasort,
+		go.id goid,go.goodsCode gogoodsCode,go.goodsName gogoodsName ,go.commonTitle gocommonTitle,go.labelId golabelId,
+		pi.id piid,pi.pictureUrl pipictureUrl,
+		sk.id skid,sk.favorablePrice skfavorablePrice
+		FROM  t_shop_goods go
+		LEFT JOIN t_shop_label la on la.id=go.labelId
+		LEFT JOIN t_shop_picture pi on go.goodsCode=pi.goodsId
+		LEFT JOIN t_shop_sku sk on go.goodsCode=sk.goodsId
+		where  find_in_set('3', labelId)
+	</select>
+	
+	<!-- 首页 获取分类商品(findClassfiyCommodity)  获取男性 man -->
+	<select id="findClassfiyCommodityMan" resultMap="labelGoodsPictureSku">
+		select 
+		la.id laid,la.labelName lalabelName,la.sort lasort,
+		go.id goid,go.goodsCode gogoodsCode,go.goodsName gogoodsName ,go.commonTitle gocommonTitle,go.labelId golabelId,
+		pi.id piid,pi.pictureUrl pipictureUrl,
+		sk.id skid,sk.favorablePrice skfavorablePrice
+		FROM  t_shop_goods go
+		LEFT JOIN t_shop_label la on la.id=go.labelId
+		LEFT JOIN t_shop_picture pi on go.goodsCode=pi.goodsId
+		LEFT JOIN t_shop_sku sk on go.goodsCode=sk.goodsId
+		where  find_in_set('2', labelId)
+	</select>
+	
+	<resultMap type="com.lifeshs.shop.GoodsDTO" id="labelGoodsPictureSku">
+		<id column="goid" property="id" />
+		<result column="gogoodsCode" property="goodsCode" />
+		<result column="gogoodsName" property="goodsName" />
+		<result column="gocommonTitle" property="commonTitle" />
+		<!-- 商品图片表(t_shop_picture) -->
+		<association property="PictureDTO" javaType="com.lifeshs.shop.PictureDTO">
+			<id column="piid" property="id" />
+			<result column="pipictureUrl" property="pictureUrl" />
+		</association>
+		
+		<!-- 商品SKU(t_shop_sku) -->
+		<association property="SkuDTO" javaType="com.lifeshs.shop.SkuDTO">
+			<id column="skid" property="id" />
+			<result column="skfavorablePrice" property="favorablePrice" />
+		</association>
+		
+	</resultMap>
+
+
+	<!-- 商城首页推荐分类 -->
+	<select id="getRecommendCategory" resultType="com.lifeshs.shop.PageRecommendGoodsDTO">
+		SELECT id,category_name AS categoryName,sort,end_time AS endTime 
+			FROM t_shop_page_goods
+		 ORDER BY sort ${rule}
+		 <if test="size != null">LIMIT ${size}</if> 
+		
+	</select>
+
+	<update id="moveSortOrSetTime">
+		update t_shop_page_goods 
+		<set>
+			<if test="sort != null">sort=#{sort},</if>
+			<if test="endTime != null">end_time=#{endTime},</if>
+		</set>
+		 where id=#{id}
+	</update>
+	
+	<update id="updateSortByCase">
+		UPDATE  t_shop_page_goods
+		SET sort = (CASE id
+		<foreach collection="list" item="rc">
+		 	WHEN ${rc.id} THEN ${rc.sort}
+		</foreach>
+		 END)
+	</update>
+	
+	<select id="selectAdvertPager" resultType="map">
+		SELECT 
+			ad.id,ad.image,p.pictureUrl,ad.goodsId,g.goodsName,ad.`status`,ad.url,ad.advert_type as advertType
+			,ad.shopId,s.shopName,ad.userId,u.userName AS userName,ad.show_time AS showTime
+		FROM t_shop_advertising_image ad
+		LEFT JOIN t_shop s ON s.id=ad.shopId
+		LEFT JOIN t_user u ON u.id=ad.userId
+		LEFT JOIN t_shop_goods g ON g.id=ad.goodsId
+		LEFT JOIN t_shop_picture p ON g.id=p.goodsId AND p.masterGraph=0
+		<where>
+			AND ad.status = #{status}
+			<if test="advertType != null">AND ad.advert_type=#{advertType}</if>
+			<if test="date != null and date neq ''">AND ad.show_time=#{date}</if>
+			<if test="userName != null and userName neq ''">AND u.userName LIKE CONCAT('%',#{userName},'%')</if>
+			<if test="shopName != null and shopName neq ''">AND s.shopName LIKE CONCAT('%',#{shopName},'%')</if>
+			<if test="goodsName != null and goodsName neq ''">AND g.goodsName LIKE CONCAT('%',#{goodsName},'%')</if>
+		</where>
+		ORDER BY ad.`createTime` DESC
+			limit #{startRow},#{pageSize}
+	</select>
+	
+	<select id="selectAdvertPagerTotal" resultType="int">
+		SELECT 
+			count(1)
+		FROM t_shop_advertising_image ad
+		<if test="shopName != null and shopName neq ''">
+			LEFT JOIN t_shop s ON s.id=ad.shopId
+		</if>
+		<if test="userName != null and userName neq ''">
+			LEFT JOIN t_user u ON u.id=ad.userId
+		</if>
+		<if test="goodsName != null and goodsName neq ''">
+			LEFT JOIN t_shop_goods g ON g.id=ad.goodsId
+		</if>
+		<where>
+			AND ad.status = #{status}
+			<if test="advertType != null">AND ad.advert_type=#{advertType}</if>
+			<if test="date != null and date neq ''">AND ad.show_time=#{date}</if>
+			<if test="userName != null and userName neq ''">AND u.userName LIKE CONCAT('%',#{userName},'%')</if>
+			<if test="shopName != null and shopName neq ''">AND s.shopName LIKE CONCAT('%',#{shopName},'%')</if>
+			<if test="goodsName != null and goodsName neq ''">AND g.goodsName LIKE CONCAT('%',#{goodsName},'%')</if>
+		</where>
+	</select>
+	
+	<update id="updateAdvertStatusById">
+		update t_shop_advertising_image set status=${status} where id=#{id}
+	</update>
+	
+	<select id="checkNumForAdvertShowTime" resultType="com.lifeshs.shop.AdvertDTO">
+		SELECT id,goodsId,show_time AS showTime FROM t_shop_advertising_image WHERE STATUS = 1 AND show_time=#{showTime}
+	</select>
+	
+	<insert id="addAdvert" parameterType="com.lifeshs.shop.AdvertDTO" useGeneratedKeys="true" keyProperty="id">
+		insert into t_shop_advertising_image
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="image != null">image,</if>
+			<if test="goodsId != null">goodsId,</if>
+			<if test="sort != null">sort,</if>
+			<if test="status != null">status,</if>
+			<if test="shopId != null">shopId,</if>
+			<if test="userId != null">userId,</if>
+			<if test="createTime != null">createTime,</if>
+			<if test="showTime != null">show_time,</if>
+			<if test="advertType != null">advert_type,</if>
+			<if test="url != null">url,</if>
+		</trim>
+		VALUES
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="image != null">#{image},</if>
+			<if test="goodsId != null">#{goodsId},</if>
+			<if test="sort != null">#{sort},</if>
+			<if test="status != null">#{status},</if>
+			<if test="shopId != null">#{shopId},</if>
+			<if test="userId != null">#{userId},</if>
+			<if test="createTime != null">#{createTime},</if>
+			<if test="showTime != null">#{showTime},</if>
+			<if test="advertType != null">#{advertType},</if>
+			<if test="url != null">#{url},</if>
+		</trim>
+	</insert>
+
+
+</mapper>

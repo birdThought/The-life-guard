@@ -1,0 +1,837 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lifeshs.dao1.user.UserRecordDao" >
+  <resultMap id="BaseResultMap" type="com.lifeshs.po.UserRecord" >
+    <constructor >
+      <idArg column="id" jdbcType="INTEGER" javaType="java.lang.Integer" />
+      <arg column="userId" jdbcType="INTEGER" javaType="java.lang.Integer" />
+      <arg column="height" jdbcType="REAL" javaType="java.lang.Float" />
+      <arg column="weight" jdbcType="REAL" javaType="java.lang.Float" />
+      <arg column="gender" jdbcType="BIT" javaType="java.lang.Boolean" />
+      <arg column="birthday" jdbcType="DATE" javaType="java.util.Date" />
+      <arg column="waist" jdbcType="REAL" javaType="java.lang.Float" />
+      <arg column="bust" jdbcType="REAL" javaType="java.lang.Float" />
+      <arg column="hip" jdbcType="REAL" javaType="java.lang.Float" />
+      <arg column="heartRate" jdbcType="SMALLINT" javaType="java.lang.Short" />
+      <arg column="heartRateStatus" jdbcType="BIT" javaType="java.lang.Boolean" />
+      <arg column="diastolic" jdbcType="SMALLINT" javaType="java.lang.Short" />
+      <arg column="systolic" jdbcType="SMALLINT" javaType="java.lang.Short" />
+      <arg column="bloodPressureStatus" jdbcType="BIT" javaType="java.lang.Boolean" />
+      <arg column="saturation" jdbcType="SMALLINT" javaType="java.lang.Short" />
+      <arg column="saturationStatus" jdbcType="BIT" javaType="java.lang.Boolean" />
+      <arg column="vitalCapacity" jdbcType="SMALLINT" javaType="java.lang.Short" />
+      <arg column="vitalCapacityScore" jdbcType="SMALLINT" javaType="java.lang.Short" />
+      <arg column="WHR" jdbcType="REAL" javaType="java.lang.Float" />
+      <arg column="WHRStatus" jdbcType="BIT" javaType="java.lang.Boolean" />
+      <arg column="BMI" jdbcType="REAL" javaType="java.lang.Float" />
+      <arg column="BMIRankStatus" jdbcType="BIT" javaType="java.lang.Boolean" />
+      <arg column="baseMetabolism" jdbcType="SMALLINT" javaType="java.lang.Short" />
+      <arg column="baseMetabolismStatus" jdbcType="BIT" javaType="java.lang.Boolean" />
+      <arg column="corporeityResult" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="subHealthSymptomScore" jdbcType="SMALLINT" javaType="java.lang.Short" />
+      <arg column="subHealthSymptomHealthPoint" jdbcType="SMALLINT" javaType="java.lang.Short" />
+      <arg column="dietQuestionnaireOptionId" jdbcType="INTEGER" javaType="java.lang.Integer" />
+      <arg column="sportQuestionnaireOptionId" jdbcType="INTEGER" javaType="java.lang.Integer" />
+      <arg column="mentalHealthQuestionnaireOptionId" jdbcType="INTEGER" javaType="java.lang.Integer" />
+      <arg column="sleepHour" jdbcType="REAL" javaType="java.lang.Float" />
+      <arg column="strokeRiskScore" jdbcType="SMALLINT" javaType="java.lang.Short" />
+      <arg column="createDate" jdbcType="TIMESTAMP" javaType="java.util.Date" />
+      <arg column="modifyDate" jdbcType="TIMESTAMP" javaType="java.util.Date" />
+    </constructor>
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, userId, height, weight, gender, birthday, waist, bust, hip, heartRate, heartRateStatus, 
+    diastolic, systolic, bloodPressureStatus, saturation, saturationStatus, vitalCapacity, 
+    vitalCapacityScore, WHR, WHRStatus, BMI, BMIRankStatus, baseMetabolism, baseMetabolismStatus, 
+    corporeityResult, subHealthSymptomScore, subHealthSymptomHealthPoint, dietQuestionnaireOptionId, 
+    sportQuestionnaireOptionId, mentalHealthQuestionnaireOptionId, sleepHour, strokeRiskScore, 
+    createDate, modifyDate
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_user_record
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from t_user_record
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.lifeshs.po.UserRecord" >
+    insert into t_user_record (id, userId, height, 
+      weight, gender, birthday, waist, 
+      bust, hip, heartRate, heartRateStatus, 
+      diastolic, systolic, bloodPressureStatus, 
+      saturation, saturationStatus, vitalCapacity, 
+      vitalCapacityScore, WHR, WHRStatus, 
+      BMI, BMIRankStatus, baseMetabolism, 
+      baseMetabolismStatus, corporeityResult, subHealthSymptomScore, 
+      subHealthSymptomHealthPoint, dietQuestionnaireOptionId, 
+      sportQuestionnaireOptionId, mentalHealthQuestionnaireOptionId, 
+      sleepHour, strokeRiskScore, createDate, 
+      modifyDate)
+    values (#{id,jdbcType=INTEGER}, #{userId,jdbcType=INTEGER}, #{height,jdbcType=REAL}, 
+      #{weight,jdbcType=REAL}, #{gender,jdbcType=BIT}, #{birthday,jdbcType=DATE}, #{waist,jdbcType=REAL}, 
+      #{bust,jdbcType=REAL}, #{hip,jdbcType=REAL}, #{heartRate,jdbcType=SMALLINT}, #{heartRateStatus,jdbcType=BIT}, 
+      #{diastolic,jdbcType=SMALLINT}, #{systolic,jdbcType=SMALLINT}, #{bloodPressureStatus,jdbcType=BIT}, 
+      #{saturation,jdbcType=SMALLINT}, #{saturationStatus,jdbcType=BIT}, #{vitalCapacity,jdbcType=SMALLINT}, 
+      #{vitalCapacityScore,jdbcType=SMALLINT}, #{WHR,jdbcType=REAL}, #{WHRStatus,jdbcType=BIT}, 
+      #{BMI,jdbcType=REAL}, #{BMIRankStatus,jdbcType=BIT}, #{baseMetabolism,jdbcType=SMALLINT}, 
+      #{baseMetabolismStatus,jdbcType=BIT}, #{corporeityResult,jdbcType=VARCHAR}, #{subHealthSymptomScore,jdbcType=SMALLINT}, 
+      #{subHealthSymptomHealthPoint,jdbcType=SMALLINT}, #{dietQuestionnaireOptionId,jdbcType=INTEGER}, 
+      #{sportQuestionnaireOptionId,jdbcType=INTEGER}, #{mentalHealthQuestionnaireOptionId,jdbcType=INTEGER}, 
+      #{sleepHour,jdbcType=REAL}, #{strokeRiskScore,jdbcType=SMALLINT}, #{createDate,jdbcType=TIMESTAMP}, 
+      #{modifyDate,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.lifeshs.po.UserRecord" >
+    insert into t_user_record
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="userId != null" >
+        userId,
+      </if>
+      <if test="height != null" >
+        height,
+      </if>
+      <if test="weight != null" >
+        weight,
+      </if>
+      <if test="gender != null" >
+        gender,
+      </if>
+      <if test="birthday != null" >
+        birthday,
+      </if>
+      <if test="waist != null" >
+        waist,
+      </if>
+      <if test="bust != null" >
+        bust,
+      </if>
+      <if test="hip != null" >
+        hip,
+      </if>
+      <if test="heartRate != null" >
+        heartRate,
+      </if>
+      <if test="heartRateStatus != null" >
+        heartRateStatus,
+      </if>
+      <if test="diastolic != null" >
+        diastolic,
+      </if>
+      <if test="systolic != null" >
+        systolic,
+      </if>
+      <if test="bloodPressureStatus != null" >
+        bloodPressureStatus,
+      </if>
+      <if test="saturation != null" >
+        saturation,
+      </if>
+      <if test="saturationStatus != null" >
+        saturationStatus,
+      </if>
+      <if test="vitalCapacity != null" >
+        vitalCapacity,
+      </if>
+      <if test="vitalCapacityScore != null" >
+        vitalCapacityScore,
+      </if>
+      <if test="WHR != null" >
+        WHR,
+      </if>
+      <if test="WHRStatus != null" >
+        WHRStatus,
+      </if>
+      <if test="BMI != null" >
+        BMI,
+      </if>
+      <if test="BMIRankStatus != null" >
+        BMIRankStatus,
+      </if>
+      <if test="baseMetabolism != null" >
+        baseMetabolism,
+      </if>
+      <if test="baseMetabolismStatus != null" >
+        baseMetabolismStatus,
+      </if>
+      <if test="corporeityResult != null" >
+        corporeityResult,
+      </if>
+      <if test="subHealthSymptomScore != null" >
+        subHealthSymptomScore,
+      </if>
+      <if test="subHealthSymptomHealthPoint != null" >
+        subHealthSymptomHealthPoint,
+      </if>
+      <if test="dietQuestionnaireOptionId != null" >
+        dietQuestionnaireOptionId,
+      </if>
+      <if test="sportQuestionnaireOptionId != null" >
+        sportQuestionnaireOptionId,
+      </if>
+      <if test="mentalHealthQuestionnaireOptionId != null" >
+        mentalHealthQuestionnaireOptionId,
+      </if>
+      <if test="sleepHour != null" >
+        sleepHour,
+      </if>
+      <if test="strokeRiskScore != null" >
+        strokeRiskScore,
+      </if>
+      <if test="createDate != null" >
+        createDate,
+      </if>
+      <if test="modifyDate != null" >
+        modifyDate,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="userId != null" >
+        #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="height != null" >
+        #{height,jdbcType=REAL},
+      </if>
+      <if test="weight != null" >
+        #{weight,jdbcType=REAL},
+      </if>
+      <if test="gender != null" >
+        #{gender,jdbcType=BIT},
+      </if>
+      <if test="birthday != null" >
+        #{birthday,jdbcType=DATE},
+      </if>
+      <if test="waist != null" >
+        #{waist,jdbcType=REAL},
+      </if>
+      <if test="bust != null" >
+        #{bust,jdbcType=REAL},
+      </if>
+      <if test="hip != null" >
+        #{hip,jdbcType=REAL},
+      </if>
+      <if test="heartRate != null" >
+        #{heartRate,jdbcType=SMALLINT},
+      </if>
+      <if test="heartRateStatus != null" >
+        #{heartRateStatus,jdbcType=BIT},
+      </if>
+      <if test="diastolic != null" >
+        #{diastolic,jdbcType=SMALLINT},
+      </if>
+      <if test="systolic != null" >
+        #{systolic,jdbcType=SMALLINT},
+      </if>
+      <if test="bloodPressureStatus != null" >
+        #{bloodPressureStatus,jdbcType=BIT},
+      </if>
+      <if test="saturation != null" >
+        #{saturation,jdbcType=SMALLINT},
+      </if>
+      <if test="saturationStatus != null" >
+        #{saturationStatus,jdbcType=BIT},
+      </if>
+      <if test="vitalCapacity != null" >
+        #{vitalCapacity,jdbcType=SMALLINT},
+      </if>
+      <if test="vitalCapacityScore != null" >
+        #{vitalCapacityScore,jdbcType=SMALLINT},
+      </if>
+      <if test="WHR != null" >
+        #{WHR,jdbcType=REAL},
+      </if>
+      <if test="WHRStatus != null" >
+        #{WHRStatus,jdbcType=BIT},
+      </if>
+      <if test="BMI != null" >
+        #{BMI,jdbcType=REAL},
+      </if>
+      <if test="BMIRankStatus != null" >
+        #{BMIRankStatus,jdbcType=BIT},
+      </if>
+      <if test="baseMetabolism != null" >
+        #{baseMetabolism,jdbcType=SMALLINT},
+      </if>
+      <if test="baseMetabolismStatus != null" >
+        #{baseMetabolismStatus,jdbcType=BIT},
+      </if>
+      <if test="corporeityResult != null" >
+        #{corporeityResult,jdbcType=VARCHAR},
+      </if>
+      <if test="subHealthSymptomScore != null" >
+        #{subHealthSymptomScore,jdbcType=SMALLINT},
+      </if>
+      <if test="subHealthSymptomHealthPoint != null" >
+        #{subHealthSymptomHealthPoint,jdbcType=SMALLINT},
+      </if>
+      <if test="dietQuestionnaireOptionId != null" >
+        #{dietQuestionnaireOptionId,jdbcType=INTEGER},
+      </if>
+      <if test="sportQuestionnaireOptionId != null" >
+        #{sportQuestionnaireOptionId,jdbcType=INTEGER},
+      </if>
+      <if test="mentalHealthQuestionnaireOptionId != null" >
+        #{mentalHealthQuestionnaireOptionId,jdbcType=INTEGER},
+      </if>
+      <if test="sleepHour != null" >
+        #{sleepHour,jdbcType=REAL},
+      </if>
+      <if test="strokeRiskScore != null" >
+        #{strokeRiskScore,jdbcType=SMALLINT},
+      </if>
+      <if test="createDate != null" >
+        #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifyDate != null" >
+        #{modifyDate,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.lifeshs.po.UserRecord" >
+    update t_user_record
+    <set >
+      <if test="userId != null" >
+        userId = #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="height != null" >
+        height = #{height,jdbcType=REAL},
+      </if>
+      <if test="weight != null" >
+        weight = #{weight,jdbcType=REAL},
+      </if>
+      <if test="gender != null" >
+        gender = #{gender,jdbcType=BIT},
+      </if>
+      <if test="birthday != null" >
+        birthday = #{birthday,jdbcType=DATE},
+      </if>
+      <if test="waist != null" >
+        waist = #{waist,jdbcType=REAL},
+      </if>
+      <if test="bust != null" >
+        bust = #{bust,jdbcType=REAL},
+      </if>
+      <if test="hip != null" >
+        hip = #{hip,jdbcType=REAL},
+      </if>
+      <if test="heartRate != null" >
+        heartRate = #{heartRate,jdbcType=SMALLINT},
+      </if>
+      <if test="heartRateStatus != null" >
+        heartRateStatus = #{heartRateStatus,jdbcType=BIT},
+      </if>
+      <if test="diastolic != null" >
+        diastolic = #{diastolic,jdbcType=SMALLINT},
+      </if>
+      <if test="systolic != null" >
+        systolic = #{systolic,jdbcType=SMALLINT},
+      </if>
+      <if test="bloodPressureStatus != null" >
+        bloodPressureStatus = #{bloodPressureStatus,jdbcType=BIT},
+      </if>
+      <if test="saturation != null" >
+        saturation = #{saturation,jdbcType=SMALLINT},
+      </if>
+      <if test="saturationStatus != null" >
+        saturationStatus = #{saturationStatus,jdbcType=BIT},
+      </if>
+      <if test="vitalCapacity != null" >
+        vitalCapacity = #{vitalCapacity,jdbcType=SMALLINT},
+      </if>
+      <if test="vitalCapacityScore != null" >
+        vitalCapacityScore = #{vitalCapacityScore,jdbcType=SMALLINT},
+      </if>
+      <if test="WHR != null" >
+        WHR = #{WHR,jdbcType=REAL},
+      </if>
+      <if test="WHRStatus != null" >
+        WHRStatus = #{WHRStatus,jdbcType=BIT},
+      </if>
+      <if test="BMI != null" >
+        BMI = #{BMI,jdbcType=REAL},
+      </if>
+      <if test="BMIRankStatus != null" >
+        BMIRankStatus = #{BMIRankStatus,jdbcType=BIT},
+      </if>
+      <if test="baseMetabolism != null" >
+        baseMetabolism = #{baseMetabolism,jdbcType=SMALLINT},
+      </if>
+      <if test="baseMetabolismStatus != null" >
+        baseMetabolismStatus = #{baseMetabolismStatus,jdbcType=BIT},
+      </if>
+      <if test="corporeityResult != null" >
+        corporeityResult = #{corporeityResult,jdbcType=VARCHAR},
+      </if>
+      <if test="subHealthSymptomScore != null" >
+        subHealthSymptomScore = #{subHealthSymptomScore,jdbcType=SMALLINT},
+      </if>
+      <if test="subHealthSymptomHealthPoint != null" >
+        subHealthSymptomHealthPoint = #{subHealthSymptomHealthPoint,jdbcType=SMALLINT},
+      </if>
+      <if test="dietQuestionnaireOptionId != null" >
+        dietQuestionnaireOptionId = #{dietQuestionnaireOptionId,jdbcType=INTEGER},
+      </if>
+      <if test="sportQuestionnaireOptionId != null" >
+        sportQuestionnaireOptionId = #{sportQuestionnaireOptionId,jdbcType=INTEGER},
+      </if>
+      <if test="mentalHealthQuestionnaireOptionId != null" >
+        mentalHealthQuestionnaireOptionId = #{mentalHealthQuestionnaireOptionId,jdbcType=INTEGER},
+      </if>
+      <if test="sleepHour != null" >
+        sleepHour = #{sleepHour,jdbcType=REAL},
+      </if>
+      <if test="strokeRiskScore != null" >
+        strokeRiskScore = #{strokeRiskScore,jdbcType=SMALLINT},
+      </if>
+      <if test="createDate != null" >
+        createDate = #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifyDate != null" >
+        modifyDate = #{modifyDate,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.lifeshs.po.UserRecord" >
+    update t_user_record
+    set userId = #{userId,jdbcType=INTEGER},
+      height = #{height,jdbcType=REAL},
+      weight = #{weight,jdbcType=REAL},
+      gender = #{gender,jdbcType=BIT},
+      birthday = #{birthday,jdbcType=DATE},
+      waist = #{waist,jdbcType=REAL},
+      bust = #{bust,jdbcType=REAL},
+      hip = #{hip,jdbcType=REAL},
+      heartRate = #{heartRate,jdbcType=SMALLINT},
+      heartRateStatus = #{heartRateStatus,jdbcType=BIT},
+      diastolic = #{diastolic,jdbcType=SMALLINT},
+      systolic = #{systolic,jdbcType=SMALLINT},
+      bloodPressureStatus = #{bloodPressureStatus,jdbcType=BIT},
+      saturation = #{saturation,jdbcType=SMALLINT},
+      saturationStatus = #{saturationStatus,jdbcType=BIT},
+      vitalCapacity = #{vitalCapacity,jdbcType=SMALLINT},
+      vitalCapacityScore = #{vitalCapacityScore,jdbcType=SMALLINT},
+      WHR = #{WHR,jdbcType=REAL},
+      WHRStatus = #{WHRStatus,jdbcType=BIT},
+      BMI = #{BMI,jdbcType=REAL},
+      BMIRankStatus = #{BMIRankStatus,jdbcType=BIT},
+      baseMetabolism = #{baseMetabolism,jdbcType=SMALLINT},
+      baseMetabolismStatus = #{baseMetabolismStatus,jdbcType=BIT},
+      corporeityResult = #{corporeityResult,jdbcType=VARCHAR},
+      subHealthSymptomScore = #{subHealthSymptomScore,jdbcType=SMALLINT},
+      subHealthSymptomHealthPoint = #{subHealthSymptomHealthPoint,jdbcType=SMALLINT},
+      dietQuestionnaireOptionId = #{dietQuestionnaireOptionId,jdbcType=INTEGER},
+      sportQuestionnaireOptionId = #{sportQuestionnaireOptionId,jdbcType=INTEGER},
+      mentalHealthQuestionnaireOptionId = #{mentalHealthQuestionnaireOptionId,jdbcType=INTEGER},
+      sleepHour = #{sleepHour,jdbcType=REAL},
+      strokeRiskScore = #{strokeRiskScore,jdbcType=SMALLINT},
+      createDate = #{createDate,jdbcType=TIMESTAMP},
+      modifyDate = #{modifyDate,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+
+  <select id="selectByUserId" parameterType="integer" resultMap="BaseResultMap">
+    SELECT
+    <include refid="Base_Column_List"/>
+    FROM t_user_record
+    WHERE userId = #{userId}
+  </select>
+
+  <!-- 获取用户的个人信息 -->
+  <select id="findByUserInfoList" resultType="com.lifeshs.vo.member.UserVo">
+    SELECT u.userName,u.realName,u.mobile,u.createDate,s.gender,s.birthday,s.userId
+    FROM
+	t_user u
+    INNER JOIN t_user_record s ON u.id = s.userId
+    WHERE u.id = s.userId
+    <if test="userName != null">
+      AND u.userName = #{userName}
+    </if>
+    <if test="realName != null">
+      AND u.realName = #{realName}
+    </if>
+    <if test="mobile != null">
+      AND u.mobile = #{mobile}
+    </if>
+      limit #{curPage},#{pageSize}
+  </select>
+
+  <!-- 获取用户的个人信息 -->
+  <select id="findByUserInfoListAgent" resultType="com.lifeshs.vo.member.UserVo">
+    <!-- SELECT distinct u.userName,u.realName,u.mobile,u.createDate,s.gender,s.birthday,s.userId
+    FROM
+    t_user u
+    INNER JOIN t_user_record s ON u.id = s.userId
+    INNER JOIN t_order o ON u.id=o.userId
+    INNER JOIN t_org_user ou ON o.orgUserId=ou.id
+    INNER JOIN t_org g ON g.id=ou.orgId AND g.parentId=#{userNo}
+    WHERE u.id = s.userId
+    <if test="userName != null">
+      AND u.userName = #{userName}
+    </if>
+    <if test="realName != null">
+      AND u.realName = #{realName}
+    </if>
+    <if test="mobile != null">
+      AND u.mobile = #{mobile}
+    </if>
+    limit #{curPage},#{pageSize} -->
+    select *from (
+        SELECT distinct '用户' as 'type', u.userName,u.realName,u.mobile,u.createDate,u.userNo,s.gender,s.birthday,s.userId
+        FROM t_user u
+        INNER JOIN t_user_record s ON u.id = s.userId
+        WHERE u.parentId=#{userNo}
+        
+        UNION ALL
+        
+        SELECT case when a.agentId='1' then '代理商' when a.agentId='2' then '业务员' else '其它'  end 'type', a.userName,a.`name` as realName,a.moblie,a.createDate,a.userNo,'' as gender,'' as birthday,'' as userId 
+        FROM t_admin_user a
+        WHERE a.parentId=#{userNo}
+    ) m 
+    where 1=1 
+    <if test="userName != null and userName != '' ">
+        AND m.userName like CONCAT('%',#{userName},'%')
+    </if>
+    <if test="realName != null and realName != '' ">
+        AND m.realName like CONCAT('%',#{realName},'%')
+    </if>
+    <if test="mobile != null and mobile != '' ">
+        AND m.mobile like CONCAT('%',#{mobile},'%')
+    </if>
+    ORDER BY CREATEDATE DESC
+    limit #{curPage},#{pageSize} 
+  </select>
+
+  <select id="findByCountSum" resultType="java.lang.Integer">
+    SELECT count(1) FROM(
+      SELECT u.userName,u.realName,u.mobile,u.createDate,s.gender,s.birthday,s.userId
+      FROM
+	t_user u
+    INNER JOIN t_user_record s on u.id = s.userId
+    WHERE u.id = s.userId
+	<if test="userName != null">
+      AND u.userName = #{userName}
+    </if>
+    <if test="realName != null">
+      AND u.realName = #{realName}
+    </if>
+    <if test="mobile != null">
+      AND u.mobile = #{mobile}
+    </if>
+)m
+  </select>
+
+  <select id="findByCountSumAgent" resultType="java.lang.Integer">
+    <!-- SELECT count(1) FROM(
+    SELECT u.userName,u.realName,u.mobile,u.createDate,s.gender,s.birthday,s.userId
+    FROM
+    t_user u
+    INNER JOIN t_user_record s on u.id = s.userId
+    INNER JOIN t_order o ON u.id=o.userId
+    INNER JOIN t_org_user ou ON o.orgUserId=ou.id
+    INNER JOIN t_org g ON g.id=ou.orgId AND g.parentId=#{userNo}
+    WHERE u.id = s.userId
+    <if test="userName != null">
+      AND u.userName = #{userName}
+    </if>
+    <if test="realName != null">
+      AND u.realName = #{realName}
+    </if>
+    <if test="mobile != null">
+      AND u.mobile = #{mobile}
+    </if>
+    )m -->
+    SELECT count(1) FROM(
+        SELECT  '用户' as 'type', u.userName,u.realName,u.mobile,u.createDate,u.userNo,s.gender,s.birthday,s.userId
+        FROM t_user u
+        INNER JOIN t_user_record s ON u.id = s.userId
+        WHERE u.parentId=#{userNo}
+
+        UNION ALL
+
+        SELECT case when a.agentId='1' then '代理商' when a.agentId='2' then '业务员' else '其它'  end 'type', a.userName,a.`name`,a.moblie,a.createDate,a.userNo,'' as gender,'' as birthday,'' as userId 
+        FROM t_admin_user a
+        WHERE a.parentId=#{userNo}
+     )m
+     where 1=1 
+    <if test="userName != null and userName != '' ">
+        AND m.userName like CONCAT('%',#{userName},'%')
+    </if>
+    <if test="realName != null and realName != '' ">
+        AND m.realName like CONCAT('%',#{realName},'%')
+    </if>
+    <if test="mobile != null and mobile != '' ">
+        AND m.mobile like CONCAT('%',#{mobile},'%')
+    </if>
+  </select>
+
+  <select id="findStatisticsDetaList" resultType="com.lifeshs.vo.StatisticsVO">
+    SELECT u.realName,u.mobile,r.gender,r.birthday,r.weight,r.userId FROM
+    t_user u
+    INNER JOIN t_user_record r on u.id = r.userId
+    <if test="users !=null">
+    INNER JOIN t_user_vip v on v.userId = u.id
+    </if>
+    <if test="label != null">
+    INNER JOIN t_user_hobby h on v.userId = h.userId
+    </if>
+    WHERE u.`status` = '0'
+    <if test="users != null">
+     AND v.`status` = '0'
+    </if>
+    <if test="province != null">
+      AND (u.county LIKE CONCAT("%", #{province} ,"%"))
+    </if>
+    <if test="gender != null">
+       AND r.gender = #{gender}
+    </if>
+    <if test="endAge != null">
+      AND #{endAge} &gt;=  r.birthday
+    </if>
+    <if test="startAge != null">
+      AND  r.birthday &gt;= #{startAge} 
+    </if>
+    <if test="weight != null">
+      AND r.weight = #{weight}
+    </if>
+    <if test="label != null">
+      AND h.hobbyId = #{label}
+    </if>
+    <if test="mobile != null">
+      AND u.mobile = #{mobile}
+    </if>
+        limit #{curPage},#{pageSize}
+    
+  </select>
+  
+  
+  <select id="findUserDeviceTokenList" resultType="com.lifeshs.po.push.UserDeviceTokenPO">
+    SELECT u.id as userId,app.deviceToken,app.OS FROM
+    t_user u
+    INNER JOIN t_user_record r on u.id = r.userId
+    INNER JOIN t_user_app_push app on app.userId = u.id AND app.display = TRUE 
+    <if test="users !=null">
+    INNER JOIN t_user_vip v on v.userId = u.id
+    </if>
+    <if test="label != null">
+    INNER JOIN t_user_hobby h on v.userId = h.userId
+    </if>
+    WHERE u.`status` = '0'
+    <if test="users != null">
+     AND v.`status` = '0'
+    </if>
+    <if test="province != null">
+      AND (u.county LIKE CONCAT("%", #{province} ,"%"))
+    </if>
+    <if test="gender != null">
+       AND r.gender = #{gender}
+    </if>
+    <if test="endAge != null">
+      AND #{endAge} * 365 &gt;= DATEDIFF(NOW(), r.birthday) 
+    </if>
+    <if test="startAge != null">
+      AND DATEDIFF(NOW(), r.birthday) &gt;  #{startAge} * 365 
+    </if>
+    <if test="weight != null">
+      AND r.weight = #{weight}
+    </if>
+    <if test="label != null">
+      AND h.hobbyId = #{label}
+    </if>
+    <if test="mobile != null">
+      AND u.mobile = #{mobile}
+    </if>
+    group by app.deviceToken  
+  </select>
+  
+  
+  <select id="findByDataListSum" parameterType="int" resultType="java.lang.Integer">
+      SELECT COUNT(1) FROM(
+      SELECT u.realName,u.mobile,r.gender,r.birthday,r.weight,r.userId FROM
+      t_user u
+      INNER JOIN t_user_record r on u.id = r.userId
+      <if test="users !=null">
+      INNER JOIN t_user_vip v on v.userId = u.id
+      </if>
+      <if test="label != null">
+      INNER JOIN t_user_hobby h on v.userId = h.userId
+      </if>
+      WHERE u.`status` = '0'
+    <if test="users != null">
+     AND v.`status` = '0'
+    </if>
+    <if test="province != null">
+      AND (u.county LIKE CONCAT("%", #{province} ,"%"))
+    </if>
+    <if test="gender != null">
+      AND r.gender = #{gender}
+    </if>
+    <if test="endAge != null">
+      AND #{endAge} &gt;=  r.birthday
+    </if>
+    <if test="startAge != null">
+      AND  r.birthday &gt;= #{startAge} 
+    </if>
+    <if test="weight != null">
+      AND r.weight = #{weight}
+    </if>
+    <if test="label != null">
+      AND h.hobbyId = #{label}
+    </if>
+    <if test="mobile != null">
+      AND u.mobile = #{mobile}
+    </if>
+    )m
+  </select>
+
+  <select id="findByCountData" parameterType="int" resultType="java.lang.Integer">
+    SELECT
+    count(*)
+    FROM
+    (SELECT count(1) memberCount,sum(CASE WHEN ur.gender = '1' THEN 1 END) man,
+    sum(CASE WHEN ur.gender = '0' THEN 1  END) woman, ifNull(u.province, '地址数据缺失') province, CASE WHEN ISNULL(ur.birthday) THEN
+    '生日数据缺失'
+    WHEN DATE_FORMAT(curdate(), '%Y') - DATE_FORMAT(ur.birthday, '%Y') BETWEEN 0
+    AND 20 THEN
+    '0~20岁'
+    WHEN DATE_FORMAT(curdate(), '%Y') - DATE_FORMAT(ur.birthday, '%Y') BETWEEN 20
+    AND 30 THEN
+    '20~30岁'
+    WHEN DATE_FORMAT(curdate(), '%Y') - DATE_FORMAT(ur.birthday, '%Y') BETWEEN 30
+    AND 40 THEN
+    '30~40岁'
+    WHEN DATE_FORMAT(curdate(), '%Y') - DATE_FORMAT(ur.birthday, '%Y') BETWEEN 40
+    AND 50 THEN
+    '40~50岁'
+    WHEN DATE_FORMAT(curdate(), '%Y') - DATE_FORMAT(ur.birthday, '%Y') BETWEEN 50
+    AND 60 THEN
+    '50~60岁'
+    WHEN DATE_FORMAT(curdate(), '%Y') - DATE_FORMAT(ur.birthday, '%Y') >= 60 THEN
+    '60岁以上'
+    END ageAvg
+    FROM
+    t_user u
+    INNER JOIN t_user_record ur ON u.id = ur.userId
+        <if test="orgName != null">
+          LEFT JOIN t_order o  ON o.userId = u.id
+          AND o.`status` in (0,1,2)
+          LEFT JOIN t_org_user ou ON o.orgUserId = ou.id
+          LEFT JOIN t_org org ON org.id = ou.orgId
+        </if>
+        WHERE u.id = ur.userId
+      <if test="userNo != null">
+        AND u.parentId = #{userNo}
+      </if>
+        <if test="orgName != null">
+          AND org.orgName = #{orgName}
+        </if>
+        <if test="province != null">
+          AND u.province = #{province}
+        </if>
+        <if test="avgAge != null">
+          AND ur.birthday = #{avgAge}
+        </if>
+        group by
+            u.province) v
+  </select>
+  <select id="findByCountDataList" resultType="com.lifeshs.vo.member.memberCountVo">
+    SELECT
+        count(1) memberCount,
+        sum(case
+            when ur.gender='1' then 1
+        end) man,
+        sum(case
+            when ur.gender='0' then 1
+        end) woman,
+        ifNull(u.province,
+        '地址数据缺失') province,
+        case
+            WHEN ISNULL(ur.birthday) then '生日数据缺失'
+            WHEN DATE_FORMAT(curdate(),
+            '%Y')-DATE_FORMAT(ur.birthday,
+            '%Y') between 0 and 20 then '0~20岁'
+            WHEN DATE_FORMAT(curdate(),
+            '%Y')-DATE_FORMAT(ur.birthday,
+            '%Y')  between 20 and 30 then '20~30岁'
+            WHEN DATE_FORMAT(curdate(),
+            '%Y')-DATE_FORMAT(ur.birthday,
+            '%Y') between 30 and 40 then '30~40岁'
+            WHEN DATE_FORMAT(curdate(),
+            '%Y')-DATE_FORMAT(ur.birthday,
+            '%Y')  between 40 and 50 then '40~50岁'
+            WHEN DATE_FORMAT(curdate(),
+            '%Y')-DATE_FORMAT(ur.birthday,
+            '%Y')  between 50 and 60 then '50~60岁'
+            WHEN DATE_FORMAT(curdate(),
+            '%Y')-DATE_FORMAT(ur.birthday,
+            '%Y')  >=60 then '60岁以上'
+        END ageAvg
+    from
+        t_user u
+    INNER JOIN
+        t_user_record ur
+            ON u.id = ur.userId
+        <if test="orgName != null">
+          LEFT JOIN t_order o  ON o.userId = u.id
+          AND o.status in (0,1,2)
+          LEFT JOIN t_org_user ou ON o.orgUserId = ou.id
+          LEFT JOIN t_org org ON org.id = ou.orgId
+        </if>
+    WHERE u.id = ur.userId
+    <if test="userNo != null">
+      AND u.parentId = #{userNo}
+    </if>
+    <if test="orgName != null">
+     AND org.orgName = #{orgName}
+    </if>
+    <if test="province != null">
+     AND u.province = #{province}
+    </if>
+    <if test="avgAge != null">
+     AND ur.birthday = #{avgAge}
+    </if>
+    group by
+    u.province
+    <if test="radioValue == 0">
+    ORDER BY province ASC
+    </if>
+    <if test="radioValue == 1">
+    ORDER BY ageAvg ASC
+    </if>
+    LIMIT #{curPage},#{pageSize}
+  </select>
+  
+  <select id="countGenderSum" resultType="com.lifeshs.vo.member.memberCountVo">
+    SELECT
+	count(1) memberCount,
+	sum(
+		CASE
+		WHEN ur.gender = '1' THEN
+			1
+		END
+	) man,
+	sum(
+		CASE
+		WHEN ur.gender = '0' THEN
+			1
+		END
+	) woman,
+	sum(
+		CASE
+		WHEN ur.gender is null THEN
+			1
+		END
+	) missing
+FROM
+	t_user u
+INNER JOIN t_user_record ur ON u.id = ur.userId 
+where u.parentId=#{userNo}
+  </select>
+</mapper>

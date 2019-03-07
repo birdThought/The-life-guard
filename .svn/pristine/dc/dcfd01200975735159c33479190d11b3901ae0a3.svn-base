@@ -1,0 +1,8 @@
+"use strict";
+var HelpResponse = (function () {
+    function HelpResponse() {
+    }
+    return HelpResponse;
+}());
+exports.HelpResponse = HelpResponse;
+//# sourceMappingURL=help-response.js.map

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lifeshs.dao1.data.DiseasesDao" >
+
+    <!--获取单个病种信息-->
+    <select id="getDiseases" resultType="com.lifeshs.po.data.DiseasesPO">
+        SELECT * FROM t_data_diseases WHERE id = #{id} AND deleted = FALSE
+    </select>
+
+    <!--获取病种列表-->
+    <select id="findDiseasesList" resultType="com.lifeshs.po.data.DiseasesPO">
+        SELECT * FROM t_data_diseases WHERE deleted = FALSE
+        ORDER BY id
+    </select>
+
+
+</mapper>

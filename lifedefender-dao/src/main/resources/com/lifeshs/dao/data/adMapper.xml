@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lifeshs.dao.data.IAdDao">
+    <select id="listAd" resultType="com.lifeshs.pojo.data.AdDTO">
+        SELECT id, type, photo, weight FROM t_data_ad WHERE type = #{type.value}
+            ORDER BY weight, modifyDate DESC
+            LIMIT #{limit}
+    </select>
+</mapper>

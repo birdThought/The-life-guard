@@ -1,0 +1,173 @@
+
+.main-content-top{
+	line-height: 50px;
+	padding-left: 1em;
+	font-size: 16px;
+}
+.main-content-top a
+{
+	color: #666;
+}
+.main-content-top span{
+	color:#333;
+}
+.main-content form{
+	width:660px;
+	margin: 0 auto;
+}
+.head-img{
+	width: 330px;
+	margin:0 auto;
+}
+.head-img div{
+	padding-left:240px;
+}
+.head-img p{
+	color:#999;
+	font-size: 14px;
+	line-height: 50px;
+}
+.head-btn input{
+	position: absolute;
+    right: 0;
+    top: 0;
+	opacity:0;
+}
+.head-btn{
+	display: inline-block;
+	position: relative;
+	width: 146px;
+	height: 38px;
+	background-color: #10bb71;
+	color:#fff;
+	font-size: 16px;
+	text-align: center;
+	line-height: 38px;
+	border-radius: 4px;
+	margin-bottom: 30px;
+}
+.user-infor li:after{
+	content: "";
+	clear: both;
+	visibility: hidden;
+	display: block;
+}
+.user-infor li{
+	line-height: 44px;
+	margin-bottom: 30px;
+}
+.user-infor li p{
+	float: left;
+	width:120px;
+	text-align: right;
+	margin-right: 30px;
+	color: #666;
+	font-size: 16px;
+}
+.user-infor li input[type=text],
+.user-infor li select{
+	float: left;
+	width: 378px;
+	height: 44px;
+	border:1px solid #ddd;
+	text-indent: 1em;
+}
+.chose-id{
+	position: relative;
+	display: inline-block;
+	width: 120px;
+	height: 36px;
+	background-color: #10bb71;
+	color:#fff;
+	font-size: 16px;
+	text-align: center;
+	line-height: 38px;
+	border-radius: 4px;
+	margin-bottom: 30px;
+}
+.chose-id input{
+	position: absolute;
+	left: 0;
+	top:0;
+	opacity:0;
+}
+.chose-id + span{
+	color:#999;
+	font-size: 14px;
+	margin-left: 10px;
+}
+.id-card dd{
+	padding-left: 60px;
+}
+.id-card dd div{
+	width: 240px;
+	height: 178px;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	border:1px solid #ddd;
+}
+.id-card dd div:first-child{
+	margin-right: 30px;
+}
+.refer-to{
+	padding-top: 20px;
+	padding-left: 150px;
+}
+.refer-to a.btn{
+	display: inline-block;
+	width: 230px;
+	height: 52px;
+	line-height: 52px;
+	text-align: center;
+	color:#fff;
+	background-color:#10bb71;
+	font-size: 18px;
+	border-radius: 6px;
+	margin-top: 20px;
+}
+.refer-to a.retest{
+	color:#10bb71;
+	margin-left:10px;
+	display:inline-block;
+	
+	text-decoration: underline
+}
+.msg-lay{
+	float: left;
+	margin-left: 10px;
+	color:#999;
+}
+/* 门店信息 */
+.main-content .store-infor form{
+	width: 810px;
+}
+.store-infor{
+	margin-top:40px;
+}
+.store-infor .chose-id{
+	margin-top: 20px;
+}
+.store-infor .head-img{
+	width: auto;
+}
+.store-infor .store-intro{
+	width: 632px;
+	/*border:1px solid #10bb71;*/
+	float: left;
+	padding:10px;
+	line-height: 1.8;
+	min-height: 120px;
+}
+.chose-area div select{
+	width: 134px;
+	margin-right: 20px;
+}
+.store-map{
+	padding-left: 52px;
+}
+#map{
+	width: 95%;
+	height: 326px;
+}
+

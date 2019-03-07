@@ -1,0 +1,55 @@
+"use strict";
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+var core_1 = require("@angular/core");
+var router_1 = require("@angular/router");
+var common_1 = require("@angular/common");
+require("rxjs/add/operator/switchMap");
+var menu_1 = require("./menu");
+var menu_service_1 = require("./menu.service");
+var MenuDetailComponent = (function () {
+    function MenuDetailComponent(menuService, route, location) {
+        this.menuService = menuService;
+        this.route = route;
+        this.location = location;
+    }
+    MenuDetailComponent.prototype.ngOnInit = function () {
+        var _this = this;
+        this.route.params
+            .switchMap(function (params) { return _this.menuService.getMenu(+params['id']); })
+            .subscribe(function (menu) { return _this.menu = menu; });
+    };
+    ;
+    MenuDetailComponent.prototype.goBack = function () {
+        this.location.back();
+    };
+    MenuDetailComponent.prototype.save = function () {
+        var _this = this;
+        this.menuService.update(this.menu)
+            .then(function () { return _this.goBack(); });
+    };
+    return MenuDetailComponent;
+}());
+__decorate([
+    core_1.Input(),
+    __metadata("design:type", menu_1.Menu)
+], MenuDetailComponent.prototype, "menu", void 0);
+MenuDetailComponent = __decorate([
+    core_1.Component({
+        selector: 'menu-detail',
+        templateUrl: './menu-detail.component.html',
+        styleUrls: ['./menu-detail.component.css']
+    }),
+    __metadata("design:paramtypes", [menu_service_1.MenuService,
+        router_1.ActivatedRoute,
+        common_1.Location])
+], MenuDetailComponent);
+exports.MenuDetailComponent = MenuDetailComponent;
+//# sourceMappingURL=menu-detail.component.js.map

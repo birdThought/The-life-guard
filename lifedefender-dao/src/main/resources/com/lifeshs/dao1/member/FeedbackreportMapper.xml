@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lifeshs.dao1.member.FeedbackreportDao">
+    <select id="findByFeedbackAll" resultType="com.lifeshs.vo.member.FeedbackreportVo">
+        select m.id,m.message, m.createDate, m.userId,m.reply,m.userType,m.realName  
+        from (
+            SELECT  ou.parentId as orgParentId,u.parentId as uParentId ,r.id,r.message, r.createDate, r.userId,r.reply,r.userType,
+                CASE
+                WHEN r.userType = 0 THEN
+                u.realName
+                WHEN r.userType = 1 THEN
+                ou.realName
+                END realName
+                FROM
+                t_report r
+                LEFT JOIN t_user u ON r.userId = u.id
+                LEFT JOIN t_org_user ou ON r.userId = ou.id
+                WHERE
+                r.isRead = 0
+        ) m 
+        where 1=1 and (m.orgParentId=#{userNo} or m.uParentId = #{userNo})
+        ORDER BY m.createDate DESC
+        LIMIT #{curPage},#{pageSize}
+    </select>
+
+    <select id="findByFeedbacCount" resultType="java.lang.Integer">
+        SELECT
+          count(*)
+          FROM(
+        SELECT ou.parentId as orgParentId,u.parentId as uParentId ,r.id,r.message,r.createDate,r.userId,r.reply,r.userType,
+			CASE
+		WHEN r.userType = 0 THEN
+			u.realName
+		WHEN r.userType = 1 THEN
+			ou.realName
+		END realName
+		FROM
+			t_report r
+		LEFT JOIN t_user u ON r.userId = u.id
+		LEFT JOIN t_org_user ou ON r.userId = ou.id
+		WHERE
+			r.isRead = 0
+		ORDER BY
+			r.createDate DESC
+	) v where 1=1 and (v.orgParentId=#{userNo} or v.uParentId = #{userNo})
+    </select>
+
+    <delete id="delete">
+        DELETE  FROM t_report WHERE id = #{id}
+    </delete>
+    
+    <select id="findById" resultType="com.lifeshs.po.ReportPo">
+        SELECT * FROM t_report WHERE id =#{id}
+    </select>
+
+    <update id="updateReport">
+        UPDATE t_report
+        SET message = #{message},
+        contactInformation = #{contactInformation},
+        isRead = #{isRead},
+        reply = #{reply},
+        userId = #{userId},
+        createDate = #{createDate},
+        userType = #{userType}
+        WHERE id = #{id}
+    </update>
+</mapper>

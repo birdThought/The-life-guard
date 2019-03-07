@@ -1,0 +1,10 @@
+<div id="search-component">
+    <h4>Menu Search</h4>
+    <input #searchBox id="search-box" (keyup)="search(searchBox.value)" />
+    <div>
+        <div *ngFor="let menu of menus | async"
+             (click)="gotoDetail(menu)" class="search-result" >
+            {{menu.name}}
+        </div>
+    </div>
+</div>

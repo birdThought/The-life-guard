@@ -1,0 +1,137 @@
+<#assign base =rc.getContextPath()/>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no">
+    <meta name="apple-mobile-web-app-title" content="生命守护">
+    <meta name="format-detection" content="telephone=yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <link rel="stylesheet" href="/static/css/reset.css">
+    <link rel="stylesheet" type="text/css" href="/static/css/help/help-app.css">
+    <title>帮助中心</title>
+</head>
+<body>
+<header>
+    <div class="container clearfix">
+        <i></i>
+        <p>帮助中心</p>
+    </div>
+</header><!-- /header -->
+<article>
+    <ul class="navbar">
+        <li class="test-ajax">
+            <p></p>
+        </li>
+        <li>
+            <p>
+                <img src="/static/images/help/help-1.png" alt="">
+                智能设备
+                <i></i>
+            </p>
+            <dl>
+                <dd>
+                    <a href="/help/help-detail/1">血糖仪说明书</a>
+                </dd>
+                <dd>
+                    <a href="#">C3说明书</a>
+                </dd>
+                <dd>
+                    <a href="#">心率手环说明书</a>
+                </dd>
+                <dd>
+                    <a href="#">肺活仪说明书</a>
+                </dd>
+                <dd>
+                    <a href="#">血压计操作说明</a>
+                </dd>
+                <dd>
+                    <a href="#">体脂秤操作说明</a>
+                </dd>
+                <dd>
+                    <a href="#">血氧仪操作说明</a>
+                </dd>
+            </dl>
+        </li>
+        <li>
+            <p>
+                <img src="/static/images/help/help-2.png" alt="">
+                健康测量
+                <i></i>
+            </p>
+            <dl>
+                <dd>
+                    <a href="#">血糖仪说明书</a>
+                </dd>
+                <dd>
+                    <a href="#">C3说明书</a>
+                </dd>
+                <dd>
+                    <a href="#">心率手环说明书</a>
+                </dd>
+                <dd>
+                    <a href="#">肺活仪说明书</a>
+                </dd>
+                <dd>
+                    <a href="#">血压计操作说明</a>
+                </dd>
+                <dd>
+                    <a href="#">体脂秤操作说明</a>
+                </dd>
+                <dd>
+                    <a href="#">血氧仪操作说明</a>
+                </dd>
+            </dl>
+        </li>
+        <li>
+            <p>
+                <img src="/static/images/help/help-3.png" alt="">
+                机构服务
+                <i></i>
+            </p>
+        </li>
+        <li>
+            <p>
+                <img src="/static/images/help/help-4.png" alt="">
+                健康档案
+                <i></i>
+            </p>
+        </li>
+        <li>
+            <p>
+                <img src="/static/images/help/help-5.png" alt="">
+                注册登录
+                <i></i>
+            </p>
+        </li>
+        <li>
+            <p>
+                <img src="/static/images/help/help-6.png" alt="">
+                产品视频介绍
+                <i></i>
+            </p>
+        </li>
+    </ul>
+</article>
+</body>
+<script src="/static/js/reset.js"></script>
+<script src="/static/js/plugins/jquery/jquery-2.1.1.min.js"></script>
+<!--<script src="/static/js/plugins/angular/angular.js"></script>-->
+<script>
+//    angular.element.$(".navbar dl").css("display","none");
+    $(".navbar p").on("click",function() {
+    	$(".navbar p i").not($(this).children("i")).removeClass("current");
+		$(".navbar li dl").not($(this).next("dl")).css("display","none");
+		$(this).children("i").toggleClass("current").parent("p").next("dl").slideToggle(400);
+    })
+    $(function () {
+        if( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) {
+            $('header').css('display', 'none');
+        }
+        $.get("http://localhost:8080/help/item/%E8%B5%84%E8%AE%AF%E4%BF%A1%E6%81%AF", function(result){
+            $(".test-ajax p").html(result);
+        });
+    })
+</script>
+</html>

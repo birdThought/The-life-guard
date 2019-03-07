@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lifeshs.dao1.systemManage.FoodManageDao">
+		
+	<!-- 查询食物列表 -->
+	<select id="findFood" resultMap="foodVo">
+		SELECT
+			a.id AS aId,
+			a.kind AS aKind,
+			a.image AS aImage,
+			a.kcal AS aKcal,
+			a.`name` AS aName,
+			b.id AS bId,
+			b.`name` AS bName
+		FROM
+			t_data_food a
+		INNER JOIN t_data_food_kind b 
+		ON a.kind = b.id
+		<where>
+		<if test="kind !=null">
+			a.kind = #{kind}
+		</if>
+		<if test="name != null">
+			AND a.`name` LIKE CONCAT(#{name}, '%')
+		</if>
+		</where>
+		LIMIT #{startRow},#{pageSize}
+	</select>
+	
+	<!--统计食物数量 -->
+	<select id="countFood" resultType="java.lang.Integer">
+		SELECT COUNT(1)
+		FROM
+			t_data_food a
+		INNER JOIN t_data_food_kind b 
+		ON a.kind = b.id
+		<where>
+		<if test="kind !=null">
+			a.kind = #{kind}
+		</if>
+		<if test="name != null">
+			AND a.`name` LIKE CONCAT(#{name}, '%')
+		</if>
+		</where>	
+	</select>
+	
+	<!-- 添加食物 -->
+	<insert id="addFood" parameterType="com.lifeshs.vo.systemManage.FoodVo">
+		INSERT INTO t_data_food(kind,image,kcal,name)
+		VALUES(#{kind},#{image},#{kcal},#{name})
+	</insert>
+	
+	<!-- 编辑食物 -->
+	<update id="updateFood" parameterType="com.lifeshs.vo.systemManage.FoodVo">
+		UPDATE t_data_food 
+		<set>
+			<if test="kind != null">
+				kind = #{kind},
+			</if>
+			<if test="image != null">
+				image = #{image},
+			</if>
+			<if test="kcal != null">
+				kcal = #{kcal},
+			</if>
+			<if test="name != null">
+				name = #{name}
+			</if>
+		</set>
+		WHERE id = #{id}
+	</update>
+	
+	<!-- 删除食物 -->
+	<delete id="deleteFood">
+		DELETE FROM t_data_food WHERE id = #{id}
+	</delete>
+	
+	 <resultMap type="com.lifeshs.vo.systemManage.FoodVo" id="foodVo">  
+        <id column="aId" property="id"/>  
+        <result column="aKind" property="kind"/>  
+        <result column="aImage" property="image"/>  
+		<result column="aKcal" property="kcal"/>
+		<result column="aName" property="name"/>    
+        <association property="foodKind" notNullColumn="bId"
+        	javaType="com.lifeshs.entity.record.TDataFoodKind">  
+            <id column="bId" property="id"/>  
+            <result column="bName" property="name"/>   
+        </association>  
+    </resultMap>  
+</mapper>

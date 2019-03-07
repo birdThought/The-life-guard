@@ -1,0 +1,101 @@
+log4j.rootLogger=INFO,stdout,A
+#log4j.rootLogger={level},appender1, appender2,
+#level:ALL<DEBUG<INFO<WARN<ERROR<FATAL<OFF
+#log4j.additivity.org.apache=true
+
+###################LOGGER START###################
+log4j.logger.org.apache.ibatis=INFO,sql
+log4j.logger.java.sql.Connection=DEBUG,sql
+log4j.logger.java.sql.PreparedStatement=DEBUG,sql  
+log4j.logger.java.sql.ResultSet=DEBUG,sql
+###################LOGGER END  ###################
+
+###################APPENDER START#################
+#stdout
+log4j.appender.stdout=org.apache.log4j.ConsoleAppender
+log4j.appender.stdout.Threshold=INFO
+log4j.appender.stdout.Target=System.out
+log4j.appender.stdout.layout=org.apache.log4j.PatternLayout
+log4j.appender.stdout.layout.ConversionPattern=%d{yyyy-MM-dd HH:mm:ss} [%t] %-5p %x - %m (%F:%L)%n
+
+#mybatis
+log4j.appender.sql=org.apache.log4j.DailyRollingFileAppender
+log4j.appender.sql.Threshold=INFO
+log4j.appender.sql.File=${lifedefender_api_log}/sql.log
+log4j.appender.sql.DatePattern='.'yyyy-MM-dd'.log'
+log4j.appender.sql.Append=true
+log4j.appender.sql.layout=org.apache.log4j.PatternLayout
+log4j.appender.sql.layout.ConversionPattern=%d{yyyy-MM-dd HH:mm:ss} [%t] %-5p %x - %m (%F:%L)%n
+log4j.appender.sql.Encoding=UTF-8
+
+#app
+log4j.logger.app=INFO,app
+log4j.appender.app=org.apache.log4j.DailyRollingFileAppender
+log4j.appender.app.File=${lifedefender_api_log}/app.log
+log4j.appender.app.DatePattern='.'yyyy-MM-dd'.log'
+log4j.appender.app.Append=true
+log4j.appender.app.layout=org.apache.log4j.PatternLayout
+log4j.appender.app.layout.ConversionPattern=%d{yyyy-MM-dd HH:mm:ss} [%t] %-5p %x - %m (%F:%L)%n
+log4j.appender.app.Encoding=UTF-8
+
+#mapp
+log4j.logger.mapp=INFO,mapp
+log4j.appender.mapp=org.apache.log4j.DailyRollingFileAppender
+log4j.appender.mapp.File=${lifedefender_api_log}/mapp.log
+log4j.appender.mapp.DatePattern='.'yyyy-MM-dd'.log'
+log4j.appender.mapp.Append=true
+log4j.appender.mapp.layout=org.apache.log4j.PatternLayout
+log4j.appender.mapp.layout.ConversionPattern=%d{yyyy-MM-dd HH:mm:ss} [%t] %-5p %x - %m (%F:%L)%n
+log4j.appender.mapp.Encoding=UTF-8
+
+#E
+log4j.logger.E=ERROR,E
+log4j.appender.E=org.apache.log4j.DailyRollingFileAppender
+log4j.appender.E.File=${lifedefender_api_log}/error.log
+log4j.appender.E.DatePattern='.'yyyy-MM-dd'.log'
+log4j.appender.E.Append=true
+log4j.appender.E.layout=org.apache.log4j.PatternLayout
+log4j.appender.E.layout.ConversionPattern=%d{yyyy-MM-dd HH:mm:ss} [%t] %-5p %x - %m (%F:%L)%n
+log4j.appender.E.Encoding=UTF-8
+
+#SMS
+log4j.logger.SMS=INFO,SMS
+log4j.appender.SMS=org.apache.log4j.DailyRollingFileAppender
+log4j.appender.SMS.File=${lifedefender_api_log}/sms.log
+log4j.appender.SMS.DatePattern='.'yyyy-MM-dd'.log'
+log4j.appender.SMS.Append=true
+log4j.appender.SMS.layout=org.apache.log4j.PatternLayout
+log4j.appender.SMS.layout.ConversionPattern=%d{yyyy-MM-dd HH:mm:ss} [%t] %-5p %x - %m (%F:%L)%n
+log4j.appender.SMS.Encoding=UTF-8
+
+#task
+log4j.logger.task=INFO,task
+log4j.appender.task=org.apache.log4j.DailyRollingFileAppender
+log4j.appender.task.File=${lifedefender_api_log}/task.log
+log4j.appender.task.DatePattern='.'yyyy-MM-dd'.log'
+log4j.appender.task.Append=true
+log4j.appender.task.layout=org.apache.log4j.PatternLayout
+log4j.appender.task.layout.ConversionPattern=%d{yyyy-MM-dd HH:mm:ss} [%t] %-5p %x - %m (%F:%L)%n
+log4j.appender.task.Encoding=UTF-8
+
+#A
+log4j.appender.A=org.apache.log4j.DailyRollingFileAppender
+log4j.appender.A.Threshold=INFO
+log4j.appender.A.File=${lifedefender_api_log}/all.log
+log4j.appender.A.DatePattern='.'yyyy-MM-dd'.log'
+log4j.appender.A.Append=true
+log4j.appender.A.layout=org.apache.log4j.PatternLayout
+log4j.appender.A.layout.ConversionPattern=%d{yyyy-MM-dd HH:mm:ss} [%t] %-5p %x - %m (%F:%L)%n
+log4j.appender.A.Encoding=UTF-8
+
+#pay
+log4j.logger.pay=INFO,pay
+log4j.appender.pay=org.apache.log4j.DailyRollingFileAppender
+log4j.appender.pay.File=${lifedefender_api_log}/pay.log
+log4j.appender.pay.DatePattern='.'yyyy-MM-dd'.log'
+log4j.appender.pay.Append=true
+log4j.appender.pay.layout=org.apache.log4j.PatternLayout
+log4j.appender.pay.layout.ConversionPattern=%d{yyyy-MM-dd HH:mm:ss} [%t] %-5p %x - %m (%F:%L)%n
+log4j.appender.pay.Encoding=UTF-8
+
+###################APPENDER END  #################

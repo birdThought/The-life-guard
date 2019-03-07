@@ -1,0 +1,362 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lifeshs.dao1.order.IOrderFlowDao">
+    <resultMap id="BaseResultMap" type="com.lifeshs.po.OrderFlowPO">
+        <constructor>
+            <idArg column="id" jdbcType="INTEGER" javaType="java.lang.Integer"/>
+            <arg column="orderNumber" jdbcType="CHAR" javaType="java.lang.String"/>
+            <arg column="realName" jdbcType="VARCHAR" javaType="java.lang.String"/>
+            <arg column="orgId" jdbcType="INTEGER" javaType="java.lang.Integer"/>
+            <arg column="orgName" jdbcType="VARCHAR" javaType="java.lang.String"/>
+            <arg column="serveName" jdbcType="VARCHAR" javaType="java.lang.String"/>
+            <arg column="flowType" jdbcType="TINYINT" javaType="java.lang.Byte"/>
+            <arg column="payDevice" jdbcType="CHAR" javaType="java.lang.String"/>
+            <arg column="payType" jdbcType="TINYINT" javaType="java.lang.Byte"/>
+            <arg column="cost" jdbcType="INTEGER" javaType="java.lang.Integer"/>
+            <arg column="payCost" jdbcType="INTEGER" javaType="java.lang.Integer"/>
+            <arg column="usePoints" jdbcType="BIT" javaType="java.lang.Boolean"/>
+            <arg column="points" jdbcType="INTEGER" javaType="java.lang.Integer"/>
+            <arg column="pointsCost" jdbcType="INTEGER" javaType="java.lang.Integer"/>
+            <arg column="payAccount" jdbcType="VARCHAR" javaType="java.lang.String"/>
+            <arg column="tradeNo" jdbcType="VARCHAR" javaType="java.lang.String"/>
+            <arg column="sellerAccount" jdbcType="VARCHAR" javaType="java.lang.String"/>
+            <arg column="profitShare" jdbcType="INTEGER" javaType="java.lang.Integer"/>
+            <arg column="orgIncome" jdbcType="INTEGER" javaType="java.lang.Integer"/>
+            <arg column="sysIncome" jdbcType="INTEGER" javaType="java.lang.Integer"/>
+            <arg column="sysProfitShare" jdbcType="INTEGER" javaType="java.lang.Integer"/>
+            <arg column="agentIncome" jdbcType="INTEGER" javaType="java.lang.Integer"/>
+            <arg column="agentProfitShare" jdbcType="INTEGER" javaType="java.lang.Integer"/>
+            <arg column="salesmanIncome" jdbcType="INTEGER" javaType="java.lang.Integer"/>
+            <arg column="salesmanProfitShare" jdbcType="INTEGER" javaType="java.lang.Integer"/>
+            <arg column="serviceOrgIncome" jdbcType="INTEGER" javaType="java.lang.Integer"/>
+            <arg column="serviceOrgProfitShare" jdbcType="INTEGER" javaType="java.lang.Integer"/>
+            <arg column="introduceOrgIncome" jdbcType="INTEGER" javaType="java.lang.Integer"/>
+            <arg column="introduceOrgProfitShare" jdbcType="INTEGER" javaType="java.lang.Integer"/>
+            <arg column="orgUserUserId" jdbcType="VARCHAR" javaType="java.lang.String"/>
+            <arg column="createTime" jdbcType="TIMESTAMP" javaType="java.util.Date"/>
+        </constructor>
+    </resultMap>
+    <sql id="Base_Column_List">
+    id, orderNumber, realName, orgId, orgName, serveName, flowType, payDevice, payType, 
+    cost, payCost, usePoints, points, pointsCost, payAccount, tradeNo, sellerAccount, 
+    profitShare, orgIncome, sysIncome, sysProfitShare,agentIncome,agentProfitShare,salesmanIncome,
+    salesmanProfitShare,serviceOrgIncome,serviceOrgProfitShare,introduceOrgIncome,introduceOrgProfitShare,orgUserUserId,
+    createTime
+  </sql>
+    <select id="getOrderFlowPO" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+        select
+        <include refid="Base_Column_List"/>
+        from t_order_flow
+        where id = #{id,jdbcType=INTEGER}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from t_order_flow
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+    <insert id="insert" parameterType="com.lifeshs.po.OrderFlowPO">
+    insert into t_order_flow (id, orderNumber, realName, 
+      orgId, orgName, serveName, 
+      flowType, payDevice, payType, 
+      cost, payCost, usePoints, 
+      points, pointsCost, payAccount, 
+      tradeNo, sellerAccount, profitShare, 
+      orgIncome, sysIncome, sysProfitShare,agentIncome,
+      agentProfitShare,salesmanIncome,salesmanProfitShare,
+      serviceOrgIncome,serviceOrgProfitShare,introduceOrgIncome,
+      introduceOrgProfitShare,orgUserUserId,createTime
+      )
+    values (#{id,jdbcType=INTEGER}, #{orderNumber,jdbcType=CHAR}, #{realName,jdbcType=VARCHAR}, 
+      #{orgId,jdbcType=INTEGER}, #{orgName,jdbcType=VARCHAR}, #{serveName,jdbcType=VARCHAR}, 
+      #{flowType,jdbcType=TINYINT}, #{payDevice,jdbcType=CHAR}, #{payType,jdbcType=TINYINT}, 
+      #{cost,jdbcType=INTEGER}, #{payCost,jdbcType=INTEGER}, #{usePoints,jdbcType=BIT}, 
+      #{points,jdbcType=INTEGER}, #{pointsCost,jdbcType=INTEGER}, #{payAccount,jdbcType=VARCHAR}, 
+      #{tradeNo,jdbcType=VARCHAR}, #{sellerAccount,jdbcType=VARCHAR}, #{profitShare,jdbcType=INTEGER}, 
+      #{orgIncome,jdbcType=INTEGER}, #{sysIncome,jdbcType=INTEGER}, #{sysProfitShare,jdbcType=INTEGER},
+      #{agentIncome,jdbcType=INTEGER}, #{agentProfitShare,jdbcType=INTEGER}, #{salesmanIncome,jdbcType=INTEGER},
+      #{salesmanProfitShare,jdbcType=INTEGER}, #{serviceOrgIncome,jdbcType=INTEGER}, #{serviceOrgProfitShare,jdbcType=INTEGER},
+      #{introduceOrgIncome,jdbcType=INTEGER}, #{introduceOrgProfitShare,jdbcType=INTEGER}, #{orgUserUserId,jdbcType=VARCHAR},
+      #{createTime,jdbcType=TIMESTAMP}
+      )
+  </insert>
+    <insert id="addSelective" parameterType="com.lifeshs.po.OrderFlowPO">
+        insert into t_order_flow
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="orderNumber != null">
+                orderNumber,
+            </if>
+            <if test="realName != null">
+                realName,
+            </if>
+            <if test="orgId != null">
+                orgId,
+            </if>
+            <if test="orgName != null">
+                orgName,
+            </if>
+            <if test="serveName != null">
+                serveName,
+            </if>
+            <if test="flowType != null">
+                flowType,
+            </if>
+            <if test="payDevice != null">
+                payDevice,
+            </if>
+            <if test="payType != null">
+                payType,
+            </if>
+            <if test="cost != null">
+                cost,
+            </if>
+            <if test="payCost != null">
+                payCost,
+            </if>
+            <if test="usePoints != null">
+                usePoints,
+            </if>
+            <if test="points != null">
+                points,
+            </if>
+            <if test="pointsCost != null">
+                pointsCost,
+            </if>
+            <if test="payAccount != null">
+                payAccount,
+            </if>
+            <if test="tradeNo != null">
+                tradeNo,
+            </if>
+            <if test="sellerAccount != null">
+                sellerAccount,
+            </if>
+            <if test="profitShare != null">
+                profitShare,
+            </if>
+            <if test="orgIncome != null">
+                orgIncome,
+            </if>
+            <if test="sysIncome != null">
+                sysIncome,
+            </if>
+            <if test="createTime != null">
+                createTime,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=INTEGER},
+            </if>
+            <if test="orderNumber != null">
+                #{orderNumber,jdbcType=CHAR},
+            </if>
+            <if test="realName != null">
+                #{realName,jdbcType=VARCHAR},
+            </if>
+            <if test="orgId != null">
+                #{orgId,jdbcType=INTEGER},
+            </if>
+            <if test="orgName != null">
+                #{orgName,jdbcType=VARCHAR},
+            </if>
+            <if test="serveName != null">
+                #{serveName,jdbcType=VARCHAR},
+            </if>
+            <if test="flowType != null">
+                #{flowType,jdbcType=TINYINT},
+            </if>
+            <if test="payDevice != null">
+                #{payDevice,jdbcType=CHAR},
+            </if>
+            <if test="payType != null">
+                #{payType,jdbcType=TINYINT},
+            </if>
+            <if test="cost != null">
+                #{cost,jdbcType=INTEGER},
+            </if>
+            <if test="payCost != null">
+                #{payCost,jdbcType=INTEGER},
+            </if>
+            <if test="usePoints != null">
+                #{usePoints,jdbcType=BIT},
+            </if>
+            <if test="points != null">
+                #{points,jdbcType=INTEGER},
+            </if>
+            <if test="pointsCost != null">
+                #{pointsCost,jdbcType=INTEGER},
+            </if>
+            <if test="payAccount != null">
+                #{payAccount,jdbcType=VARCHAR},
+            </if>
+            <if test="tradeNo != null">
+                #{tradeNo,jdbcType=VARCHAR},
+            </if>
+            <if test="sellerAccount != null">
+                #{sellerAccount,jdbcType=VARCHAR},
+            </if>
+            <if test="profitShare != null">
+                #{profitShare,jdbcType=INTEGER},
+            </if>
+            <if test="orgIncome != null">
+                #{orgIncome,jdbcType=INTEGER},
+            </if>
+            <if test="sysIncome != null">
+                #{sysIncome,jdbcType=INTEGER},
+            </if>
+            <if test="createTime != null">
+                #{createTime,jdbcType=TIMESTAMP},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.lifeshs.po.OrderFlowPO">
+        update t_order_flow
+        <set>
+            <if test="orderNumber != null">
+                orderNumber = #{orderNumber,jdbcType=CHAR},
+            </if>
+            <if test="realName != null">
+                realName = #{realName,jdbcType=VARCHAR},
+            </if>
+            <if test="orgId != null">
+                orgId = #{orgId,jdbcType=INTEGER},
+            </if>
+            <if test="orgName != null">
+                orgName = #{orgName,jdbcType=VARCHAR},
+            </if>
+            <if test="serveName != null">
+                serveName = #{serveName,jdbcType=VARCHAR},
+            </if>
+            <if test="flowType != null">
+                flowType = #{flowType,jdbcType=TINYINT},
+            </if>
+            <if test="payDevice != null">
+                payDevice = #{payDevice,jdbcType=CHAR},
+            </if>
+            <if test="payType != null">
+                payType = #{payType,jdbcType=TINYINT},
+            </if>
+            <if test="cost != null">
+                cost = #{cost,jdbcType=INTEGER},
+            </if>
+            <if test="payCost != null">
+                payCost = #{payCost,jdbcType=INTEGER},
+            </if>
+            <if test="usePoints != null">
+                usePoints = #{usePoints,jdbcType=BIT},
+            </if>
+            <if test="points != null">
+                points = #{points,jdbcType=INTEGER},
+            </if>
+            <if test="pointsCost != null">
+                pointsCost = #{pointsCost,jdbcType=INTEGER},
+            </if>
+            <if test="payAccount != null">
+                payAccount = #{payAccount,jdbcType=VARCHAR},
+            </if>
+            <if test="tradeNo != null">
+                tradeNo = #{tradeNo,jdbcType=VARCHAR},
+            </if>
+            <if test="sellerAccount != null">
+                sellerAccount = #{sellerAccount,jdbcType=VARCHAR},
+            </if>
+            <if test="profitShare != null">
+                profitShare = #{profitShare,jdbcType=INTEGER},
+            </if>
+            <if test="orgIncome != null">
+                orgIncome = #{orgIncome,jdbcType=INTEGER},
+            </if>
+            <if test="sysIncome != null">
+                sysIncome = #{sysIncome,jdbcType=INTEGER},
+            </if>
+            <if test="createTime != null">
+                createTime = #{createTime,jdbcType=TIMESTAMP},
+            </if>
+        </set>
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.lifeshs.po.OrderFlowPO">
+    update t_order_flow
+    set orderNumber = #{orderNumber,jdbcType=CHAR},
+      realName = #{realName,jdbcType=VARCHAR},
+      orgId = #{orgId,jdbcType=INTEGER},
+      orgName = #{orgName,jdbcType=VARCHAR},
+      serveName = #{serveName,jdbcType=VARCHAR},
+      flowType = #{flowType,jdbcType=TINYINT},
+      payDevice = #{payDevice,jdbcType=CHAR},
+      payType = #{payType,jdbcType=TINYINT},
+      cost = #{cost,jdbcType=INTEGER},
+      payCost = #{payCost,jdbcType=INTEGER},
+      usePoints = #{usePoints,jdbcType=BIT},
+      points = #{points,jdbcType=INTEGER},
+      pointsCost = #{pointsCost,jdbcType=INTEGER},
+      payAccount = #{payAccount,jdbcType=VARCHAR},
+      tradeNo = #{tradeNo,jdbcType=VARCHAR},
+      sellerAccount = #{sellerAccount,jdbcType=VARCHAR},
+      profitShare = #{profitShare,jdbcType=INTEGER},
+      orgIncome = #{orgIncome,jdbcType=INTEGER},
+      sysIncome = #{sysIncome,jdbcType=INTEGER},
+      createTime = #{createTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+
+    <!--以下sql为手写-->
+    <select id="getOrderFlowPOByOrderNumber" parameterType="string" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM t_order_flow
+        where orderNumber = #{orderNumber}
+    </select>
+
+    <!-- 获取交易流水总记录数 -->
+    <select id="getTotalRecord" resultType="int">
+        SELECT COUNT(*) FROM t_order_flow of 
+        INNER JOIN t_order o ON o.orderNumber = of.orderNumber 
+        <where>
+            <include refid="select_order_agent_where"></include>
+            <if test="orderNumber != null">AND orderNumber = #{orderNumber}</if>
+            <if test="realName != null">AND realName LIKE CONCAT(#{realName}, '%')</if>
+            <if test="orgName != null">AND orgName LIKE CONCAT(#{orgName}, '%')</if>
+            <if test="serveName != null">AND serveName = #{serveName}</if>
+            <if test="startDate != null">AND createTime &gt;= #{startDate}</if>
+            <if test="endDate !=null">AND createTime &lt;= #{endDate}</if>
+        </where>
+    </select>
+
+    <!-- 获取交易流水列表 -->
+    <select id="findOrderFlowList" resultType="com.lifeshs.vo.order.OrderFlowVO">
+        SELECT of.id,realName,of.orgName,serveName,cost,flowType,of.orderNumber,payAccount,payDevice,payType,tradeNo
+        FROM t_order_flow of 
+        INNER JOIN t_order o ON o.orderNumber = of.orderNumber
+        <where>
+            <include refid="select_order_agent_where"></include>
+            <if test="orderNumber != null">AND orderNumber = #{orderNumber}</if>
+            <if test="realName != null">AND realName LIKE CONCAT(#{realName}, '%')</if>
+            <if test="orgName != null">AND orgName LIKE CONCAT(#{orgName}, '%')</if>
+            <if test="serveName != null">AND serveName = #{serveName}</if>
+            <if test="startDate != null">AND createTime &gt;= #{startDate}</if>
+            <if test="endDate !=null">AND createTime &lt;= #{endDate}</if>
+        </where>
+        LIMIT #{startRow},#{pageSize}
+    </select>
+    
+    <sql id="select_order_agent_where">
+        <if test="userNo.indexOf('A') != -1">AND o.sysUserNo=#{userNo}</if>
+        <if test="userNo.indexOf('D') != -1">AND o.agentUserNo=#{userNo}</if>
+        <if test="userNo.indexOf('Y') != -1">AND o.salesmanUserNo=#{userNo}</if>
+        <if test="userNo.indexOf('O') != -1">AND o.introduceOrgUserNo=#{userNo}</if>
+    </sql>
+
+    <!-- 获取按服务名称分组的列表 -->
+    <select id="getGroupByServeNameList" resultType="java.lang.String">
+      SELECT serveName FROM t_order_flow GROUP BY serveName
+  </select>
+
+    <!-- 根据id获取交易流水记录 -->
+    <select id="getOrderFlowById" resultType="com.lifeshs.vo.order.OrderFlowVO">
+      	SELECT * FROM t_order_flow WHERE id = #{id}
+  </select>
+
+</mapper>

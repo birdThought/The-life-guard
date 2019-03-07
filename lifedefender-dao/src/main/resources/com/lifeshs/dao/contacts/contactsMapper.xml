@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lifeshs.dao.contacts.IContactsDao" >
+
+	<!-- 查询用户亲情号码和SOS号码 -->
+	<select id="findFamilyAndSos" parameterType="java.lang.Integer" resultType="com.lifeshs.entity.member.TUserContacts">
+		select c.id,c.userId,c.`name`,c.contactNumber,c.contactType from t_user_contacts c 
+			where c.userId = #{userId} Order By id DESC
+	</select>
+	
+	<!-- 向通讯录添加电话号码 -->
+	<!-- <insert id="addContact" parameterType="com.lifeshs.entity.member.TUserContacts">
+		<selectKey resultType="java.lang.Integer" order="AFTER" keyProperty="id"> 
+        	SELECT LAST_INSERT_ID() AS ID   
+    	</selectKey>
+    	Insert Into t_user_contacts(userId, name, contactNumber, isSOS, isFamily)
+    	Values(#{userId}, #{name}, #{contactNumber}, #{isSOS}, #{isFamily})
+	</insert> -->
+	<!-- 修改联系人 -->
+	<update id="updateContact" parameterType="com.lifeshs.entity.member.TUserContacts">
+		update t_user_contacts c set c.userId =#{userId},c.name=#{name}, c.contactNumber=#{contactNumber},c.contactType = #{contactType} where c.id=#{id}
+	</update>
+	<!-- 删除联系人 -->
+	<delete id="deleteContact" parameterType="int">
+        delete from t_user_contacts where id=#{id}
+    </delete>
+    
+    <update id="removeContactTypeInAllContact">
+    	UPDATE t_user_contacts c SET c.contactType = (c.contactType - #{removeContactType}) WHERE c.contactType &gt;= #{removeContactType} AND c.userId = #{userId}
+    </update>
+    
+    <update id="updateContactReceiveSMS">
+		update t_user_contacts set receiveSMS = #{receiveSMS} where userId = #{userId}
+	</update>
+	
+	<insert id="addContanct">
+	    INSERT INTO t_user_contacts(userId,name,contactNumber,isSOS,receiveSMS,terminalType,contactType) VALUES(#{userId},'SOS',#{contactNumber},1,0,2,4)
+	</insert>
+</mapper>

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lifeshs.dao.data.IMeasureSiteDao">
+    <select id="listMeasureSite" resultMap="measureSiteDTO">
+        SELECT id, name, longitude, latitude, logo, banner, phoneNumber, address FROM t_data_measure_site
+        WHERE free = #{free} AND cityAreaCode LIKE CONCAT(#{cityAreaCode},'%')  
+    </select>
+    
+    <resultMap type="com.lifeshs.pojo.data.MeasureSiteDTO" id="measureSiteDTO">
+        <id column="id" property="id"/>
+        <collection property="openingTimeList" column="id" ofType="com.lifeshs.pojo.data.MeasureSiteOpeningTimeDTO" select="selectOpeningTime" />
+        <collection property="deviceList" column="id" ofType="com.lifeshs.pojo.data.MeasureSiteDevice" select="selectDevice" />
+    </resultMap>
+    
+    <select id="selectOpeningTime" resultType="com.lifeshs.pojo.data.MeasureSiteOpeningTimeDTO">
+        SELECT startTime, endTime FROM t_data_measure_site_openingtime WHERE siteId = #{siteId}
+    </select>
+    
+    <select id="selectDevice" resultType="com.lifeshs.pojo.data.MeasureSiteDeviceDTO">
+        SELECT name, photo FROM t_data_measure_device d
+            INNER JOIN t_data_measure_site_device_relation r ON r.deviceId = d.id
+        WHERE r.siteId = #{id}
+    </select>
+</mapper>

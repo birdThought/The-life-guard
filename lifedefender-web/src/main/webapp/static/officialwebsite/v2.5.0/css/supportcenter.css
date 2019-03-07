@@ -1,0 +1,199 @@
+
+.content-body {
+    margin-top:5rem;
+    margin-bottom: 8rem;
+}
+.content-top {
+    line-height:4rem;
+    letter-spacing: 0.1rem;
+    font-size:1.1rem;
+    margin-top:2rem;
+}
+.content-top > p {
+    color: #666;
+    font-size:1.4rem;
+}
+.content-top > p span {
+    color: #ff4400;
+}
+.content-list-left {
+    float: left;
+    width:25%;
+}
+.content-list-left  li {
+    margin-bottom:3rem;
+    line-height:1;
+    font-size:1rem;
+    text-align: right;
+    margin-right: 15%;
+}
+.content-list-left  li a {
+    display: block;
+    font-size:1.3rem;
+    width:100%;
+    color: #666;
+}
+.content-list-right {
+    width:70%;
+    border-left: 2px solid #cccccc;
+    padding-left: 10%;
+    float: right;
+}
+.content-list-right  li {
+    width:100%;
+    line-height:1;
+
+    font-size:1.4rem;
+    margin-bottom:2.6rem;
+    cursor: pointer;
+}
+.content-list-right  li > a {
+    color: #666;
+}
+.content-list-right li i {
+    color: #c9cbca;
+    margin-right:1rem;
+}
+.content-list-right ul li:hover {
+    color: #ff4400;
+    font-weight:bold;
+}
+@media screen and (min-width: 1400px) {
+    .video-content .nav-pills {
+        padding-right: 20%;
+    }
+}
+
+#video_show ul.nav-pills {
+    border-right:2px solid #ccc;
+}
+#video_show ul.nav-pills li {
+    line-height:2rem;
+}
+.tab-content > div > div {
+    /* height:270px;
+    border:1px solid #ccc; */
+}
+.content-list-left ul li a.active {
+    color: red;
+}
+.questionsubmit li label {
+    width:5.6rem;
+}
+.questionsubmit li input {
+    width:20rem;
+    height:2.2rem;
+    border:1px solid #44c660;
+    padding-left: 1rem;
+    font-size:1rem;
+}
+.questionsubmit li textarea {
+    width:100%;
+    height:186px;
+    resize: none;
+    padding:2%;
+    float: left;
+}
+.questionsubmit li:last-of-type p {
+    border:1px solid #ccc;
+    border-right: none;
+}
+.questionsubmit li:last-of-type p >input[type=button] {
+    float: right;
+    width:9.8rem;
+    height:3rem;
+    background: #44c660;
+    text-align: center;
+    line-height:3rem;
+    color: #fff;
+}
+
+.supportcenter-videoDes {
+    font-size:1.4rem;
+    font-weight: bold;
+    letter-spacing: 1.5px;
+    line-height:1;
+    margin-top:50px;
+    margin-bottom:50px;
+}
+
+.tab-content {
+    padding-top: 5%;
+    padding-left: 10%;
+}
+.video-description {
+    color: #f40;
+    font-size:1.6rem;
+    margin-bottom:4.5rem;
+}
+@media screen and (max-width: 850px){
+    .tablistbox {
+        overflow: scroll;
+    }
+    .nav-pills {
+        width:800px;
+    }
+    .tab-content {
+        padding-left: 0;
+    }
+    .linkfriends li {
+        min-height: 6rem !important;
+    }
+
+
+}
+@media screen and (max-width: 400px){
+    .tab-content > div > div {
+        /*height: 20rem;*/
+    }
+}
+.teamwork {
+    margin-top:80px;
+}
+.teamwork h4 {
+    font-size:2.5rem;
+    color: #5f6637;
+    margin-bottom:2.4rem;
+}
+.teamwork p {
+    font-size:1rem;
+    color: #5f6637;
+}
+.linkfriends {
+    margin-top:4rem;
+}
+#facebox table {
+    margin-top:2rem;
+}
+@media screen and (max-width: 750px){
+    .content-list-left ul a {
+        font-size:1.2rem;
+    }
+}
+.content-list-left {
+    width:31%;
+}
+.content-list-right {
+    width:68%;
+}
+.share-thing span {
+    float: left;
+    margin-top:1rem;
+}
+@media screen and (min-width: 1400px) {
+    .video-content .nav-pills {
+        padding-right: 20%;
+    }
+    .tab-content > div > div {
+        width:484px;
+        margin-left:20%;
+    }
+    .tab-content section {
+        margin-left:20%;
+        margin-top:1rem;
+    }
+    .share-thing span {
+        font-size:1.6rem;
+        color: #666;
+    }
+}

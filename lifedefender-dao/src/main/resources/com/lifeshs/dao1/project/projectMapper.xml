@@ -1,0 +1,196 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- 机构的服务项目 -->
+<mapper namespace="com.lifeshs.dao1.project.IProjectDao" >
+    <!-- 得到服务师的服务项目列表 -->
+    <select id="findProjectListByEmployee" parameterType="Integer" resultType="com.lifeshs.po.ProjectPO">
+        SELECT p.* FROM t_project p,t_project_orguser_relation o  WHERE p.projectCode=o.projectCode and o.orgUserId = #{employeeId};
+    </select>
+
+    <!--获取服务项目的服务师列表-->
+    <select id="findServiceOrgUserRelationList" resultType="com.lifeshs.pojo.org.service.ServiceOrgUserRelationDTO">
+        SELECT u.realName, u.id as orgUserId, u.photo,u.userCode, r.price, r.monthPrice, r.yearPrice 
+        FROM t_project_orguser_relation r
+        INNER JOIN t_org_user u on r.orgUserId = u.id
+        WHERE r.projectCode = #{code}
+    </select>
+
+    <!--删除服务项目的服务师-->
+    <select id="delServiceOrgUserRelationList">
+        DELETE FROM t_project_orguser_relation
+        WHERE projectCode = #{code} AND orgUserId in
+        <foreach item="item" index="index" collection="ids" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </select>
+
+    <!--添加服务项目的服务师-->
+    <insert id = "addServiceOrgUserRelation" useGeneratedKeys="true" parameterType="java.util.List">
+        insert into
+        t_project_orguser_relation(projectCode, orgUserId, price, monthPrice, yearPrice, createDate)
+        values
+        <foreach collection="orgUser" item="item" index="index" separator="," >
+            (#{item.projectCode}, #{item.orgUserId}, #{item.price}, #{item.monthPrice}, #{item.yearPrice}, NOW())
+        </foreach>
+    </insert>
+
+    <!--更新服务项目的服务师-->
+    <update id="updateServiceOrgUserRelation" parameterType="java.util.List">
+        <foreach collection="orgUser" item="item" index="index" open="" close="" separator=";">
+            update t_project_orguser_relation
+            <set>
+                price=#{item.price},monthPrice=#{item.monthPrice},yearPrice=#{item.yearPrice} 
+            </set>
+            where projectCode = #{item.projectCode} AND orgUserId = #{item.orgUserId}
+        </foreach>
+    </update>
+
+
+    <!--更新t_project表数据-->
+    <update id="updateProject" parameterType="com.lifeshs.po.ProjectPO">
+        UPDATE t_project
+        <trim prefix="set" suffixOverrides=",">
+            <if test="name!=null">name=#{name},</if>
+            <if test="price!=null">price=#{price},</if>
+            <if test="image!=null">image=#{image},</if>
+            <if test="serveId!=null">serveId=#{serveId},</if>
+            modifyDate = NOW()
+        </trim>
+        WHERE projectCode = #{projectCode}
+    </update>
+
+    <!--更新项目媒体资料-->
+    <update id="updateProjectMedia" parameterType="com.lifeshs.pojo.org.service.ServiceMediaDTO">
+        UPDATE t_project_media SET
+        pictureOne=#{pictureOne}, pictureTwo=#{pictureTwo}, pictureThree=#{pictureThree}, pictureFour=#{pictureFour}
+        WHERE projectCode = #{projectCode}
+    </update>
+
+    <!--添加服务项目-套餐-->
+    <insert id = "addProjectComboList" parameterType="java.util.List">
+        insert into
+        t_project_combo(projectCode, introduce, price, name, marketPrice, createDate)
+        values
+        <foreach collection="combo" item="item" index="index" separator="," >
+            (#{item.projectCode}, #{item.introduce}, #{item.price}, #{item.name}, #{item.marketPrice}, NOW())
+        </foreach>
+    </insert>
+
+    <!--删除服务项目-套餐-->
+    <delete id="delProjectComboList">
+        DELETE FROM t_project_combo WHERE projectCode = #{code}
+    </delete>
+
+    <!--获取门店服务项目的基础信息-->
+    <select id="findProjectList" resultType="com.lifeshs.po.ProjectPO">
+        SELECT * FROM t_project WHERE orgId = #{orgId}
+    </select>
+
+    <!--获取服务项目-->
+    <select id = "findProjectByOrgId" resultType="com.lifeshs.pojo.org.service.OrgServiceDTO">
+        (
+            SELECT
+                r.id,
+                CONCAT(c.`name`, ' # ', u.realName) AS `name`,
+                c.modifyDate,
+                c.`status`,
+                u.photo AS image,
+                c.`code`,
+                r.createDate,
+                s.`code` AS serveCode,
+                c.projectType,
+                c.`name` AS projectName
+            FROM
+                t_project_orguser_relation r
+            INNER JOIN t_project_consult c ON c.`code` = r.projectCode
+            INNER JOIN t_org_user u ON u.id = r.orgUserId
+            INNER JOIN t_data_serve_type2 s ON s.id = c.serveId
+            WHERE
+                c.orgId = #{orgId} AND c.`status` = 2
+        )
+        UNION
+        (
+            SELECT
+                l.id,
+                l.`name`,
+                l.modifyDate,
+                l.`status`,
+                l.image,
+                l.`code`,
+                l.createDate,
+                s.`code` AS serveCode,
+                l.projectType,
+                l.`name` AS projectName
+            FROM
+                t_project_lesson l
+            INNER JOIN t_data_serve_type2 s ON s.id = l.serveId
+            WHERE
+                l.orgId = #{orgId} AND l.`status` = 2
+        )
+        UNION
+        (
+            SELECT
+                c.id,
+                CONCAT(v.`name`, ' # ', c.`name`) AS `name`,
+                v.modifyDate,
+                v.`status`,
+                v.image,
+                v.`code`,
+                v.createDate,
+                s.`code` AS serveCode,
+                v.projectType,
+                v.`name` AS projectName
+            FROM
+                t_project_combo c
+            INNER JOIN t_project_visit v ON v.`code` = c.projectCode
+            INNER JOIN t_data_serve_type2 s ON s.id = v.serveId
+            WHERE
+                v.orgId = #{orgId} AND v.`status` = 2
+        )
+        ORDER BY createDate DESC
+    </select>
+
+    <select id="findProjectWithCondition" resultType="com.lifeshs.vo.project.ProjectVO">
+        SELECT
+            p.id,
+            p.projectCode,
+            p.name,
+            p.price,
+            p.image,
+            p.serveId,
+            p.orgId,
+            p.createDate,
+            p.modifyDate,
+            p.status,
+            p.huanxinId,
+            o.orgName
+        FROM t_project p
+        INNER JOIN t_org o ON o.id = p.orgId
+        <where>
+            <if test="userNo != null">AND o.parentId = #{userNo}</if>
+            <if test="orgName != null">AND o.orgName LIKE CONCAT(#{orgName}, '%')</if>
+            <if test="classifyName != null">AND p.`name` REGEXP CONCAT('^.+\\[.*', #{classifyName}, '.*\\]')</if>
+            <if test="serveCode != null">AND p.projectType = #{serveCode}</if>
+        </where>
+        ORDER BY p.id DESC
+        LIMIT #{startRow}, #{pageSize}
+    </select>
+    
+    <select id="countProjectWithCondition" resultType="java.lang.Integer">
+        SELECT COUNT(1) FROM t_project p
+        INNER JOIN t_org o ON o.id = p.orgId
+        <where>
+            <if test="userNo != null">AND o.parentId = #{userNo}</if>
+            <if test="orgName != null">AND o.orgName LIKE CONCAT(#{orgName}, '%')</if>
+            <if test="classifyName != null">AND p.`name` REGEXP CONCAT('^.+\\[.*', #{classifyName}, '.*\\]')</if>
+            <if test="serveCode != null">AND p.projectType = #{serveCode}</if>
+        </where>
+    </select>
+    
+    <select id="findProjectByOrderNumber" resultType="com.lifeshs.po.ProjectPO">
+        SELECT p.* FROM t_project p
+        INNER JOIN t_order o ON o.projectCode = p.projectCode 
+        WHERE o.orderNumber = #{orderNumber}
+    </select>
+    
+</mapper>

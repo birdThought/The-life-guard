@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lifeshs.dao1.push.PushMessageDao">
+
+    <!--添加推送消息-->
+    <insert id="addPushMessage" parameterType="com.lifeshs.po.push.PushMessagePO">
+        INSERT INTO t_push_message
+        (receiveId, userType, title, content, deleted, msgType, sendType,
+         sendId, openType, openTarget, openAttach, createDate)
+        VALUES (#{receiveId}, #{userType}, #{title}, #{content}, #{deleted}, #{msgType}, #{sendType},
+                #{sendId}, #{openType}, #{openTarget}, #{openAttach}, NOW())
+    </insert>
+
+    <!--获取推送消息-->
+    <select id="findPushMessageList" resultType="com.lifeshs.po.push.PushMessagePO">
+        SELECT p.* FROM t_push_message p
+        WHERE  p.deleted = 0
+        AND userType = #{userType}
+        <if test="sendId != null">AND p.sendId = #{sendId}</if>
+        <if test="msgTypeList != null">AND p.msgType IN
+            <foreach collection="msgTypeList" item="t" open="(" close=")" separator=",">#{t}</foreach>
+        </if>
+        <if test="sendTypeList != null">AND p.sendType IN
+            <foreach collection="sendTypeList" item="t" open="(" close=")" separator=",">#{t}</foreach>
+        </if>
+        limit #{pageIndex}, #{pageSize}
+    </select>
+
+    <!--计算推送消息数目-->
+    <select id="countPushMessage" resultType="java.lang.Integer">
+        SELECT count(1) FROM t_push_message p
+        WHERE  p.deleted = 0
+        AND userType = #{userType}
+        <if test="sendId != null">AND p.sendId = #{sendId}</if>
+        <if test="msgTypeList != null">AND p.msgType IN
+            <foreach collection="msgTypeList" item="t" open="(" close=")" separator=",">#{t}</foreach>
+        </if>
+        <if test="sendTypeList != null">AND p.sendType IN
+            <foreach collection="sendTypeList" item="t" open="(" close=")" separator=",">#{t}</foreach>
+        </if>
+    </select>
+
+    <!--删除推送消息-->
+    <delete id="delPushMessage">
+        UPDATE t_push_message SET deleted = 1
+        WHERE id = #{id} AND sendId = #{sendId}
+    </delete>
+
+    <!--批量删除推送消息-->
+    <delete id="delPushMessageList">
+        UPDATE t_push_message SET deleted = 1
+        WHERE id IN
+            <foreach collection="ids" item="t" open="(" close=")" separator=",">#{t}</foreach>
+        AND sendId = #{sendId}
+    </delete>
+
+
+
+
+
+</mapper>

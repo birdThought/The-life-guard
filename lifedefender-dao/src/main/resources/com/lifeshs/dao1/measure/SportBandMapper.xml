@@ -1,0 +1,195 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lifeshs.dao1.measure.SportBandDao" >
+  <resultMap id="BaseResultMap" type="com.lifeshs.po.SportBandPO" >
+    <constructor >
+      <idArg column="id" jdbcType="INTEGER" javaType="java.lang.Integer" />
+      <arg column="userId" jdbcType="INTEGER" javaType="java.lang.Integer" />
+      <arg column="date" jdbcType="DATE" javaType="java.util.Date" />
+      <arg column="steps" jdbcType="INTEGER" javaType="java.lang.Integer" />
+      <arg column="mileage" jdbcType="INTEGER" javaType="java.lang.Integer" />
+      <arg column="kcal" jdbcType="INTEGER" javaType="java.lang.Integer" />
+      <arg column="sleepDuration" jdbcType="SMALLINT" javaType="java.lang.Short" />
+      <arg column="shallowDuration" jdbcType="SMALLINT" javaType="java.lang.Short" />
+      <arg column="deepDuration" jdbcType="SMALLINT" javaType="java.lang.Short" />
+      <arg column="wakeupDuration" jdbcType="SMALLINT" javaType="java.lang.Short" />
+      <arg column="deviceType" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="createDate" jdbcType="TIMESTAMP" javaType="java.util.Date" />
+    </constructor>
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, userId, date, steps, mileage, kcal, sleepDuration, shallowDuration, deepDuration, 
+    wakeupDuration, deviceType, createDate
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_sport_band
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from t_sport_band
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.lifeshs.po.SportBandPO" >
+    insert into t_sport_band (id, userId, date, 
+      steps, mileage, kcal, 
+      sleepDuration, shallowDuration, deepDuration, 
+      wakeupDuration, deviceType, createDate
+      )
+    values (#{id,jdbcType=INTEGER}, #{userId,jdbcType=INTEGER}, #{date,jdbcType=DATE}, 
+      #{steps,jdbcType=INTEGER}, #{mileage,jdbcType=INTEGER}, #{kcal,jdbcType=INTEGER}, 
+      #{sleepDuration,jdbcType=SMALLINT}, #{shallowDuration,jdbcType=SMALLINT}, #{deepDuration,jdbcType=SMALLINT}, 
+      #{wakeupDuration,jdbcType=SMALLINT}, #{deviceType,jdbcType=VARCHAR}, #{createDate,jdbcType=TIMESTAMP}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.lifeshs.po.SportBandPO" >
+    insert into t_sport_band
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="userId != null" >
+        userId,
+      </if>
+      <if test="date != null" >
+        date,
+      </if>
+      <if test="steps != null" >
+        steps,
+      </if>
+      <if test="mileage != null" >
+        mileage,
+      </if>
+      <if test="kcal != null" >
+        kcal,
+      </if>
+      <if test="sleepDuration != null" >
+        sleepDuration,
+      </if>
+      <if test="shallowDuration != null" >
+        shallowDuration,
+      </if>
+      <if test="deepDuration != null" >
+        deepDuration,
+      </if>
+      <if test="wakeupDuration != null" >
+        wakeupDuration,
+      </if>
+      <if test="deviceType != null" >
+        deviceType,
+      </if>
+      <if test="createDate != null" >
+        createDate,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="userId != null" >
+        #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="date != null" >
+        #{date,jdbcType=DATE},
+      </if>
+      <if test="steps != null" >
+        #{steps,jdbcType=INTEGER},
+      </if>
+      <if test="mileage != null" >
+        #{mileage,jdbcType=INTEGER},
+      </if>
+      <if test="kcal != null" >
+        #{kcal,jdbcType=INTEGER},
+      </if>
+      <if test="sleepDuration != null" >
+        #{sleepDuration,jdbcType=SMALLINT},
+      </if>
+      <if test="shallowDuration != null" >
+        #{shallowDuration,jdbcType=SMALLINT},
+      </if>
+      <if test="deepDuration != null" >
+        #{deepDuration,jdbcType=SMALLINT},
+      </if>
+      <if test="wakeupDuration != null" >
+        #{wakeupDuration,jdbcType=SMALLINT},
+      </if>
+      <if test="deviceType != null" >
+        #{deviceType,jdbcType=VARCHAR},
+      </if>
+      <if test="createDate != null" >
+        #{createDate,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.lifeshs.po.SportBandPO" >
+    update t_sport_band
+    <set >
+      <if test="userId != null" >
+        userId = #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="date != null" >
+        date = #{date,jdbcType=DATE},
+      </if>
+      <if test="steps != null" >
+        steps = #{steps,jdbcType=INTEGER},
+      </if>
+      <if test="mileage != null" >
+        mileage = #{mileage,jdbcType=INTEGER},
+      </if>
+      <if test="kcal != null" >
+        kcal = #{kcal,jdbcType=INTEGER},
+      </if>
+      <if test="sleepDuration != null" >
+        sleepDuration = #{sleepDuration,jdbcType=SMALLINT},
+      </if>
+      <if test="shallowDuration != null" >
+        shallowDuration = #{shallowDuration,jdbcType=SMALLINT},
+      </if>
+      <if test="deepDuration != null" >
+        deepDuration = #{deepDuration,jdbcType=SMALLINT},
+      </if>
+      <if test="wakeupDuration != null" >
+        wakeupDuration = #{wakeupDuration,jdbcType=SMALLINT},
+      </if>
+      <if test="deviceType != null" >
+        deviceType = #{deviceType,jdbcType=VARCHAR},
+      </if>
+      <if test="createDate != null" >
+        createDate = #{createDate,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.lifeshs.po.SportBandPO" >
+    update t_sport_band
+    set userId = #{userId,jdbcType=INTEGER},
+      date = #{date,jdbcType=DATE},
+      steps = #{steps,jdbcType=INTEGER},
+      mileage = #{mileage,jdbcType=INTEGER},
+      kcal = #{kcal,jdbcType=INTEGER},
+      sleepDuration = #{sleepDuration,jdbcType=SMALLINT},
+      shallowDuration = #{shallowDuration,jdbcType=SMALLINT},
+      deepDuration = #{deepDuration,jdbcType=SMALLINT},
+      wakeupDuration = #{wakeupDuration,jdbcType=SMALLINT},
+      deviceType = #{deviceType,jdbcType=VARCHAR},
+      createDate = #{createDate,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+
+  <select id="selectDatesByUserId" resultType="com.lifeshs.po.SportBandPO" parameterType="map">
+    SELECT date
+    from t_sport_band
+    where userId = #{userId}
+    and DATE_ADD(#{queryDate},interval 1 month) &gt;= date
+    and date &gt;= #{queryDate}
+  </select>
+
+  <select id="getLastDateByUserId" resultType="date" parameterType="integer">
+    SELECT date
+    FROM t_sport_band
+    WHERE userId = #{userId}
+    Order by date desc
+    limit 1
+  </select>
+</mapper>

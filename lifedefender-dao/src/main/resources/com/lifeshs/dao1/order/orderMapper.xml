@@ -1,0 +1,1166 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lifeshs.dao1.order.IOrderDao" >
+    <!-- 完成订单（状态置为已完成，记录完成时间） -->
+    <update id="completeOrder">
+        UPDATE t_order SET status = 4,endDate=now() WHERE id = #{orderId}
+    </update>
+
+    <!-- 查询门店/服务师的指定月份的订单数和订单合计金额 -->
+    <select id="getCountAndChargeByMonth" resultType="com.lifeshs.vo.OrderCountAndChargeVO">
+        SELECT count(*) as orderNumber,ifnull(sum(charge),0) as charge FROM t_order o,t_project p WHERE o.projectCode=p.projectCode and o.status in (3,4) and date_format(o.createDate,'%Y-%m')=#{month}
+        <if test="orgId != null">
+            and p.orgId=#{orgId}
+        </if>
+        <if test="employeeId != null">
+            and o.orgUserId=#{employeeId}
+        </if>
+    </select>
+
+    <!-- 查询门店/服务师的指定日期的订单数和订单合计金额 -->
+    <select id="getCountAndChargeByDay" resultType="com.lifeshs.vo.OrderCountAndChargeVO">
+        SELECT count(*) as orderNumber,ifnull(sum(charge),0) as charge FROM t_order o,t_project p WHERE o.projectCode=p.projectCode and o.status in (3,4) and date_format(o.createDate,'%Y-%m-%d')=#{day}
+        <if test="orgId != null">
+            and p.orgId=#{orgId}
+        </if>
+        <if test="employeeId != null">
+            and o.orgUserId=#{employeeId}
+        </if>
+    </select>
+
+    <!-- 按日统计门店的指定月份的订单数量及金额合计 -->
+    <select id="getMonthOrderStatistics" resultType="com.lifeshs.vo.OrderStatisticsByDayVO">
+        SELECT DATE_FORMAT(createDate,'%Y%m%d') statisticsday,count(*) as statisticsCount,sum(charge) as statisticsTotal FROM t_order WHERE statementId=#{statementId} GROUP BY statisticsday
+    </select>
+
+    <select id="checkWarningMsgIsRead" resultType="integer">
+        SELECT
+        COUNT(1)
+        FROM t_order o
+        WHERE o.userId = #{memberId}
+        and o.orgUserId in
+        <foreach collection="employeeIds" item="employeeId" separator="," close=")" open="(">
+            #{employeeId}
+        </foreach>
+        and o.warningDate = #{queryDate}
+    </select>
+
+    <!-- 分页查询门店/服务师所属的有异常会员 -->
+    <select id="findWainingMemberList" resultType="com.lifeshs.vo.WarningUserVO">
+        SELECT
+        o.userId,
+        IFNULL(u.realName, u.userName) as name,
+        u.photo,
+        o.hasWarning,
+        o.warningDate as measureTime,
+        o.id orderId
+        FROM t_order o,t_user u,t_project p
+        WHERE o.userId=u.id and o.projectCode=p.projectCode and o.status=3 and o.hasWarning is not NULL and o.warningDate is not NULL
+        <if test="orgId != null">
+            and p.orgId=#{orgId}
+        </if>
+        <if test="orgUserId != null">
+            and o.orgUserId=#{orgUserId}
+        </if>
+        order by o.createDate desc
+        limit #{startRow},#{lenght};
+    </select>
+
+    <!-- 分页查询门店/服务师所属的订单 -->
+    <select id="findOrderList" resultMap="orderMap">
+        SELECT o.userId,o.*,u.id as uid,u.*,ou.id as ouid,ou.realName as realName1,ou.userCode as userCode1,s.id as osid,s.*,p.id as opid,p.*
+        FROM t_order o,t_user u,t_org_user ou,t_project p,t_data_serve_type2 s
+        WHERE o.userId=u.id and o.orgUserId=ou.id and o.projectCode=p.projectCode and p.serveId=s.id
+        <if test="orgId != null">
+            and ou.orgId=#{orgId}
+        </if>
+        <if test="orgUserId != null">
+            and o.orgUserId=#{orgUserId}
+        </if>
+        <if test="projectType != null">
+            and p.projectType=#{projectType}
+        </if>
+        <if test="status == null">
+            and o.status in (3,4)
+        </if>
+        <if test="status != null">
+            and o.status=#{status}
+        </if>
+        <if test="search != null">
+            and u.realName like CONCAT('%',#{search},'%' )
+        </if>
+        <if test="memberId!=null">
+            and u.id = #{memberId}
+        </if>
+        order by o.createDate desc
+        limit #{startRow},#{lenght};
+    </select>
+
+    <!-- 分页查询门店/服务师所属的订单(只查已有评论的订单) -->
+    <select id="findOrderListWithComments" resultMap="orderMap">
+        SELECT o.*,u.id as uid,u.*,ou.id as ouid,ou.realName as realName1,ou.userCode as userCode1,s.id as osid,s.*,p.id as opid,p.* FROM t_order o,t_user u,t_org_user ou,t_project p,t_data_serve_type2 s,t_order_comments oc
+        WHERE o.userId=u.id and o.orgUserId=ou.id and o.projectCode=p.projectCode and p.serveId=s.id and o.id=oc.orderId
+        <if test="orgId != null">
+            and p.orgId=#{orgId}
+        </if>
+        <if test="orgUserId != null">
+            and o.orgUserId=#{orgUserId}
+        </if>
+        <if test="commentStatus != null">
+            and oc.status=#{commentStatus}
+        </if>
+        <if test="memberId != null">
+            and u.id = #{memberId}
+        </if>
+        order by o.createDate desc
+        limit #{startRow},#{lenght};
+    </select>
+
+    <!-- 查询门店/服务师所属的订单总数(只关联用户) -->
+    <select id="findOrderCountWithUser" resultType="Integer">
+        SELECT count(o.id) FROM t_order o,t_project p,t_user u
+        WHERE o.userId=u.id and o.projectCode=p.projectCode and o.status in (3,4)
+        <if test="orgId != null">
+            and p.orgId=#{orgId}
+        </if>
+        <if test="orgUserId != null">
+            and o.orgUserId=#{orgUserId}
+        </if>
+        <if test="startDate != null">
+            and Date(o.createDate)&gt;=#{startDate}
+        </if>
+        <if test="endDate != null">
+            and Date(o.createDate)&lt;=#{endDate}
+        </if>
+    </select>
+
+    <!-- 查询门店/服务师所属的订单总数和合计金额(按日期段) -->
+    <select id="getCountAndChargeByDateDiff" resultType="com.lifeshs.vo.OrderCountAndChargeVO">
+        SELECT count(o.id) as orderNumber, sum(o.charge) as charge FROM t_order o,t_project p,t_user u
+        WHERE o.userId=u.id and o.projectCode=p.projectCode and o.status in (3,4)
+        <if test="orgId != null">
+            and p.orgId=#{orgId}
+        </if>
+        <if test="orgUserId != null">
+            and o.orgUserId=#{orgUserId}
+        </if>
+        <if test="startDate != null">
+            and Date(o.createDate)&gt;=#{startDate}
+        </if>
+        <if test="endDate != null">
+            and Date(o.createDate)&lt;=#{endDate}
+        </if>
+    </select>
+
+    <!-- 分页查询门店/服务师所属的订单(只关联用户) -->
+    <select id="findOrderListWithUser" resultType="com.lifeshs.dto.manager.order.GetOrderListData">
+        SELECT o.id,o.status,o.createDate as orderTime,o.price,u.id as userId,u.realName,u.photo,o.subject,o.number FROM t_order o,t_project p,t_user u
+        WHERE o.userId=u.id and o.projectCode=p.projectCode and o.status in (3,4)
+        <if test="orgId != null">
+            and p.orgId=#{orgId}
+        </if>
+        <if test="orgUserId != null">
+            and o.orgUserId=#{orgUserId}
+        </if>
+        <if test="startDate != null">
+            and Date(o.createDate)&gt;=#{startDate}
+        </if>
+        <if test="endDate != null">
+            and Date(o.createDate)&lt;=#{endDate}
+        </if>
+        order by o.createDate desc
+        limit #{startRow},#{lenght};
+    </select>
+
+    <sql id="fullOrderMap_SQL">
+        o.*,o.charge AS oCharge,o.`status` AS oStatus,u.id as uid,u.*,ou.id as ouid,ou.*,
+        oc.id as ocid,oc.*,u.realName as urealName, u.userCode AS mUserCode, u.mobile AS uMobile,
+        ou.realName as ourealName, ou.userCode AS oUserCode,
+        rf.id AS id_rf, rf.orderNumber AS orderNumber_rf, rf.cause AS cause_rf,
+        rf.refundTime AS refundTime_rf, rf.`status` AS status_rf,
+        l.id AS lId, l.huanxinId AS lHuanxinId, l.`status` AS lStatus,p.id AS opid,p.projectCode,p.name,p.price,p.image,p.status,p.huanxinId,p.serveId,p.projectType
+    </sql>
+
+    <!-- 查询订单详细-->
+    <select id="getOrderDetail" resultMap="fullOrderMap">
+        SELECT <include refid="fullOrderMap_SQL" />
+        FROM t_order o
+        LEFT JOIN t_order_comments oc ON o.id=oc.orderId
+        LEFT JOIN t_org_user ou on o.orgUserId=ou.id
+        LEFT JOIN t_project p on o.projectCode=p.projectCode
+        LEFT JOIN t_order_refund rf ON rf.orderNumber = o.orderNumber
+        LEFT JOIN t_project_lesson l ON l.`code` = o.projectCode,t_user u
+        WHERE o.userId=u.id
+        <if test="orderId != null">
+            and o.id=#{orderId}
+        </if>
+    </select>
+
+    <select id="getOrderStoreSmsDetailByOrderNumber" resultType="com.lifeshs.po.OrderPO">
+        SELECT *
+        FROM t_order_sms_org o
+        WHERE o.orderNumber = #{orderNumber}
+    </select>
+
+    <select id="getOrderDetailByOrderNumber" resultMap="fullOrderMap">
+        SELECT <include refid="fullOrderMap_SQL" />
+        FROM t_order o
+        LEFT JOIN t_order_comments oc ON o.id=oc.orderId
+        LEFT JOIN t_org_user ou on o.orgUserId=ou.id
+        LEFT JOIN t_project p on o.projectCode=p.projectCode
+        LEFT JOIN t_order_refund rf ON rf.orderNumber = o.orderNumber
+        LEFT JOIN t_project_lesson l ON l.`code` = o.projectCode,t_user u
+        WHERE o.userId = u.id
+        AND o.orderNumber = #{orderNumber}
+    </select>
+
+    <!-- 查询订单详细-->
+    <select id="getRefundOrderDetail"  resultType="com.lifeshs.vo.RefundOrderVO">
+        SELECT o.id, o.orderNumber, u.realName, u.mobile, o.address, o.subject, o.number, o.charge, o.createDate, r.cause, r.refundTime, r.status as refundStatus
+        FROM t_order o LEFT JOIN t_order_refund r on o.orderNumber=r.orderNumber,t_user u
+        WHERE o.userId=u.id
+        <if test="orderId != null">
+            and o.id=#{orderId}
+        </if>
+        <if test="orderNumber != null">
+            and o.orderNumber=#{orderNumber}
+        </if>
+    </select>
+
+    <resultMap id="orderMap" type="com.lifeshs.po.OrderPO">
+        <id property="id" column="id"/>
+        <result property="orderNumber" column="orderNumber"/>
+        <result property="status" column="status"/>
+        <result property="createDate" column="createDate"/>
+        <result property="endDate" column="endDate"/>
+        <result property="price" column="price"/>
+        <result property="number" column="number"/>
+        <result property="charge" column="charge"/>
+        <result property="subject" column="subject"/>
+        <result property="body" column="body" />
+        <result property="address" column="address" />
+        <result property="receiverMobile" column="receiverMobile" />
+        <result property="receiverName" column="receiverName" />
+        <result property="projectCode" column="projectCode"/>
+        <result property="projectImage" column="projectImage"/>
+        <result property="serveItemId" column="serveItemId"/>
+        <association property="user" javaType="com.lifeshs.po.UserPO">
+            <id property="id" column="uid"/>
+            <result property="userName" column="userName"/>
+            <result property="realName" column="realName"/>
+            <result property="userCode" column="userCode"/>
+            <result property="mobile" column="mobile"/>
+            <result property="photo" column="photo"/>
+            <result property="province" column="province"/>
+            <result property="city" column="city"/>
+            <result property="county" column="county"/>
+            <result property="street" column="street"/>
+        </association>
+        <association property="employee" javaType="com.lifeshs.po.EmployeePO">
+            <id property="id" column="ouid"/>
+            <result property="realName" column="realName1"/>
+            <result property="userCode" column="userCode1"/>
+        </association>
+        <association property="serveType" javaType="com.lifeshs.pojo.serve.ServeTypeSecondDTO">
+            <id property="id" column="osid"/>
+            <result property="name" column="name"/>
+            <result property="code" column="code"/>
+        </association>
+        <association property="project" javaType="com.lifeshs.po.ProjectPO">
+            <id property="id" column="opid"/>
+            <result property="projectCode" column="projectCode"/>
+            <result property="name" column="name"/>
+            <result property="price" column="price"/>
+            <result property="image" column="image"/>
+            <result property="status" column="status"/>
+            <result property="huanxinId" column="huanxinId"/>
+            <result property="serveId" column="serveId"/>
+            <result property="projectType" column="projectType"/>
+        </association>
+        <association property="userAddress" column="userId" select="com.lifeshs.dao1.member.IMemberAddressDao.findUserAddress"/>
+    </resultMap>
+
+    <resultMap id="fullOrderMap" type="com.lifeshs.po.OrderPO">
+        <id property="id" column="id"/>
+        <result property="orderNumber" column="orderNumber"/>
+        <result property="status" column="oStatus"/>
+        <result property="createDate" column="createDate"/>
+        <result property="endDate" column="endDate" />
+        <result property="price" column="price"/>
+        <result property="charge" column="charge"/>
+        <result property="number" column="number"/>
+        <result property="subject" column="subject"/>
+        <result property="body" column="body" />
+        <result property="projectCode" column="projectCode"/>
+        <result property="charge" column="oCharge" />
+        <!-- OrderPO无此字段
+            <result property="projectType" column="projectType"/>
+        -->
+        <result property="projectImage" column="projectImage"/>
+        <result property="verifyCode" column="verifyCode"/>
+        <result property="serveId" column="serveId"/>
+        <result property="address" column="address"/>
+        <result property="receiverName" column="receiverName"/>
+        <result property="receiverMobile" column="receiverMobile"/>
+        
+        <!-- 电子券相关的两个参数 -->
+        <result property="couponsId" column="couponsId"/>
+        <result property="serveItemId" column="serveItemId"/>
+        
+        <!-- 添加收费方式字段返回 -->
+        <result property="chargeMode" column="chargeMode"/>
+        <!-- 添加订单类型字段返回 -->
+        <result property="orderType" column="orderType"/>
+        
+        <association property="user" javaType="com.lifeshs.po.UserPO">
+            <id property="id" column="uid"/>
+            <result property="userName" column="userName"/>
+            <result property="realName" column="urealName"/>
+            <result property="mobile" column="uMobile"/>
+            <result property="photo" column="photo"/>
+            <result property="province" column="province"/>
+            <result property="city" column="city"/>
+            <result property="county" column="county"/>
+            <result property="street" column="street"/>
+            <result property="userCode" column="mUserCode" />
+        </association>
+        <association property="employee" javaType="com.lifeshs.po.EmployeePO">
+            <id property="id" column="ouid"/>
+            <result property="realName" column="ourealName"/>
+            <result property="userCode" column="oUserCode" />
+        </association>
+        <association property="project" javaType="com.lifeshs.po.ProjectPO">
+            <id property="id" column="opid"/>
+            <result property="projectCode" column="projectCode"/>
+            <result property="name" column="name"/>
+            <result property="price" column="price"/>
+            <result property="image" column="image"/>
+            <result property="status" column="status"/>
+            <result property="huanxinId" column="huanxinId"/>
+            <result property="serveId" column="serveId"/>
+            <result property="projectType" column="projectType"/>
+        </association>
+        <association property="comment" javaType="com.lifeshs.po.CommentPO">
+            <id property="id" column="ocid"/>
+            <result property="comment" column="comment"/>
+            <result property="reply" column="reply"/>
+        </association>
+        <association property="userAddress" column="uid" select="com.lifeshs.dao1.member.IMemberAddressDao.findUserAddress"/>
+        <association property="serveType" javaType="com.lifeshs.pojo.serve.ServeTypeSecondDTO">
+            <id property="id" column="osid"/>
+            <result property="name" column="name"/>
+            <result property="code" column="code"/>
+        </association>
+        <association property="refund" javaType="com.lifeshs.vo.RefundOrderVO">
+            <id property="id" column="id_rf" />
+            <result property="orderNumber" column="orderNumber_rf" />
+            <result property="cause" column="cause_rf" />
+            <result property="refundTime" column="refundTime_rf" />
+            <result property="refundStatus" column="status_rf" />
+        </association>
+        <association property="lesson" javaType="com.lifeshs.po.LessonPO">
+            <id property="id" column="lId" />
+            <result property="huanxinId" column="lHuanxinId" />
+            <result property="status" column="lStatus" />
+        </association>
+        <association property="store" column="ouid" select="com.lifeshs.dao1.store.IStoreDao.findStoreByServices"/>
+        
+    </resultMap>
+
+    <select id="countOrderByUser" resultType="java.lang.Integer">
+        SELECT
+            COUNT(1)
+        FROM
+            t_order o
+        WHERE
+            o.id = #{orderId} AND o.userId = #{userId}
+    </select>
+
+    <select id="countOrderByStore" resultType="java.lang.Integer">
+        SELECT
+        COUNT(1)
+        FROM
+        t_order o
+        WHERE
+        o.id = #{orderId}
+        <if test="orgId != null">
+            AND o.orgUserId in (SELECT id FROM t_org_user WHERE orgId = #{orgId})
+        </if>
+        <if test="orgUserId != null">
+            AND o.orgUserId = #{orgUserId}
+        </if>
+
+    </select>
+
+    <select id = "findOrderByOrderNumber" resultType="com.lifeshs.po.OrderPO">
+        SELECT * FROM t_order o
+        WHERE o.orderNumber = #{orderNumber}
+    </select>
+
+    <!--门店获取退款信息列表-->
+    <select id="findRefundOrderList"  resultType="com.lifeshs.vo.RefundOrderVO">
+        SELECT
+            o.id, o.orderNumber, u.realName, u.mobile, o.address, o.subject, o.number, o.charge, o.createDate, r.cause, r.refundTime, r.status as refundStatus
+        FROM
+            t_order_refund r
+        LEFT JOIN
+            t_order o on o.orderNumber = r.orderNumber, t_user u
+        WHERE
+            u.id = o.userId
+        AND
+            o.orgUserId in (SELECT id FROM t_org_user WHERE orgId = #{orgId})
+        <if test = "status != null">
+            AND
+            r.status = #{status}
+        </if>
+        order by r.refundTime desc
+        limit #{startRow},#{length};
+    </select>
+
+    <!--门店获取退款信息总数-->
+    <select id="countRefundOrder" resultType="java.lang.Integer">
+        SELECT
+            count(1)
+        FROM
+            t_order_refund r
+        LEFT JOIN
+            t_order o on o.orderNumber=r.orderNumber
+        WHERE
+            o.orgUserId in (SELECT id FROM t_org_user WHERE orgId = #{orgId})
+        <if test = "status != null">
+            AND
+            r.status = #{status}
+        </if>
+    </select>
+
+    <select id="countStoreOrder" resultType="java.lang.Integer">
+        SELECT
+            <choose>
+            <when test="distinctUser">COUNT(DISTINCT(o.userId))</when>
+            <otherwise>COUNT(o.id)</otherwise>
+            </choose>
+        FROM t_order o
+        INNER JOIN t_project p ON p.projectCode = o.projectCode AND p.`status` != 1
+        WHERE
+            p.orgId = #{orgId}
+            <if test="statusList != null and statusList.size != 0">
+                AND o.`status` IN <foreach collection="statusList" open="(" close=")" item="s" separator=",">#{s}</foreach>
+            </if>
+    </select>
+
+    <!--修改退款订单信息表装态-->
+    <update id = "updateRefundOrderStatus">
+        <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+        UPDATE t_order_refund
+        SET status = #{status}
+        <if test="auditorId != null">
+            , auditorId = #{auditorId}, auditorTime = NOW()
+        </if>
+        <if test="status == 0 || status == 3">
+            , completeTime = NOW()
+        </if>
+        WHERE orderNumber = #{orderNumber}
+    </update>
+
+    <!--修改订单装态-->
+    <update id = "updateOrderStatusByNumber">
+        <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+        UPDATE t_order
+        SET status = #{status}
+        WHERE orderNumber = #{orderNumber}
+    </update>
+
+    <update id="updateOrderStatus" parameterType="map">
+        UPDATE
+        t_order
+        SET
+        status = #{status}
+        Where
+        id = #{orderId}
+    </update>
+
+    <!--删除订单-->
+    <update id="deleteOrder">
+        UPDATE t_order
+        SET deleted = 1
+        WHERE status != 3 AND status != 7 AND id = #{orderId}
+    </update>
+    
+    <select id="findUserValidLessonOrder" resultType="com.lifeshs.po.OrderPO">
+        SELECT o.* FROM t_order o
+        INNER JOIN t_project_lesson p ON p.`code` = o.projectCode
+        WHERE p.id = #{lessonId} AND o.userId = #{userId} AND o.`status` = 3
+    </select>
+
+    <!--add by wuj-->
+    <resultMap id="SimpleOrderMap" type="com.lifeshs.po.OrderPO">
+        <id property="id" column="o_id"/>
+        <result property="orderNumber" column="o_orderNumber"/>
+        <result property="status" column="o_status"/>
+        <result property="createDate" column="o_createDate"/>
+        <result property="subject" column="o_subject"/>
+        <result property="projectCode" column="o_projectCode"/>
+        <association property="employee" javaType="com.lifeshs.po.EmployeePO">
+            <id property="id" column="e_id"/>
+            <result property="realName" column="e_realName"/>
+            <result property="userCode" column="e_userCode"/>
+            <result property="expertise" column="e_expertise"/>
+        </association>
+        <association property="projectCombo" javaType="com.lifeshs.po.ProjectComboPO">
+            <id property="id" column="c_id"/>
+            <result property="name" column="c_name"/>
+        </association>
+        <association property="org" javaType="com.lifeshs.po.OrgPO">
+            <id property="id" column="g_id"/>
+            <result property="orgName" column="g_orgName"/>
+        </association>
+        <association property="serveType" javaType="com.lifeshs.pojo.serve.ServeTypeSecondDTO">
+            <id property="id" column="s_id"/>
+            <result property="name" column="s_name"/>
+            <result property="code" column="s_code"/>
+        </association>
+        <association property="lesson" javaType="com.lifeshs.po.LessonPO">
+            <id property="id" column="l_id"/>
+            <result property="huanxinId" column="l_huanxinId"/>
+        </association>
+        <association property="comment" javaType="com.lifeshs.po.CommentPO">
+            <id property="id" column="cId" />
+        </association>
+        <association property="refund" javaType="com.lifeshs.vo.RefundOrderVO">
+            <id property="id" column="rId"/>
+            <result property="refundStatus" column="rStatus"/>
+        </association>
+    </resultMap>
+
+    <!--获取服务列表-->
+    <select id="getOrderPOByCodeAndUserId" resultMap="SimpleOrderMap" parameterType="map">
+        SELECT
+          p.image AS s_image, /*image 服务图片*/
+          g.orgName AS g_orgName,/*orgName 机构名*/
+          e.realName as e_realName,/*服务师名字*/
+          o.subject as o_subject,/*服务项目*/
+          o.createDate as o_createDate,/*服务创建时间*/
+          o.status AS o_status,/*订单状态*/
+          o.projectCode AS o_projectCode,/*服务代码*/
+          e.userCode AS e_userCode,/*环信帐号*/
+          l.huanxinId AS l_huanxinId, /*环信帐号*/
+          l.id AS l_id, /*课堂id*/
+          e.expertise AS e_expertise,/*专长*/
+          p.projectType AS s_code,/*服务CODE*/
+          c.id AS cId,/** 评价id */
+          r.id AS rId,/** 退款id */
+          r.`status` AS rStatus,
+          s.id AS s_id,
+          s.code AS s_code,
+          s.name AS s_name
+        FROM t_order o
+        INNER JOIN t_org_user e ON o.orgUserId = e.id
+        INNER JOIN t_project p ON o.projectCode = p.projectCode
+        INNER JOIN t_org g ON e.orgId = g.id
+        LEFT JOIN t_project_lesson l ON o.projectCode = l.code
+        LEFT JOIN t_order_comments c ON c.orderId = o.id
+        LEFT JOIN t_order_refund r ON r.orderNumber = o.orderNumber
+        LEFT JOIN t_data_serve_type2 s ON o.serveId = s.id
+        WHERE o.userId = #{userId}
+        and p.projectType = #{projectType}
+        and o.status = 3
+        order by o.createDate desc
+        limit #{startRow},#{length};
+    </select>
+
+    <select id="findOrderByProjectCodeList" resultMap="orderMap">
+        SELECT o.userId,o.*,u.id as uid,u.*,ou.id as ouid,ou.realName as realName1,ou.userCode as userCode1,s.id as osid,s.*,p.id as opid,p.* FROM t_order o,t_user u,t_org_user ou,t_project p,t_data_serve_type2 s
+        WHERE o.userId=u.id and o.orgUserId=ou.id and o.projectCode=p.projectCode and p.serveId=s.id
+        AND o.projectCode = #{projectCode} 
+        and o.`status` IN (3, 4) 
+        group by u.id 
+    </select>
+    
+    <select id="findConsultOrderOutOfEndDateList" resultMap="orderMap">
+        SELECT
+            o.*,o.orgUserId as ouid, u.id AS uid, u.realName AS realName, u.userCode AS userCode, u.photo AS photo
+        FROM t_order o
+        INNER JOIN t_project_consult p ON p.`code` = o.projectCode
+        INNER JOIN t_user u ON u.id = o.userId
+        WHERE 1=1
+        AND o.`status` = 3
+        AND o.orderType = 1
+        AND (
+	        	o.endDate &lt;= #{endTime,jdbcType=TIMESTAMP}
+	        <if test="startTime != null">
+	        	AND o.endDate &gt; #{startTime,jdbcType=TIMESTAMP}
+	        </if>
+        )
+        
+    </select>
+
+    <!--获取门店订单统计报表-->
+    <select id="findStatisticsList" resultType="com.lifeshs.vo.StatisticsVO">
+        SELECT p.projectCode, p.name as projectName, o.id as orderId, SUM(o.charge) as totalCharge, COUNT(1) as totalOrder,
+        COUNT(DISTINCT(o.userId)) as totalUser, u.gender, u.birthday, o.userDiseasesName as diseasesName, o.userDiseasesId as diseasesId from
+        t_order o
+        INNER JOIN t_project p on o.projectCode = p.projectCode
+        INNER JOIN t_user_record u on u.userId = o.userId
+        WHERE p.orgId = #{orgId}
+        <if test="projectCode != null">
+            AND p.projectCode = #{projectCode}
+        </if>
+        <if test="diseasesId != null">
+            AND o.userDiseasesId = #{diseasesId}
+        </if>
+        <if test="gender != null">
+            AND u.gender = #{gender}
+        </if>
+        <if test="startAge != null">
+            AND u.birthday &gt; #{startAge}
+        </if>
+        <if test="endAge != null">
+            AND u.birthday &lt; #{endAge}
+        </if>
+        GROUP BY p.id, o.userDiseasesName, u.gender
+        limit #{startIndex}, #{pageSize}
+    </select>
+
+    <!--获取门店订单统计报表总数-->
+    <select id="countStatistics" resultType="java.lang.Integer">
+        SELECT COUNT(m.n) FROM(
+            SELECT 1 AS n from
+            t_order o
+            INNER JOIN t_project p on o.projectCode = p.projectCode
+            INNER JOIN t_user_record u on u.userId = o.userId
+            WHERE p.orgId = #{orgId}
+            <if test="projectCode != null">
+                AND p.projectCode = #{projectCode}
+            </if>
+            <if test="diseasesId != null">
+                AND o.userDiseasesId = #{diseasesId}
+            </if>
+            <if test="gender != null">
+                AND u.gender = #{gender}
+            </if>
+            <if test="startAge != null">
+                AND u.birthday &gt; #{startAge}
+            </if>
+            <if test="endAge != null">
+                AND u.birthday &lt; #{endAge}
+            </if>
+            GROUP BY  p.id, o.userDiseasesName, u.gender
+        ) m
+    </select>
+
+    <!--获取门店订单详细统计报表-->
+    <select id="findStatisticsDetailsList" resultType="com.lifeshs.vo.StatisticsVO">
+        SELECT p.projectCode, p.name as projectName, us.userName, us.mobile, us.realName, o.id as orderId, o.userId as userId, SUM(o.charge) as totalCharge, COUNT(1) as totalOrder,
+        u.gender,ROUND(DATEDIFF(CURDATE(), u.birthday)/365.2422) as age, u.birthday, o.userDiseasesName as diseasesName, o.userDiseasesId as diseasesId from
+        t_order o
+        LEFT JOIN t_project p on o.projectCode = p.projectCode
+        LEFT JOIN t_user_record u on u.userId = o.userId
+        LEFT JOIN t_user us on us.id = o.userId
+        WHERE p.orgId = #{orgId}
+        <if test="projectCode != null">
+            AND p.projectCode = #{projectCode}
+        </if>
+        <if test="diseasesId != null">
+            AND o.userDiseasesId = #{diseasesId}
+        </if>
+        <if test="gender != null">
+            AND u.gender = #{gender}
+        </if>
+        <if test="startAge != null">
+            AND u.birthday &gt; #{startAge}
+        </if>
+        <if test="endAge != null">
+            AND u.birthday &lt; #{endAge}
+        </if>
+        <if test="mobile != null">
+            AND us.mobile LIKE CONCAT('%',#{mobile},'%')
+        </if>
+        GROUP BY o.userId, o.projectCode ORDER BY p.projectCode
+        <if test="pageSize != 0">
+            limit #{startIndex}, #{pageSize}
+        </if>
+    </select>
+
+    <!--获取门店订单详细统计报表总数-->
+    <select id="countStatisticsDetails" resultType="java.lang.Integer">
+        SELECT COUNT(m.n) FROM(
+        SELECT 1 AS n from
+        t_order o
+        LEFT JOIN t_project p on o.projectCode = p.projectCode
+        LEFT JOIN t_user_record u on u.userId = o.userId
+        LEFT JOIN t_user us on us.id = o.userId
+        WHERE p.orgId = #{orgId}
+        <if test="projectCode != null">
+            AND p.projectCode = #{projectCode}
+        </if>
+        <if test="diseasesId != null">
+            AND o.userDiseasesId = #{diseasesId}
+        </if>
+        <if test="gender != null">
+            AND u.gender = #{gender}
+        </if>
+        <if test="startAge != null">
+            AND u.birthday &gt; #{startAge}
+        </if>
+        <if test="endAge != null">
+            AND u.birthday &lt; #{endAge}
+        </if>
+        <if test="mobile != null">
+            AND us.mobile LIKE CONCAT('%',#{mobile},'%')
+        </if>
+        GROUP BY o.userId, o.projectCode ORDER BY p.projectCode
+        ) m
+    </select>
+
+    <!--添加订单-机构短信充值订单-->
+    <insert id="addOrderStoreSms" parameterType="com.lifeshs.po.OrderStoreSmsPO">
+        INSERT INTO t_order_sms_org (orderNumber, subject, body, price, number, charge, status, orgId, deleted, createDate)
+        VALUES (#{orderNumber}, #{subject}, #{body}, #{price}, #{number}, #{charge}, #{status}, #{orgId}, 0, NOW())
+    </insert>
+
+    <!--获取机构短信充值订单状态-->
+    <select id="getOrderStoreSmsStatus" resultType="java.lang.Integer">
+        SELECT status FROM t_order_sms_org WHERE orderNumber = #{orderNumber}
+    </select>
+
+    <!--更新机构短信充值订单状态-->
+    <update id="updateOrderStoreSmsStatus">
+        UPDATE t_order_sms_org SET status = #{status} WHERE orderNumber = #{orderNumber}
+    </update>
+
+    <select id="getOrderCountByIdAndStatus" resultType="integer" parameterType="map">
+        SELECT
+         count(1)
+        FROM t_order
+        WHERE orgUserId = #{id}
+        and status = #{status}
+    </select>
+
+    <!--修改用户备注（基于订单表）-->
+    <update id="updateUserRemark">
+        UPDATE t_order o SET o.userRemark = #{userRemark} WHERE o.id = #{orderId} AND o.userId = #{userId}
+    </update>
+
+    <!--修改用户病种（基于订单表）-->
+    <update id="updateUserDiseases">
+        UPDATE t_order o SET o.userDiseasesId = #{userDiseasesId}, o.userDiseasesName = #{userDiseasesName}
+        WHERE o.id = #{orderId} AND o.userId = #{userId}
+    </update>
+
+    <select id="getOrgUserIds" resultType="integer" parameterType="integer">
+        SELECT
+        orgUserId
+        FROM t_order o
+        WHERE o.userId = #{userId}
+        and o.status in (3,4)
+        group by orgUserId
+    </select>
+    
+    <!-- 搜索指定年月期间未结算的订单列表 -->
+    <select id="findOrderListWithCondition" resultMap="StatementOrderVO">
+        SELECT o.*, u.businessId AS uBusinessId, u.joinDate AS uJoinDate
+        FROM
+            t_order o
+        INNER JOIN t_user u ON u.id = o.userId
+        WHERE
+        <!-- 服务serveId -->
+            serveId IN (
+                SELECT id FROM t_serve WHERE code IN <foreach collection="serveCodeList" open="(" close=")" separator="," item="code">#{code}</foreach>
+            )
+        <!-- 订单类型：服务订单 -->
+        AND orderType = 1
+        <!-- 结算id为空 -->
+        AND statementId IS NULL
+        <!-- 订单状态 -->
+        AND `status` IN <foreach collection="statusList" open="(" close=")" separator="," item="status">#{status}</foreach>
+        <!-- 支付方式：非免费 -->
+        AND chargeMode != 0
+        <!-- 日期 -->
+        AND DATE_FORMAT(startDate, '%Y-%m') = #{yyyyMM}
+    </select>
+    
+    <resultMap id="StatementOrderVO" type="com.lifeshs.vo.order.StatementOrderVO">
+        <id property="id" column="id"/>
+        <result property="orderNumber" column="orderNumber"/>
+        <result property="userId" column="userId"/>
+        <result property="chargeMode" column="chargeMode"/>
+        <result property="subject" column="subject"/>
+        <result property="body" column="body"/>
+        <result property="price" column="price"/>
+        <result property="number" column="number"/>
+        <result property="charge" column="charge"/>
+        <result property="startDate" column="startDate"/>
+        <result property="endDate" column="endDate"/>
+        <result property="timesRemaining" column="timesRemaining"/>
+        <result property="hasWarning" column="hasWarning"/>
+        <result property="warningDate" column="warningDate"/>
+        <result property="status" column="status"/>
+        <result property="recard" column="recard"/>
+        <result property="createDate" column="createDate"/>
+        <result property="orderType" column="orderType"/>
+        <result property="orgUserId" column="orgUserId"/>
+        <result property="projectCode" column="projectCode"/>
+        <result property="verifyCode" column="verifyCode"/>
+        <result property="serveId" column="serveId"/>
+        <result property="projectImage" column="projectImage"/>
+        <result property="address" column="address"/>
+        <result property="receiverName" column="receiverName"/>
+        <result property="receiverMobile" column="receiverMobile"/>
+        <result property="profitShare" column="profitShare"/>
+        <result property="orgIncome" column="orgIncome"/>
+        <result property="statementId" column="statementId"/>
+        <result property="deleted" column="deleted"/>
+        <result property="userRemark" column="userRemark"/>
+        <result property="userDiseasesName" column="userDiseasesName"/>
+        <result property="userDiseasesId" column="userDiseasesId"/>
+        <result property="couponsId" column="couponsId"/>
+        <result property="serveItemId" column="serveItemId"/>
+        <association property="user" javaType="com.lifeshs.po.user.UserPO">
+            <id property="id" column="userId"/>
+            <!-- 可以根据实际需求适度添加查询结果赋值 -->
+            <result property="businessId" column="uBusinessId"/>
+            <result property="joinDate" column="uJoinDate"/>
+        </association>
+    </resultMap>
+    
+    <select id="findTotalMoney" resultType="com.lifeshs.vo.order.OrderAgentAmountVO">
+    
+        select 
+               <if test="userNo.indexOf('A') != -1 or userNo.indexOf('D') != -1 or userNo.indexOf('Y') != -1">
+                    COALESCE(sum(total),0) as total,
+               </if>
+               <if test="userNo.indexOf('A') != -1 or userNo.indexOf('D') != -1 or userNo.indexOf('O') != -1">
+                    COALESCE(sum(serviceTotal),0) as serviceTotal,
+               </if>
+               COALESCE(sum(introduceTotal),0) as introduceTotal 
+        from (
+        
+            <!-- vip本机构价格 -->
+            <if test="orderType=='' or orderType==null or orderType=='Vip'">
+                <if test="userNo.indexOf('A') != -1 or userNo.indexOf('D') != -1 or userNo.indexOf('Y') != -1">
+                    SELECT 
+                        <if test="userNo.indexOf('A') != -1"> COALESCE(sum(v.sysIncome),0) as total, </if>
+                        <if test="userNo.indexOf('D') != -1"> COALESCE(sum(v.agentIncome),0) as total,  </if>
+                        <if test="userNo.indexOf('Y') != -1"> COALESCE(sum(v.salesmanIncome),0) as total,  </if>
+                        0 as introduceTotal, 0 as serviceTotal
+                    FROM t_order_vip v 
+                    INNER JOIN t_user u ON u.id = v.userId 
+                    <where>
+                        <if test="userNo.indexOf('A') != -1">AND v.sysUserNo=#{userNo} </if>
+                        <if test="userNo.indexOf('D') != -1">AND v.agentUserNo=#{userNo} </if>
+                        <if test="userNo.indexOf('Y') != -1">AND v.salesmanUserNo=#{userNo} </if>
+                        AND v.`status` in (3,4) 
+                        <if test="userName != null and userName!=''">AND u.userName LIKE CONCAT("%", #{userName}, "%")</if>
+                        <if test="realName != null and realName!=''">AND u.realName LIKE CONCAT("%", #{realName}, "%")</if>
+                        <if test="orderType=='Vip' and projectType != null">and c.l1 = #{projectType}</if>
+                    </where>
+                    
+                    union all
+                </if>
+                
+                <!-- vip服务机构 -->
+                <if test="userNo.indexOf('A') != -1 or userNo.indexOf('D') != -1 or userNo.indexOf('O') != -1">
+                    SELECT 0 as total, COALESCE(sum(v.serviceOrgIncome),0) as serviceTotal, 0 as introduceTotal
+                    FROM t_order_vip v 
+                    INNER JOIN t_user u ON u.id = v.userId 
+                    <where>
+                        <if test="userNo.indexOf('A') != -1"> AND v.serviceOrgUserNo=#{userNo} </if>
+                        <if test="userNo.indexOf('D') != -1"> AND v.serviceOrgUserNo=#{userNo} </if>
+                        <if test="userNo.indexOf('O') != -1"> AND v.serviceOrgUserNo=#{userNo} </if>
+                        AND v.`status` in (3,4) 
+                        <if test="userName != null and userName!=''">AND u.userName LIKE CONCAT("%", #{userName}, "%")</if>
+                        <if test="realName != null and realName!=''">AND u.realName LIKE CONCAT("%", #{realName}, "%")</if>
+                        <if test="orderType=='Vip' and projectType != null">and c.l1 = #{projectType}</if>
+                    </where>
+                    
+                    union all
+                </if>
+                
+                <!-- vip引入机构 -->
+                SELECT  0 as total, 0 as serviceTotal, COALESCE(sum(v.introduceOrgIncome),0) as introduceTotal 
+                    FROM t_order_vip v 
+                    INNER JOIN t_user u ON u.id = v.userId 
+                    <where>
+                        <if test="userNo.indexOf('A') != -1">AND v.introduceOrgUserNo = #{userNo} </if>
+                        <if test="userNo.indexOf('D') != -1">AND v.introduceOrgUserNo = #{userNo} </if>
+                        <if test="userNo.indexOf('Y') != -1">AND v.introduceOrgUserNo = #{userNo} </if>
+                        <if test="userNo.indexOf('O') != -1">AND v.introduceOrgUserNo = #{userNo} </if>
+                        AND v.`status` in (3,4) 
+                        <if test="userName != null and userName!=''">AND u.userName LIKE CONCAT("%", #{userName}, "%")</if>
+                        <if test="realName != null and realName!=''">AND u.realName LIKE CONCAT("%", #{realName}, "%")</if>
+                        <if test="orderType=='Vip' and projectType != null and projectType!='' ">and c.l1 = #{projectType}</if>
+                    </where>
+                
+                <if test="orderType=='' or orderType==null or orderType=='Service'">
+                    union all
+                </if>
+            </if>
+    
+            <!-- 服务本机构价格 -->
+            <if test="orderType=='' or orderType==null or orderType=='Service'">
+                <if test="userNo.indexOf('A') != -1 or userNo.indexOf('D') != -1 or userNo.indexOf('Y') != -1">
+                    SELECT
+                        <if test="userNo.indexOf('A') != -1"> COALESCE(sum(o.sysIncome),0) as total,  </if>
+                        <if test="userNo.indexOf('D') != -1"> COALESCE(sum(o.agentIncome),0) as total,  </if>
+                        <if test="userNo.indexOf('Y') != -1"> COALESCE(sum(o.salesmanIncome),0) as total,  </if>
+                        0 as introduceTotal, 0 as serviceTotal
+                    FROM t_order o
+                    LEFT JOIN t_user u ON u.id = o.userId 
+                    LEFT JOIN t_org_user ou ON ou.id = o.orgUserId
+                    LEFT JOIN t_org org on org.id = ou.orgId
+                    <if test="projectType != null">LEFT JOIN t_project p ON p.projectCode = o.projectCode</if>
+                    <where>
+                        <if test="userNo.indexOf('A') != -1"> AND o.sysUserNo=#{userNo} </if>
+                        <if test="userNo.indexOf('D') != -1"> AND o.agentUserNo=#{userNo} </if>
+                        <if test="userNo.indexOf('Y') != -1"> AND o.salesmanUserNo=#{userNo} </if>
+                        AND o.`status` in (3,4) 
+                        <if test="userName != null and userName!=''">AND u.userName LIKE CONCAT("%", #{userName}, "%")</if>
+                        <if test="realName != null and realName!=''">AND u.realName LIKE CONCAT("%", #{realName}, "%")</if>
+                        <if test="orgName != null and orgName!=''">AND org.orgName LIKE CONCAT("%", #{orgName}, "%")</if>
+                        <if test="orderType=='Service' and projectType != null and projectType!=''">AND p.projectType = #{projectType}</if>
+                    </where>
+                    
+                    union all
+                </if>
+                
+                <if test="userNo.indexOf('A') != -1 or userNo.indexOf('D') != -1 or userNo.indexOf('O') != -1">
+                    SELECT 0 as total, COALESCE(sum(o.serviceOrgIncome),0) as serviceTotal, 0 as introduceTotal
+                    FROM t_order o
+                    LEFT JOIN t_user u ON u.id = o.userId 
+                    LEFT JOIN t_org_user ou ON ou.id = o.orgUserId
+                    LEFT JOIN t_org org on org.id = ou.orgId
+                    <if test="projectType != null and projectType!='' ">LEFT JOIN t_project p ON p.projectCode = o.projectCode</if>
+                    <where>
+                        <if test="userNo.indexOf('A') != -1">AND o.serviceOrgUserNo=#{userNo}</if>
+                        <if test="userNo.indexOf('D') != -1">AND o.serviceOrgUserNo=#{userNo}</if>
+                        <if test="userNo.indexOf('O') != -1">AND o.serviceOrgUserNo=#{userNo} </if>
+                        AND o.`status` in (3,4) 
+                        <if test="userName != null and userName!='' ">AND u.userName LIKE CONCAT("%", #{userName}, "%")</if>
+                        <if test="realName != null and realName!='' ">AND u.realName LIKE CONCAT("%", #{realName}, "%")</if>
+                        <if test="orgName != null and orgName!='' ">AND org.orgName LIKE CONCAT("%", #{orgName}, "%")</if>
+                        <if test="orderType=='Service' and projectType != null and projectType!=''">AND p.projectType = #{projectType}</if>
+                    </where>
+                    
+                    union all
+                </if>
+                
+                SELECT 0 as total, 0 as serviceTotal, COALESCE(sum(o.introduceOrgIncome),0) as introduceTotal
+                FROM t_order o
+                LEFT JOIN t_user u ON u.id = o.userId 
+                LEFT JOIN t_org_user ou ON ou.id = o.orgUserId
+                LEFT JOIN t_org org on org.id = ou.orgId
+                <if test="projectType != null and projectType!='' ">LEFT JOIN t_project p ON p.projectCode = o.projectCode</if>
+                <where>
+                    <if test="userNo.indexOf('A') != -1">AND o.introduceOrgUserNo = #{userNo} </if>
+                    <if test="userNo.indexOf('D') != -1">AND o.introduceOrgUserNo = #{userNo} </if>
+                    <if test="userNo.indexOf('Y') != -1">AND o.introduceOrgUserNo = #{userNo} </if>
+                    <if test="userNo.indexOf('O') != -1">AND o.introduceOrgUserNo = #{userNo} </if>
+                    AND o.`status` in (3,4) 
+                    <if test="userName != null and userName!='' ">AND u.userName LIKE CONCAT("%", #{userName}, "%")</if>
+                    <if test="realName != null and realName!='' ">AND u.realName LIKE CONCAT("%", #{realName}, "%")</if>
+                    <if test="orgName != null and orgName!='' ">AND org.orgName LIKE CONCAT("%", #{orgName}, "%")</if>
+                    <if test="orderType=='Service' and projectType != null and projectType!=''">AND p.projectType = #{projectType}</if>
+                </where>
+            </if>
+        ) a 
+    </select>
+    
+    <select id="countOrderWithCondition" resultType="java.lang.Integer">
+    
+        select count(id) from (
+
+            <if test="orderType=='' or orderType==null or orderType=='Vip'">
+                SELECT v.id FROM t_order_vip v 
+                INNER JOIN t_user u ON u.id = v.userId 
+                <where>
+                    <include refid="select_order_vip_agent_where"></include>
+                    <if test="userName != null and userName!=''">AND u.userName LIKE CONCAT("%", #{userName}, "%")</if>
+                    <if test="realName != null and realName!=''">AND u.realName LIKE CONCAT("%", #{realName}, "%")</if>
+                    <if test="status != null and status!=''">AND v.`status` = #{status}</if>
+                    <if test="orderType=='Vip' and projectType != null and projectType!=''">and c.l1 = #{projectType}</if>
+                </where>
+                <if test="orderType=='' or orderType==null or orderType=='Service'">
+                    union all
+                </if>
+            </if>
+            
+            
+            <if test="orderType=='' or orderType==null or orderType=='Service'">
+                SELECT o.id FROM t_order o 
+                INNER JOIN t_user u ON u.id = o.userId 
+                LEFT JOIN t_org_user ou ON ou.id = o.orgUserId 
+                LEFT JOIN t_org org ON org.id = ou.orgId 
+                <if test="projectType != null">LEFT JOIN t_project p ON p.projectCode = o.projectCode</if>
+                <where>
+                    <include refid="select_order_agent_where"></include>
+                    <if test="userName != null and userName!=''">AND u.userName LIKE CONCAT("%", #{userName}, "%")</if>
+                    <if test="realName != null and realName!=''">AND u.realName LIKE CONCAT("%", #{realName}, "%")</if>
+                    <if test="orgName != null and orgName !=''">AND org.orgName LIKE CONCAT("%", #{orgName}, "%")</if>
+                    <if test="orderType=='Service' and projectType != null and projectType!=''">AND p.projectType = #{projectType}</if>
+                    <if test="status != null">AND o.`status` = #{status}</if>
+                </where>
+            </if>
+        ) a
+    
+        <!-- SELECT COUNT(1) FROM t_order o
+        INNER JOIN t_user u ON u.id = o.userId
+        LEFT JOIN t_org_user ou ON ou.id = o.orgUserId
+        LEFT JOIN t_org org ON org.id = ou.orgId
+        <if test="projectType != null">LEFT JOIN t_project p ON p.projectCode = o.projectCode</if>
+        <where>
+            <include refid="select_order_agent_where"></include>
+            <if test="userName != null">AND u.userName LIKE CONCAT(#{userName}, "%")</if>
+            <if test="realName != null">AND u.realName LIKE CONCAT(#{realName}, "%")</if>
+            <if test="orgName != null">AND org.orgName LIKE CONCAT(#{orgName}, "%")</if>
+            <if test="projectType != null">AND p.projectType = #{projectType}</if>
+            <if test="status != null">AND o.`status` = #{status}</if>
+        </where> -->
+    </select>
+    
+    <select id="findOrderWithCondition" resultType="com.lifeshs.po.order.OrderWithVipPO">
+    
+        select  orderType,orderNumber,status, charge, profitShare, sysIncome1, createDate, 
+             sysUserNo,sysIncome,agentUserNo,agentIncome,salesmanUserNo,salesmanIncome,introduceOrgUserNo,introduceOrgIncome,serviceOrgUserNo,serviceOrgIncome, 
+             userName, realName, orgName, "" AS serveName from (
+
+            <if test="orderType=='' or orderType==null or orderType=='Vip'">
+                SELECT 'vip套餐' orderType,v.orderNumber, v.`status`, '' charge, '' profitShare, '' sysIncome1, v.createDate, 
+                             v.sysUserNo,v.sysIncome,v.agentUserNo,v.agentIncome,v.salesmanUserNo,v.salesmanIncome,v.introduceOrgUserNo,v.introduceOrgIncome,v.serviceOrgUserNo,v.serviceOrgIncome, 
+                             u.userName, u.realName, '广州通众电气实业有限公司' orgName, "" AS serveName 
+                FROM t_order_vip v 
+                LEFT JOIN t_user u ON u.id = v.userId 
+                INNER JOIN t_vip_combo c on c.id = v.vipComboId 
+                <where>
+                    <include refid="select_order_vip_agent_where"></include>
+                    <if test="userName != null and userName !=''">AND u.userName LIKE CONCAT("%", #{userName}, "%")</if>
+                    <if test="realName != null and realName !=''">AND u.realName LIKE CONCAT("%", #{realName}, "%")</if>
+                    <if test="status != null and status !=''">AND v.`status` = #{status}</if>
+                    <if test="orderType=='Vip' and projectType != null and projectType !='' ">and c.l1 = #{projectType}</if>
+                </where>
+                <if test="orderType=='' or orderType==null or orderType=='Service'">
+                UNION all
+                </if>
+            </if>
+            
+            <if test="orderType=='' or orderType==null or orderType=='Service'">
+                SELECT '服务' orderType,o.orderNumber, o.`status`, o.charge, o.profitShare, (o.charge-o.orgIncome) AS sysIncome1, o.createDate, 
+                             o.sysUserNo,o.sysIncome,o.agentUserNo,o.agentIncome,o.salesmanUserNo,o.salesmanIncome,o.introduceOrgUserNo,o.introduceOrgIncome,o.serviceOrgUserNo,o.serviceOrgIncome, 
+                             u.userName, u.realName, org.orgName, "" AS serveName 
+                FROM t_order o 
+                LEFT JOIN t_user u ON u.id = o.userId 
+                LEFT JOIN t_org_user ou ON ou.id = o.orgUserId 
+                LEFT JOIN t_org org on org.id = ou.orgId 
+                <if test="projectType != null">LEFT JOIN t_project p ON p.projectCode = o.projectCode</if>
+                <where>
+                    <include refid="select_order_agent_where"></include>
+                    <if test="userName != null and userName !='' ">AND u.userName LIKE CONCAT("%", #{userName}, "%")</if>
+                    <if test="realName != null and realName !='' ">AND u.realName LIKE CONCAT("%", #{realName}, "%")</if>
+                    <if test="orgName != null and orgName !='' ">AND org.orgName LIKE CONCAT("%", #{orgName}, "%")</if>
+                    <if test="orderType=='Service' and projectType != null and projectType != '' ">AND p.projectType = #{projectType}</if>
+                    <if test="status != null and status !=''">AND o.`status` = #{status}</if>
+                </where>
+            </if>
+        ) a 
+        where 1=1 
+        <if test="orgName != null and orgName != '' ">AND a.orgName LIKE CONCAT("%", #{orgName}, "%")</if>
+        ORDER BY a.createDate desc
+        LIMIT #{startRow}, #{pageSize} 
+
+        <!-- SELECT
+            o.orderNumber, o.`status`, o.charge, o.profitShare, (o.charge-o.orgIncome) AS sysIncome1, o.createDate,
+            o.sysUserNo,o.sysIncome,o.agentUserNo,o.agentIncome,o.salesmanUserNo,o.salesmanIncome,o.introduceOrgUserNo,o.introduceOrgIncome,o.serviceOrgUserNo,o.serviceOrgIncome,
+            u.userName, u.realName, org.orgName, "" AS serveName
+        FROM t_order o
+        LEFT JOIN t_user u ON u.id = o.userId 
+        LEFT JOIN t_org_user ou ON ou.id = o.orgUserId
+        LEFT JOIN t_org org on org.id = ou.orgId
+        <if test="projectType != null">LEFT JOIN t_project p ON p.projectCode = o.projectCode</if>
+        <where>
+            <include refid="select_order_agent_where"></include>
+            <if test="userName != null">AND u.userName LIKE CONCAT(#{userName}, "%")</if>
+            <if test="realName != null">AND u.realName LIKE CONCAT(#{realName}, "%")</if>
+            <if test="orgName != null">AND org.orgName LIKE CONCAT(#{orgName}, "%")</if>
+            <if test="projectType != null">AND p.projectType = #{projectType}</if>
+            <if test="status != null">AND o.`status` = #{status}</if>
+        </where>
+        ORDER BY o.id DESC
+        LIMIT #{startRow}, #{pageSize} -->
+    </select>
+    
+    <sql id="select_order_agent_where">
+        <if test="userNo.indexOf('A') != -1">AND (o.sysUserNo=#{userNo} or o.introduceOrgUserNo = #{userNo} or o.serviceOrgUserNo=#{userNo})</if>
+        <if test="userNo.indexOf('D') != -1">AND (o.agentUserNo=#{userNo} or o.introduceOrgUserNo = #{userNo} or o.serviceOrgUserNo=#{userNo})</if>
+        <if test="userNo.indexOf('Y') != -1">AND (o.salesmanUserNo=#{userNo} or o.introduceOrgUserNo = #{userNo})</if>
+        <if test="userNo.indexOf('O') != -1">AND (o.introduceOrgUserNo=#{userNo} or o.serviceOrgUserNo=#{userNo})</if>
+    </sql>
+    <sql id="select_order_vip_agent_where">
+        <if test="userNo.indexOf('A') != -1">AND (v.sysUserNo=#{userNo} or v.introduceOrgUserNo = #{userNo} or v.serviceOrgUserNo=#{userNo})</if>
+        <if test="userNo.indexOf('D') != -1">AND (v.agentUserNo=#{userNo} or v.introduceOrgUserNo = #{userNo} or v.serviceOrgUserNo=#{userNo})</if>
+        <if test="userNo.indexOf('Y') != -1">AND (v.salesmanUserNo=#{userNo} or v.introduceOrgUserNo = #{userNo})</if>
+        <if test="userNo.indexOf('O') != -1">AND (v.introduceOrgUserNo=#{userNo} or v.serviceOrgUserNo=#{userNo})</if>
+    </sql>
+    
+    <select id="countOrderCountWithCondition" resultType="java.lang.Integer">
+        SELECT COUNT(1)
+        FROM (
+            SELECT COUNT(1)
+            FROM t_order o
+                LEFT JOIN t_data_serve_type2 s ON s.id = o.serveId
+                LEFT JOIN t_org_user u ON u.id = o.orgUserId
+                LEFT JOIN t_org org ON org.id = u.orgId
+            <where>
+                <include refid="select_order_agent_where"></include>
+                <if test="orgName != null">
+                    AND org.orgName LIKE CONCAT(#{orgName}, "%")
+                </if>
+                <if test="serveCode != null">
+                    AND s.code = #{serveCode}
+                </if>
+                <if test="start != null">
+                    AND o.createDate &gt;= #{start}
+                </if>
+                <if test="end != null">
+                    AND o.createDate &lt;= #{end}
+                </if>
+            </where>
+            GROUP BY s.name
+        ) AS a
+    </select>
+    
+    <select id="findOrderCountWithCondition" resultType="com.lifeshs.vo.order.customer.OrderCountVO">
+        SELECT
+            <choose>
+                <when test="orgName == null">'全部门店' AS orgName,</when>
+                <when test="orgName != null">org.orgName,</when>
+            </choose>
+            s.name AS serveName,
+            count(1) AS allCount,
+            SUM(case WHEN o.status IN (3,4,5) THEN 1 ELSE 0 END) AS payCount,
+            SUM(case WHEN o.status = 1 THEN 1 ELSE 0 END) AS unPayCount,
+            SUM(case WHEN o.status = 4 THEN 1 ELSE 0 END) AS finishCount
+        FROM t_order o
+            LEFT JOIN t_data_serve_type2 s ON s.id = o.serveId
+            LEFT JOIN t_org_user u ON u.id = o.orgUserId
+            LEFT JOIN t_org org ON org.id = u.orgId
+        <where>
+            <include refid="select_order_agent_where"></include>
+            <if test="orgName != null">
+                AND org.orgName LIKE CONCAT(#{orgName}, "%")
+            </if>
+            <if test="serveCode != null">
+                AND s.code = #{serveCode}
+            </if>
+            <if test="start != null">
+                AND o.createDate &gt;= #{start}
+            </if>
+            <if test="end != null">
+                AND o.createDate &lt;= #{end}
+            </if>
+        </where>
+        GROUP BY s.name
+    </select>
+</mapper>

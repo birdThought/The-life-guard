@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!-- 体检报告单独映射表 -->
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lifeshs.dao.record.IRecordDao">
+
+    <select id="selectTRecordSportWithDate" resultMap="A">
+		SELECT * FROM
+			t_record_sport
+		WHERE
+			userId = #{userId}
+		And date_format(recordDate,'%Y-%m-%d')=#{recordDate}
+		ORDER BY startTime
+	</select>
+
+    <resultMap type="com.lifeshs.entity.record.TRecordSport" id="A">
+        <id property="id" column="id"/>
+        <!-- <result property="energy" column="energy" />
+        <result property="userId" column="userId" />
+        <result property="startTime" column="startTime" />
+        <result property="recordDate" column="recordDate" />
+        <result property="createDate" column="createDate" /> -->
+        <collection property="details" ofType="com.lifeshs.entity.record.TRecordSportDetail" column="id" select="A2"/>
+    </resultMap>
+
+    <select id="A2" resultMap="B">
+		SELECT * FROM t_record_sport_detail WHERE recordId = #{id}
+	</select>
+
+    <resultMap type="com.lifeshs.entity.record.TRecordSportDetail" id="B">
+        <id property="id" column="id"/>
+        <!-- <result property="recordId" column="recordId"/>
+        <result property="duration" column="duration"/> -->
+        <association property="sport" column="sportId" javaType="com.lifeshs.entity.data.TDataSport" select="A3"/>
+    </resultMap>
+
+    <select id="A3" resultType="com.lifeshs.entity.data.TDataSport">
+		SELECT * FROM t_data_sport WHERE id = #{id}
+	</select>
+
+    <select id="selectSportEnergyByUserIdWithDate" resultType="com.lifeshs.entity.record.TRecordSport">
+        SELECT
+        SUM(energy) AS energy,
+        recordDate
+        FROM
+        t_record_sport
+        WHERE
+        userId = #{userId}
+        <choose>
+            <when test="customSetDate">
+                AND #{startDate} &lt;= DATE(recordDate) AND DATE(recordDate) &lt;= #{endDate}
+            </when>
+            <otherwise>
+                AND DATE_SUB(CURDATE(), INTERVAL 7 DAY) &lt;= DATE(recordDate)
+            </otherwise>
+        </choose>
+        GROUP BY
+        recordDate;
+    </select>
+
+    <delete id="delSportByRecordSportId" parameterType="java.lang.Integer">
+		DELETE t_record_sport.*, t_record_sport_detail.*  FROM t_record_sport, t_record_sport_detail 
+			WHERE t_record_sport.id = #{recordSportId}
+				AND t_record_sport.id = t_record_sport_detail.recordId
+	</delete>
+
+    <delete id="deleteSportDetail" parameterType="java.lang.Integer">
+		DELETE FROM t_record_sport_detail
+			WHERE id = #{detailId}
+	</delete>
+
+    <select id="selectMedicalDataByUserIdAndQueryDate" parameterType="map" resultType="string">
+        SELECT date_format(createDate,'20%y-%m-%d')
+        FROM t_record_medical
+        WHERE userId = #{userId}
+        and DATE_ADD(#{queryDate}, interval 1 month) &gt;= createDate
+        and createDate &gt;= #{queryDate}
+    </select>
+
+    <select id="selectPhysicalsDataByUserIdAndQueryDate" parameterType="map" resultType="string">
+        SELECT date_format(createDate,'20%y-%m-%d')
+        FROM t_record_physicals
+        WHERE userId = #{userId}
+        and DATE_ADD(#{queryDate}, interval 1 month) &gt;= createDate
+        and createDate &gt;= #{queryDate}
+    </select>
+
+    <select id="selectDietDataByUserIdAndQueryDate" parameterType="map" resultType="string">
+        SELECT date_format(createDate,'20%y-%m-%d')
+        FROM t_record_diet
+        WHERE userId = #{userId}
+        and DATE_ADD(#{queryDate}, interval 1 month) &gt;= createDate
+        and createDate &gt;= #{queryDate}
+    </select>
+
+    <select id="selectLastDietDateWithExistData" resultType="date" parameterType="integer">
+        SELECT
+          recordDate
+        FROM t_record_diet
+        WHERE userId = #{userId}
+        group by recordDate
+    </select>
+</mapper>

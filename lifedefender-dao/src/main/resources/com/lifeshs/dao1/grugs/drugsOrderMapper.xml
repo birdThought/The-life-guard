@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lifeshs.dao1.drugs.DrugsOrderDao">
+
+    <resultMap type="com.lifeshs.po.drugs.OrderPO" id="OrderDTO">
+        <id column="id" property="id"/>
+        <result property="userId" column="userId"/>
+        <result property="orderNo" column="orderNo"/>
+        <result property="status" column="status"/>
+        <result property="money" column="money"/>
+        <result property="shippingNo" column="shippingNo"/>
+        <result property="invoice" column="invoice"/>
+        
+        <collection property="productList" notNullColumn="pId" ofType="com.lifeshs.po.drugs.OrderProductPO">
+            <id property="id" column="pId"/>
+            <result property="productCode" column="productCode"/>
+            <result property="productName" column="productName"/>
+            <result property="amount" column="amount"/>
+            <result property="actualPrice" column="actualPrice"/>
+            <result property="thumbnailUrl" column="thumbnailUrl"/>
+            <result property="packing" column="packing"/>
+        </collection>
+    </resultMap>
+    
+    <!--统计订单数量 -->
+    <select id="countDrugsOrder" resultType="java.lang.Integer">
+        select count(1) from t_drugs_order 
+        where 1=1 
+        <if test="orderNo != null">
+            and orderNo = #{orderNo} 
+        </if>
+        <if test="paymentType != null">
+            and paymentType = #{paymentType} 
+        </if>
+        <if test="status != null">
+            and status = #{status}
+        </if>
+    </select>
+    
+
+    <!-- 获取订单列表 -->
+    <select id="getDrugsOrderList" resultType="com.lifeshs.po.drugs.OrderPO">
+        select <include refid="select_order_data"></include> 
+        from t_drugs_order 
+        WHERE 1=1 
+        <if test="orderNo!=null">
+            and orderNo=#{orderNo} 
+        </if>
+        <if test="paymentType!=null">
+            and paymentType=#{paymentType} 
+        </if>
+        <if test="status!=null">
+            and status=#{status} 
+        </if>
+        LIMIT #{startRow},#{pageSize}
+    </select>
+    
+    <!-- 药品字段 -->
+    <sql id="select_order_data">
+        id, orderNo, externalOrderNo, invoice, orderNotes, money, orderTime, 
+        userId, consignee, address, createDate, physCode, paymentType, transportCosts, 
+        status, shippingNo, payCost, payAccount, sellerAccount, clinicalDiagnosis, 
+        doctorAdvice<!-- , orderType  -->
+    </sql>
+    
+    <!-- 获取订单 -->
+    <select id="findDrugsOrderInfo" resultType="com.lifeshs.po.drugs.OrderPO">
+        select <include refid="select_order_data"></include> 
+        
+        
+        from t_drugs_order 
+        WHERE 1=1 
+        <if test="orderNo!=null">
+            and orderNo=#{orderNo} 
+        </if>
+        <if test="paymentType!=null">
+            and paymentType=#{paymentType} 
+        </if>
+        <if test="status!=null">
+            and status=#{status} 
+        </if>
+        LIMIT #{startRow},#{pageSize}
+    </select>
+    
+   
+
+</mapper>

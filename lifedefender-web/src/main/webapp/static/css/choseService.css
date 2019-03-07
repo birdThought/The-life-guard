@@ -1,0 +1,103 @@
+@charset "utf-8";
+*:before,*:after,*{box-sizing:border-box;
+    -moz-box-sizing:border-box; /* Firefox */
+    -webkit-box-sizing:border-box; /* Safari */
+}
+.container{
+    width:918px;
+    min-height:840px;
+    border:1px solid #ddd;
+    margin:20px 40px;
+    padding:0px 30px 20px;
+}
+.container h3{
+    font-size:16px;
+    font-weight:500;
+}
+.chose-title{
+    height: 60px;
+    line-height: 60px;
+    font-size: 16px;
+    border-bottom: 1px dashed #ddd;
+}
+.community{
+    border:1px solid #ddd;
+    padding:18px;
+    overflow:auto;
+    border-bottom: none;
+}
+.community li{
+    float:left;
+}
+.community div{
+    float:left;
+}
+.community a{
+    display:block;
+    margin-left:100px;
+}
+.setCenter{
+    line-height:60px;
+}
+.setCenter em{
+    color:red;
+    margin:0 10px;
+}
+.service-team{
+    border:1px solid #ddd;
+}
+.service-team .teams-title{
+    line-height:50px;
+    text-indent:1em;
+}
+.teams{
+    padding:20px;
+    overflow:auto;
+    border-top:1px solid #ddd;
+}
+.teams li{
+    float:left;
+    margin-right:10px;
+}
+.teams li img{
+    width:90px;
+    border-radius:50%;
+}
+.teams p{
+    font-size:16px;
+    margin-bottom:10px;
+}
+.teams small{
+    margin-left:14px;
+    border-radius:4px;
+    padding: 2px 12px;
+    color:#fff;
+    background-color:#48c858;
+}
+.teams li dd{
+}
+.teams li:nth-of-type(3){
+    position:relative;
+}
+.teams li:nth-of-type(3) button{
+    cursor: pointer;
+    position: absolute;
+    top:20px;
+    left:40px;
+    width:80px;
+    height:34px;
+    background-color:#fbb43a;
+    border-radius:5px;
+    border:none;
+    color:#fff;
+    font-size:16px;
+    outline:none;
+    font-family: "Microsoft Yahei";
+}
+.teams li:nth-of-type(3) button:not(.leaveState):active{
+    background-color: #fba41d;
+}
+.teams .leaveState,
+.teams li:nth-of-type(3) .leaveState{
+    background-color:#ddd;
+}

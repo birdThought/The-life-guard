@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lifeshs.dao1.electronicCoupons.ElectronicCouponsPackageRelationDao">
+    
+    <!-- 添加关联关系 -->
+    <insert id="addRelation">
+        INSERT INTO t_electronic_coupons_package_templet_relation(packageId,templetId,createDate) 
+        VALUES
+        <foreach collection="templetIdList" item="templetId" separator=",">
+            (#{packageId}, #{templetId},NOW())
+        </foreach>
+    </insert>
+    
+    <!-- 删除关联关系 -->
+    <delete id="delRelation">
+        DELETE FROM t_electronic_coupons_package_templet_relation
+        WHERE id= #{id}
+    </delete>
+    
+    <!-- 删除关联关系 -->
+    <delete id="delRelationByPackageIdAndTempletId">
+        DELETE FROM t_electronic_coupons_package_templet_relation
+        WHERE packageId = #{packageId}
+        <if test="templetIdList != null">
+            AND templetId IN
+            <foreach collection="templetIdList" item="templetId" open="(" close=")" separator=",">
+                #{templetId}
+            </foreach>
+        </if>
+    </delete>
+
+    <delete id="delRelationByTempletId">
+        DELETE FROM t_electronic_coupons_package_templet_relation
+        WHERE templetId = #{templetId}
+    </delete>
+
+</mapper>

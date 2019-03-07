@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>生命守护移动端</title>
+    <style>
+        .alert{
+            font-family: Helvetica;
+            color:#44c660;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+<h1 class="alert">Under Construction！</h1>
+</body>
+</html>

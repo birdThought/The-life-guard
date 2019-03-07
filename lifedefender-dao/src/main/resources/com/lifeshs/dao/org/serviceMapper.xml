@@ -1,0 +1,997 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lifeshs.dao.org.manage.OrgServiceDao">
+
+    <!-- 查找该机构的服务列表和会员数 -->
+    <select id="getOrgServiceListAndMemberCount" parameterType="int"
+            resultType="com.lifeshs.pojo.org.server.OrgServer">
+        SELECT
+            s.id,
+            s. NAME serviceName,
+            s.image,
+            os.createDate,
+            os.id orgServeId,os.hasTime,os.timePrice,os.hasFree,os.freeDate,os.hasMonth,os.monthPrice,os.hasYear,os.yearPrice,
+            COUNT(DISTINCT(o.userId)) memberCount, COUNT(DISTINCT(g.id)) groupCount,
+            os.classify, s.code
+        FROM
+        t_serve s
+        LEFT JOIN t_org_serve os ON os.serveId = s.id
+        LEFT JOIN
+        t_order o ON o.orgServeId = os.id AND o.status = 3 AND o.orderType = 1
+        LEFT JOIN t_org_group g ON os.id=g.orgServeId
+        <if test="orgUserId!=null">
+            LEFT JOIN t_org_group_orguser gu ON gu.groupId=g.id
+        </if>
+        WHERE os.orgId = #{orgId}
+        <if test="orgUserId!=null">
+            AND gu.orgUserId=#{orgUserId}
+        </if>
+        GROUP BY
+        os.serveId
+        ORDER BY
+        s.id
+    </select>
+    <!-- 定制服务栏 -->
+    <select id="getServeDatas" parameterType="int"
+            resultType="com.lifeshs.entity.org.TServe">
+        select
+        t_serve.id,t_serve.serveType,t_serve.classify,t_serve.`name`,t_serve.about,t_serve.chargeMode,t_serve.profitShare,GROUP_CONCAT(t_org_serve.serveId)
+        hasOrder
+        from t_serve LEFT JOIN t_org_serve on
+        t_org_serve.orgId=${value}
+        GROUP BY
+        t_serve.id
+    </select>
+
+    <!-- 查询该服务下的所有群组 -->
+    <select id="findGroupByKey" parameterType="int"
+            resultType="com.lifeshs.pojo.org.server.OrgServerGroupBase">
+        select
+        t_org_group.id,t_org_group.`name`,count(DISTINCT(t_order.userId)) as
+        memberCount, t_org_group.createDate,t_org_group.orgServeId from
+        t_org_group LEFT JOIN t_order on
+        t_order.serveGroupId=t_org_group.id AND t_order.status = 3 AND t_order.orderType = 1
+        <if test="orgUserId!=null">
+            LEFT JOIN t_org_group_orguser ON t_org_group.id=t_org_group_orguser.groupId
+        </if>
+        where
+        <if test="orgUserId!=null">
+            t_org_group_orguser.orgUserId=#{orgUserId} AND
+        </if>
+        t_org_group.orgServeId=(select t_org_serve.id from t_org_serve where
+            orgId=#{orgId} and serveId=#{serveId})
+        GROUP BY t_org_group.id desc
+    </select>
+    
+    <!-- 查询该服务下的所有群组 -->
+    <select id="findGroupByKeyWithOrgServeId" parameterType="int"
+            resultType="com.lifeshs.pojo.org.server.OrgServerGroupBase">
+        select
+        t_org_group.id,t_org_group.`name`,count(DISTINCT(t_order.userId)) as
+        memberCount, t_org_group.createDate,t_org_group.orgServeId from
+        t_org_group LEFT JOIN t_order on
+        t_order.serveGroupId = t_org_group.id AND t_order.status = 3 AND t_order.orderType = 1
+        <if test="orgUserId!=null">
+            LEFT JOIN t_org_group_orguser ON t_org_group.id=t_org_group_orguser.groupId
+        </if>
+        where
+        <if test="orgUserId!=null">
+            t_org_group_orguser.orgUserId=#{orgUserId} AND
+        </if>
+        t_org_group.orgServeId=(select t_org_serve.id from t_org_serve where
+        orgId=#{orgId} and t_org_serve.id = #{orgServeId})
+        GROUP BY t_org_group.id desc
+    </select>
+
+    <!-- 查询该群组的详细信息 -->
+    <select id="getGroupInfo" parameterType="int"
+            resultType="com.lifeshs.pojo.org.server.OrgServerGroupInfo">
+        select
+        id,name,qrCode,createDate
+        from
+        t_org_group where
+        orgServeId=(select
+        t_org_serve.id from t_org_serve where
+        orgId=${orgId}
+        and
+        serveId=${serveId}) and t_org_group.id=${groupId}
+    </select>
+
+    <!-- 查询该群组的管理员和服务师 -->
+    <select id="findAdminAndServer" parameterType="int"
+            resultType="java.util.HashMap">
+        SELECT
+        <choose>
+            <when test="isLimit==1">
+                t_org_group_orguser.id goId,
+                t_org_user.id,
+                t_org_user.realName,
+                t_org_user.photo,
+                t_org_user.sex,
+                GROUP_CONCAT(t_org_group. NAME) groupNames,
+            </when>
+            <otherwise>group_concat(t_org_user.realName) realName,</otherwise>
+        </choose>
+        t_org_user.userType
+        FROM
+            t_org_user,
+            t_org_group_orguser
+        LEFT JOIN t_org_group ON t_org_group.id = t_org_group_orguser.groupId
+        WHERE
+            t_org_group_orguser.groupId=#{groupId}
+        AND t_org_user.id = t_org_group_orguser.orgUserId
+        AND t_org_user.userType in (1,2)
+        <if test="isLimit==1">
+            GROUP BY t_org_user.id
+        </if>
+    </select>
+
+    <select id="findAllUserInGroup" parameterType="int"
+            resultType="com.lifeshs.pojo.org.server.OrgMemberBase">
+        <include refid="findAllUserInGroupMain"></include>
+        limit ${page},${dPage}
+    </select>
+    
+    <select id="findAllUserInGroupWithoutPageSplit" parameterType="int"
+        resultType="com.lifeshs.pojo.org.server.OrgMemberBase">
+        <include refid="findAllUserInGroupMain"></include>
+        ORDER BY t_order.hasWarning DESC, CONVERT(t_user.realName USING GBK)
+    </select>
+    
+    <sql id="findAllUserInGroupMain">
+        SELECT
+            t_user.id,
+            t_user.userCode hxId,
+            t_user.realName,
+            t_user_record.gender AS `sex`,
+            t_user.photo,
+            MAX(t_order.endDate) endDate,
+            SUM(t_order.timesRemaining) timesRemaining,
+            t_order.chargeMode,
+            t_order.hasWarning
+        FROM
+            t_user,
+            t_order,
+            t_user_record
+        WHERE
+            t_order.serveGroupId = #{groupId}
+        AND t_order.userId = t_user.id
+        AND t_order.status = 3
+        AND t_order.orderType = 1
+        AND t_user_record.userId = t_user.id
+        GROUP BY
+            t_order.userId,
+            t_order.chargeMode
+    </sql>
+    
+    <!-- 获取该机构下的所有服务师以及该服务师管理的群数 -->
+    <select id="getOrgGroupManager" parameterType="int"
+            resultType="com.lifeshs.pojo.org.employee.OrgEmploy">
+        SELECT
+            t_org_user.id,
+            t_org_user.realName,
+            count(
+                t_org_group_orguser.groupId
+            ) groupCount,
+            t_org_user.photo,
+            t_org_user.sex,
+            GROUP_CONCAT(t_org_group. NAME) groupNames
+        FROM
+            t_org_user
+        LEFT JOIN t_org_group_orguser ON t_org_group_orguser.orgUserId = t_org_user.id
+        LEFT JOIN t_org_group ON t_org_group.id = t_org_group_orguser.groupId
+        WHERE
+            t_org_user.orgId = #{value}
+        AND t_org_user.userType IN (1, 2)
+        GROUP BY
+            t_org_user.id
+    </select>
+    <!-- 查询该群组的管理员或者服务师的信息 -->
+    <select id="getUserInfo" parameterType="int"
+            resultType="com.lifeshs.pojo.org.employee.OrgEmploy">
+        select t_org_user.id,
+        t_org_user.realName,t_org_user.userName,t_org_user.sex,t_org_user.photo,t_org.orgName,t_org_user.userType,GROUP_CONCAT(t_org_group.`name`)
+        as serveGroup from t_org_user,t_org,t_org_group where t_org_user.id
+        =${serverId} and t_org.id=${orgId} and t_org_group.id in (select
+        t_org_group_orguser.groupId from t_org_group_orguser where
+        t_org_group_orguser.orgUserId=${serverId})
+        <!-- s -->
+        <!-- 2016年11月30日16:34:14 -->
+        AND t_order.`status` = 3 AND t_order.orderType = 1
+        <!-- e -->
+    </select>
+    
+    <select id="getServeAndOrgInfoByGroupId" resultType="java.util.HashMap">
+        SELECT os.id AS `orgServeId`,s.`name`,s.image,os.about AS orgServeAbout,og.id AS `orgId`,o.orgName,o.logo,o.about AS `orgAbout`
+        FROM t_org_group og
+        INNER JOIN t_org_serve os ON os.id = og.orgServeId
+        INNER JOIN t_serve s ON s.id = os.serveId
+        INNER JOIN t_org o ON o.id = os.orgId
+        WHERE og.id = #{groupId}
+    </select>
+
+    <sql id="history_record">
+        from
+        t_order o
+        <choose>
+            <when test="orgServeId != null">
+                INNER JOIN t_org_serve s ON s.id = #{orgServeId}
+            </when>
+            <otherwise>
+                INNER JOIN t_org_serve s ON s.serveId=#{serverId}
+            </otherwise>
+        </choose>
+        and s.orgId=#{orgId} AND o.orgServeId=s.id AND o.userId is not null AND o.chargeMode is not null
+        INNER JOIN t_org_group g ON g.orgServeId=o.orgServeId AND o.serveGroupId=g.id
+        LEFT JOIN t_user u ON u.id = o.userId
+        LEFT JOIN t_user_record ur ON ur.userId = u.id
+        <choose>
+            <when test="condition!=null">
+                WHERE
+                <foreach collection="condition.keys" item="key" index="index"
+                         separator="and">
+                    <choose>
+                        <when test="key=='t_order.endDate'">
+                            DATE_FORMAT(t_order.endDate,'%Y-%m-%d') =
+                            #{condition[${key}]}
+                        </when>
+                        <when test="key=='normal'">
+                            CURDATE()&lt;=t_order.endDate
+                        </when>
+                        <when test="key=='outDate'">
+                            CURDATE()&gt;t_order.endDate
+                        </when>
+                        <when test="key=='status'">
+                            o.status IN 
+                            <foreach collection="condition[key]" item="s" index="index_1" separator="," open="(" close=")">
+                                #{s}
+                            </foreach>
+                        </when>
+                        <otherwise>
+                            ${key} = #{condition[${key}]}
+                        </otherwise>
+                    </choose>
+                </foreach>
+                AND o.orderType = 1
+            </when>
+            <otherwise>
+                WHERE o.orderType = 1
+            </otherwise>
+        </choose>
+        GROUP BY o.userId,o.chargeMode
+    </sql>
+
+    <!-- 查询服务历史记录 -->
+    <select id="findHistoryServeRecord" parameterType="java.util.HashMap"
+            resultType="com.lifeshs.pojo.org.server.OrgServeRecord">
+        select o.id,s.id orgServeId,u.realName,g.name groupName
+        ,ur.gender sex,o.chargeMode,o.status,sum(o.timesRemaining) timesRemaining,
+        min(o.startDate) startDate,MAX(o.endDate) endDate,sum((IFNULL(o.price,0)*(IFNULL(o.number,0))))/100
+        fair,u.photo
+        <include refid="history_record"></include>
+        ORDER BY o.id desc limit ${page},${dPage};
+    </select>
+    <!-- 查询服务历史记录 -->
+    <select id="getHistoryServeRecordCount" parameterType="java.util.HashMap"
+            resultType="int">
+        select count(1) FROM (select
+        1
+        <include refid="history_record"></include>
+        ) a
+    </select>
+
+
+    <!-- 获取该机构的所有服务师 -->
+    <select id="getServer" parameterType="int"
+            resultType="com.lifeshs.pojo.org.employee.OrgEmploy">
+        select id,realName from t_org_user where orgId=${orgId} and
+        userType=1;
+    </select>
+
+    <!-- 查询最近一周、一月的交易数据（订单量、交易额） -->
+    <select id="getTradeData" parameterType="java.util.HashMap"
+            resultType="java.util.HashMap">
+        select COUNT(*) as tradeCount, SUM(charge) as charge FROM
+        t_order
+        <where>
+            <choose>
+                <when test="dateType == 'DAY'">
+                    DATE_SUB(CURDATE(), INTERVAL 1 DAY)&lt;=
+                    date(startDate)
+                </when>
+                <when test="dateType == 'WEEK'">
+                    DATE_SUB(CURDATE(), INTERVAL 1 WEEK)&lt;=
+                    date(startDate)
+                </when>
+                <when test="dateType == 'MONTH'">
+                    DATE_SUB(CURDATE(), INTERVAL 1 MONTH)&lt;=
+                    date(startDate)
+                </when>
+            </choose>
+            AND orgServeId = ${orgId}
+        </where>
+
+    </select>
+    <!-- 查询个人会员信息(今日、昨日、本月新增以及共有会员数) -->
+    <select id="getMemberData" parameterType="java.util.HashMap"
+            resultType="java.util.HashMap">
+        select COUNT(DISTINCT(userId)) as memberCount FROM t_order
+        <where>
+            <choose>
+                <when test="dateType == 'DAY'">
+                    AND DATE_SUB(CURDATE(), INTERVAL 0 DAY)&lt;=
+                    date(startDate)
+                    AND DATE_SUB(CURDATE(), INTERVAL 0 DAY)&lt;=
+                    date(endDate)
+                </when>
+                <when test="dateType == 'YESTODAY'">
+                    AND DATE_SUB(CURDATE(), INTERVAL 1 DAY)&lt;=
+                    date(startDate)
+                    AND DATE_SUB(CURDATE(), INTERVAL 0 DAY)&gt;
+                    date(startDate)
+                    AND DATE_SUB(CURDATE(), INTERVAL 0 DAY)&lt;=
+                    date(endDate)
+                </when>
+                <when test="dateType == 'MONTH'">
+                    AND DATE_SUB(CURDATE(), INTERVAL 1 MONTH)&lt;=
+                    date(startDate)
+                    AND DATE_SUB(CURDATE(), INTERVAL 0 DAY)&lt;=
+                    date(endDate)
+                </when>
+                <otherwise>
+                    DATE_SUB(CURDATE(), INTERVAL 0 DAY)&lt;= date(endDate)
+                </otherwise>
+            </choose>
+            AND orgServeId = ${orgId}
+        </where>
+    </select>
+
+    <sql id="member_sql">
+        from
+        t_order INNER JOIN t_org_serve ON t_order.orgServeId=t_org_serve.id
+        LEFT JOIN t_org_group ON t_order.serveGroupId=t_org_group.id
+        LEFT JOIN t_serve ON t_serve.id=t_org_serve.serveId
+        LEFT JOIN t_user ON t_user.id = t_order.userId
+        LEFT JOIN t_user_record ur ON ur.userId = t_user.id
+        WHERE t_org_serve.orgId=#{orgId} AND t_order.orderType = 1
+        <if test="condition!=null">
+            and
+            <foreach collection="condition.keys" item="key" index="index"
+                     separator="and">
+                <choose>
+                    <when test="key=='curService'">
+                        t_serve.`name` = #{condition[${key}]}
+                    </when>
+                    <when test="key=='userName'">
+                        t_user.userName like #{condition[${key}]}
+                    </when>
+                    <when test="key=='curServiceId'">
+                        t_org_serve.id = #{condition[${key}]}
+                    </when>
+                    <when test="key=='userRealName'">
+                        t_user.realName like CONCAT('%', #{condition[${key}]},'%')
+                    </when>
+                    <otherwise>
+                        ${key} = #{condition[${key}]}
+                    </otherwise>
+                </choose>
+            </foreach>
+        </if>
+        GROUP BY t_order.userId,t_order.chargeMode,t_org_serve.id
+    </sql>
+    <!-- 获取该机构的用户列表信息 -->
+    <select id="findMemberList" parameterType="java.util.HashMap"
+            resultType="com.lifeshs.pojo.org.server.OrgMember">
+        select
+           t_order.id,t_user.userName,t_user.realName,t_user.mobile,t_org_group.`name`
+           groupName,t_serve.`name` curService,t_user.photo,ur.birthday,ur.gender AS `sex`,t_user.id AS `userId`,t_order.serveGroupId AS `groupId`,t_order.hasWarning,t_order.warningDate
+        <include refid="member_sql"></include>
+        order by t_order.id desc
+        limit ${page},${dPage};
+    </select>
+
+    <!-- 获取该机构的用户总数 -->
+    <select id="getMemberCount" parameterType="java.util.HashMap"
+            resultType="int">
+        select count(1) FROM (SELECT 1
+        <include refid="member_sql"></include>) a
+    </select>
+
+    <!-- 获取会员详细信息 -->
+    <select id="getMemberMessageDetail"
+            resultType="com.lifeshs.pojo.org.server.OrgMemberMessageDetailVO">
+        SELECT
+            u.id, ur.gender AS `sex`, u.realName, ur.birthday, u.photo, max(o.endDate) endDate, u.userName,
+            s.`name` AS currentServeName, o.timesRemaining, o.chargeMode, o.price,
+            g.`name` AS groupName, o.serveGroupId
+        FROM
+            t_user u
+        INNER JOIN t_order o ON o.userId = u.id AND o.orderType = 1
+            <!-- 过滤订单失效的用户 -->
+            AND o.`status` = 3
+        INNER JOIN t_org_group g ON g.id = o.serveGroupId
+        INNER JOIN t_org_serve os ON os.id = o.orgServeId
+        INNER JOIN t_serve s ON s.id = os.serveId
+        INNER JOIN t_user_record ur ON ur.userId = u.id
+        WHERE
+            o.serveGroupId = #{groupId}
+        AND u.id = #{userId}
+        <if test="chargeMode != null">
+            AND o.chargeMode = #{chargeMode}
+        </if>
+    </select>
+
+    <!-- 判断t_user是否属于该机构的会员（机构下的服务是否包含该会员的订单） -->
+    <select id="isThisMemberBelongToTheOrg" resultType="java.lang.Integer">
+        SELECT
+            COUNT(1)
+        FROM
+            t_order o
+        WHERE
+            o.userId = #{userId} AND o.status = 3
+        AND
+            o.orgUserId in (SELECT id FROM t_org_user WHERE orgId = #{orgId})
+    </select>
+
+    <select id="geTServers" resultType="com.lifeshs.entity.org.TServe">
+        SELECT id, serveType, classify, code, name, about, profitShare, image, createDate FROM t_serve
+    </select>
+
+    <select id="getTOrg" resultMap="OrgDTO">
+        SELECT * FROM t_org WHERE id = #{id}
+    </select>
+
+    <select id="getRecommendManage" resultMap="OrgDTO">
+        SELECT * FROM t_org o
+        WHERE o.isRecommend = 1 AND o.orgVerified = 1 AND o.`status` = 0
+        ORDER BY id DESC
+        <if test="limit != null">
+            LIMIT #{limit}
+        </if>
+    </select>
+    
+    <resultMap type="com.lifeshs.pojo.org.OrgDTO" id="OrgDTO">
+        <id property="id" column="id"/>
+        <association property="parentOrg" column="parent" javaType="com.lifeshs.pojo.org.OrgDTO" select="selectOrg" />
+        <collection property="orgServes" ofType="com.lifeshs.pojo.org.server.OrgServeDTO" column="id" select="selectOrgServe" />
+    </resultMap>
+    
+    <select id="selectOrgServe" resultMap="OrgServeDTO">
+        SELECT * FROM t_org_serve INNER JOIN t_serve ON t_serve.id = t_org_serve.serveId WHERE orgId = #{id} ORDER BY t_serve.`code`
+    </select>
+    
+    <select id="selectOrg" resultType="com.lifeshs.pojo.org.OrgDTO">
+        SELECT * FROM t_org WHERE id = #{id}
+    </select>
+    
+    <resultMap type="com.lifeshs.pojo.org.server.OrgServeDTO" id="OrgServeDTO">
+        <id property="id" column="id"/>
+        <association property="serve" column="serveId" javaType="com.lifeshs.pojo.serve.ServeTypeSecondDTO" select="selectServe" />
+        <collection property="validOrders" column="id" ofType="com.lifeshs.pojo.order.OrderDTO" select="selectValidOrder" />
+        <collection property="groups" column="id" ofType="com.lifeshs.pojo.org.group.GroupDTO" select="selectGroupByServeId" />
+    </resultMap>
+    
+    <select id="selectServe" resultType="com.lifeshs.pojo.serve.ServeTypeSecondDTO">
+        SELECT t2.id, t2.code, t2.name,t1.id as firstId,t1.code as firstCode,t1.name as firstName FROM t_data_serve_type t1,t_data_serve_type2 t2 WHERE t1.id=t2.serveId and t2.id = #{id}
+    </select>
+    
+    <select id="selectValidOrder" resultMap="OrderDTO">
+        SELECT id, chargeMode, charge, userId, orderNumber, `status`, serveGroupId FROM t_order WHERE orgServeId = #{id} AND `status` IN (3, 4) AND orderType = 1
+    </select>
+    
+    <resultMap type="com.lifeshs.pojo.order.OrderDTO" id="OrderDTO">
+        <id property="id" column="id" />
+        <association property="group" column="serveGroupId" javaType="com.lifeshs.pojo.org.group.GroupDTO" select="selectGroup" />
+    </resultMap>
+    
+    <select id="selectGroup" resultType="com.lifeshs.pojo.org.group.GroupDTO">
+        SELECT * FROM t_org_group WHERE id = #{id}
+    </select>
+    
+    <resultMap type="com.lifeshs.pojo.org.group.GroupDTO" id="GroupDTO">
+        <id column="id" property="id"/>
+        <collection property="orgUsers" column="id" ofType="com.lifeshs.pojo.org.OrgUserDTO" select="selectOrgUserByGroupId" />
+    </resultMap>
+    
+    <select id="selectOrgUserByGroupId" resultMap="OrgUserDTO">
+        SELECT u.* FROM t_org_user u INNER JOIN t_org_group_orguser gu ON gu.orgUserId = u.id WHERE gu.groupId = #{id}
+    </select>
+    
+    <select id="selectGroupByServeId" resultMap="GroupDTO">
+        SELECT * FROM t_org_group WHERE orgServeId = #{id}
+    </select>
+
+    <select id="getOrgServeById" resultMap="OrgServeDTO">
+        SELECT * FROM t_org_serve WHERE id = #{id}
+    </select>
+
+    <select id="getCountOfQueryOrgListByValueName" resultType="java.lang.Integer">
+        SELECT COUNT(1) FROM (SELECT o.id
+        <include refid="s1"></include>
+        ) AS cc;
+    </select>
+    <select id="queryOrgListByValueName" resultType="java.util.HashMap">
+        SELECT
+        o.id AS `orgId`,
+        o.orgName,
+        o.logo,
+        o.about,
+        o.province,
+        o.city,
+        o.district,
+        o.street,
+        o.longitude,
+        o.latitude
+        <include refid="s1"></include>
+        ORDER BY
+        orgId DESC
+        LIMIT #{startIndex}, #{pageSize}
+    </select>
+    <sql id="s1">
+        FROM t_org o
+        INNER JOIN t_org_serve os ON os.orgId = o.id
+        INNER JOIN t_serve s ON s.id = os.serveId
+        LEFT JOIN t_org_user ou ON ou.orgId = o.id
+        WHERE
+        o.type != 0
+        AND o.orgVerified = 1
+        AND (o.orgName LIKE CONCAT('%', #{value}, '%') OR FIND_IN_SET(#{value}, os.classify))
+            AND ou.userType IN (1, 2)
+        <!-- 添加地区筛选 -->
+        <if test="areaCodeRegex != null">
+            AND CONCAT(o.province, o.city, o.district) REGEXP #{areaCodeRegex}
+        </if>
+        GROUP BY o.id
+            HAVING SUM(ou.id) &gt; 0
+    </sql>
+    
+    <select id="getCountOfOrgListByClassifyOrServeCode" resultType="java.lang.Integer">
+        SELECT COUNT(1) FROM(
+        SELECT o.id
+        <include refid="s2" />
+        ) AS cc;
+    </select>
+    <select id="orgListByClassifyOrServeCode" resultType="java.util.HashMap">
+        SELECT
+        o.id AS `orgId`,
+        o.orgName,
+        o.logo,
+        o.about,
+        o.province,
+        o.city,
+        o.district,
+        o.street,
+        o.longitude,
+        o.latitude,
+        GROUP_CONCAT(DISTINCT s.`name`) AS tags
+        <include refid="s2" />
+        ORDER BY
+        orgId DESC
+        LIMIT #{startIndex}, #{pageSize}
+    </select>
+    <sql id="s2">
+        FROM
+            t_org o
+        INNER JOIN t_org_serve os ON os.orgId = o.id
+        INNER JOIN t_serve s ON s.id = os.serveId
+        <!-- 添加一个ou.status = 0 避免员工离职后再次出现 -->
+        INNER JOIN t_org_user ou ON ou.orgId = o.id AND ou.status = 0
+        <!-- 避免服务下没有群组与服务师 -->
+        INNER JOIN t_org_group g ON g.orgServeId = os.id
+        INNER JOIN t_org_group_orguser gu ON gu.groupId = g.id
+        WHERE
+            o.type != 0
+            AND o.orgVerified = 1
+            AND o.`status` = 0
+            AND ou.userType IN (1, 2)
+        <if test="code != null">
+            AND s.`code` = #{code}
+        </if>
+        <if test="classify != null">
+            AND FIND_IN_SET(#{classify}, os.classify)
+        </if>
+        <!-- 添加地区筛选条件 -->
+        <if test="areaCodeRegex != null">
+            AND CONCAT(o.province, o.city, o.district) REGEXP #{areaCodeRegex}
+        </if>
+        <if test="value != null">
+            AND (o.orgName LIKE CONCAT('%', #{value}, '%'))
+        </if>
+        GROUP BY o.id
+        HAVING
+            <!-- 避免服务下没有群组与服务师 -->
+            (SUM(ou.id) &gt; 0) AND (SUM(gu.id) &gt; 0)
+    </sql>
+
+    <select id="getCountOfOrgListPageSplit" resultType="java.lang.Integer">
+        SELECT
+        COUNT(1)
+        <include refid="orgListPageSplitNormalQueryLanguage"></include>
+    </select>
+
+    <select id="getOrgListByPageSplit" resultType="java.util.HashMap">
+        SELECT
+        o.id AS `orgId`,
+        o.orgName,
+        o.logo,
+        o.about,
+        o.province,
+        o.city,
+        o.district,
+        o.street,
+        o.longitude,
+        o.latitude
+        <include refid="orgListPageSplitNormalQueryLanguage"></include>
+        <if test="code == null and classify == null">
+            GROUP BY o.id
+        </if>
+        ORDER BY
+        orgId DESC
+        LIMIT #{startIndex}, #{pageSize}
+    </select>
+
+    <sql id="orgListPageSplitNormalQueryLanguage">
+        FROM
+        t_org o
+        INNER JOIN t_org_serve os ON os.orgId = o.id
+        LEFT JOIN t_serve s ON s.id = os.serveId
+        WHERE
+        o.type = 1
+        <if test="orgName != null">
+            AND (o.orgName LIKE CONCAT('%', #{orgName}, '%') OR FIND_IN_SET(#{orgName}, os.classify))
+        </if>
+        <if test="code != null">
+            AND s.`code` = #{code}
+        </if>
+        <if test="classify != null">
+            AND FIND_IN_SET(#{classify}, os.classify)
+        </if>
+    </sql>
+
+    <select id="selectOrgServes" resultType="com.lifeshs.pojo.health.OrgServeVO">
+        SELECT
+            os.id AS `orgServeId`,
+            s.id AS `serveId`,
+            s.`name`,
+            s.`code`,
+            s.about,
+            s.image
+        FROM
+            t_org_serve os
+        INNER JOIN t_serve s ON os.serveId = s.id
+        <!-- 避免服务没有开通群组 -->
+        INNER JOIN t_org_group og ON og.orgServeId = os.id
+        <!-- 避免群组中没有服务师 -->
+        INNER JOIN t_org_group_orguser ogu ON ogu.groupId = og.id
+        WHERE
+            os.orgId = #{orgId}
+        <!-- 避免群组中没有服务师 -->
+        HAVING SUM(ogu.id) &gt; 0
+    </select>
+
+    <select id="selectServeDetailByOrgServeId" resultType="java.util.HashMap">
+        SELECT
+            os.id,
+            os.orgId,
+            os.serveId,
+            s.`name`,
+            s.`code`,
+            s.about,
+            s.image,
+            s.serveType,
+            os.classify,
+            os.hasFree,
+            os.hasTime,
+            os.timePrice,
+            os.hasMonth,
+            os.monthPrice,
+            os.hasYear,
+            os.yearPrice,
+            group_concat(g.id) groupIds,
+            r.orgName,
+            r.logo,
+            r.about orgAbout,
+            os.about AS orgServeAbout
+        FROM
+            t_org_serve os
+        INNER JOIN t_serve s ON os.serveId = s.id
+        LEFT JOIN t_org_group g ON os.id = g.orgServeId
+        LEFT JOIN t_org r ON os.orgId = r.id
+        WHERE
+            os.id = #{orgServeId}
+    </select>
+    
+    <select id="selectServeDetailByServeGroupId" resultType="com.lifeshs.pojo.org.server.ServeDetailDTO">
+        SELECT
+            os.id AS `orgServeId`,
+            os.serveId,
+            s.`name`,
+            s.`code`,
+            s.about,
+            s.image,
+            s.serveType,
+            os.classify,
+            os.hasFree,
+            os.hasTime,
+            os.timePrice,
+            os.hasMonth,
+            os.monthPrice,
+            os.hasYear,
+            os.yearPrice,
+            os.about AS orgServeAbout,
+            og.name AS serveGroupName,
+            og.description
+        FROM
+            t_org_serve os
+        INNER JOIN t_serve s ON os.serveId = s.id
+        LEFT JOIN t_org_group og ON os.id = og.orgServeId
+        WHERE
+            og.id = #{serveGroupId}
+    </select>
+
+    <!-- 通过服务ID查询该服务下的服务师信息 -->
+    <select id="selectServeUserByServeId" resultType="java.util.HashMap">
+        SELECT
+            ou.id AS userId,
+            ou.realName,
+            ou.photo,
+            ou.about,
+            ou.detail
+        FROM
+            t_org_serve os
+        INNER JOIN t_org_group og ON og.orgServeId = os.id
+        INNER JOIN t_org_group_orguser ogo ON ogo.groupId = og.id
+        INNER JOIN t_org_user ou ON ogo.orgUserId = ou.id
+        WHERE
+            os.id = #{orgServeId}
+        AND ou.`status` = 0
+        AND ou.userType IN (1, 2)
+        ORDER BY ou.id;
+    </select>
+
+    <sql id="healthConsult">
+        SELECT
+            t_org.id orgId, t_org.orgName, t_org.street, t_org.logo, group_concat(t_serve.name) serviceList,
+            group_concat(t_org_serve.classify) classify, t_org.about, t_org.province AS provinceCode, t_org.city AS cityCode,
+            t_org.district AS districtCode, COUNT(t_order.id) AS `count`
+        FROM t_org
+            INNER JOIN t_org_serve ON t_org.id=t_org_serve.orgId
+            INNER JOIN t_serve ON t_org_serve.serveId=t_serve.id
+            <!-- 避免服务没有群组 -->
+            INNER JOIN t_org_group ON t_org_group.orgServeId = t_org_serve.id
+            LEFT JOIN t_org_user ou ON ou.orgId = t_org.id AND ou.userType IN (1, 2)
+            LEFT JOIN t_order ON t_order.orgServeId = t_org_serve.id AND t_order.status IN (3, 4) AND t_order.orderType = 1
+        WHERE
+            t_org.type in (1,2) AND t_org.orgVerified = 1
+        <if test="params.filterName != null">
+            AND t_org.orgName like #{params.filterName}
+            OR t_org_serve.classify like #{params.filterName}
+        </if>
+        <if test="params.pcCode != null">
+            AND CONCAT(t_org.province, t_org.city) = #{params.pcCode}
+        </if>
+        <if test="params.pCode != null">
+            AND t_org.province = #{params.pCode}
+        </if>
+        <if test="params.orgType != null">
+            AND t_org.orgType LIKE CONCAT('%', #{params.orgType},'%')
+        </if>
+        GROUP BY t_org.id
+        HAVING SUM(ou.id) &gt; 0
+        <if test="params.condition!=null">
+            AND
+            <foreach collection="params.condition.keys" item="status" index="index" separator="and">
+                <choose>
+                    <when test="status=='serviceList'">
+                        serviceList LIKE CONCAT('%', #{params.condition[${status}]}, '%')
+                    </when>
+                    <when test="status=='classify'">
+                        classify LIKE CONCAT('%', #{params.condition[${status}]}, '%')
+                    </when>
+                </choose>
+            </foreach>
+        </if>
+    </sql>
+    <!--  查询或筛选服务列表总数  -->
+    <select id="getHealthConsultListCount" parameterType="java.util.HashMap" resultType="int">
+        select COUNT(1) from ( <include refid="healthConsult" /> ) t;
+    </select>
+    <!--  查询或筛选服务列表  -->
+    <select id="getHealthConsultList" parameterType="java.util.HashMap" resultType="com.lifeshs.pojo.health.ServiceItem">
+        <include refid="healthConsult"></include>
+        limit ${page},${dPage};
+    </select>
+
+    <!-- 获取服务机构的分类标签 -->
+    <select id="getServeOrgClassify" resultType="java.lang.String">
+        SELECT os.classify FROM t_org o
+        INNER JOIN t_org_serve os ON os.orgId = o.id
+        WHERE o.id = #{orgId}
+    </select>
+
+    <select id="getOrgUserClassifyByUserId" resultType="java.lang.String">
+        SELECT
+            os.classify
+        FROM
+            t_org_serve os
+        INNER JOIN t_org_group og ON og.orgServeId = os.id
+        INNER JOIN t_org_group_orguser ogo ON ogo.groupId = og.id
+        WHERE
+            ogo.orgUserId = #{orgUserId};
+    </select>
+
+    <select id="getOrgUserServeList" resultType="com.lifeshs.pojo.health.OrgServeVO">
+        SELECT
+            os.id AS `orgServeId`,
+            s.id AS `serveId`,
+            s.`name`,
+            s.`code`,
+            s.about,
+            s.image
+        FROM
+            t_org_serve os
+        INNER JOIN t_serve s ON os.serveId = s.id
+        INNER JOIN t_org_group og ON og.orgServeId = os.id
+        INNER JOIN t_org_group_orguser ogo ON ogo.groupId = og.id
+        WHERE
+            ogo.orgUserId = #{orgUserId}
+    </select>
+
+    <select id="getServeOrgUserList" resultType="java.util.HashMap">
+        SELECT
+            ou.id AS userId,
+            ou.photo,
+            ou.realName,
+            ou.userCode AS `huanxinUserName`,
+            ou.about,
+            ou.detail
+        FROM
+            t_org_group og
+        INNER JOIN t_org_group_orguser ogo ON og.id = ogo.groupId
+        INNER JOIN t_org_user ou ON ou.id = ogo.orgUserId
+        WHERE
+            og.id = #{groupId}
+        AND ou.`status` = 0
+        AND ou.userType IN (1, 2)
+    </select>
+
+    <select id="getUsersByHuanxinAccount" resultType="java.util.HashMap">
+        SELECT
+        u.id AS `userId`,
+        u.userCode AS `huanxinUserName`,
+        u.realName AS `name`,
+        u.photo
+        FROM
+        t_user u
+        WHERE
+        u.userCode IN
+        <foreach collection="huanxinUserNames" open="(" close=")" separator="," index="index">
+            ${huanxinUserNames[index]}
+        </foreach>
+    </select>
+
+    <!-- 获取该机构定制服务下所有群组内的服务师 -->
+    <select id="getServersInOrgServeGroupId" resultType="java.util.HashMap">
+        SELECT
+        u.id,u.realName,u.photo,u.about,r.orgName
+        from t_org_group_orguser g INNER JOIN t_org_user u ON
+        g.groupId IN
+        <foreach collection="group" open="(" close=")" separator="," index="index">
+            ${group[index]}
+        </foreach>
+        and g.orgUserId=u.id
+        LEFT JOIN t_org r ON u.orgId=r.id
+        AND u.`status` = 0
+        ORDER BY u.id;
+    </select>
+
+    <!--移动群组-->
+    <update id="moveGroup" parameterType="java.util.HashMap">
+        UPDATE t_order o set o.serveGroupId=#{newGroup} WHERE
+        <if test="userId!=null">
+            o.userId=#{userId} AND
+        </if>
+        serveGroupId=#{oldGroup}
+        AND o.orderType = 1
+        <if test="serveId != null">
+            AND o.orgServeId=(SELECT s.id from t_org_serve s where s.orgId=#{orgId} AND serveId=#{serveId});
+        </if>
+    </update>
+    
+    <select id="getGroupBaseInfo" resultType="com.lifeshs.pojo.org.server.OrgServerGroupBase">
+    SELECT
+        og.id, og.`name`, count(DISTINCT(o.userId)) AS memberCount, og.createDate
+    FROM
+        t_org_group og
+    LEFT JOIN t_order o ON o.serveGroupId = og.id AND o.orderType = 1
+    WHERE
+        og.id = #{groupId} AND o.`status` = 3
+    </select>
+    
+    <select id="getRecommendServes" resultType="com.lifeshs.pojo.org.server.RecommendServe">
+        SELECT
+            t_org_serve.id AS orgServeId,
+            t_serve.`name` AS serveName,
+            t_org.orgName,
+            t_order.chargeMode,
+            t_org_serve.timePrice,
+            t_org_serve.monthPrice,
+            t_org_serve.yearPrice,
+            COUNT(t_order.id) AS countOfOrder
+        FROM
+            t_org
+        INNER JOIN t_org_serve ON t_org_serve.orgId = t_org.id
+        INNER JOIN t_serve ON t_serve.id = t_org_serve.serveId
+        INNER JOIN t_order ON t_order.orgServeId = t_org_serve.id
+        WHERE
+            t_org_serve.id IN (
+                SELECT
+                    sid
+                FROM
+                    (
+                        SELECT
+                            o.orgServeId AS sid,
+                            COUNT(1) AS c
+                        FROM
+                            t_order o
+                        WHERE
+                            o.`status` IN (3, 4)
+                        GROUP BY
+                            o.orgServeId
+                        ORDER BY
+                            c DESC
+                        <if test="count != null">LIMIT #{count}</if>
+                    ) AS s
+            )
+        AND t_order.`status` IN (3, 4)
+        AND t_order.orderType = 1
+        GROUP BY
+            t_order.orgServeId
+        ORDER BY
+            countOfOrder DESC;
+    </select>
+    
+    <select id="getOrgServeConsumePersonTime" resultType="java.lang.Integer">
+        SELECT COUNT(DISTINCT userId) FROM t_order WHERE orgServeId = #{orgServeId} AND `status` IN (3, 4) AND orderType = 1
+    </select>
+    
+    <select id="getOrgUser" resultMap="OrgUserDTO">
+        SELECT
+            id, userCode, userName, password, token, realName, mobile, mobileVerified, email, emailVerified,
+            sex, birthday, tel, address, status, userType, orgId, detail, idCard, idCardPicOne, idCardPicTwo, expertise, photo, about
+        FROM t_org_user WHERE id = #{id}
+    </select>
+    
+    <resultMap type="com.lifeshs.pojo.org.OrgUserDTO" id="OrgUserDTO">
+        <id column="id" property="id"/>
+        <association property="org" column="orgId" javaType="com.lifeshs.pojo.org.OrgDTO" select="getTOrg" />
+        <collection property="groups" column="id" ofType="com.lifeshs.pojo.org.group.GroupDTO" select="selectGroupByUserId" />
+    </resultMap>
+    
+    <select id="selectGroupByUserId" resultType="com.lifeshs.pojo.org.group.GroupDTO">
+        SELECT g.* FROM t_org_group g INNER JOIN t_org_group_orguser gu ON gu.groupId = g.id WHERE gu.orgUserId = #{id}
+    </select>
+    
+    <update id="updateOrgUser" parameterType="com.lifeshs.pojo.org.OrgUserDTO">
+        UPDATE t_org_user SET
+        <trim suffixOverrides=",">
+            <if test="token != null">token = #{token},</if>
+            <if test="realName != null">realName = #{realName},</if>
+            <if test="password != null">password = #{password},</if>
+            <if test="mobile != null">mobile = #{mobile},</if>
+            <if test="mobileVerified != null">mobileVerified = #{mobileVerified},</if>
+            <if test="email != null">email = #{email},</if>
+            <if test="emailVerified != null">emailVerified = #{emailVerified},</if>
+            <if test="sex != null">sex = #{sex},</if>
+            <if test="birthday != null">birthday = #{birthday},</if>
+            <if test="tel != null">tel = #{tel},</if>
+            <if test="address != null">address = #{address},</if>
+            <if test="status != null">status = #{status},</if>
+            <if test="userType != null">userType = #{userType},</if>
+            <if test="idCard != null">idCard = #{idCard},</if>
+            <if test="idCardPicOne != null">idCardPicOne = #{idCardPicOne},</if>
+            <if test="idCardPicTwo != null">idCardPicTwo = #{idCardPicTwo},</if>
+        </trim>
+        WHERE id = #{id} LIMIT 1
+    </update>
+</mapper>

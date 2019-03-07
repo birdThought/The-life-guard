@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lifeshs.dao1.order.famousDoctor.FamousDoctorOrderDao">
+    <select id="getOrder" resultType="com.lifeshs.po.order.FamousDoctorOrderPO">
+        SELECT <include refid="FAMOUS_DOCTOR_ORDER_ALL_COLUMN" />
+        FROM t_order_famous_doctor
+        WHERE id = #{id}
+    </select>
+    
+    <select id="findOrderByOrderNumber" resultType="com.lifeshs.po.order.FamousDoctorOrderPO">
+        SELECT <include refid="FAMOUS_DOCTOR_ORDER_ALL_COLUMN" />
+        FROM t_order_famous_doctor
+        WHERE orderNumber = #{orderNumber}
+    </select>
+    
+    <select id="countOrderWithCondition" resultType="java.lang.Integer">
+        SELECT COUNT(1) FROM t_order_famous_doctor
+        <where>
+            <if test="userId != null">userId = #{userId},</if>
+            <if test="famousDoctorId != null">AND famousDoctorId = #{famousDoctorId},</if>
+            <if test="status != null">AND status = #{status}</if>
+        </where>
+    </select>
+    
+    <select id="findOrderListWithCondition" resultType="com.lifeshs.po.order.FamousDoctorOrderPO">
+        SELECT <include refid="FAMOUS_DOCTOR_ORDER_ALL_COLUMN" />
+        FROM t_order_famous_doctor
+        <where>
+            <if test="userId != null">userId = #{userId},</if>
+            <if test="famousDoctorId != null">AND famousDoctorId = #{famousDoctorId},</if>
+            <if test="status != null">AND status = #{status}</if>
+        </where>
+        ORDER BY id, userId
+        LIMIT #{startRow}, #{pageSize}
+    </select>
+    
+    <sql id="FAMOUS_DOCTOR_ORDER_ALL_COLUMN">
+        id, orderNumber, userId, fDoctorId, subject, body, price, `status`, deleted, createDate, modifyDate
+    </sql>
+    
+    <insert id="addOrder" parameterType="com.lifeshs.po.order.FamousDoctorOrderPO">
+        <selectKey order="AFTER" keyProperty="id" resultType="java.lang.Integer">
+            SELECT LAST_INSERT_ID() AS id
+        </selectKey>
+        INSERT INTO t_order_famous_doctor(orderNumber, userId, fDoctorId, subject, body, price, `status`, deleted, createDate)
+        VALUES(#{orderNumber}, #{userId}, #{fDoctorId}, #{subject}, #{body}, #{price}, #{status}, FALSE, NOW())
+    </insert>
+    
+    <update id="updateOrder" parameterType="com.lifeshs.po.order.FamousDoctorOrderPO">
+        UPDATE t_order_famous_doctor
+        SET modifyDate = NOW()
+            <if test="status != null">, `status` = #{status}</if>
+            <if test="deleted != null">, deleted = #{deleted}</if>
+        WHERE id = #{id}
+    </update>
+</mapper>

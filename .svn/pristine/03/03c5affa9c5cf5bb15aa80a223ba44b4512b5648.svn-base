@@ -1,0 +1,608 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lifeshs.dao.member.IMemberDao">
+
+    <!-- 查询 By Map -->
+    <select id="selectMemberByMap" parameterType="java.util.HashMap"
+        resultType="java.util.HashMap">
+        select * from t_sys_device
+    </select>
+
+    <select id="selectLikeUser" parameterType="java.lang.String"
+        resultType="com.lifeshs.entity.member.TUser">
+        SELECT * FROM t_user
+        WHERE userName LIKE #{userName}
+    </select>
+
+    <select id="selectSmsRecordListByPage" parameterType="java.util.Map"
+        resultType="java.util.Map">
+        SELECT
+            t_sms.id, t_sms.sendType, t_sms.sendId, t_sms.content,
+            t_sms.receiveMobile, t_sms.status, t_sms.createDate,
+            t_user.userName
+        FROM t_sms, t_user
+        WHERE
+            t_sms.sendId = t_user.id
+            AND sendId = ${sendId}
+        ORDER BY createDate
+        LIMIT ${start}, ${pageSize}
+    </select>
+
+    <select id="listUserCode" resultType="java.lang.String">
+        SELECT userCode FROM t_user WHERE id IN
+        <trim prefix="(" suffix=")">
+            <foreach collection="userIds" item="item" index="index"
+                separator=",">#{item}</foreach>
+        </trim>
+    </select>
+    
+    <select id="getUserRecord" resultMap="UserRecordDTO">
+        SELECT
+            <include refid="RECORD_ALL_COLUMN" />
+        FROM t_user_record record
+        WHERE record.userId = #{userId}
+    </select>
+    
+    <resultMap type="com.lifeshs.pojo.member.UserRecordDTO" id="UserRecordDTO">
+        <id column="id" property="id"/>
+        <result column="dietQuestionnaireOptionId" property="dietQuestionnaireOptionId"/>
+        <result column="sportQuestionnaireOptionId" property="sportQuestionnaireOptionId"/>
+        <result column="mentalHealthQuestionnaireOptionId" property="mentalHealthQuestionnaireOptionId"/>
+        <association property="dietQuestionnaireOption" column="dietQuestionnaireOptionId" javaType="com.lifeshs.pojo.paper.PaperOptionDTO" select="selectPapperOption"/>
+        <association property="sportQuestionnaireOption" column="sportQuestionnaireOptionId" javaType="com.lifeshs.pojo.paper.PaperOptionDTO" select="selectPapperOption"/>
+        <association property="mentalHealthQuestionnaireOption" column="mentalHealthQuestionnaireOptionId" javaType="com.lifeshs.pojo.paper.PaperOptionDTO" select="selectPapperOption"/>
+    </resultMap>
+    
+    <select id="selectPapperOption" resultType="com.lifeshs.pojo.paper.PaperOptionDTO">
+        SELECT id, name, score FROM t_service_paper_option WHERE id = #{id}
+    </select>
+
+    <update id="updateUserRecord" parameterType="com.lifeshs.pojo.member.UserRecordDTO">
+        UPDATE t_user_record SET
+        <trim>
+            <if test="height != null">height = #{height},</if>
+            <if test="weight != null">weight = #{weight},</if>
+            <if test="gender != null">gender = #{gender},</if>
+            <if test="birthday != null">birthday = #{birthday},</if>
+            <if test="waist != null">waist = #{waist},</if>
+            <if test="bust != null">bust = #{bust},</if>
+            <if test="hip != null">hip = #{hip},</if>
+            <if test="heartRateStatus != null">heartRateStatus = #{heartRateStatus},</if>
+            <if test="bloodPressureStatus != null">bloodPressureStatus = #{bloodPressureStatus},</if>
+            <if test="saturationStatus != null">saturationStatus = #{saturationStatus},</if>
+            <if test="vitalCapacityScore != null">vitalCapacityScore = #{vitalCapacityScore},</if>
+            <if test="WHRStatus != null">WHRStatus = #{WHRStatus},</if>
+            <if test="BMIRankStatus != null">BMIRankStatus = #{BMIRankStatus},</if>
+            <if test="baseMetabolismStatus != null">baseMetabolismStatus = #{baseMetabolismStatus},</if>
+            <if test="corporeityResult != null">corporeityResult = #{corporeityResult},</if>
+            <if test="corporeityScore != null">corporeityScore = #{corporeityScore},</if>
+            <if test="subHealthSymptomScore != null">subHealthSymptomScore = #{subHealthSymptomScore},</if>
+            <if test="subHealthSymptomHealthPoint != null">subHealthSymptomHealthPoint = #{subHealthSymptomHealthPoint},</if>
+            <if test="dietQuestionnaireOptionId != null">dietQuestionnaireOptionId = #{dietQuestionnaireOptionId},</if>
+            <if test="sportQuestionnaireOptionId != null">sportQuestionnaireOptionId = #{sportQuestionnaireOptionId},</if>
+            <if test="mentalHealthQuestionnaireOptionId != null">mentalHealthQuestionnaireOptionId = #{mentalHealthQuestionnaireOptionId},</if>
+            <if test="sleepHour != null">sleepHour = #{sleepHour},</if>
+            <if test="heartRate != null">heartRate = #{heartRate},</if>
+            <if test="diastolic != null">diastolic = #{diastolic},</if>
+            <if test="systolic != null">systolic = #{systolic},</if>
+            <if test="saturation != null">saturation = #{saturation},</if>
+            <if test="vitalCapacity != null">vitalCapacity = #{vitalCapacity},</if>
+            <if test="WHR != null">WHR = #{WHR},</if>
+            <if test="BMI != null">BMI = #{BMI},</if>
+            <if test="baseMetabolism != null">baseMetabolism = #{baseMetabolism},</if>
+            <if test="strokeRiskScore != null">strokeRiskScore = #{strokeRiskScore},</if>
+            modifyDate = NOW()
+        </trim>
+        WHERE userId = #{userId}
+        LIMIT 1
+    </update>
+    
+    <select id="getUser" resultMap="userDtoV2">
+        SELECT
+            u.id AS uId, userCode, userName, password, photo, token, mobile, mobileVerified, email, emailVerified, realName, province, city, county, street,
+            healthProduct, healthWarning, hasWarning, groupKey, u.modifyDate, u.status AS uStatus, u.businessId AS uBusinessId, u.joinDate AS uJoinDate,
+            r.id AS rId, height, weight, gender, r.birthday, waist, bust, hip, heartRateStatus, bloodPressureStatus, saturationStatus, vitalCapacityScore, WHRStatus,
+            BMIRankStatus, baseMetabolismStatus, corporeityResult, subHealthSymptomScore, subHealthSymptomHealthPoint,
+            dietQuestionnaireOptionId, sportQuestionnaireOptionId, mentalHealthQuestionnaireOptionId,
+            sleepHour, r.modifyDate AS rModifyDate, heartRate, diastolic, systolic, saturation, vitalCapacity, WHR, BMI, baseMetabolism, strokeRiskScore,
+            dQ.id AS dQId, dQ.name AS dQName, dQ.score AS dQScore,
+            sQ.id AS sQId, sQ.name AS sQName, sQ.score AS sQScore,
+            mQ.id AS mQId, mQ.name AS mQName, mQ.score AS mQScore
+        FROM t_user u
+        LEFT JOIN t_user_record r ON r.userId = u.id
+        LEFT JOIN t_service_paper_option dQ ON dQ.id = r.dietQuestionnaireOptionId
+        LEFT JOIN t_service_paper_option sQ ON sQ.id = r.sportQuestionnaireOptionId
+        LEFT JOIN t_service_paper_option mQ ON mQ.id = r.mentalHealthQuestionnaireOptionId
+        WHERE u.id = #{id}
+    </select>
+    
+    <resultMap type="com.lifeshs.pojo.member.UserDTO" id="userDtoV2">
+        <id column="uId" property="id" />
+        <result column="userCode" property="userCode" />
+        <result column="userName" property="userName" />
+        <result column="password" property="password" />
+        <result column="photo" property="photo" />
+        <result column="token" property="token" />
+        <result column="mobile" property="mobile" />
+        <result column="mobileVerified" property="mobileVerified" />
+        <result column="email" property="email" />
+        <result column="emailVerified" property="emailVerified" />
+        <result column="realName" property="realName" />
+        <result column="province" property="province" />
+        <result column="city" property="city" />
+        <result column="county" property="county" />
+        <result column="street" property="street" />
+        <result column="healthProduct" property="healthProduct" />
+        <result column="healthWarning" property="healthWarning" />
+        <result column="hasWarning" property="hasWarning" />
+        <result column="groupKey" property="groupKey" />
+        <result column="modifyDate" property="modifyDate" />
+        <result column="uStatus" property="status" />
+        <result column="uBusinessId" property="businessId"/>
+        <result column="uJoinDate" property="joinDate"/>
+        <association property="recordDTO" notNullColumn="rId" javaType="com.lifeshs.pojo.member.UserRecordDTO">
+            <id column="rId" property="id"/>
+            <result column="uId" property="userId"/>
+            <result column="height" property="height"/>
+            <result column="weight" property="weight"/>
+            <result column="gender" property="gender"/>
+            <result column="birthday" property="birthday"/>
+            <result column="waist" property="waist"/>
+            <result column="bust" property="bust"/>
+            <result column="hip" property="hip"/>
+            <result column="heartRateStatus" property="heartRateStatus"/>
+            <result column="bloodPressureStatus" property="bloodPressureStatus"/>
+            <result column="saturationStatus" property="saturationStatus"/>
+            <result column="vitalCapacityScore" property="vitalCapacityScore"/>
+            <result column="WHRStatus" property="WHRStatus"/>
+            <result column="BMIRankStatus" property="BMIRankStatus"/>
+            <result column="baseMetabolismStatus" property="baseMetabolismStatus"/>
+            <result column="corporeityResult" property="corporeityResult"/>
+            <result column="subHealthSymptomScore" property="subHealthSymptomScore"/>
+            <result column="subHealthSymptomHealthPoint" property="subHealthSymptomHealthPoint"/>
+            <result column="dietQuestionnaireOptionId" property="dietQuestionnaireOptionId"/>
+            <result column="sportQuestionnaireOptionId" property="sportQuestionnaireOptionId"/>
+            <result column="mentalHealthQuestionnaireOptionId" property="mentalHealthQuestionnaireOptionId"/>
+            <result column="sleepHour" property="sleepHour"/>
+            <result column="rModifyDate" property="modifyDate"/>
+            <result column="heartRate" property="heartRate"/>
+            <result column="diastolic" property="diastolic"/>
+            <result column="systolic" property="systolic"/>
+            <result column="saturation" property="saturation"/>
+            <result column="vitalCapacity" property="vitalCapacity"/>
+            <result column="WHR" property="WHR"/>
+            <result column="BMI" property="BMI"/>
+            <result column="baseMetabolism" property="baseMetabolism"/>
+            <result column="strokeRiskScore" property="strokeRiskScore"/>
+            <association property="dietQuestionnaireOption" notNullColumn="dQId" javaType="com.lifeshs.pojo.paper.PaperOptionDTO">
+                <id column="dQId" property="id"/>
+                <result column="dQName" property="name"/>
+                <result column="dQScore" property="score"/>
+            </association>
+            <association property="sportQuestionnaireOption" notNullColumn="sQId" javaType="com.lifeshs.pojo.paper.PaperOptionDTO">
+                <id column="sQId" property="id"/>
+                <result column="sQName" property="name"/>
+                <result column="sQScore" property="score"/>
+            </association>
+            <association property="mentalHealthQuestionnaireOption" notNullColumn="mQId" javaType="com.lifeshs.pojo.paper.PaperOptionDTO">
+                <id column="mQId" property="id"/>
+                <result column="mQName" property="name"/>
+                <result column="mQScore" property="score"/>
+            </association>
+        </association>
+    </resultMap>
+
+    <resultMap type="com.lifeshs.pojo.member.UserDTO" id="userDtoV3">
+        <id column="uId" property="id" />
+        <result column="userCode" property="userCode" />
+        <result column="userName" property="userName" />
+        <result column="password" property="password" />
+        <result column="photo" property="photo" />
+        <result column="token" property="token" />
+        <result column="mobile" property="mobile" />
+        <result column="mobileVerified" property="mobileVerified" />
+        <result column="email" property="email" />
+        <result column="emailVerified" property="emailVerified" />
+        <result column="realName" property="realName" />
+        <result column="province" property="province" />
+        <result column="city" property="city" />
+        <result column="county" property="county" />
+        <result column="street" property="street" />
+        <result column="healthProduct" property="healthProduct" />
+        <result column="healthWarning" property="healthWarning" />
+        <result column="hasWarning" property="hasWarning" />
+        <result column="groupKey" property="groupKey" />
+        <result column="modifyDate" property="modifyDate" />
+        <result column="uStatus" property="status" />
+        <association property="recordDTO" notNullColumn="rId" javaType="com.lifeshs.pojo.member.UserRecordDTO">
+            <id column="rId" property="id"/>
+            <result column="uId" property="userId"/>
+            <result column="height" property="height"/>
+            <result column="weight" property="weight"/>
+            <result column="gender" property="gender"/>
+            <result column="birthday" property="birthday"/>
+            <result column="waist" property="waist"/>
+            <result column="bust" property="bust"/>
+            <result column="hip" property="hip"/>
+        </association>
+    </resultMap>
+    
+    <select id="getUserByUserName" resultMap="UserDTO" parameterType="java.lang.String">
+        SELECT <include refid="USER_ALL_COLUMN" />
+        FROM t_user user
+        WHERE user.userName = #{userName} AND `status` != 2
+    </select>
+    
+    <!-- 用户id -->
+    <select id="getUserByUserNo" resultMap="UserDTO" parameterType="java.lang.String">
+        SELECT <include refid="USER_ALL_COLUMN" />
+        FROM t_user user
+        WHERE user.userNo = #{userNo} 
+    </select>
+    
+    <!-- 用户 判断 t_admin_user 表   UserNo-->
+    <select id="getAdminUserUserNo" parameterType="String" resultType="com.lifeshs.po.admin.AdminUserDTO">
+       select id,userNo from t_admin_user where userNo=#{userNo}
+    </select>
+    
+    <!-- 用户 判断 t_org_user 表   UserNo-->
+    <select id="getOrgUserNo" parameterType="String" resultType="com.lifeshs.pojo.org.OrgUserDTO">
+       select id,userNo from t_org_user where userNo=#{userNo}
+    </select>
+    
+    <select id="getUserByMobile" resultMap="UserDTO" parameterType="java.lang.String">
+        SELECT <include refid="USER_ALL_COLUMN" />
+        FROM t_user user
+        WHERE user.mobile = #{mobile} AND user.mobileVerified = TRUE AND `status` != 2
+    </select>
+    
+    <resultMap type="com.lifeshs.pojo.member.UserDTO" id="UserDTO">
+        <id column="id" property="id"/>
+        <association property="recordDTO" column="id" select="getUserRecord" />
+    </resultMap>
+
+    <update id="updateUser">
+        UPDATE t_user SET
+            <if test="password != null">password = #{password},</if>
+            <if test="token != null">token = #{token},</if>
+            <if test="mobile != null">mobile = #{mobile},</if>
+            <if test="mobileVerified != null">mobileVerified = #{mobileVerified},</if>
+            <if test="email != null">email = #{email},</if>
+            <if test="emailVerified != null">emailVerified = #{emailVerified},</if>
+            <if test="province != null">province = #{province},</if>
+            <if test="city != null">city = #{city},</if>
+            <if test="county != null">county = #{county},</if>
+            <if test="street != null">street = #{street},</if>
+            <if test="hasWarning != null">hasWarning = #{hasWarning},</if>
+            <if test="groupKey != null">groupKey = #{groupKey},</if>
+            <if test="realName != null">realName = #{realName},</if>
+            <if test="photo != null">photo = #{photo},</if>
+            <if test="healthProduct != null" >healthProduct = #{healthProduct},</if>
+            <if test="healthWarning != null" >healthWarning = #{healthWarning},</if>
+            <if test="businessId != null">businessId = #{businessId},</if>
+            <if test="joinDate != null">joinDate = #{joinDate},</if>
+            modifyDate = NOW()
+        WHERE id = #{id}
+        LIMIT 1
+    </update>
+    
+    <insert id="addUser">
+        <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+        INSERT INTO t_user
+            <trim prefix="(" suffix=")" suffixOverrides=",">
+                createDate, userCode, userName, password, userNo, 
+                <if test="parentId != null">parentId,</if>
+                <if test="token != null">token,</if>
+                <if test="mobile != null">mobile,</if>
+                <if test="mobileVerified != null">mobileVerified,</if>
+                <if test="email != null">email,</if>
+                <if test="emailVerified != null">emailVerified,</if>
+                <if test="province != null">province,</if>
+                <if test="city != null">city,</if>
+                <if test="county != null">county,</if>
+                <if test="street != null">street,</if>
+                <if test="hasWarning != null">hasWarning,</if>
+                <if test="groupKey != null">groupKey,</if>
+                <if test="realName != null">realName,</if>
+                <if test="photo != null">photo,</if>
+                <if test="healthProduct != null">healthProduct,</if>
+                <if test="healthWarning != null">healthWarning,</if>
+                <if test="status != null">`status`,</if>
+            </trim>
+            <trim prefix="VALUES(" suffix=")" suffixOverrides=",">
+                NOW(), #{userCode}, #{userName}, #{password},
+                CONCAT('U',(SELECT Auto_increment FROM information_schema.tables WHERE table_schema in ('lifekeepers_v2','lifekeepers_test','lifekeepers_dev') and TABLE_NAME='t_user')),
+                <if test="parentId != null">#{parentId},</if>
+                <if test="token != null">#{token},</if>
+                <if test="mobile != null">#{mobile},</if>
+                <if test="mobileVerified != null">#{mobileVerified},</if>
+                <if test="email != null">#{email},</if>
+                <if test="emailVerified != null">#{emailVerified},</if>
+                <if test="province != null">#{province},</if>
+                <if test="city != null">#{city},</if>
+                <if test="county != null">#{county},</if>
+                <if test="street != null">#{street},</if>
+                <if test="hasWarning != null">#{hasWarning},</if>
+                <if test="groupKey != null">#{groupKey},</if>
+                <if test="realName != null">#{realName},</if>
+                <if test="photo != null">#{photo},</if>
+                <if test="healthProduct != null" >#{healthProduct},</if>
+                <if test="healthWarning != null" >#{healthWarning},</if>
+                <if test="status != null">#{status}</if>
+            </trim>
+    </insert>
+    
+    <insert id="addUserRecord">
+        <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+        INSERT INTO t_user_record
+            <trim prefix="(" suffix=")" suffixOverrides=",">
+                createDate,userId,
+                <if test="height != null">height,</if>
+                <if test="weight != null">weight,</if>
+                <if test="gender != null">gender,</if>
+                <if test="birthday != null">birthday,</if>
+                <if test="waist != null">waist,</if>
+                <if test="bust != null">bust,</if>
+                <if test="hip != null">hip,</if>
+                <if test="heartRateStatus != null">heartRateStatus,</if>
+                <if test="bloodPressureStatus != null">bloodPressureStatus,</if>
+                <if test="saturationStatus != null">saturationStatus,</if>
+                <if test="vitalCapacityScore != null">vitalCapacityScore,</if>
+                <if test="WHRStatus != null">WHRStatus,</if>
+                <if test="BMIRankStatus != null">BMIRankStatus,</if>
+                <if test="baseMetabolismStatus != null">baseMetabolismStatus,</if>
+                <if test="corporeityResult != null">corporeityResult,</if>
+                <if test="subHealthSymptomScore != null">subHealthSymptomScore,</if>
+                <if test="subHealthSymptomHealthPoint != null">subHealthSymptomHealthPoint,</if>
+                <if test="dietQuestionnaireOptionId != null">dietQuestionnaireOptionId,</if>
+                <if test="sportQuestionnaireOptionId != null">sportQuestionnaireOptionId,</if>
+                <if test="mentalHealthQuestionnaireOptionId != null">mentalHealthQuestionnaireOptionId,</if>
+                <if test="sleepHour != null">sleepHour,</if>
+                <if test="heartRate != null">heartRate,</if>
+                <if test="diastolic != null">diastolic,</if>
+                <if test="systolic != null">systolic,</if>
+                <if test="saturation != null">saturation,</if>
+                <if test="vitalCapacity != null">vitalCapacity,</if>
+                <if test="WHR != null">WHR,</if>
+                <if test="BMI != null">BMI,</if>
+                <if test="baseMetabolism != null">baseMetabolism,</if>
+                <if test="strokeRiskScore != null">strokeRiskScore,</if>
+            </trim>
+            <trim prefix="VALUES(" suffix=")" suffixOverrides=",">
+                NOW(),#{userId},
+                <if test="height != null">#{height},</if>
+                <if test="weight != null">#{weight},</if>
+                <if test="gender != null">#{gender},</if>
+                <if test="birthday != null">#{birthday},</if>
+                <if test="waist != null">#{waist},</if>
+                <if test="bust != null">#{bust},</if>
+                <if test="hip != null">#{hip},</if>
+                <if test="heartRateStatus != null">#{heartRateStatus},</if>
+                <if test="bloodPressureStatus != null">#{bloodPressureStatus},</if>
+                <if test="saturationStatus != null">#{saturationStatus},</if>
+                <if test="vitalCapacityScore != null">#{vitalCapacityScore},</if>
+                <if test="WHRStatus != null">#{WHRStatus},</if>
+                <if test="BMIRankStatus != null">#{BMIRankStatus},</if>
+                <if test="baseMetabolismStatus != null">#{baseMetabolismStatus},</if>
+                <if test="corporeityResult != null">#{corporeityResult},</if>
+                <if test="subHealthSymptomScore != null">#{subHealthSymptomScore},</if>
+                <if test="subHealthSymptomHealthPoint != null">#{subHealthSymptomHealthPoint},</if>
+                <if test="dietQuestionnaireOptionId != null">#{dietQuestionnaireOptionId},</if>
+                <if test="sportQuestionnaireOptionId != null">#{sportQuestionnaireOptionId},</if>
+                <if test="mentalHealthQuestionnaireOptionId != null">#{mentalHealthQuestionnaireOptionId},</if>
+                <if test="sleepHour != null">#{sleepHour},</if>
+                <if test="heartRate != null">#{heartRate},</if>
+                <if test="diastolic != null">#{diastolic},</if>
+                <if test="systolic != null">#{systolic},</if>
+                <if test="saturation != null">#{saturation},</if>
+                <if test="vitalCapacity != null">#{vitalCapacity},</if>
+                <if test="WHR != null">#{WHR},</if>
+                <if test="BMI != null">#{BMI},</if>
+                <if test="strokeRiskScore != null">#{strokeRiskScore},</if>
+            </trim>
+    </insert>
+    
+    <update id="leaveGroup">
+        UPDATE t_user SET groupKey = NULL WHERE id = #{userId}
+    </update>
+    
+    <select id="listUserByGroupKey" resultMap="UserDTO" parameterType="java.lang.String">
+        SELECT <include refid="USER_ALL_COLUMN" />
+        FROM t_user user
+        WHERE user.groupKey = #{groupKey}
+    </select>
+
+    <!-- 别名user -->
+    <sql id="USER_ALL_COLUMN">
+        user.id,user.userNo, user.userCode, user.userName, user.password,
+        user.realName, user.photo, user.token, user.mobile, user.mobileVerified, user.email, user.emailVerified,
+        user.province, user.city, user.county, user.street, user.healthProduct, user.healthWarning, user.groupKey,
+        user.`status`, user.modifyDate
+    </sql>
+    
+    <!-- 别名record -->
+    <sql id="RECORD_ALL_COLUMN">
+        record.id, record.userId, record.height, record.weight, record.gender, record.birthday, record.waist, record.bust, record.hip,
+        record.heartRateStatus, record.bloodPressureStatus, record.saturationStatus, record.vitalCapacityScore, record.WHRStatus, record.BMIRankStatus, record.baseMetabolismStatus,
+        record.corporeityResult, record.corporeityScore, record.subHealthSymptomScore, record.subHealthSymptomHealthPoint, record.dietQuestionnaireOptionId, record.sportQuestionnaireOptionId, record.mentalHealthQuestionnaireOptionId,
+        record.sleepHour, record.modifyDate, record.heartRate, record.diastolic, record.systolic, record.saturation, record.vitalCapacity, record.WHR, record.BMI, record.baseMetabolism,
+        record.strokeRiskScore
+    </sql>
+
+    <select id = "getIllegalMobileNumber" resultType="java.lang.Integer">
+        SELECT
+            COUNT(1)
+        FROM
+            t_sms
+        WHERE
+            sendId = #{sendId}
+        AND
+            receiveMobile = #{receiveMobile, jdbcType = VARCHAR}
+        AND
+            createDate = DATE_FORMAT(NOW(),'%y-%m-%d');
+    </select>
+
+    <insert id="addOauthUser" parameterType="com.lifeshs.pojo.member.UserOauthDTO">
+      INSERT INTO
+          t_user_oauth (userId, oauthType, openId, uId, createDate)
+      VALUE
+          (#{userId}, #{oauthType}, #{openId}, #{uId}, NOW())
+    </insert>
+
+    <select id="getUserByUId" parameterType="java.lang.String" resultMap="UserDTO">
+        SELECT <include refid="USER_ALL_COLUMN" />
+        FROM t_user user
+            INNER JOIN t_user_oauth o ON o.userId = user.id
+        WHERE o.uId = #{uId}
+    </select>
+    
+    <select id="getUserByUserId" parameterType="int" resultType="map">
+    	SELECT <include refid="USER_ALL_COLUMN" />
+    	,o.id AS oaid,o.userId,o.oauthType,o.openId,o.uId,o.createDate
+        FROM t_user user
+            INNER JOIN t_user_oauth o ON o.userId = user.id
+        WHERE user.id = #{userId}
+    </select>
+
+    <select id = "getUserPcLogin" parameterType="java.lang.String" resultType="com.lifeshs.pojo.member.UserPcLoginDTO">
+        SELECT
+            loginToken, userToken, userId
+        FROM
+            t_user_pc_login
+        WHERE
+            loginToken = #{token}
+    </select>
+
+    <insert id = "addUserPcLogin" parameterType="com.lifeshs.pojo.member.UserPcLoginDTO">
+        INSERT INTO
+          t_user_pc_login (loginToken, userToken, userId, createDate)
+        VALUE
+          (#{loginToken}, #{userToken}, #{userId}, NOW())
+    </insert>
+
+    <insert id = "addVcode" parameterType="com.lifeshs.pojo.member.VcodeDTO">
+        INSERT INTO
+          t_vcode (type, content, terminalType, createDate)
+        VALUE
+          (#{type}, #{content}, #{terminalType}, NOW())
+    </insert>
+
+    <insert id="addUserMeasurementReminder">
+        INSERT INTO t_user_measurement_reminder(userId, smsSwitch, pushSwitch) VALUES(#{userId}, 0, 1)
+    </insert>
+    <!--获取提醒设置-->
+    <select id="getUserMeasurementReminder" resultType="com.lifeshs.pojo.member.UserMeasurementReminderDTO">
+        SELECT * FROM t_user_measurement_reminder WHERE userId = #{userId,jdbcType=INTEGER}
+    </select>
+    <!--获取提醒项目列表-->
+    <select id="listUserMeasurementReminderDetail" resultType="com.lifeshs.pojo.member.UserMeasurementReminderDetailDTO" parameterType="java.util.Map">
+        SELECT * FROM t_user_measurement_reminder_detail WHERE recordStatus = #{recordStatus,jdbcType=INTEGER}  AND userId = #{userId,jdbcType=INTEGER} ORDER BY createTime desc
+    </select>
+    <!--设置短信提醒-->
+    <update id="setUserMeasurementReminderSmsSwitch" parameterType="java.util.Map">
+        UPDATE  t_user_measurement_reminder SET  smsSwitch= #{smsSwitch} WHERE userId = #{userId,jdbcType=INTEGER}
+    </update>
+    <!--设置推送提醒-->
+    <update id="setUserMeasurementReminderPushSwitch" parameterType="java.util.Map">
+        UPDATE  t_user_measurement_reminder SET  pushSwitch= #{pushSwitch} WHERE userId = #{userId,jdbcType=INTEGER}
+    </update>
+    <!-- 设置用户提醒 -->
+    <update id="setUserMeasurementReminderSwitch" parameterType="java.util.Map">
+        UPDATE t_user_measurement_reminder SET
+            <if test="smsSwitch != null">
+                smsSwitch = #{smsSwitch},
+            </if>
+            <if test="pushSwitch != null">
+                pushSwitch = #{smsSwitch}
+            </if>
+        WHERE userId = #{userId}
+    </update>
+    <!--新增提醒项目-->
+    <insert id="addUserMeasurementReminderDetail" parameterType="com.lifeshs.pojo.member.UserMeasurementReminderDetailDTO">
+        <selectKey resultType="java.lang.Integer" order="AFTER" keyProperty="reminderDetailId">
+            SELECT LAST_INSERT_ID() AS reminderDetailId
+        </selectKey>
+        INSERT INTO  t_user_measurement_reminder_detail(userId,reminderTime,repeatCycle,devices,reminderStatus,createTime) VALUES(#{userId}, #{reminderTime},#{repeatCycle},#{devices},#{reminderStatus},#{createTime})
+    </insert>
+    <!--更新提醒项目-->
+    <update id="updateUserMeasurementReminderDetail" parameterType="com.lifeshs.pojo.member.UserMeasurementReminderDetailDTO">
+        UPDATE t_user_measurement_reminder_detail SET reminderTime=#{reminderTime} ,repeatCycle=#{repeatCycle} ,devices=#{devices} ,reminderStatus=#{reminderStatus},updateTime=#{updateTime} WHERE reminderDetailId=#{reminderDetailId,jdbcType=INTEGER}
+    </update>
+    <!--逻辑删除提醒项目-->
+    <update id="delUserMeasurementReminderDetail" parameterType="java.util.Map">
+        UPDATE t_user_measurement_reminder_detail SET recordStatus=#{recordStatus,jdbcType=INTEGER} WHERE reminderDetailId=#{reminderDetailId,jdbcType=INTEGER}
+    </update>
+    <!-- 逻辑删除提醒项目 -->
+    <update id="delUserMeasurementReminderDetailByUserId">
+        UPDATE t_user_measurement_reminder_detail SET recordStatus=#{recordStatus,jdbcType=INTEGER} WHERE userId=#{userId,jdbcType=INTEGER}
+    </update>
+    <!--设置提醒项目状态-->
+    <update id="setUserMeasurementReminderDetailStatus" parameterType="java.util.Map">
+        UPDATE  t_user_measurement_reminder_detail SET  reminderStatus= #{reminderStatus} WHERE reminderDetailId = #{reminderDetailId,jdbcType=INTEGER}
+    </update>
+    
+    <!-- APP V24 新增方法 -->
+    <!-- 获取用户的地址列表 -->
+    <select id="listAddress" resultType="com.lifeshs.pojo.member.address.AddressDTO">
+        SELECT id, userId, receiverName, contactNumber, address, street, selected FROM t_user_address WHERE userId = #{userId} AND `display` = TRUE ORDER BY selected DESC, createDate, id
+    </select>
+    
+    <insert id="saveAddress" parameterType="com.lifeshs.pojo.member.address.AddressDTO">
+        <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+        INSERT INTO t_user_address(userId, receiverName, contactNumber, address, street, createDate, selected)
+        VALUES(
+            #{userId}, #{receiverName}, #{contactNumber}, #{address}, #{street}, NOW(),
+            <!-- 判断selected字段的值，如果没有设置，就将其值默认为false -->
+            <choose>
+                <when test="selected == null">FALSE</when>
+                <otherwise>#{selected}</otherwise>
+            </choose>
+        )
+    </insert>
+    
+    <update id="updateAddress" parameterType="com.lifeshs.pojo.member.address.AddressDTO">
+        UPDATE t_user_address SET modifyDate = NOW()
+        <if test="receiverName != null">,receiverName = #{receiverName}</if>
+        <if test="contactNumber != null">,contactNumber = #{contactNumber}</if>
+        <if test="address != null">,address = #{address}</if>
+        <if test="street != null">,street = #{street}</if>
+        <if test="selected != null">,selected = #{selected}</if>
+        WHERE id = #{id} AND userId = #{userId}
+    </update>
+    
+    <update id="removeAddress">
+        UPDATE t_user_address SET modifyDate = NOW(), `display` = FALSE
+        WHERE userId = #{userId} AND id = #{id} LIMIT 1
+    </update>
+    
+    <update id="updateUserAddressToUnSelected">
+        UPDATE t_user_address SET modifyDate = NOW(), selected = FALSE
+        WHERE userId = #{userId} AND `display` = TRUE
+    </update>
+    
+    <select id="getAddress" resultType="com.lifeshs.pojo.member.address.AddressDTO">
+        SELECT id, userId, receiverName, contactNumber, address, street, selected FROM t_user_address WHERE id = #{id} AND userId = #{userId} AND `display` = TRUE
+    </select>
+
+    <select id="getUserByOpenId" resultType="com.lifeshs.pojo.member.UserDTO">
+        SELECT id, userName, password FROM t_user WHERE openId = #{openId}
+    </select>
+
+    <update id="updateOpenId">
+        UPDATE t_user SET openId = #{openId}, modifyDate = NOW() WHERE id = #{userId}
+    </update>
+    
+    <select id="findUserByUserName" resultType="com.lifeshs.po.user.UserPO">
+        SELECT * FROM t_user WHERE userName = #{userName} AND `status` != 2
+    </select>
+    
+    <select id="findUserByVerifyMobile" resultType="com.lifeshs.po.user.UserPO">
+        SELECT * FROM t_user WHERE mobile = #{mobile} AND mobileVerified = TRUE AND `status` != 2
+    </select>
+</mapper>

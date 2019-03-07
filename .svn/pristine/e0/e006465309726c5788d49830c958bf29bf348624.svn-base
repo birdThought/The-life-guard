@@ -1,0 +1,129 @@
+.hzw-city-picker{
+	position: absolute;
+	border: 2px solid #c9cbce;
+	width: 402px;
+	background: #ffffff;
+	z-index: 999999;
+	font-size: 0;
+}
+.hzw-city-picker:before, .hzw-city-picker:after{
+	content: '';
+	display: block;
+	width: 0;
+	height: 0;
+	border-width: 10px;
+	border-style: solid;
+	position: absolute;
+	left: 20px;
+	z-index: 999999;
+}
+.hzw-city-picker:before{
+	border-color: transparent transparent #ffffff;
+	top: -17px;
+	z-index: 9999999;
+}
+.hzw-city-picker:after{
+	border-color: transparent transparent #c9cbce;
+	top: -20px;
+}
+.hzw-city-picker *{
+	box-sizing: border-box;
+	margin: 0 auto;
+	padding: 0;
+	color: #666666;
+	font-family: "Microsoft YaHei";
+	font-size: 14px;
+}
+.hzw-city-picker ul{
+	list-style: none;
+}
+.hzw-city-picker ul li{
+	display: inline-block;
+	position: relative;
+	margin: 4px;
+	cursor: pointer;
+}
+.hzw-city-picker p{
+	font-weight: bold;
+	padding: 0 4px;
+	margin-top: 4px;
+	margin-bottom: 10px;
+}
+.hzw-city-picker .line{
+	width: 372px;
+	margin: 0 auto;
+	margin-top: 8px;
+	margin-bottom: 4px;
+	border-bottom: 1px solid #d8d8d8;
+}
+
+/*热门城市*/
+.hzw-city-picker .hzw-hot-wrap{
+	width: 100%;
+	background: #ffffff;
+	padding: 9px;
+}
+.hzw-city-picker .hzw-hot-wrap ul li{
+	width: 68px;
+	height: 40px;
+	text-align: center;
+	line-height: 40px;
+	color: #666666;
+	background-color: #f5f5f5;
+}
+.hzw-city-picker .hzw-hot-wrap ul li:hover{
+	color: #ff00ff;
+}
+
+/*选择省份*/
+.hzw-city-picker .hzw-wrap{
+	position: relative;
+	width: 100%;
+	background: #ffffff;
+	padding: 9px;
+}
+.hzw-city-picker .hzw-province-name{
+	display: inline-block;
+	width: 68px;
+	height: 40px;
+	text-align: center;
+	line-height: 40px;
+	position: relative;
+	background-color: #f5f5f5;
+}
+.hzw-city-picker .hzw-province-name:hover{
+	color: #ff00ff;
+}
+
+.hzw-city-picker .hzw-province.active{
+	z-index: 999999999;
+}
+.hzw-city-picker .hzw-province-name.active{
+	border: 1px solid #D8D8D8;
+	border-bottom-color: #ffffff;
+	color: #ff00ff;
+	background-color: #ffffff;
+}
+.hzw-city-picker .hzw-city-wrap{
+	display: none;
+	border: 1px solid #D8D8D8;
+	background: #ffffff;
+	position: absolute;
+	top: 39px;
+	width: 328px;
+	padding: 10px;
+}
+.hzw-city-picker .hzw-city{
+	width: 68px;
+	height: 40px;
+	text-align: center;
+	line-height: 40px;
+	color: #999999;
+	background-color: #f5f5f5;
+	overflow: hidden;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+}
+.hzw-city-picker .hzw-city:hover{
+	color: #ff00ff;
+}

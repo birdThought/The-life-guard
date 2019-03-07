@@ -1,0 +1,207 @@
+.content {
+	margin-top:42px;
+	text-align: center;
+}
+.content h2 {
+	font-size:4rem;
+}
+.btn-group > button {
+	margin-right:20px;
+	margin-top:44px;
+}
+.btn-group > .btn:first-child:not(:last-child):not(.dropdown-toggle),
+.btn-group > .btn:not(:first-child):not(:last-child):not(.dropdown-toggle),
+.btn-group > .btn:last-child:not(:first-child), .btn-group > .dropdown-toggle:not(:first-child){
+	border-radius: 25px;
+}
+.management {
+	border-color: #b28850;
+	color:#b28850;
+}
+.management:hover {
+	background-color: #f29a76;
+	color:#fff;
+}
+.organization {
+	background-color: #36abe8;
+	color:#fff;
+}
+.user {
+	color:#44c660;
+}
+.content-bottom {
+	margin-top:8rem;
+	margin-bottom:4rem;
+}
+.content-bottom > .products-des {
+	font-size:2rem;
+	text-align: center;
+	line-height:3rem;
+	font-weight: bold;
+}
+.content-bottom > p {
+	font-size:1.1rem;
+	text-align: center;
+}
+.friendlinks {
+	margin:0 auto;
+	text-align: center;
+}
+.friendlinks > div {
+	display: inline-block;
+	margin-right: 120px;
+}
+.Platformsandsystems {
+	margin-top: 3rem;
+}
+.Platformsandsystems > p {
+	font-size:1.4rem;
+	color: #666;
+}
+.systemlist ul {
+	width:100%;
+}
+.friendlinks {
+	margin-bottom:5rem;
+}
+.user:hover {
+	background-color: #f29a76;
+	color:#fff;
+}
+.health {
+	border-color: #f29a76;
+	color:#f29a76;
+}
+.health:hover {
+	background-color: #f29a76;
+	color:#fff;
+}
+.part {
+	margin-top:50px;
+}
+.grey {
+	background-image: url(./../images/bg.jpg);
+	background-size: cover;
+}
+.part .phone {
+	margin-left:150px;
+}
+.grey .phone {
+	margin-top:50px;
+	margin-bottom: 50px;
+	margin-left:20px;
+}
+.part p {
+	width:420px;
+	line-height: 2.0;
+	text-align: left;
+	margin-top:25px;
+	font-size: 14px;
+}
+.icon .online {
+	margin-top:90px;
+}
+.part strong {
+	color: #44c660
+}
+.grey .icon {
+	margin-left:190px;
+	margin-top:90px;
+}
+.grey .icon .row {
+	margin-top:120px;
+}
+.grey .icon small {
+	display: block;
+	margin-top:20px;
+	font-size: 15px;
+	line-height: 1.5;
+	text-align: center;
+}
+.grey .icon .add {
+	text-align: center;
+}
+/*@media screen and (min-width:320px) and (max-widht:780px) {
+	.part .phone {
+	margin-left:0;
+	margin-top:50px;
+	}
+}*/
+
+.icon {
+	margin-top: 30px;
+}
+.icon h3 {
+	color:#44c660;
+	font-weight: bold;
+	text-align: left;
+}
+.icon h3::before {
+	content: "";
+	display: block;
+	width:80px;
+	height:8px;
+	background-color: #44c660;
+	margin-bottom: 20px;
+}
+.icon > ul {
+	padding:0;
+	margin-top:34px;
+}
+.icon > ul > li {
+	display: block;
+	margin-bottom: 22px;
+}
+.icon > ul > li > span {
+	font-size:1.8rem;
+	display: block;
+	margin-top: 22px;
+}
+@media screen and (max-width: 750px) {
+	.part .phone {
+		margin-left:0;
+	}
+	.part p {
+		width:100%;
+	}
+	.grey .icon {
+		margin-left:0;
+	}
+	.btn-group, .btn-group-vertical {
+		padding-left: 20%;
+	}
+	.content {
+		margin-top:6rem;
+		text-align: center;
+	}
+}
+@media screen and (max-width: 340px){
+	.btn-group, .btn-group-vertical {
+		padding-left: 6%;
+	}
+}
+.Platformsandsystems {
+	margin-top: 3rem;
+}
+.Platformsandsystems p {
+	font-size:14px;
+	letter-spacing:0.1rem;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

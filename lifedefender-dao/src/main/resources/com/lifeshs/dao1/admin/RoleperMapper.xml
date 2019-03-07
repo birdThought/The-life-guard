@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lifeshs.dao1.admin.RoleperDao">
+        
+   
+
+    <!-- 获取角色权限明细 -->
+    <select id="findPermissionByid" resultType="com.lifeshs.po.admin.RolePermissionPo">  
+        SELECT
+			*
+		FROM
+			t_admin_role_permission
+		where roleId = #{roleId}
+    </select>
+
+    <!-- 获取菜单列表 -->
+    <select id="findByAll" resultType ="com.lifeshs.po.admin.AdminPermissionPO">               
+           SELECT
+				*
+			FROM
+				t_admin_permission 
+       	
+    </select>
+    
+    
+    <!-- 获取权限列表 -->
+    <select id="findByAllOperation" resultType ="com.lifeshs.po.admin.AdminPermissionCheckedPO">               
+           SELECT
+				*
+			FROM
+				t_admin_permission 
+			<if test="agentId != null">
+				where hasAgent = #{agentId}
+			</if>
+       		LIMIT #{page},#{size}
+    </select>
+
+    <delete id="deleteRoleMenu" parameterType="int">
+         delete from t_admin_role_permission where roleId=#{roleId}
+    </delete>
+
+    <insert id="addRoleMenu" parameterType="java.util.Map">
+        INSERT INTO t_customer_role_per(roleId,perid) VALUES
+        <foreach collection="params" item="value" open="(" separator="," close=")">
+            #{roleId},#{value}
+        </foreach>
+    </insert>
+
+    <!-- 根据已知的di 获取权限 -->
+    <select id="loadPermissionList" parameterType="java.util.List" resultType="com.lifeshs.po.admin.permissionPo">
+            SELECT id,menu,menuName,parent_id,status,weight
+        from
+            t_customer_permission tcp
+        WHERE tcp.id in 
+        <foreach collection="idlist" item="value" open="(" separator="," close=")">
+            #{value}
+        </foreach>
+    </select>
+
+    <select id="loadRoleMenu" parameterType="java.lang.Integer" resultType="java.util.Map">
+        SELECT c.menu path,c.menuName name,c.weight,p.menuName menuRealm
+        FROM t_customer_role_per rp
+        LEFT JOIN t_customer_permission c on rp.perid=c.id
+        INNER JOIN t_customer_permission p ON c.parent_id=p.id AND p.parent_id=0
+        WHERE rp.roleId=#{roleId} order by p.weight
+    </select>
+    
+     <insert id="addRolePermission">
+        INSERT INTO t_admin_role_permission(roleId,permission) VALUES ( #{roleId},#{params});
+        
+    </insert>
+    
+    <select id="getRolePermissionByItem" resultType="com.lifeshs.po.admin.RolePermissionPo">
+    	SELECT
+			*
+		FROM
+			t_admin_role_permission
+		WHERE
+			
+			permission LIKE '${item}%'
+    </select>
+    
+    <update id="updateRolePermissionById">
+    	UPDATE
+			t_admin_role_permission
+		SET permission = #{st} 
+		WHERE
+			id = #{id}
+    </update>
+    
+    <select id="getPermissionSize" resultType="java.lang.Integer">
+    	select COUNT(*) FROM t_admin_permission
+    	<if test="agentId != null">
+    		where hasAgent = #{agentId}
+    	</if>
+    </select>
+    
+    <select id="getPermissionList" resultType="com.lifeshs.po.admin.AdminPermissionCheckedPO">
+    	SELECT
+			*
+		FROM
+			t_admin_permission
+		<if test="agentId != null">
+			where hasAgent =#{agentId}
+		</if>
+		LIMIT #{curPage},#{pageSize}
+		
+    </select>
+    
+    <select id="getRoleSize" resultType="Integer">
+    	SELECT COUNT(*) from t_admin_permission 
+    	<if test="agentId != null">
+    		where hasAgent = #{agentId}
+    	</if>
+    	
+    </select>
+    
+    
+</mapper>

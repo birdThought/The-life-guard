@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--门店-线下用户管理-->
+<mapper namespace="com.lifeshs.dao.org.offline.IOfflineManageDao">
+
+     <!--线下用户总数量-->
+    <select id = "getCountOfOffline" resultType="java.lang.Integer">
+        SELECT
+            COUNT(1)
+        FROM
+            t_user u
+        WHERE u.parentId=#{userNo} 
+        <if test="realName != null">
+            and u.realName LIKE CONCAT('%', #{realName},'%') 
+        </if>
+        <if test="mobile != null">
+            and u.mobile LIKE CONCAT('%', #{mobile},'%')
+        </if>
+    </select>  
+
+
+     <!--获取线下用户列表-->
+     <select id = "listOffile" resultType="com.lifeshs.po.user.UserPO">
+        SELECT * FROM t_user u 
+        WHERE u.parentId=#{userNo} 
+        <if test="realName != null">
+            and u.realName LIKE CONCAT('%', #{realName},'%') 
+        </if>
+        <if test="mobile != null">
+            and u.mobile LIKE CONCAT('%', #{mobile},'%')      
+        </if>
+        LIMIT #{startIndex}, #{pageSize}
+    </select>  
+
+
+
+
+</mapper>

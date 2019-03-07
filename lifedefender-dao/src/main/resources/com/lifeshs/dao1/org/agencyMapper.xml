@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lifeshs.dao1.org.AgencyDao" >
+
+    <select id="getAgency" resultType="com.lifeshs.po.org.AgencyPO">
+        SELECT <include refid="AGENCY_ALL_COLUMN" /> FROM t_org_agency WHERE id = #{id}
+    </select>
+
+    <select id="findAgencyByParentIdList" resultType="com.lifeshs.po.org.AgencyPO">
+        SELECT <include refid="AGENCY_ALL_COLUMN" /> FROM t_org_agency WHERE parentId = #{parentId}
+    </select>
+
+    <insert id="addAgency" parameterType="com.lifeshs.po.org.AgencyPO">
+        <selectKey resultType="java.lang.Integer" order="AFTER" keyProperty="id">
+            SELECT LAST_INSERT_ID() AS ID
+        </selectKey>
+        INSERT INTO t_org_agency(
+            name, createDate
+            <if test="parentId != null">,parentId</if>
+        )
+        VALUES(
+            #{name}, NOW(),
+            <if test="parentId != null">,#{parentId}</if>
+        )
+    </insert>
+
+    <sql id="AGENCY_ALL_COLUMN">id, name, parentId, createDate, modifyDate</sql>
+</mapper>

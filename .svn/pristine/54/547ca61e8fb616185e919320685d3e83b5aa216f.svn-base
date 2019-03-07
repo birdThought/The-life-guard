@@ -1,0 +1,71 @@
+"use strict";
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+/**
+ * Created by Administrator on 2017/5/2.
+ */
+var core_1 = require("@angular/core");
+var router_1 = require("@angular/router");
+var help_service_1 = require("../../service/help.service");
+var HelpColumnComponent = (function () {
+    function HelpColumnComponent(helpService, router) {
+        this.helpService = helpService;
+        this.router = router;
+    }
+    HelpColumnComponent.prototype.ngOnInit = function () {
+        this.getHelpResponse();
+    };
+    ;
+    HelpColumnComponent.prototype.onSelect = function (helpColumn) {
+        if (this.selectedHelpColumn === helpColumn) {
+            this.selectedHelpColumn = null;
+            return;
+        }
+        this.selectedHelpColumn = helpColumn;
+    };
+    ;
+    HelpColumnComponent.prototype.getHelpColumns = function () {
+        // this.helpColumns= this.helpResponse.helpColumns;
+        for (var v in this.helpColumns) {
+            this.helpColumns[v].helps = this.getHelps(this.helpColumns[v].id);
+        }
+    };
+    ;
+    HelpColumnComponent.prototype.getHelpResponse = function () {
+        var _this = this;
+        this.helpService.getHelpResponse().then(function (x) {
+            _this.helps = x.helps;
+            _this.helpColumns = x.helpColumns;
+            _this.getHelpColumns();
+            console.log(_this.helps);
+        });
+    };
+    ;
+    HelpColumnComponent.prototype.getHelps = function (id) {
+        var _helps = [];
+        for (var v in this.helps) {
+            if (this.helps[v].columnId === id) {
+                _helps.push(this.helps[v]);
+            }
+        }
+        return _helps;
+    };
+    return HelpColumnComponent;
+}());
+HelpColumnComponent = __decorate([
+    core_1.Component({
+        selector: 'life-helps',
+        templateUrl: './helpcolumn.component.html',
+        styleUrls: ['./helpcolumn.component.css'],
+    }),
+    __metadata("design:paramtypes", [help_service_1.HelpService, router_1.Router])
+], HelpColumnComponent);
+exports.HelpColumnComponent = HelpColumnComponent;
+//# sourceMappingURL=helpcolumn.component.js.map

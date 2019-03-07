@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lifeshs.dao1.systemManage.AppVersionDao">
+
+	<!-- 获取测量建议列表 -->
+	<select id="findAppVersion" resultType="com.lifeshs.vo.systemManage.AppVersionVo">
+		SELECT
+			id,appname,`comment`,`create`,path,public AS publicVersion,version
+		FROM
+			t_app_version
+	    LIMIT #{startRow},#{pageSize}
+	</select>
+	
+	<!-- 统计测量建议数量 -->
+	<select id="countVersion" resultType="java.lang.Integer">
+	 	SELECT COUNT(1) FROM t_app_version
+	</select>
+
+	<!--添加测量建议-->
+	<insert id="addVersion" parameterType="com.lifeshs.vo.systemManage.AppVersionVo">
+		INSERT INTO t_app_version(appname,`comment`,`create`,path,public,version)
+		VALUES(#{appname},#{comment},NOW(),#{path},#{publicVersion},#{version})
+	</insert>
+	
+	<!-- 编辑测量建议 -->
+	<update id="updateVersion" parameterType="com.lifeshs.vo.systemManage.AppVersionVo">
+		UPDATE t_app_version
+		<set>
+			<if test="appname !=null">
+				appname = #{appname},
+			</if>
+			<if test="path != null">
+				path = #{path},
+			</if>
+			<if test="publicVersion != null">
+				public = #{publicVersion},
+			</if>
+			<if test="version != null">
+				version = #{version}
+			</if>
+		</set>
+		WHERE id = #{id}
+	</update>
+	
+	<!-- 删除测量建议 -->
+	<delete id="deleteVersion">
+		DELETE FROM t_app_version WHERE id = #{id}
+	</delete>
+	
+ 
+</mapper>

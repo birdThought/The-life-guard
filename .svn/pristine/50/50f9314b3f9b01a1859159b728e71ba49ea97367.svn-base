@@ -1,0 +1,55 @@
+"use strict";
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var core_1 = require("@angular/core");
+var platform_browser_1 = require("@angular/platform-browser");
+var forms_1 = require("@angular/forms"); // <-- NgModel lives here
+var http_1 = require("@angular/http");
+var app_component_1 = require("./app.component");
+var dashboard_component_1 = require("./dashboard.component");
+var menus_component_1 = require("./menus.component");
+var menu_detail_component_1 = require("./menu-detail.component");
+var menu_service_1 = require("./menu.service");
+var app_routing_module_1 = require("./app-routing.module");
+// Imports for loading & configuring the in-memory web api
+var menu_search_component_1 = require("./menu-search.component");
+var help_detail_component_1 = require("./component/help/help-detail.component");
+var helpcolumn_component_1 = require("./component/help/helpcolumn.component");
+var help_service_1 = require("./service/help.service");
+var gongyi_component_1 = require("./component/marketing/gongyi.component");
+var marketing_service_1 = require("./service/marketing.service");
+var AppModule = (function () {
+    function AppModule() {
+    }
+    return AppModule;
+}());
+AppModule = __decorate([
+    core_1.NgModule({
+        imports: [
+            platform_browser_1.BrowserModule,
+            forms_1.FormsModule,
+            http_1.HttpModule,
+            http_1.JsonpModule,
+            // InMemoryWebApiModule.forRoot(InMemoryDataService),
+            app_routing_module_1.AppRoutingModule
+        ],
+        declarations: [
+            app_component_1.AppComponent,
+            menu_detail_component_1.MenuDetailComponent,
+            menus_component_1.MenusComponent,
+            dashboard_component_1.DashboardComponent,
+            menu_search_component_1.MenuSearchComponent,
+            help_detail_component_1.HelpDetailComponent,
+            helpcolumn_component_1.HelpColumnComponent,
+            gongyi_component_1.GongyiComponent
+        ],
+        bootstrap: [app_component_1.AppComponent],
+        providers: [menu_service_1.MenuService, help_service_1.HelpService, marketing_service_1.MarketingService] //,{provide: LocationStrategy,useClass: HashLocationStrategy}
+    })
+], AppModule);
+exports.AppModule = AppModule;
+//# sourceMappingURL=app.module.js.map

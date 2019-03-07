@@ -1,0 +1,967 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lifeshs.dao.order.IOrderDao" >
+    <select id="getCountOfServeOrderByUserId" resultType="java.lang.Integer">
+        SELECT COUNT(1) FROM t_order o
+        WHERE
+            userId = #{userId} AND orderType = 1
+        <choose>
+            <when test="status == null">
+                AND o.`status` != 6
+            </when>
+            <otherwise>
+                AND o.`status` IN 
+                <foreach collection="status" index="index" separator="," open="(" close=")">
+                    ${status[index]}
+                </foreach>
+            </otherwise>
+        </choose>
+        <if test="groupIds != null">
+        AND o.`orgServeId` IN 
+            <foreach collection="groupIds" index="index" separator="," open="(" close=")">
+                ${groupIds[index]}
+            </foreach>
+        </if>
+    </select>
+
+    <select id="listServeOrderWithPageSplit" resultType="java.util.HashMap">
+        <include refid="select_order_serve_data"></include>
+        WHERE
+            userId = #{userId} AND orderType = 1
+        <choose>
+            <when test="status == null">
+                AND o.`status` != 6
+            </when>
+            <otherwise>
+                AND o.`status` IN 
+                <foreach collection="status" index="index" separator="," open="(" close=")">
+                    ${status[index]}
+                </foreach>
+            </otherwise>
+        </choose>
+        <if test="groupIds != null">
+        AND o.`orgServeId` IN 
+            <foreach collection="groupIds" index="index" separator="," open="(" close=")">
+                ${groupIds[index]}
+            </foreach>
+        </if>
+        ORDER BY o.id DESC
+        LIMIT #{startIndex}, #{pageSize}
+    </select>
+    
+    <select id="getServeOrder" resultType="java.util.HashMap">
+        <include refid="select_order_serve_data" />
+        WHERE
+            o.userId = #{userId}
+            AND o.id = #{orderId}
+            AND o.orderType = 1
+    </select>
+
+    <!-- 查询t_order与t_serve的基本信息 -->
+    <sql id="select_order_serve_data">
+        SELECT
+            o.id AS `orderId`,
+            o.orderNumber,
+            o.orgServeId,
+            o.serveGroupId,
+            o.userId,
+            o.chargeMode,
+            o.price,
+            o.number,
+            o.charge,
+            o.startDate,
+            o.endDate,
+            o.timesRemaining,
+            o.`status`,
+            o.recard,
+            o.createDate,
+            org.orgName,
+            org.logo,
+            s.name AS `serveName`,
+            s.image,
+            s.about,
+            o.body,
+            o.subject,
+            s.code,
+            og.id AS serveGroupId,
+            og.huanxinId
+        FROM
+            t_order o
+        LEFT JOIN t_org_serve os ON os.id = orgServeId
+        LEFT JOIN t_serve s ON s.id = os.serveId
+        LEFT JOIN t_org org ON org.id = os.orgId
+        LEFT JOIN t_org_group og ON og.id = o.serveGroupId
+    </sql>
+    
+    <select id="getOrderBasicDataByOrderNumber" resultType="com.lifeshs.pojo.order.OrderFlowBasicDTO">
+        SELECT
+            u.realName AS `userRealName`,
+            org.id AS `orgId`,
+            org.orgName,
+            s.`name` AS serveName,
+            p.profitShare,
+            o.orderType,
+            o.charge AS total
+        FROM
+            t_order o
+        LEFT JOIN t_user u ON o.userId = u.id
+        LEFT JOIN t_project p ON p.`projectCode` = o.projectCode
+        LEFT JOIN t_org org ON org.id = p.orgId
+        LEFT JOIN t_data_serve_type2 s ON s.id = o.serveId
+        WHERE
+            o.orderNumber = #{orderNumber};
+    </select>
+
+    <select id="getOrderStoreSmsBasicDataByOrderNumber" resultType="com.lifeshs.pojo.order.OrderFlowBasicDTO">
+        SELECT
+        org.id AS `orgId`,
+        org.orgName,
+        o.charge AS total
+        FROM
+        t_order_sms_org o
+        LEFT JOIN t_org org ON org.id = o.orgId
+        WHERE
+        o.orderNumber = #{orderNumber};
+    </select>
+    
+    <select id="getUserServeDOList" resultType="com.lifeshs.pojo.order.UserServeDO">
+        SELECT
+            o.id AS `orderId`,
+            o.orgServeId AS orgServeId,
+            s.`name` AS `serveName`,
+            org.id AS `orgId`,
+            org.orgName,
+            org.logo,
+            o.chargeMode,
+            o.timesRemaining AS `timesRemaining`,
+            o.endDate AS `endDate`,
+            s.code AS serveCode,
+            og.huanxinId,
+            og.id AS serveGroupId,
+            og.name AS serveGroupName
+        FROM
+            t_org org
+        INNER JOIN t_org_serve os ON os.orgId = org.id
+        INNER JOIN t_serve s ON s.id = os.serveId
+        INNER JOIN t_order o ON o.orgServeId = os.id AND o.`status` = 3
+        INNER JOIN t_org_group og ON og.id = o.serveGroupId
+        WHERE
+            o.userId = #{userId} AND orderType = 1
+        <!-- GROUP BY o.orgServeId, o.chargeMode -->
+        ORDER BY
+            o.createDate;
+    </select>
+    
+    <select id="getServiceOrderDetailDO" resultType="com.lifeshs.pojo.order.ServiceOrderDetailDO">
+        SELECT
+            org.id AS `orgId`,
+            o.orgServeId AS orgServeId,
+            org.orgName,
+            s.`name` AS serviceName,
+            org.logo,
+            min(o.startDate) startDate,
+            MAX(o.endDate) AS `endDate`,
+            SUM(o.timesRemaining) AS timesRemaining,
+            o.serveGroupId,
+            o.id AS `orderId`,
+            o.chargeMode
+        FROM
+            t_order o
+        INNER JOIN t_org_serve os ON os.id = o.orgServeId
+        INNER JOIN t_serve s ON os.serveId = s.id
+        INNER JOIN t_org org ON org.id = os.orgId
+        WHERE
+            o.orgServeId = #{orgServeId}
+        AND (o.`status` = 3 OR o.`status` = 4)
+        AND o.userId = #{userId}
+        AND o.orderType = 1
+    </select>
+    
+    <select id="getUserOrderMaxStartDateAndEndDateByUserIdAndOrgServeId" resultType="com.lifeshs.pojo.order.ServiceOrderDetailDO">
+        SELECT
+            MAX(endDate) AS `endDate`
+        FROM
+            t_order o
+        WHERE
+            o.`status` = 3
+        AND o.userId = #{userId}
+        AND o.orgServeId = #{orgServeId}
+        AND o.orderType = 1
+    </select>
+    
+    <select id="getUserFirstOrderIdWithChargeModeIsByTime" resultType="com.lifeshs.entity.order.TOrder">
+        <include refid="serveOrderAllColumn"></include>
+        WHERE
+            o.orgServeId = #{orgServeId}
+        AND o.userId = #{userId}
+        AND o.`status` = 3
+        AND o.chargeMode = 1
+        AND orderType = 1
+        ORDER BY
+            o.startDate
+        LIMIT 1;
+    </select>
+    
+    <sql id="serveOrderAllColumn">
+        SELECT o.id,o.orderNumber,o.orgServeId,o.serveGroupId,o.userId,o.chargeMode,o.subject,o.body,o.price,o.number,o.charge,o.startDate,o.endDate,o.timesRemaining,o.status,o.recard,o.orderType,o.createDate
+        FROM t_order o
+    </sql>
+    
+    <update id="updateServeOrderHasWarning">
+        UPDATE t_order o
+        SET o.hasWarning = #{hasWarning}, warningDate = #{warningDate}
+        WHERE
+            userId = #{userId}
+            AND o.orgUserId = #{serveUserId}
+            AND o.`status` = 3
+            AND o.orderType = 1
+    </update>
+    
+    <!-- <select id="getOrgValidOrder" resultType="com.lifeshs.entity.order.TOrder">
+        SELECT * FROM t_order INNER JOIN t_org_serve ON t_org_serve.id = t_order.orgServeId WHERE t_org_serve.orgId = #{orgId} AND t_order.status IN (3, 4)
+    </select> -->
+    
+    <update id="updateValidServeOrderToComplete">
+        UPDATE t_order SET `status` = 4
+        WHERE
+            serveGroupId = #{serveGroupId}
+            AND `status` = 3
+            AND orderType = 1
+            <if test="userId != null">
+                AND userId = #{userId}
+            </if>
+    </update>
+    
+    <update id="updateBeforePayServeOrderToPayFailded">
+        UPDATE t_order SET `status` = 2
+        WHERE 
+            (serveGroupId = #{serveGroupId} OR orgServeId = #{orgServeId})
+            AND `status` = 1
+            AND orderType = 1
+            <if test="userId != null">
+                AND userId = #{userId}
+            </if>
+    </update>
+    
+    <insert id = "addSMSOrder">
+        INSERT INTO t_order(orderNumber,userId,price,number,charge,subject,body,`status`,orderType,createDate)
+        VALUES(#{orderNumber},#{userId},#{price},#{number},#{charge},#{subject},#{body},#{status},2,NOW())
+    </insert>
+    
+    <select id="getCountOfSMSOrderByUserId" resultType="java.lang.Integer">
+        SELECT COUNT(1) FROM t_order
+        WHERE userId = #{userId} AND orderType = 2
+        AND `status` IN
+            <foreach collection="statusList" open="(" close=")" item="s" separator=",">#{s}</foreach>
+    </select>
+    
+    <select id="listSMSOrder" resultMap="SMSOrder">
+        SELECT id, orderNumber, userId, subject, body, price, number, charge, status, createDate FROM t_order
+        WHERE userId = #{userId} AND orderType = 2
+        AND `status` IN
+            <foreach collection="statusList" open="(" close=")" item="s" separator=",">#{s}</foreach>
+        ORDER BY createDate LIMIT #{startIndex}, #{pageSize}
+    </select>
+    
+    <resultMap id="SMSOrder" type="com.lifeshs.pojo.order.SMSOrderDTO">
+        <id property="id" column="id" />
+        <result column="orderNumber" property="orderNumber" />
+        <association property="orderFlow" column="orderNumber" javaType="com.lifeshs.pojo.order.SMSOrderFlowDTO" select="selectSMSOrderFlow"/>
+    </resultMap>
+    
+    <select id="selectSMSOrderFlow" resultType="com.lifeshs.pojo.order.SMSOrderFlowDTO">
+        SELECT id,flowType,payType FROM t_order_flow WHERE orderNumber = #{orderNumber}
+    </select>
+    
+    <select id="listNeedToBeFaildLessonOrder" resultType="java.util.Map">
+        SELECT u.userCode, g.huanxinId FROM t_order o
+            INNER JOIN t_user u ON u.id = o.userId
+            INNER JOIN t_org_serve os ON os.id = o.orgServeId
+            INNER JOIN t_serve s ON s.id = os.serveId AND s.code = '02'
+            INNER JOIN t_org_group g ON g.id = o.serveGroupId WHERE
+            o.endDate IS NOT NULL
+            AND (DATEDIFF(o.endDate, CURDATE()) &lt; 0)
+            AND o.`status` = 3
+            AND o.chargeMode != 1
+            AND o.orderType = 1
+    </select>
+    
+    <select id="updateServeOrderStatus">
+        UPDATE t_order o SET o.`status` = 4
+        WHERE
+            o.endDate IS NOT NULL
+            AND (DATEDIFF(o.endDate, CURDATE()) &lt; 0)
+            AND o.`status` = 3
+            AND o.chargeMode != 1
+            AND o.orderType = 1
+    </select>
+
+    <select id="selectOrderComment" resultMap="OrderCommentDTO">
+        SELECT id, orderId, status, comment, reply, score, createDate, replyDate FROM t_order_comments WHERE orderId = #{id}
+    </select>
+    
+    <resultMap type="com.lifeshs.pojo.order.OrderCommentDTO" id="OrderCommentDTO">
+        <id column="id" property="id"/>
+        <collection property="image" ofType="java.lang.String" column="id" select="selectCommentImage" />
+    </resultMap>
+    
+    <select id="selectCommentImage" resultType="java.lang.String">
+        SELECT image FROM t_order_comments_image WHERE orderCommentId = #{id}
+    </select>
+
+    <select id="listOrderByOrgUser" resultMap="orgOrderDTO">
+        SELECT o.id as orderId, o.price, o.createDate, o.projectCode as code, o.orderNumber, u.userName, u.userCode, u.photo as userPhoto
+        FROM t_order o
+        INNER JOIN t_user u ON u.id = o.userId
+        INNER JOIN t_project p ON o.projectCode = p.projectCode
+        WHERE u.id = o.userId
+        AND o.orgUserId = #{orgUserId}
+        AND o.`status` = #{status}
+        <if test="keyword != null">
+            AND (u.userName LIKE CONCAT('%', #{keyword},'%')
+            OR p.name LIKE CONCAT('%', #{keyword},'%')
+            OR o.orderNumber LIKE CONCAT('%', #{keyword},'%'))
+        </if>
+        AND o.projectCode in (
+            SELECT p.projectCode
+            FROM t_project p
+            INNER JOIN t_org_user ou ON p.orgId = ou.orgId
+            WHERE ou.id = #{orgUserId}
+            <if test="type == 'online'">
+                AND projectType = 1
+            </if>
+            <if test="type == 'offline'">
+                AND projectType = 2
+            </if>
+            <if test="type == 'visit'">
+                AND projectType = 3
+            </if>
+        )
+        limit #{startIndex}, #{pageSize}
+    </select>
+
+    <select id="getCountOfServiceOrderByOrgUser" resultType="java.lang.Integer">
+        SELECT count(m.n) FROM (
+            SELECT 1 as n
+            FROM t_order o
+            INNER JOIN t_user u ON u.id = o.userId
+            INNER JOIN t_project p ON o.projectCode = p.projectCode
+            WHERE u.id = o.userId
+            AND o.orgUserId = #{orgUserId}
+            AND o.`status` = #{status}
+            <if test="keyword != null">
+                AND (u.userName LIKE CONCAT('%', #{keyword},'%')
+                OR p.name LIKE CONCAT('%', #{keyword},'%')
+                OR o.orderNumber LIKE CONCAT('%', #{keyword},'%'))
+            </if>
+            AND o.projectCode in (
+                SELECT p.projectCode
+                FROM t_project p
+                INNER JOIN t_org_user ou ON p.orgId = ou.orgId
+                WHERE ou.id = #{orgUserId}
+                <if test="type == 'online'">
+                    AND projectType = 1
+                </if>
+                <if test="type == 'offline'">
+                    AND projectType = 2
+                </if>
+                <if test="type == 'visit'">
+                    AND projectType = 3
+                </if>
+            )
+        )m
+    </select>
+
+
+    <select id="getTodayCountOfServiceOrderByOrgUser" resultType="java.lang.Integer">
+        SELECT
+        count(1)
+        FROM
+        t_order o
+        WHERE
+        o.orgUserId = #{orgUserId}
+        <if test="status != null">
+            AND o.`status` = #{status}
+        </if>
+        <if test="createDate != null">
+            AND Date(o.`createDate`) = #{createDate}
+        </if>
+    </select>
+
+    <sql id="listOrderCommentsSQL">
+        FROM
+            t_order o, t_user u, t_order_comments c
+        WHERE
+            u.id = o.userId
+        AND
+            o.orgUserId = #{orgUserId}
+        AND
+            c.orderId = o.id
+        <if test="commentsStatus != null">
+            AND c.`status` = #{commentsStatus}
+        </if>
+        <if test="status != null">
+            AND o.`status` = #{status}
+        </if>
+        <if test="userName != null">
+            AND u.userName LIKE CONCAT('%',#{userName},'%')
+        </if>
+        AND o.projectCode in (
+        <if test="type == 'all'">
+            SELECT code FROM t_project_consult WHERE status = 2
+            UNION
+            SELECT code FROM t_project_lesson WHERE status = 2
+            UNION
+            SELECT code FROM t_project_visit WHERE status = 2
+        </if>
+        <if test="type == 'online'">
+            SELECT code FROM t_project_consult WHERE status = 2
+            UNION
+            SELECT code FROM t_project_lesson WHERE status = 2
+        </if>
+        <if test="type == 'offline'">
+            SELECT code FROM t_project_visit WHERE status = 2 AND projectType = 2
+        </if>
+        <if test="type == 'visit'">
+            SELECT code FROM t_project_visit WHERE status = 2 AND projectType = 3
+        </if>
+        )
+    </sql>
+
+    <select id = "listOrderByComments" resultMap="orgOrderDTO">
+        select
+        o.id as orderId, o.price, o.createDate, o.projectCode as code, u.userName, u.userCode
+        <include refid="listOrderCommentsSQL" />
+        ORDER BY o.createDate LIMIT #{startIndex}, #{pageSize}
+    </select>
+
+    <select id="getCountOfServiceOrderByComments" resultType="java.lang.Integer">
+        select count(1) <include refid="listOrderCommentsSQL" />
+    </select>
+
+    <!--<select id = "getServeOrderDetail" resultMap="ServiceOrderDTO">
+        SELECT
+          o.id as orderId, o.orderNumber, o.`status`, o.createDate, se.name AS orgServeName, se.image as orgServeImage, o.price, o.number, u.mobile, u.userName
+        FROM
+          t_order o, t_user u, t_org_serve s, t_serve se
+        WHERE
+          u.id = o.userId
+        AND
+          o.orgServeId = s.id
+        AND
+          o.orgServeId = s.id
+        AND
+          s.serveId = se.id
+        AND
+          o.orderType = 1
+        AND
+          o.id = #{orderId}
+        AND
+          o.orgUserId = #{orgUserId}
+    </select>-->
+    
+    <insert id="saveServeOrderComment" parameterType="com.lifeshs.pojo.order.OrderCommentDTO">
+        <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+        INSERT INTO t_order_comments(createDate,orderId,status,comment,reply,score)
+        VALUES(NOW(),#{orderId},#{status},#{comment},#{reply},#{score})
+    </insert>
+    
+    <update id="updateServeOrderComment" parameterType="com.lifeshs.pojo.order.OrderCommentDTO">
+        UPDATE t_order_comments SET modifyDate = NOW()
+        <if test="status != null">, `status` = #{status}</if>
+        <if test="comment != null">, comment = #{comment}</if>
+        <if test="reply != null">, reply = #{reply}</if>
+        <if test="score != null">, score = #{score}</if>
+        <if test="replyDate != null">, replyDate = NOW()</if>
+        WHERE orderId = #{orderId}
+    </update>
+    
+    <select id="listProfit" resultType="com.lifeshs.pojo.org.profit.ProfitDTO">
+        SELECT
+            SUM(o.charge) AS earning,
+            COUNT(o.id) AS orderCount,
+            o.createDate AS date
+        FROM
+            t_order o
+        <if test="orgId != null">
+            INNER JOIN t_org_user ou ON ou.id = o.orgUserId
+        </if>
+
+        WHERE
+            (DATE(#{startDate}) &lt; o.createDate
+                AND
+                o.createDate &lt;= DATE(#{endDate})
+            )
+        AND o.orderType = 1
+        AND o.`status` IN (3, 4)
+        <if test="orgId != null">
+            AND ou.orgId = #{orgId}
+        </if>
+        <if test="orgUserId != null">
+            AND o.orgUserId = #{orgUserId}
+        </if>
+        GROUP BY DATE_FORMAT(o.createDate,'%Y-%m-%d')
+    </select>
+
+    <select id="countDayProfit" resultType="com.lifeshs.pojo.org.profit.ProfitDTO">
+        SELECT
+        SUM(o.charge) AS earning,
+        COUNT(o.id) AS orderCount,
+        o.createDate AS date
+        FROM
+        t_order o
+        INNER JOIN t_org_user ou ON ou.id = o.orgUserId
+        WHERE
+        (o.createDate &lt;= DATE(#{date})
+        AND
+        DATE_FORMAT(o.createDate,'%Y-%m-%d') = DATE_FORMAT(#{date}, '%Y-%m-%d')
+        )
+        AND o.orderType = 1
+        AND o.`status` IN (3, 4)
+        AND ou.orgId = #{orgId}
+    </select>
+
+    <select id="countDayProfitByServices" resultType="com.lifeshs.pojo.org.profit.ProfitDTO">
+        SELECT
+        SUM(o.charge) AS earning,
+        COUNT(o.id) AS orderCount,
+        o.createDate AS date
+        FROM
+        t_order o
+        WHERE
+        (o.createDate &lt;= DATE(#{date})
+        AND
+        DATE_FORMAT(o.createDate,'%Y-%m-%d') = DATE_FORMAT(#{date}, '%Y-%m-%d')
+        )
+        AND o.orderType = 1
+        AND o.`status` IN (3, 4)
+        AND o.orgUserId = #{orgUserId}
+    </select>
+
+    <select id="countWeekProfit" resultType="com.lifeshs.pojo.org.profit.ProfitDTO">
+        SELECT
+            SUM(o.charge) AS earning,
+            COUNT(o.id) AS orderCount,
+            o.createDate AS date
+        FROM
+            t_order o
+        INNER JOIN t_org_user ou ON ou.id = o.orgUserId
+        WHERE
+            (o.createDate &lt;= DATE(#{date})
+                AND
+                DATE_SUB(DATE(#{date}), INTERVAL 1 WEEK) &lt; o.createDate
+            )
+        AND o.orderType = 1
+        AND o.`status` IN (3, 4)
+        AND ou.orgId = #{orgId}
+    </select>
+
+
+    
+    <select id="countIncome" resultType="java.lang.Long">
+        SELECT IFNULL(SUM(orgIncome), 0) FROM t_order_flow
+        WHERE orgId = #{orgId}
+            AND (createTime &lt;= DATE(#{endDate}) AND DATE(#{startDate}) &lt;= createTime)
+    </select>
+
+    <!--根据机构获取订单-->
+    <select id="listOrderByOrg" resultMap="orgOrderDTO">
+        SELECT o.orderNumber, o.id as orderId, o.price, o.createDate, o.projectCode as code, u.id as orgUserId, u.realName as orgRealName, us.userName
+        FROM
+            t_order o, t_org_user u, t_user us
+        WHERE
+            o.orgUserId = u.id
+            AND us.id = o.userId
+            <if test="status != null">
+                AND o.status = #{status}
+            </if>
+            <if test="userName != null">
+                AND us.userName LIKE CONCAT('%',#{userName},'%')
+            </if>
+        AND o.projectCode in (
+            <if test="type == null">
+                SELECT projectCode FROM  t_project p
+                WHERE p.orgId = #{orgId}
+            </if>
+            <if test="type == 'online'">
+                SELECT projectCode FROM  t_project p
+                WHERE p.projectType = 1 AND p.orgId = #{orgId}
+            </if>
+            <if test="type == 'offline'">
+                SELECT projectCode FROM  t_project p
+                WHERE p.projectType = 2 AND p.orgId = #{orgId}
+            </if>
+            <if test="type == 'visit'">
+                SELECT projectCode FROM  t_project p
+                WHERE p.projectType = 3 AND p.orgId = #{orgId}
+            </if>
+        )
+        limit #{startIndex}, #{pageSize}
+    </select>
+
+    <resultMap id="orgOrderDTO" type="com.lifeshs.pojo.order.ServiceOrderDTO">
+        <id column="code" property="code"/>
+        <association property="service" column="code" select="getServiceByCode"/>
+    </resultMap>
+
+
+    <resultMap type="com.lifeshs.pojo.order.ServiceOrderDTO" id="ServiceOrderDTO">
+        <id column="orderId" property="orderId" />
+        <association property="service" column="code" select="getServiceByCode"/>
+        <association property="comment" column="orderId" javaType="com.lifeshs.pojo.order.OrderCommentDTO" select="selectOrderComment"/>
+    </resultMap>
+
+    <!--获取服务项目信息-->
+    <select id="getServiceByCode" resultType="com.lifeshs.pojo.org.service.OrgServiceDTO">
+    <!--SELECT
+        name, image, projectType, serveId
+    FROM
+        t_project_lesson
+    WHERE
+        code = #{code}
+    UNION
+    SELECT
+        name, image, projectType, serveId
+    FROM
+        t_project_consult
+    WHERE
+        code = #{code}
+    UNION
+    SELECT
+        name, image, projectType, serveId
+    FROM
+        t_project_visit
+    WHERE
+        code = #{code}-->
+      SELECT
+          p.name, p.image, p.serveId, p.huanxinId, p.projectType
+      FROM
+          t_project p
+      WHERE
+          p.projectCode = #{code}
+</select>
+
+<!--根据机构获取订单总数-->
+    <select id="getCountOfOrderByOrg" resultType="java.lang.Integer">
+        SELECT count(1)
+        FROM
+            t_order o, t_user u
+        WHERE
+            o.userId = u.id
+        <if test="status != null">
+            AND o.status = #{status}
+        </if>
+        <if test="userName != null">
+            AND u.userName LIKE CONCAT('%',#{userName},'%')
+        </if>
+        AND o.projectCode in (
+        <if test="type == null">
+
+            SELECT projectCode FROM  t_project p
+            WHERE  p.orgId = #{orgId}
+        </if>
+        <if test="type == 'online'">
+
+            SELECT projectCode FROM  t_project p
+            WHERE  p.projectType = 1 AND p.orgId = #{orgId}
+        </if>
+        <if test="type == 'offline'">
+
+            SELECT projectCode FROM  t_project p
+            WHERE  p.projectType = 2 AND p.orgId = #{orgId}
+        </if>
+        <if test="type == 'visit'">
+
+            SELECT projectCode FROM  t_project p
+            WHERE  p.projectType = 3 AND p.orgId = #{orgId}
+        </if>
+        )
+    </select>
+
+    <!--根据机构获取订单总数-->
+    <select id="getTodayCountOfOrderByOrg" resultType="java.lang.Integer">
+        SELECT count(1)
+        FROM
+        t_order o
+        WHERE
+        1=1
+        <if test="status != null">
+            AND o.status = #{status}
+        </if>
+        <if test="createDate != null">
+            AND DATE(o.createDate) = #{createDate}
+        </if>
+    </select>
+
+    <!--获取订单详细-->
+    <select id = "getOrderDetails" resultMap="ServiceOrderDTO">
+        SELECT
+          o.id as orderId, o.orderNumber, o.`status`, o.createDate, o.price, o.number, o.projectCode as code, u.mobile, u.userName
+        FROM
+          t_order o, t_user u, t_org_user us
+        WHERE
+          u.id = o.userId
+        AND
+          o.orderType = 1
+        AND
+          o.orgUserId = us.id
+        AND
+          o.id = #{orderId}
+        AND
+          us.orgId = #{orgId}
+    </select>
+
+    <!--获取最近7天服务师收益-->
+    <select id="countWeekProfitByOrgUser" resultType="com.lifeshs.pojo.org.profit.ProfitDTO">
+        SELECT
+            SUM(o.charge) AS earning, COUNT(o.id) AS orderCount, o.createDate AS date
+        FROM
+            t_order o
+        WHERE
+            DATE_SUB(CURDATE(), INTERVAL 1 WEEK) &lt;= date(o.createDate)
+        AND
+            o.status in (3, 4)
+        AND
+            o.createDate &lt;= DATE (#{date})
+        AND
+            o.orgUserId = #{orgUserId}
+    </select>
+
+    <!--查询订单验证码-->
+    <select id = "getVerifyCode" resultType="java.lang.String">
+        SELECT
+            o.verifyCode
+        FROM
+            t_order o
+        WHERE
+            o.id = #{orderId}
+        AND
+            o.orderNumber = #{orderNumber}
+    </select>
+    
+    <select id="getServiceOrderByUserIdAndServeUserId" resultMap="v2OrderDTO">
+        SELECT o.* FROM
+          t_order o
+        INNER JOIN t_project p ON p.projectCode = o.projectCode
+        WHERE
+          o.userId = #{userId}
+        AND
+          o.orderType = 1
+        AND
+          o.orgUserId = #{serveUserId}
+        AND
+          o.`status` = 3
+        AND
+          p.projectType = #{projectType}
+        ORDER BY id DESC
+        LIMIT 1
+    </select>
+    
+    <!-- 结果集 -->
+    <resultMap id="v2OrderDTO" type="com.lifeshs.pojo.order.v2.OrderDTO">
+        <id property="id" column="id" />
+        <result property="orgUserId" column="orgUserId" />
+        <result property="projectCode" column="projectCode" />
+        <association property="comment" column="id" select="com.lifeshs.dao.order.CommentDao.findCommentPOByOrderId"/>
+        <association property="serveUser" column="orgUserId" select="com.lifeshs.dao.org.employee.IEmployeeManageDao.getEmployee" />
+        <association property="commonProject" column="projectCode" select="com.lifeshs.dao.serve.ServeDao.getCommonProject" />
+        <association property="serve" column="serveId" select="com.lifeshs.dao.serve.ServeDao.getServeType" />
+        <association property="refund" column="orderNumber" select="findRefundByOrderNumber" />
+    </resultMap>
+
+    <select id="findRefundByOrderNumber" resultType="com.lifeshs.vo.RefundOrderVO">
+        SELECT id, orderNumber, cause, refundTime, `status` AS refundStatus FROM t_order_refund WHERE orderNumber = #{orderNumber}
+    </select>
+
+    <!--获取服务师指定时间段订单列表-->
+    <select id = "listOrderByServices" resultType="com.lifeshs.pojo.order.homeOrderDTO">
+        SELECT
+            o.createDate, o.orderNumber, o.`subject` as projectName, o.charge, u.userName
+        FROM
+            t_order o, t_user u
+        WHERE
+            o.userId = u.id
+        AND
+            o.`status` in (3, 4)
+        AND
+            o.orderType = 1
+        AND
+            o.orgUserId = #{orgUserId}
+        AND
+            #{startDate} &lt;= date(o.createDate)
+        AND
+            #{endDate} &gt;= date(o.createDate)
+    </select>
+
+    <!--获取服务师指定时间段订单列表-->
+    <select id = "listOrderByStore" resultType="com.lifeshs.pojo.order.homeOrderDTO">
+        SELECT
+        o.createDate, o.orderNumber, o.`subject` as projectName, o.charge, u.userName
+        FROM
+        t_order o, t_user u
+        WHERE
+        o.userId = u.id
+        AND
+        o.`status` in (3, 4)
+        AND
+        o.orderType = 1
+        AND
+        o.orgUserId in (SELECT id FROM t_org_user WHERE orgId = #{orgId})
+        AND
+        #{startDate} &lt;= date(o.createDate)
+        AND
+        #{endDate} &gt;= date(o.createDate)
+    </select>
+
+    <insert id="saveOrder" parameterType="com.lifeshs.pojo.order.v2.OrderDTO">
+        <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+        INSERT INTO t_order(orderNumber, userId, chargeMode, subject,
+            body, price, number, charge, startDate, endDate, timesRemaining, status, createDate, orderType,
+            orgUserId, projectCode, serveId, projectImage, `address`, receiverName, receiverMobile, serveItemId,
+            sysUserNo,agentUserNo,salesmanUserNo,introduceOrgUserNo,serviceOrgUserNo)
+        VALUES(#{orderNumber}, #{userId}, #{chargeMode}, #{subject},
+            #{body}, #{price}, #{number}, #{charge}, #{startDate}, #{endDate}, #{timesRemaining}, #{status}, NOW(), #{orderType},
+            #{orgUserId}, #{projectCode}, #{serveId}, #{projectImage}, #{address}, #{receiverName}, #{receiverMobile}, #{serveItemId},
+            #{sysUserNo},#{agentUserNo},#{salesmanUserNo},#{introduceOrgUserNo},#{serviceOrgUserNo})
+    </insert>
+    
+    <update id="updateOrder" parameterType="com.lifeshs.pojo.order.v2.OrderDTO">
+        UPDATE t_order
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="startDate != null">startDate = #{startDate},</if>
+            <if test="endDate != null">endDate = #{endDate},</if>
+            <if test="timesRemaining != null">timesRemaining = #{timesRemaining},</if>
+            <if test="status != null">`status` = #{status},</if>
+            <if test="profitShare != null">profitShare = #{profitShare},</if>
+            <if test="orgIncome != null">orgIncome = #{orgIncome},</if>
+            <if test="statementId != null">statementId = #{statementId},</if>
+            <if test="deleted != null">deleted = #{deleted},</if>
+            <if test="verifyCode != null">verifyCode = #{verifyCode},</if>
+            <if test="couponsId != null">couponsId = #{couponsId},</if>
+            <if test="sysUserNo != null">sysUserNo = #{sysUserNo},</if>
+            <if test="agentUserNo != null">agentUserNo = #{agentUserNo},</if>
+            <if test="salesmanUserNo != null">salesmanUserNo = #{salesmanUserNo},</if>
+            <if test="introduceOrgUserNo != null">introduceOrgUserNo = #{introduceOrgUserNo},</if>
+            <if test="serviceOrgUserNo != null">serviceOrgUserNo = #{serviceOrgUserNo},</if>
+            <if test="sysIncome != null">sysIncome = #{sysIncome},</if>
+            <if test="agentIncome != null">agentIncome = #{agentIncome},</if>
+            <if test="salesmanIncome != null">salesmanIncome = #{salesmanIncome},</if>
+            <if test="introduceOrgIncome != null">introduceOrgIncome = #{introduceOrgIncome},</if>
+            <if test="serviceOrgIncome != null">serviceOrgIncome = #{serviceOrgIncome},</if>
+        </trim>
+        <where>
+            <if test="id != null">id = #{id}</if>
+            <if test="orderNumber != null">AND orderNumber = #{orderNumber}</if>
+        </where>
+    </update>
+    
+    <select id="countOrderWithCondition" resultType="java.lang.Integer">
+        SELECT COUNT(1) FROM t_order o
+        <include refid="searchOrderCondition" />
+    </select>
+    
+    <select id="listOrderWithCondition" resultMap="v2OrderDTO">
+        SELECT o.* FROM t_order o
+        <include refid="searchOrderCondition" />
+        ORDER BY o.createDate DESC
+        LIMIT #{startIndex}, #{pageSize}
+    </select>
+    
+    <sql id="searchOrderCondition">
+        <!-- 左关联退款扩展表 -->
+        <if test="refundNotNull != null">
+            LEFT JOIN t_order_refund f ON f.orderNumber = o.orderNumber
+        </if>
+        <!--<if test="projectTypeList.size != 0">LEFT JOIN t_project p ON p.projectCode = o.projectCode</if>-->
+        <!-- 左关联评论表 -->
+        <if test="commentNotNull != null">
+            LEFT JOIN t_order_comments c ON c.orderId = o.id
+        </if>
+        WHERE
+            o.userId = #{userId}
+            AND o.deleted = 0
+            AND o.orderType = 1
+            AND o.`status` IN <foreach collection="statusList" item="s" separator="," open="(" close=")">#{s}</foreach>
+            <!--<if test="projectTypeList.size != 0">-->
+                <!--AND p.projectType IN <foreach collection="projectTypeList" item="c" separator="," open="(" close=")">#{c}</foreach>-->
+            <!--</if>-->
+            <if test="refundNotNull != null">
+                <choose>
+                    <when test="refundNotNull">AND f.id IS NOT NULL</when>
+                    <otherwise>AND f.id IS NULL</otherwise>
+                </choose>
+            </if>
+            <if test="commentNotNull != null">
+                <choose>
+                    <when test="commentNotNull">AND c.id IS NOT NULL</when>
+                    <otherwise>AND c.id IS NULL</otherwise>
+                </choose>
+            </if>
+    </sql>
+    
+    <select id="listOrderCompleteByProjectCode" resultMap="v2OrderDTO">
+        <!-- status为4表示订单状态为已完成 -->
+        SELECT * FROM t_order WHERE `status` = 4 AND projectCode = #{projectCode}
+    </select>
+
+    <select id="countProfit" resultType="com.lifeshs.pojo.org.profit.ProfitDTO">
+        SELECT
+        SUM(o.charge) AS earning,
+        COUNT(o.id) AS orderCount,
+        o.createDate AS date
+        FROM
+        t_order o
+        INNER JOIN t_org_user ou ON ou.id = o.orgUserId
+        WHERE
+          (o.createDate &lt;= DATE(#{endDate})
+        AND
+          DATE(#{startDate}) &lt; o.createDate
+        )
+        AND o.orderType = 1
+        AND o.`status` IN (3, 4)
+        AND ou.orgId = #{orgId}
+    </select>
+
+    <select id="countProfitByServices" resultType="com.lifeshs.pojo.org.profit.ProfitDTO">
+        SELECT
+        SUM(o.charge) AS earning,
+        COUNT(o.id) AS orderCount,
+        o.createDate AS date
+        FROM
+        t_order o
+        WHERE
+        (o.createDate &lt;= DATE(#{endDate})
+        AND
+        DATE(#{startDate}) &lt; o.createDate
+        )
+        AND o.orderType = 1
+        AND o.`status` IN (3, 4)
+        AND o.orgUserId = #{orgUserId}
+    </select>
+
+    <!--计算指定月数的收益-->
+    <select id = "countProfitByMonth" resultType="com.lifeshs.pojo.org.profit.ProfitDTO">
+        select
+            o.createDate as date,
+            SUM((o.charge)) as earning,
+            COUNT(o.id) as orderCount
+        from
+            t_order o
+        INNER JOIN t_org_user ou ON ou.id = o.orgUserId
+        WHERE
+            o.orderType = 1
+        AND
+            o.`status` IN (3, 4)
+        AND
+            (DATE(#{startDate}) &lt;= o.createDate
+        AND
+            DATE(#{endDate}) &gt;= o.createDate)
+        AND
+            ou.orgId = #{orgId}
+        group by month(o.createDate)
+    </select>
+</mapper>

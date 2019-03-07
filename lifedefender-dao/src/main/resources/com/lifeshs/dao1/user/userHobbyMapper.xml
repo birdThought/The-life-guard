@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lifeshs.dao1.user.UserHobbyDao">
+    <select id="findUserHobbyByUserId" resultType="com.lifeshs.po.user.UserHobbyPO">
+        SELECT <include refid="USER_HOBBY_ALL_COLUMN" /> FROM t_user_hobby userHobby WHERE userHobby.userId = #{userId} AND userHobby.deleted = FALSE
+    </select>
+    
+    <insert id="addUserHobby">
+        INSERT INTO t_user_hobby (userId, hobbyId, hobbyName, createDate)
+        VALUES
+            <foreach collection="hobbyIdList" item="hobbyId" separator=",">
+            (#{userId}, #{hobbyId}, (
+                SELECT
+                    name
+                FROM
+                    t_data_hobby
+                WHERE
+                    id = #{hobbyId}
+                ),
+                NOW()
+            )
+            </foreach>
+    </insert>
+    
+    <update id="delUserHobby">
+        UPDATE t_user_hobby SET deleted = TRUE, modifyDate = NOW() WHERE userId = #{userId} AND deleted = FALSE
+    </update>
+    
+    <update id="delUserHobbyList">
+        UPDATE t_user_hobby SET deleted = TRUE, modifyDate = NOW() WHERE id IN (
+                <foreach collection="userHobbyIdList" item="userHobbyId" separator=",">#{userHobbyId}</foreach>
+            ) AND userId = #{userId} AND deleted = FALSE
+    </update>
+    
+    <update id="updateUserHobby" parameterType="com.lifeshs.po.user.UserHobbyPO">
+        UPDATE t_user_hobby SET hobbyId = #{hobbyId}, hobbyName = (
+                SELECT name FROM t_data_hobby WHERE id = #{hobbyId}
+            ), modifyDate = NOW()
+        WHERE id = #{id} AND userId = #{userId} AND deleted = FALSE
+    </update>
+    
+    <!-- 别名userHobby -->
+    <sql id="USER_HOBBY_ALL_COLUMN">
+        userHobby.id, userHobby.userId, userHobby.hobbyId, userHobby.hobbyName, userHobby.createDate, userHobby.modifyDate
+    </sql>
+</mapper>

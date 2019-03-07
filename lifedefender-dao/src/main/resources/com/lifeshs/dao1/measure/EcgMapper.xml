@@ -1,0 +1,245 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lifeshs.dao1.measure.EcgDao" >
+
+    <!-- 心电仪 -->
+
+  <!-- <resultMap id="BaseResultMap" type="com.lifeshs.po.EcgPO" >
+    <id property="id" column="id" jdbcType="INTEGER" javaType="java.lang.Integer" />
+    <result property="userId" column="userId" jdbcType="INTEGER" javaType="java.lang.Integer" />
+    <result property="deviceType" column="deviceType" jdbcType="VARCHAR" javaType="java.lang.String" />
+    <result property="dataType" column="dataType" jdbcType="SMALLINT" javaType="java.lang.Short" />
+    <result property="date" column="date" jdbcType="DATE" javaType="java.util.Date" />
+    <result property="createDate" column="createDate" jdbcType="TIMESTAMP" javaType="java.util.Date"/>
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, userId, status, heartRate, measureDate, deviceType, createDate, image, signType, 
+    dataType, tags, rhythmId
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_measure_ecg
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from t_measure_ecg
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.lifeshs.po.EcgPO" >
+    insert into t_measure_ecg (id, userId, status, 
+      heartRate, measureDate, deviceType, 
+      createDate, image, signType, 
+      dataType, tags, rhythmId
+      )
+    values (#{id,jdbcType=INTEGER}, #{userId,jdbcType=INTEGER}, #{status,jdbcType=BIGINT}, 
+      #{heartRate,jdbcType=SMALLINT}, #{measureDate,jdbcType=TIMESTAMP}, #{deviceType,jdbcType=VARCHAR}, 
+      #{createDate,jdbcType=TIMESTAMP}, #{image,jdbcType=VARCHAR}, #{signType,jdbcType=BIT}, 
+      #{dataType,jdbcType=SMALLINT}, #{tags,jdbcType=VARCHAR}, #{rhythmId,jdbcType=INTEGER}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.lifeshs.po.EcgPO" >
+    insert into t_measure_ecg
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="userId != null" >
+        userId,
+      </if>
+      <if test="status != null" >
+        status,
+      </if>
+      <if test="heartRate != null" >
+        heartRate,
+      </if>
+      <if test="measureDate != null" >
+        measureDate,
+      </if>
+      <if test="deviceType != null" >
+        deviceType,
+      </if>
+      <if test="createDate != null" >
+        createDate,
+      </if>
+      <if test="image != null" >
+        image,
+      </if>
+      <if test="signType != null" >
+        signType,
+      </if>
+      <if test="dataType != null" >
+        dataType,
+      </if>
+      <if test="tags != null" >
+        tags,
+      </if>
+      <if test="rhythmId != null" >
+        rhythmId,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="userId != null" >
+        #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=BIGINT},
+      </if>
+      <if test="heartRate != null" >
+        #{heartRate,jdbcType=SMALLINT},
+      </if>
+      <if test="measureDate != null" >
+        #{measureDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="deviceType != null" >
+        #{deviceType,jdbcType=VARCHAR},
+      </if>
+      <if test="createDate != null" >
+        #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="image != null" >
+        #{image,jdbcType=VARCHAR},
+      </if>
+      <if test="signType != null" >
+        #{signType,jdbcType=BIT},
+      </if>
+      <if test="dataType != null" >
+        #{dataType,jdbcType=SMALLINT},
+      </if>
+      <if test="tags != null" >
+        #{tags,jdbcType=VARCHAR},
+      </if>
+      <if test="rhythmId != null" >
+        #{rhythmId,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.lifeshs.po.EcgPO" >
+    update t_measure_ecg
+    <set >
+      <if test="userId != null" >
+        userId = #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=BIGINT},
+      </if>
+      <if test="heartRate != null" >
+        heartRate = #{heartRate,jdbcType=SMALLINT},
+      </if>
+      <if test="measureDate != null" >
+        measureDate = #{measureDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="deviceType != null" >
+        deviceType = #{deviceType,jdbcType=VARCHAR},
+      </if>
+      <if test="createDate != null" >
+        createDate = #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="image != null" >
+        image = #{image,jdbcType=VARCHAR},
+      </if>
+      <if test="signType != null" >
+        signType = #{signType,jdbcType=BIT},
+      </if>
+      <if test="dataType != null" >
+        dataType = #{dataType,jdbcType=SMALLINT},
+      </if>
+      <if test="tags != null" >
+        tags = #{tags,jdbcType=VARCHAR},
+      </if>
+      <if test="rhythmId != null" >
+        rhythmId = #{rhythmId,jdbcType=INTEGER},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.lifeshs.po.EcgPO" >
+    update t_measure_ecg
+    set userId = #{userId,jdbcType=INTEGER},
+      status = #{status,jdbcType=BIGINT},
+      heartRate = #{heartRate,jdbcType=SMALLINT},
+      measureDate = #{measureDate,jdbcType=TIMESTAMP},
+      deviceType = #{deviceType,jdbcType=VARCHAR},
+      createDate = #{createDate,jdbcType=TIMESTAMP},
+      image = #{image,jdbcType=VARCHAR},
+      signType = #{signType,jdbcType=BIT},
+      dataType = #{dataType,jdbcType=SMALLINT},
+      tags = #{tags,jdbcType=VARCHAR},
+      rhythmId = #{rhythmId,jdbcType=INTEGER}
+    where id = #{id,jdbcType=INTEGER}
+  </update> -->
+
+    <select id="selectMeasureDatesByUserId" resultType="com.lifeshs.pojo.healthDevice.EcgDetailDTO">
+        SELECT e.date AS measureDate, MAX(ed.`status`) AS `status`
+        FROM t_measure_ecg e
+            LEFT JOIN t_measure_ecg_detail ed ON ed.ecgMeasureId = e.id
+        WHERE e.userId = #{userId}
+        AND DATE_ADD(#{queryDate}, INTERVAL 1 month) &gt;= e.date
+        AND e.date &gt;= #{queryDate}
+        GROUP BY e.date
+    </select>
+
+    <select id="getLastDateByUserId" resultType="java.util.Date" parameterType="java.lang.Integer">
+        SELECT date
+        FROM t_measure_ecg
+        WHERE userId = #{userId}
+        ORDER by date DESC
+        LIMIT 1
+    </select>
+
+    <select id="getLastestData" resultMap="EcgDTO">
+        SELECT
+         e.id, e.userId, e.deviceType,e.dataType, e.date,ed.id AS edId, ed.ecgMeasureId, ed.`status`, ed.heartRate, ed.measureDate, ed.image, ed.signType, ed.tags, ed.rhythmId
+        FROM t_measure_ecg e
+        LEFT JOIN t_measure_ecg_detail ed ON ed.ecgMeasureId = e.id
+        WHERE e.userId = #{userId}
+        ORDER by ed.measureDate DESC
+        LIMIT 1
+    </select>
+
+    <select id="selectByUserIdAndDate" resultMap="EcgDTO">
+        SELECT
+            e.id, e.userId, e.deviceType, e.dataType, e.date,
+            ed.id AS edId, ed.ecgMeasureId, ed.`status`, ed.heartRate, ed.measureDate, ed.image, ed.signType, ed.tags, ed.rhythmId,
+            r.id AS rId, r.name AS rName, r.meaning
+        FROM t_measure_ecg e
+            LEFT JOIN t_measure_ecg_detail ed ON ed.ecgMeasureId = e.id
+            LEFT JOIN t_data_rhythm r ON r.id = ed.rhythmId
+        WHERE e.userId = #{userId}
+            AND e.date = DATE_FORMAT(#{date}, '%Y-%m-%d')
+        ORDER by ed.measureDate DESC
+        LIMIT 1
+    </select>
+
+    <resultMap type="com.lifeshs.pojo.healthDevice.EcgDTO" id="EcgDTO">
+        <id column="id" property="id"/>
+        <result property="userId" column="userId"/>
+        <result property="deviceType" column="deviceType"/>
+        <result property="dataType" column="dataType"/>
+        <result property="date" column="date"/>
+        <result property="createDate" column="createDate"/>
+        <collection property="detailList" notNullColumn="edId" ofType="com.lifeshs.pojo.healthDevice.EcgDetailDTO">
+            <id property="id" column="edId"/>
+            <result property="ecgMeasureId" column="ecgMeasureId"/>
+            <result property="status" column="status"/>
+            <result property="heartRate" column="heartRate"/>
+            <result property="measureDate" column="measureDate"/>
+            <result property="image" column="image"/>
+            <result property="signType" column="signType"/>
+            <result property="tags" column="tags"/>
+            <result property="createDate" column="edCreateDate"/>
+            <result property="rhythmId" column="rhythmId"/>
+            <association property="ecgRhythm" javaType="com.lifeshs.pojo.data.EcgRhythmDTO">
+                <id property="id" column="rId"/>
+                <result property="name" column="rName"/>
+                <result property="meaning" column="meaning"/>
+                <!-- 这里使用延迟加载的方式获取原因跟治疗方法 -->
+                <collection property="reasonList" column="rId" ofType="java.lang.String" select="com.lifeshs.dao.device.IDeviceDao.selectReason" />
+                <collection property="remedyList" column="rId" ofType="java.lang.String" select="com.lifeshs.dao.device.IDeviceDao.selectRemedy"/>
+            </association>
+        </collection>
+    </resultMap>
+</mapper>

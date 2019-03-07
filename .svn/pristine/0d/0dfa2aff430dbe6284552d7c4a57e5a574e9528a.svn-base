@@ -1,0 +1,37 @@
+"use strict";
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var core_1 = require("@angular/core");
+var router_1 = require("@angular/router");
+var dashboard_component_1 = require("./dashboard.component");
+var menus_component_1 = require("./menus.component");
+var menu_detail_component_1 = require("./menu-detail.component");
+var helpcolumn_component_1 = require("./component/help/helpcolumn.component");
+var help_detail_component_1 = require("./component/help/help-detail.component");
+var gongyi_component_1 = require("./component/marketing/gongyi.component");
+var routes = [
+    { path: '', redirectTo: '/help', pathMatch: 'full' },
+    { path: 'dashboard', component: dashboard_component_1.DashboardComponent },
+    { path: 'detail/:id', component: menu_detail_component_1.MenuDetailComponent },
+    { path: 'help/:id', component: help_detail_component_1.HelpDetailComponent },
+    { path: 'help', component: helpcolumn_component_1.HelpColumnComponent },
+    { path: 'menus', component: menus_component_1.MenusComponent },
+    { path: 'gongyi', component: gongyi_component_1.GongyiComponent }
+];
+var AppRoutingModule = (function () {
+    function AppRoutingModule() {
+    }
+    return AppRoutingModule;
+}());
+AppRoutingModule = __decorate([
+    core_1.NgModule({
+        imports: [router_1.RouterModule.forRoot(routes)],
+        exports: [router_1.RouterModule]
+    })
+], AppRoutingModule);
+exports.AppRoutingModule = AppRoutingModule;
+//# sourceMappingURL=app-routing.module.js.map

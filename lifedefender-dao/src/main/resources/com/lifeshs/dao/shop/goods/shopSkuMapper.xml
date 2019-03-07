@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lifeshs.dao.shop.goods.ShopSkuDao">
+	
+	<!-- 批量插入sku -->
+	<insert id="batchInsertSkus">
+		INSERT INTO t_shop_sku
+		(goodsId,`group_spec`,marketPrice,`favorablePrice`,inventory,bra_code,picture)
+		VALUES
+		<foreach collection="skus" item="sku" separator=",">
+			(#{gid},#{sku.groupSpec},#{sku.marketPrice},#{sku.favorablePrice},#{sku.inventory},#{sku.braCode},#{sku.picture})
+		</foreach>
+	</insert>
+	
+	<delete id="removeSkusByGoodsId">
+		DELETE FROM t_shop_sku where goodsId=#{goodsId}
+	</delete>
+	
+	<select id="selectByGid" resultType="com.lifeshs.shop.SkuDTO">
+	 	SELECT s.id,s.`goodsId`,s.`group_spec` AS groupSpec
+		,s.marketPrice,s.favorablePrice,s.inventory,s.bra_code AS braCode,s.salesVolume,s.picture
+	   FROM t_shop_sku s
+	   WHERE s.goodsId=#{gid}
+	</select>
+</mapper>

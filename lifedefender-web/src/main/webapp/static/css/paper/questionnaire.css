@@ -1,0 +1,299 @@
+/*
+* @Author: Administrator
+* @Date:   2017-03-02 17:46:23
+* @Last Modified by:   Administrator
+* @Last Modified time: 2017-03-07 10:32:41
+*/
+/*
+* @Author: Administrator
+* @Date:   2017-02-24 17:13:05
+* @Last Modified by:   Administrator
+* @Last Modified time: 2017-03-02 17:22:36
+*/
+*{box-sizing: border-box;}
+
+.alignFlex{
+	display: flex;
+	align-items: center;
+	box-shadow: 0px 10px 30px rgba(0,0,0,.1);
+	padding-top: 10px;
+	padding-bottom: 10px;
+}
+.clearShadow{
+	box-shadow: none;
+}
+.item-content-border{
+	margin-top: 2em;
+	margin-bottom: 2em;
+	border: 1px dashed #ccc;
+	padding: 1em 1.5em;
+	margin-left: 1.5em;
+}
+.header {
+   /*  position: fixed; */
+    width: 100%;
+    background: #fff;
+    z-index: 50;
+    border-radius: 0;
+    box-shadow: 0 0 10px rgba(0,0,0,0.2);
+   /*  top: 0px; */
+}
+.navbar-inverse{
+	background-color: #fff;
+	border:none;
+}
+.navbar-inverse .navbar-toggle {
+	margin-top: 20px;
+    border-color: #48c858;
+    background-color: #48c858;
+}
+.navbar-inverse .navbar-nav>li>a{
+	color: #666;
+}
+.navbar-inverse .navbar-collapse, .navbar-inverse .navbar-form{
+	border:none;
+}
+.navbar-inverse .navbar-toggle .icon-bar {
+    /*background-color: #48c858;*/
+}
+.navbar-inverse .navbar-nav>.active>a, .navbar-inverse .navbar-nav>.active>a:focus, .navbar-inverse .navbar-nav>.active>a:hover{
+	background-color: transparent;
+	color:#48c858;
+}
+.navbar-inverse .navbar-toggle:hover, .navbar-inverse .navbar-toggle:focus {
+    background: #48c858;
+}
+
+.navbar-inverse .navbar-nav > li > a:hover, .navbar-inverse .navbar-nav > li > a:focus {
+    color: #48c858;
+}
+
+.navbar-inverse .navbar-toggle:hover .icon-bar {
+    background: #fff;
+}
+
+
+
+.banner img,.orgDown img{
+	width: 100%;
+}
+.carousel-indicators .active{
+	background-color: #80b421;
+}
+.item-content{
+	margin-top: 20px;
+	margin-bottom: 20px;
+}
+
+.row{
+	margin-top: 20px;
+	margin-bottom: 20px;
+}
+
+/* 选项卡切换 */
+.tab-item{
+	padding-left:15px;
+	padding-right: 15px;
+}
+.nav-tabs a{
+	font-size:16px;
+}
+.tab-content p{
+	margin-top: 20px;
+	margin-bottom: 10px;
+}
+.tab-content p a{
+	padding-right:50px;
+	font-size:16px;
+}
+
+.container .clearMargin{
+	margin-top: 0;
+}
+
+.item-title h3{
+	border-left:3px solid #48c858;
+	padding-left: 0.5em;
+}
+/* 中医亚健康 */
+.item-quetion{
+	margin-top: 40px;
+	border-top:1px solid #ddd;
+	position: relative;
+	padding-top:2.8em;
+	margin-bottom: 16px;
+}
+
+.item-sub{
+	position:absolute;
+	top:-5%;
+	left: 2em;
+	background-color: #fff;
+	color:#ff8525;
+}
+
+.item-quetion form{
+	padding-left: 2em;
+	min-height: 300px;
+}
+
+.item-quetion form li{
+	padding-left: 1.2em;
+	margin-bottom: 1em;
+}
+.btn{
+	padding:4px 26px;
+	color:#fff;
+	background-color: #48c858;
+}
+
+/* 分析 */
+
+.comment{
+	
+	padding-bottom: 30px;
+}
+.comment-content{
+	border-top: 1px dashed #ddd;
+	padding-top: 20px;
+
+}
+.comment-content li{
+	line-height: 2.4em;
+}
+/* 分析 */
+
+.footer{
+	background-color: #202226;
+	color: #fff;
+}
+.footer .item-code{
+	display: inline-block;
+	margin-top:10px;
+}
+.footer .container .col-xs-12 li:last-child{
+	font-size: 18px;
+}
+.footer li{
+	margin-bottom: .3em;
+}
+.footer a{
+	color: #fff;
+}
+.topHome{
+	position: fixed;
+	bottom: 2%;
+	right: 3%;
+	font-size: 30px;
+}
+.topHome i{
+	color:#48c858;
+}
+
+
+
+
+@media (max-width:768px){
+	.navbar-nav li ul li{
+		text-indent: 2em;
+	}
+	.navbar-nav li ul li a{
+		color: #999;
+	}
+	.navbar-nav li ul li a:hover{
+		color: #a8f1b1;
+	}
+	.footer .container .row > div:nth-of-type(2),
+	.footer .container .row > div:nth-of-type(3){
+		display: none;
+	}
+}
+@media (max-width:480px){
+	h3{font-size:18px;}
+	h4{font-size:15px;}
+	.service-items li{
+		margin-bottom: 1em;
+	}
+	.service_link{
+		width: 9.8em;
+		height: 16em;
+	}
+}
+@media (min-width:480px) and(max-width: 768px){
+	.service_link{
+		width: 15em !important;
+		height: 18em !important;
+	}
+}
+@media (min-width: 768px){
+	.navbar-nav {
+	    float: right;
+	    margin-top: 10px;
+	}
+	/* 导航条下拉框 */
+ul.navbar-nav > li{
+	position: relative;
+}
+ul.navbar-nav li ul {
+    display: none;
+}
+
+ul.navbar-nav li:hover ul {
+    position: absolute;
+    display: block;
+    z-index: 1000;
+    left: 0;
+    top: 44px;
+    padding: 5px 0;
+    background: #f8f8f8;
+	-webkit-box-shadow: 0 0 2px #999;
+    -moz-box-shadow: 0 0 2px #999;
+    box-shadow: 0 0 2px #999;
+    /* Border Radius */
+    -webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
+    border-radius: 4px;
+}
+ul.navbar-nav li ul li {
+    margin: 0 10px;
+    border-bottom: 1px solid #d0d0d0;
+}
+ ul.navbar-nav li ul li:first-child {
+    margin: 0 10px;
+    border-top: 0 none;
+}
+ul.navbar-nav li ul li:last-child {
+    border-bottom: 0 none;
+}
+ul.navbar-nav li ul li a, ul.navbar-nav li ul li a:link {
+    color: #777;
+    display: block;
+    background: transparent none;
+    padding: 10px 20px 10px 5px;
+    white-space: nowrap;
+
+    /* Border Radius */
+    -webkit-border-radius: 0px;
+    -moz-border-radius: 0px;
+    border-radius: 0px;
+}
+ul.navbar-nav li ul li a:hover {
+    text-decoration: underline;
+    color:#369239 ;
+}
+/* 导航条下拉框 */
+
+}
+@media (min-width: 768px) and (max-width: 992px){
+	.header .container{
+		width: 768px;
+		padding-right: 5px;
+	}
+	.orgDown .down-item li{
+		border-radius:4px;
+	}
+	.orgDown img{
+		width: 80%;
+	}
+	.none_1{display:none;}
+}

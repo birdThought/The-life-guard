@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lifeshs.dao1.admin.permissionDao">
+
+    <select id="findByAll" resultType="com.lifeshs.po.admin.permissionPo">
+    SELECT
+        *
+      FROM
+	t_admin_permission adp
+    INNER JOIN t_admin_permission ap ON adp.id = ap.parent_id
+    </select>
+
+</mapper>

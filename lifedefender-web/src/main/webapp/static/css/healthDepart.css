@@ -1,0 +1,246 @@
+@charset "utf-8";
+*:before,*:after,*{box-sizing:border-box;
+    -moz-box-sizing:border-box; /* Firefox */
+    -webkit-box-sizing:border-box; /* Safari */
+}
+.container{
+    width:918px;
+    min-height:840px;
+    border:1px solid #ddd;
+    margin:20px 40px;
+    padding:0px 30px 20px;
+}
+.search-btn {
+    background: #48c858;
+    font-size: 15px;
+    padding: 6px 20px;
+    color: #fff;
+    outline: none;
+    font-family: 'Microsoft YaHei';
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+}
+.search-btn:active{
+    background:#34af44;
+}
+
+
+.filter-contain {
+    border: 1px solid #ccc;
+    margin: 20px 0;
+    padding: 10px 0
+}
+
+.search-filter-group {
+    border-bottom: 1px solid #ccc;
+    padding: 0px 10px 8px
+}
+
+.search-divide-group {
+    border-bottom: 1px solid #ccc;
+    padding: 15px 10px 15px;
+    color: #6c6c6c;
+}
+
+.search-divide-group label {
+    float: left;
+}
+
+.search-divide-group .divide-contain {
+    margin-left: 80px;
+    border-left: 1px solid #ccc;
+    color: #0093ff;
+    padding: 0 10px;
+    font-size: 15px
+}
+
+.search-filter-group .result-text {
+    margin-left: 8px;
+    font-size: 15px
+}
+
+.search-filter-group .result-text span {
+    color: #ff5500;
+    margin: 0 8px
+}
+
+.search-filter {
+    display: inline-block;
+}
+
+.search-filter li {
+    display: inline-block;
+    margin: 5px
+}
+
+.search-filter li .filter-item {
+    height: 25px;
+    display: inline-block;
+    padding: 0 3px 0 8px;
+    line-height: 25px;
+    color: #0093ff;
+    border: 1px solid #0093ff
+}
+
+.search-filter li .filter-item a {
+    margin-left: 10px
+}
+
+.search-filter li .filter-item a:after {
+    content: url('../images/del.png');
+    width: 15px;
+    height: 15px;
+    cursor: pointer;
+    display: inline-block;
+}
+
+.search-divide-group .divide-list li.divide-action {
+    background: #d5ecfc;
+    border-radius: 3px;
+    padding: 2px 12px
+}
+
+.search-divide-group .divide-list li {
+    display: inline-block;
+    cursor: pointer;
+    margin: 0px 8px 8px
+}
+
+.result-item-contain {
+    border-bottom: 1px solid #ccc;
+    padding: 10px;
+    margin-top: 10px;
+    min-height: 150px
+}
+
+.result-item-contain img {
+    float: left;
+}
+
+.result-item-contain .result-message-contain {
+    padding: 0 8px;
+    margin-left: 170px
+}
+
+.result-item-contain .result-message-contain h3 {
+    display: inline-block;
+    font-size: 17px;
+    font-weight: 400;
+    margin-bottom: 10px
+}
+
+.result-item-contain .result-message-contain p {
+    font-size: 16px;
+    color: #6c6c6c;
+    margin-top: 3px
+}
+
+.top-contain {
+    height: 60px;
+    line-height: 60px;
+    border-bottom: 1px dashed #ccc;
+}
+
+.top-contain h3 {
+    font-size: 18px;
+    font-weight: 400;
+    display: inline;
+}
+
+.search-inp {
+    width: 300px;
+    height: 30px;
+    padding: 0 8px;
+    border: 1px solid #ccc
+}
+
+.shop-item {
+    border: 1px solid #ccc;
+    height: 220px;
+    width: 200px;
+    display: inline-block;
+    box-sizing: content-box;
+}
+
+.shop-item .shop-message-contain {
+    padding: 10px 8px
+}
+
+.shop-item .shop-message-contain h3 {
+    font-weight: 400;
+    font-size: 16px
+}
+
+.shop-item .shop-message-contain .shop-other-message {
+    margin-top: 5px
+}
+
+.shop-item .shop-message-contain .shop-other-message .shop-price {
+    color: #ff0000;
+    font-size: 16px;
+    font-weight: bold
+}
+
+.shop-item .shop-message-contain .shop-other-message .shop-sales-count {
+    float: right;
+    color: #6c6c6c
+}
+.shop-item-list li{
+    display: inline-block;margin:0 8px 15px;cursor: pointer;
+}
+/*我的服务*/
+.myService{
+    border-bottom:1px dashed #ddd;
+    margin-bottom:20px;
+}
+.myService h3{
+    height: 60px;
+    line-height: 60px;
+    font-size: 18px;
+    font-weight: 400;
+}
+.item-service{
+    border:1px solid #ddd;
+    border-top:none;
+}
+.bought-table{
+    width:856px;
+    border-collapse:collapse;
+    border-top:1px solid #ddd;
+}
+.bought-table td{
+    padding:6px 10px;
+    width:100px;
+    text-align:center;
+}
+.bought-table .table-title{
+    background-color:#f1f1f1;
+}
+.table-content{
+    border-bottom: 1px solid #ddd;
+}
+.bought-table .table-title span{
+    margin-right:16px;
+}
+.bought-table .contentBg{
+    padding:20px;
+    width:200px;
+    text-align:left;
+}
+.bought-table td em{
+    color:red;
+    font-size:16px;
+}
+.bought-table td dt{
+    font-weight:600;
+    font-size:15px;
+}
+.bought-table td:last-child p{
+    width:60px;
+    height:24px;
+    border:1px solid #ddd;
+    -webkit-border-radius:4px;
+    -moz-border-radius:4px;
+    border-radius:4px;
+}

@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lifeshs.dao.device.IDeviceDao" >
+
+    <sql id="selectBloodLipColumn">id,userId,status,HDL,HDLStatusDescription,HDLArea,LDL,LDLStatusDescription,LDLArea,TG,TGStatusDescription,TGArea,TC,TCStatusDescription,TCArea,bloodLipidRatio,bloodLipidRatioArea,bloodLipidStatusDescription,measureDate,deviceType,dataType</sql>
+
+    <select id="listBloodLipid" resultType="com.lifeshs.pojo.healthDevice.BloodLipidDTO">
+        SELECT
+            <include refid="selectBloodLipColumn" />
+        FROM t_measure_bloodlipid
+        WHERE
+            userId = #{userId}
+            AND deviceType LIKE CONCAT(#{deviceType}, '%')
+        ORDER BY measureDate DESC
+        LIMIT #{startIndex}, #{pageSize}
+    </select>
+
+    <select id="listBloodLipidWithLatestDay" resultType="com.lifeshs.pojo.healthDevice.BloodLipidDTO">
+        SELECT
+            <include refid="selectBloodLipColumn" />
+        FROM t_measure_bloodlipid
+        WHERE
+            userId = #{userId}
+            AND DATE_SUB(CURDATE(), INTERVAL 0 DAY) &lt;= date(measureDate)
+            AND DATE_SUB(CURDATE(), INTERVAL 0 DAY) &gt;= date(measureDate)
+            AND deviceType LIKE CONCAT(#{deviceType}, '%')
+        ORDER BY measureDate DESC
+    </select>
+
+    <select id="listBloodLipidWithLatestWeek" resultType="com.lifeshs.pojo.healthDevice.BloodLipidDTO">
+        SELECT
+            <include refid="selectBloodLipColumn" />
+        FROM t_measure_bloodlipid
+        WHERE
+            userId = #{userId}
+            AND DATE_SUB(CURDATE(), INTERVAL 1 WEEK) &lt; date(measureDate)
+            AND DATE_SUB(CURDATE(), INTERVAL 0 WEEK) &gt;= date(measureDate)
+            AND deviceType LIKE CONCAT(#{deviceType}, '%')
+        ORDER BY measureDate DESC
+    </select>
+
+    <select id="listBloodLipidWithLatestMonth" resultType="com.lifeshs.pojo.healthDevice.BloodLipidDTO">
+        SELECT
+            <include refid="selectBloodLipColumn" />
+        FROM t_measure_bloodlipid
+        WHERE
+            userId = #{userId}
+            AND DATE_SUB(CURDATE(), INTERVAL 1 MONTH) &lt; date(measureDate)
+            AND DATE_SUB(CURDATE(), INTERVAL 0 MONTH) &gt;= date(measureDate)
+            AND deviceType LIKE CONCAT(#{deviceType}, '%')
+        ORDER BY measureDate DESC
+    </select>
+
+    <select id="listBloodLipidWithLatestThreeMonth" resultType="com.lifeshs.pojo.healthDevice.BloodLipidDTO">
+        SELECT
+            <include refid="selectBloodLipColumn" />
+        FROM t_measure_bloodlipid
+        WHERE
+            userId = #{userId}
+            AND DATE_SUB(CURDATE(), INTERVAL 3 MONTH) &lt; date(measureDate)
+            AND DATE_SUB(CURDATE(), INTERVAL 0 MONTH) &gt;= date(measureDate)
+            AND deviceType LIKE CONCAT(#{deviceType}, '%')
+        ORDER BY measureDate DESC
+    </select>
+
+    <insert id="saveBloodLipid" parameterType="com.lifeshs.pojo.healthDevice.BloodLipidDTO">
+        <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER">
+            SELECT LAST_INSERT_ID();
+        </selectKey>
+        INSERT INTO t_measure_bloodlipid(userId,status,HDL,HDLStatusDescription,HDLArea,LDL,LDLStatusDescription,LDLArea,TG,TGStatusDescription,TGArea,TC,TCStatusDescription,TCArea,bloodLipidRatio,bloodLipidRatioArea,bloodLipidStatusDescription,measureDate,deviceType,dataType,createDate)
+        VALUES(#{userId},#{status},#{HDL},#{HDLStatusDescription},#{HDLArea},#{LDL},#{LDLStatusDescription},#{LDLArea},#{TG},#{TGStatusDescription},#{TGArea},#{TC},#{TCStatusDescription},#{TCArea},#{bloodLipidRatio},#{bloodLipidRatioArea},#{bloodLipidRatioStatusDescription},#{measureDate},#{deviceType},#{dataType},NOW())
+    </insert>
+
+</mapper>

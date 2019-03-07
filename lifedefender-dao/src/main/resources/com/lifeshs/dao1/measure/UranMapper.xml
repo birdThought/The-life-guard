@@ -1,0 +1,428 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lifeshs.dao1.measure.UranDao" >
+  <resultMap id="BaseResultMap" type="com.lifeshs.po.UranPO" >
+    <constructor >
+      <idArg column="id" jdbcType="INTEGER" javaType="java.lang.Integer" />
+      <arg column="userId" jdbcType="INTEGER" javaType="java.lang.Integer" />
+      <arg column="status" jdbcType="BIGINT" javaType="java.lang.Long" />
+      <arg column="LEU" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="LEUStatusDescription" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="NIT" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="NITStatusDescription" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="UBG" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="UBGStatusDescription" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="PRO" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="PROStatusDescription" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="pH" jdbcType="REAL" javaType="java.lang.Float" />
+      <arg column="pHStatusDescription" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="pHArea" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="BLD" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="BLDStatusDescription" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="SG" jdbcType="REAL" javaType="java.lang.Float" />
+      <arg column="SGStatusDescription" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="SGArea" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="KET" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="KETStatusDescription" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="BIL" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="BILStatusDescription" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="GLU" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="GLUStatusDescription" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="VC" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="VCStatusDescription" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="measureDate" jdbcType="TIMESTAMP" javaType="java.util.Date" />
+      <arg column="deviceType" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="createDate" jdbcType="TIMESTAMP" javaType="java.util.Date" />
+      <arg column="dataType" jdbcType="SMALLINT" javaType="java.lang.Short" />
+    </constructor>
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, userId, status, LEU, LEUStatusDescription, NIT, NITStatusDescription, UBG, UBGStatusDescription, 
+    PRO, PROStatusDescription, pH, pHStatusDescription, pHArea, BLD, BLDStatusDescription, 
+    SG, SGStatusDescription, SGArea, KET, KETStatusDescription, BIL, BILStatusDescription, 
+    GLU, GLUStatusDescription, VC, VCStatusDescription, measureDate, deviceType, createDate, 
+    dataType
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_measure_uran
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from t_measure_uran
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.lifeshs.po.UranPO" >
+    insert into t_measure_uran (id, userId, status, 
+      LEU, LEUStatusDescription, NIT, 
+      NITStatusDescription, UBG, UBGStatusDescription, 
+      PRO, PROStatusDescription, pH, 
+      pHStatusDescription, pHArea, BLD, 
+      BLDStatusDescription, SG, SGStatusDescription, 
+      SGArea, KET, KETStatusDescription, 
+      BIL, BILStatusDescription, GLU, 
+      GLUStatusDescription, VC, VCStatusDescription, 
+      measureDate, deviceType, createDate, 
+      dataType)
+    values (#{id,jdbcType=INTEGER}, #{userId,jdbcType=INTEGER}, #{status,jdbcType=BIGINT}, 
+      #{LEU,jdbcType=VARCHAR}, #{LEUStatusDescription,jdbcType=VARCHAR}, #{NIT,jdbcType=VARCHAR}, 
+      #{NITStatusDescription,jdbcType=VARCHAR}, #{UBG,jdbcType=VARCHAR}, #{UBGStatusDescription,jdbcType=VARCHAR}, 
+      #{PRO,jdbcType=VARCHAR}, #{PROStatusDescription,jdbcType=VARCHAR}, #{pH,jdbcType=REAL}, 
+      #{pHStatusDescription,jdbcType=VARCHAR}, #{pHArea,jdbcType=VARCHAR}, #{BLD,jdbcType=VARCHAR}, 
+      #{BLDStatusDescription,jdbcType=VARCHAR}, #{SG,jdbcType=REAL}, #{SGStatusDescription,jdbcType=VARCHAR}, 
+      #{SGArea,jdbcType=VARCHAR}, #{KET,jdbcType=VARCHAR}, #{KETStatusDescription,jdbcType=VARCHAR}, 
+      #{BIL,jdbcType=VARCHAR}, #{BILStatusDescription,jdbcType=VARCHAR}, #{GLU,jdbcType=VARCHAR}, 
+      #{GLUStatusDescription,jdbcType=VARCHAR}, #{VC,jdbcType=VARCHAR}, #{VCStatusDescription,jdbcType=VARCHAR}, 
+      #{measureDate,jdbcType=TIMESTAMP}, #{deviceType,jdbcType=VARCHAR}, #{createDate,jdbcType=TIMESTAMP}, 
+      #{dataType,jdbcType=SMALLINT})
+  </insert>
+  <insert id="insertSelective" parameterType="com.lifeshs.po.UranPO" >
+    insert into t_measure_uran
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="userId != null" >
+        userId,
+      </if>
+      <if test="status != null" >
+        status,
+      </if>
+      <if test="LEU != null" >
+        LEU,
+      </if>
+      <if test="LEUStatusDescription != null" >
+        LEUStatusDescription,
+      </if>
+      <if test="NIT != null" >
+        NIT,
+      </if>
+      <if test="NITStatusDescription != null" >
+        NITStatusDescription,
+      </if>
+      <if test="UBG != null" >
+        UBG,
+      </if>
+      <if test="UBGStatusDescription != null" >
+        UBGStatusDescription,
+      </if>
+      <if test="PRO != null" >
+        PRO,
+      </if>
+      <if test="PROStatusDescription != null" >
+        PROStatusDescription,
+      </if>
+      <if test="pH != null" >
+        pH,
+      </if>
+      <if test="pHStatusDescription != null" >
+        pHStatusDescription,
+      </if>
+      <if test="pHArea != null" >
+        pHArea,
+      </if>
+      <if test="BLD != null" >
+        BLD,
+      </if>
+      <if test="BLDStatusDescription != null" >
+        BLDStatusDescription,
+      </if>
+      <if test="SG != null" >
+        SG,
+      </if>
+      <if test="SGStatusDescription != null" >
+        SGStatusDescription,
+      </if>
+      <if test="SGArea != null" >
+        SGArea,
+      </if>
+      <if test="KET != null" >
+        KET,
+      </if>
+      <if test="KETStatusDescription != null" >
+        KETStatusDescription,
+      </if>
+      <if test="BIL != null" >
+        BIL,
+      </if>
+      <if test="BILStatusDescription != null" >
+        BILStatusDescription,
+      </if>
+      <if test="GLU != null" >
+        GLU,
+      </if>
+      <if test="GLUStatusDescription != null" >
+        GLUStatusDescription,
+      </if>
+      <if test="VC != null" >
+        VC,
+      </if>
+      <if test="VCStatusDescription != null" >
+        VCStatusDescription,
+      </if>
+      <if test="measureDate != null" >
+        measureDate,
+      </if>
+      <if test="deviceType != null" >
+        deviceType,
+      </if>
+      <if test="createDate != null" >
+        createDate,
+      </if>
+      <if test="dataType != null" >
+        dataType,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="userId != null" >
+        #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=BIGINT},
+      </if>
+      <if test="LEU != null" >
+        #{LEU,jdbcType=VARCHAR},
+      </if>
+      <if test="LEUStatusDescription != null" >
+        #{LEUStatusDescription,jdbcType=VARCHAR},
+      </if>
+      <if test="NIT != null" >
+        #{NIT,jdbcType=VARCHAR},
+      </if>
+      <if test="NITStatusDescription != null" >
+        #{NITStatusDescription,jdbcType=VARCHAR},
+      </if>
+      <if test="UBG != null" >
+        #{UBG,jdbcType=VARCHAR},
+      </if>
+      <if test="UBGStatusDescription != null" >
+        #{UBGStatusDescription,jdbcType=VARCHAR},
+      </if>
+      <if test="PRO != null" >
+        #{PRO,jdbcType=VARCHAR},
+      </if>
+      <if test="PROStatusDescription != null" >
+        #{PROStatusDescription,jdbcType=VARCHAR},
+      </if>
+      <if test="pH != null" >
+        #{pH,jdbcType=REAL},
+      </if>
+      <if test="pHStatusDescription != null" >
+        #{pHStatusDescription,jdbcType=VARCHAR},
+      </if>
+      <if test="pHArea != null" >
+        #{pHArea,jdbcType=VARCHAR},
+      </if>
+      <if test="BLD != null" >
+        #{BLD,jdbcType=VARCHAR},
+      </if>
+      <if test="BLDStatusDescription != null" >
+        #{BLDStatusDescription,jdbcType=VARCHAR},
+      </if>
+      <if test="SG != null" >
+        #{SG,jdbcType=REAL},
+      </if>
+      <if test="SGStatusDescription != null" >
+        #{SGStatusDescription,jdbcType=VARCHAR},
+      </if>
+      <if test="SGArea != null" >
+        #{SGArea,jdbcType=VARCHAR},
+      </if>
+      <if test="KET != null" >
+        #{KET,jdbcType=VARCHAR},
+      </if>
+      <if test="KETStatusDescription != null" >
+        #{KETStatusDescription,jdbcType=VARCHAR},
+      </if>
+      <if test="BIL != null" >
+        #{BIL,jdbcType=VARCHAR},
+      </if>
+      <if test="BILStatusDescription != null" >
+        #{BILStatusDescription,jdbcType=VARCHAR},
+      </if>
+      <if test="GLU != null" >
+        #{GLU,jdbcType=VARCHAR},
+      </if>
+      <if test="GLUStatusDescription != null" >
+        #{GLUStatusDescription,jdbcType=VARCHAR},
+      </if>
+      <if test="VC != null" >
+        #{VC,jdbcType=VARCHAR},
+      </if>
+      <if test="VCStatusDescription != null" >
+        #{VCStatusDescription,jdbcType=VARCHAR},
+      </if>
+      <if test="measureDate != null" >
+        #{measureDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="deviceType != null" >
+        #{deviceType,jdbcType=VARCHAR},
+      </if>
+      <if test="createDate != null" >
+        #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="dataType != null" >
+        #{dataType,jdbcType=SMALLINT},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.lifeshs.po.UranPO" >
+    update t_measure_uran
+    <set >
+      <if test="userId != null" >
+        userId = #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=BIGINT},
+      </if>
+      <if test="LEU != null" >
+        LEU = #{LEU,jdbcType=VARCHAR},
+      </if>
+      <if test="LEUStatusDescription != null" >
+        LEUStatusDescription = #{LEUStatusDescription,jdbcType=VARCHAR},
+      </if>
+      <if test="NIT != null" >
+        NIT = #{NIT,jdbcType=VARCHAR},
+      </if>
+      <if test="NITStatusDescription != null" >
+        NITStatusDescription = #{NITStatusDescription,jdbcType=VARCHAR},
+      </if>
+      <if test="UBG != null" >
+        UBG = #{UBG,jdbcType=VARCHAR},
+      </if>
+      <if test="UBGStatusDescription != null" >
+        UBGStatusDescription = #{UBGStatusDescription,jdbcType=VARCHAR},
+      </if>
+      <if test="PRO != null" >
+        PRO = #{PRO,jdbcType=VARCHAR},
+      </if>
+      <if test="PROStatusDescription != null" >
+        PROStatusDescription = #{PROStatusDescription,jdbcType=VARCHAR},
+      </if>
+      <if test="pH != null" >
+        pH = #{pH,jdbcType=REAL},
+      </if>
+      <if test="pHStatusDescription != null" >
+        pHStatusDescription = #{pHStatusDescription,jdbcType=VARCHAR},
+      </if>
+      <if test="pHArea != null" >
+        pHArea = #{pHArea,jdbcType=VARCHAR},
+      </if>
+      <if test="BLD != null" >
+        BLD = #{BLD,jdbcType=VARCHAR},
+      </if>
+      <if test="BLDStatusDescription != null" >
+        BLDStatusDescription = #{BLDStatusDescription,jdbcType=VARCHAR},
+      </if>
+      <if test="SG != null" >
+        SG = #{SG,jdbcType=REAL},
+      </if>
+      <if test="SGStatusDescription != null" >
+        SGStatusDescription = #{SGStatusDescription,jdbcType=VARCHAR},
+      </if>
+      <if test="SGArea != null" >
+        SGArea = #{SGArea,jdbcType=VARCHAR},
+      </if>
+      <if test="KET != null" >
+        KET = #{KET,jdbcType=VARCHAR},
+      </if>
+      <if test="KETStatusDescription != null" >
+        KETStatusDescription = #{KETStatusDescription,jdbcType=VARCHAR},
+      </if>
+      <if test="BIL != null" >
+        BIL = #{BIL,jdbcType=VARCHAR},
+      </if>
+      <if test="BILStatusDescription != null" >
+        BILStatusDescription = #{BILStatusDescription,jdbcType=VARCHAR},
+      </if>
+      <if test="GLU != null" >
+        GLU = #{GLU,jdbcType=VARCHAR},
+      </if>
+      <if test="GLUStatusDescription != null" >
+        GLUStatusDescription = #{GLUStatusDescription,jdbcType=VARCHAR},
+      </if>
+      <if test="VC != null" >
+        VC = #{VC,jdbcType=VARCHAR},
+      </if>
+      <if test="VCStatusDescription != null" >
+        VCStatusDescription = #{VCStatusDescription,jdbcType=VARCHAR},
+      </if>
+      <if test="measureDate != null" >
+        measureDate = #{measureDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="deviceType != null" >
+        deviceType = #{deviceType,jdbcType=VARCHAR},
+      </if>
+      <if test="createDate != null" >
+        createDate = #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="dataType != null" >
+        dataType = #{dataType,jdbcType=SMALLINT},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.lifeshs.po.UranPO" >
+    update t_measure_uran
+    set userId = #{userId,jdbcType=INTEGER},
+      status = #{status,jdbcType=BIGINT},
+      LEU = #{LEU,jdbcType=VARCHAR},
+      LEUStatusDescription = #{LEUStatusDescription,jdbcType=VARCHAR},
+      NIT = #{NIT,jdbcType=VARCHAR},
+      NITStatusDescription = #{NITStatusDescription,jdbcType=VARCHAR},
+      UBG = #{UBG,jdbcType=VARCHAR},
+      UBGStatusDescription = #{UBGStatusDescription,jdbcType=VARCHAR},
+      PRO = #{PRO,jdbcType=VARCHAR},
+      PROStatusDescription = #{PROStatusDescription,jdbcType=VARCHAR},
+      pH = #{pH,jdbcType=REAL},
+      pHStatusDescription = #{pHStatusDescription,jdbcType=VARCHAR},
+      pHArea = #{pHArea,jdbcType=VARCHAR},
+      BLD = #{BLD,jdbcType=VARCHAR},
+      BLDStatusDescription = #{BLDStatusDescription,jdbcType=VARCHAR},
+      SG = #{SG,jdbcType=REAL},
+      SGStatusDescription = #{SGStatusDescription,jdbcType=VARCHAR},
+      SGArea = #{SGArea,jdbcType=VARCHAR},
+      KET = #{KET,jdbcType=VARCHAR},
+      KETStatusDescription = #{KETStatusDescription,jdbcType=VARCHAR},
+      BIL = #{BIL,jdbcType=VARCHAR},
+      BILStatusDescription = #{BILStatusDescription,jdbcType=VARCHAR},
+      GLU = #{GLU,jdbcType=VARCHAR},
+      GLUStatusDescription = #{GLUStatusDescription,jdbcType=VARCHAR},
+      VC = #{VC,jdbcType=VARCHAR},
+      VCStatusDescription = #{VCStatusDescription,jdbcType=VARCHAR},
+      measureDate = #{measureDate,jdbcType=TIMESTAMP},
+      deviceType = #{deviceType,jdbcType=VARCHAR},
+      createDate = #{createDate,jdbcType=TIMESTAMP},
+      dataType = #{dataType,jdbcType=SMALLINT}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+
+  <select id="selectMeasureDatesByUserId" resultType="com.lifeshs.po.UranPO" parameterType="map">
+    SELECT measureDate,status
+    from t_measure_uran
+    where userId = #{userId}
+    and DATE_ADD(#{queryDate},interval 1 month) &gt;= measureDate
+    and measureDate &gt;= #{queryDate}
+  </select>
+
+  <select id="getLastDateByUserId" resultType="date" parameterType="integer">
+    SELECT measureDate
+    FROM t_measure_uran
+    WHERE userId = #{userId}
+    Order by measureDate desc
+    limit 1
+  </select>
+
+  <!--获取最后一条数据-->
+  <select id="getLastData" resultType="com.lifeshs.po.UranPO">
+      SELECT * FROM t_measure_uran
+      WHERE userId = #{userId}
+      order BY measureDate desc
+      limit 1
+  </select>
+
+</mapper>

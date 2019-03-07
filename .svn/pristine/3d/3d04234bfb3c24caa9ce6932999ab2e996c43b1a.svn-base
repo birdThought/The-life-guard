@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lifeshs.dao1.systemManage.MeasureSuggestionDao">
+
+	<!-- 获取测量建议列表 -->
+	<select id="findMessageSuggestion" resultMap="MessageSuggestionVo">
+		   select
+	        a.id as aId,
+	        a.adminUserId as aAdminUserId,
+	        a.createDateTime as aCreateDateTime,
+	        a.description as aDecription,
+	        a.display as aDisplay,
+	        a.endAge as aEndAge,
+	        a.gender as aGender,
+	        a.healthPackageParamId as aHealthPackageParamId,
+	        a.modifyDateTime as aModifyDateTime,
+	        a.startAge as aStartAge,
+	        a.`status` as aStatus,
+	        b.id as bId,
+			b.`name` as bName,
+	        b.name_cn as bName_cn,
+	        b.`value` as bValue 
+	    from
+	        t_data_health_description_normal a 
+	    inner join
+	        t_data_health_package_param b
+	            on a.healthPackageParamId=b.id
+	    <where>
+	    <if test="healthPackageParamId !=null">
+	    	a.healthPackageParamId = #{healthPackageParamId}
+	    </if>
+	    </where>
+	    LIMIT #{startRow},#{pageSize}
+	</select>
+	
+	<!-- 统计测量建议数量 -->
+	<select id="countSuggestion" resultType="java.lang.Integer">
+	 	select COUNT(1)
+	    from
+	        t_data_health_description_normal a 
+	    inner join
+	        t_data_health_package_param b
+	            on a.healthPackageParamId=b.id
+	    <where>
+	    <if test="healthPackageParamId !=null">
+	    	a.healthPackageParamId = #{healthPackageParamId}
+	    </if>
+	    </where>
+	</select>
+
+	<!--添加测量建议-->
+	<insert id="addSuggestion" parameterType="com.lifeshs.vo.systemManage.MeasureSuggestionVo">
+		INSERT INTO t_data_health_description_normal(healthPackageParamId,description,status,gender,startAge,endAge,display,createDateTime)
+		VALUES(#{healthPackageParamId},#{description},#{status},#{gender},#{startAge},#{endAge},#{display},NOW())
+	</insert>
+	
+	<!-- 编辑测量建议 -->
+	<update id="updateSuggestion" parameterType="com.lifeshs.vo.systemManage.MeasureSuggestionVo">
+		UPDATE t_data_health_description_normal
+		<set>
+			<if test="healthPackageParamId !=null">
+				healthPackageParamId = #{healthPackageParamId},
+			</if>
+			<if test="description !=null">
+				description = #{description},
+			</if>
+			<if test="status != null">
+				status = #{status},
+			</if>
+			<if test="gender != null">
+				gender = #{gender},
+			</if>
+			<if test="startAge != null">
+				startAge = #{startAge},
+			</if>
+			<if test="endAge !=null">
+				endAge = #{endAge},
+			</if>
+			<if test="display != null">
+				display = #{display},
+			</if>
+				modifyDateTime = NOW()
+		</set>
+		WHERE id = #{id}
+	</update>
+	
+	<!-- 删除测量建议 -->
+	<delete id="deleteSuggestion">
+		DELETE FROM t_data_health_description_normal WHERE id = #{id}
+	</delete>
+	
+	<!-- 获取健康参数列表 -->
+	<select id="getHealthParamById" resultType="com.lifeshs.po.data.HealthPackParamPO">
+		SELECT * FROM t_data_health_package_param 
+	</select>
+	
+	<!-- 映射 -->
+	 <resultMap type="com.lifeshs.vo.systemManage.MeasureSuggestionVo" id="MessageSuggestionVo">  
+        <id column="aId" property="id"/>  
+        <result column="aStartAge" property="startAge"/>   
+		<result column="aEndAge" property="endAge"/>
+		<result column="aGender" property="gender"/>
+		<result column="aStatus" property="status"/>
+		<result column="aDecription" property="description"/>
+		<result column="aHealthPackageParamId" property="healthPackageParamId"/>
+		<result column="aAdminUserId" property="adminUserId"/>
+		<result column="aCreateDateTime" property="createDateTime"/>
+		<result column="aModifyDateTime" property="modifyDateTime"/>
+		<result column="aDisplay" property="display"/>    
+        <association property="healthPackageParam" notNullColumn="bId"
+        	javaType="com.lifeshs.po.data.HealthPackParamPO">  
+            <id column="bId" property="id"/>  
+            <result column="bName" property="name"/>
+            <result column="bName_cn" property="name_cn"/> 
+            <result column="bValue" property="value"/>  
+        </association>  
+    </resultMap>  
+</mapper>

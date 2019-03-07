@@ -1,0 +1,872 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lifeshs.dao.shop.ShopDao">
+
+	<resultMap type="com.lifeshs.po.shop.CatalogOne" id="findCatalogAllMap">    	
+    	<id column="id" property="id"/>	     
+	    <result column="sort" property="sort"/>	    
+	    <result column="cName" property="cName"/>	  
+    	<collection property="catalogTwos" javaType="list" ofType="com.lifeshs.po.shop.CatalogTwo">
+    		<id column="id1" property="id1"/>	    
+	    	<result column="cName1" property="cName1"/>
+	    	<result column="sort1" property="sort1"/>
+	    	<collection property="CatalogThree" javaType="list" ofType="com.lifeshs.po.shop.CatalogThree">
+	    		<id column="id2" property="id2"/>	    
+		    	<result column="cName2" property="cName2"/>
+		    	<result column="sort2" property="sort2"/>		    	
+		    	<collection property="CatalogFours" javaType="list" ofType="com.lifeshs.po.shop.CatalogFour">
+		    		<id column="id3" property="id3"/>	    
+			    	<result column="cName3" property="cName3"/>
+			    	<result column="sort3" property="sort3"/>	
+		    	</collection>
+	    	</collection> 
+    	</collection>
+    </resultMap>
+    
+    <select id="findCatalogAll" resultMap="findCatalogAllMap">
+    	SELECT
+			c2.*, cat3.id as id3,
+			cat3.cName as cName3,
+			cat3.sort as sort3
+		FROM
+			(
+				SELECT
+					c.*, cat2.id AS id2,
+					cat2.cName AS cName2,
+					cat2.sort AS sort2
+				FROM
+					(
+						SELECT
+							cat.id,
+							cat.cName,
+							cat.sort,
+							cat1.id AS id1,
+							cat1.cName AS cName1,
+							cat.sort AS sort1
+						FROM
+							t_shop_category cat
+						INNER JOIN t_shop_category cat1 ON cat.id = cat1.pid
+						WHERE
+							cat.pid = 0
+						<if test="id != null">
+							AND cat.id = #{id}
+						</if>
+					) c
+				LEFT JOIN t_shop_category cat2 ON c.id1 = cat2.pid
+			) c2
+		LEFT JOIN t_shop_category cat3 ON c2.id2 = cat3.pid
+	</select>
+	
+	<!-- <resultMap type="com.lifeshs.po.shop.CatalogTwo" id="findCatalogByIdMap">
+    	
+    	<result column="id" property="id"/>
+	    <result column="cName" property="name"/>	   
+	    <result column="pid" property="pid"/>	    
+    	<collection property="CatalogThree" javaType="list" ofType="com.lifeshs.po.shop.CatalogTwo">
+    		<id column="id1" property="id"/>	    
+	    	<result column="name1" property="name"/>
+	    	<result column="pid2" property="pid"/>
+    	</collection>
+    </resultMap>
+	
+	
+	<select id="findCatalogById" resultMap="findCatalogByIdMap">
+		SELECT
+			tsc1.id,
+			tsc1.cNAME,
+			tsc1.sort,
+			tsc1.labelId,
+			tsc2.id AS id1,
+			tsc2.cNAME AS name1,
+			tsc2.pid AS pid2
+		FROM
+			t_shop_category tsc1
+		INNER JOIN t_shop_category tsc2 ON tsc2.pid = tsc1.id
+		WHERE
+			tsc1.parentNode = 0
+		AND tsc1.labelId = #{id} ;
+	</select> -->
+	
+	<select id="findCatalogOne" resultType="com.lifeshs.po.shop.CatalogOne">
+		select * from t_shop_label
+	
+	</select>
+	
+	
+	<select id="SearchShop" resultType="com.lifeshs.shop.ShopDTO">
+		SELECT
+			*
+		FROM
+			t_shop
+		WHERE
+			shopName LIKE '%${keyword}%'
+	</select>
+	
+	<resultMap type="com.lifeshs.po.shop.SearchSkuDisplayPO" id="SearchSkuMap">
+		<id column="id" property="id"/>	     
+	    <result column="goodsId" property="goodsId"/>	    
+	    <result column="skuAttribute" property="skuAttribute"/>	
+	    <result column="groupSpec" property="groupSpec"/>	    
+	    <result column="marketPrice" property="marketPrice"/>	
+	    <result column="favorablePrice" property="favorablePrice"/>	    
+	    <result column="inventory" property="inventory"/>	
+	    <result column="braCode" property="braCode"/>	    
+	    <result column="salesVolume" property="salesVolume"/>	
+	    <result column="group_spec" property="group_spec"/>	    
+	    <result column="goodName" property="goodName"/>	     	
+   		<collection property="pictureUrls" javaType="list" ofType="com.lifeshs.shop.PictureDTO">
+   	    		<result column="pictureUrl" property="pictureUrl"/>	 
+   	    		<result column="masterGraph" property="masterGraph"/>	 	   	    		 
+    	</collection>
+		
+	</resultMap>
+	
+	<select id="SearchSku" resultMap="SearchSkuMap">
+		SELECT
+			sku.*, goods.goodsName as goodName,
+			pict.pictureUrl,pict.masterGraph			
+		FROM
+			t_shop_sku sku
+		LEFT JOIN t_shop_goods goods ON sku.goodsId = goods.id
+		LEFT JOIN t_shop_picture pict ON sku.goodsId = pict.goodsId		
+		WHERE goods.goodsName LIKE '%${keyword}%'
+	</select>
+	
+	
+	<select id="selectPreviewId" resultType="Integer">
+		select pg.id from t_shop_page_goods pg ORDER BY pg.sort desc LIMIT 0,2
+	</select>
+	
+	
+	<resultMap type="com.lifeshs.po.shop.ShowPreviewPO" id="showPreviewMap">
+
+		<id column="pid" property="id"/>
+   		<!-- <result column="category_id" property="category_id"/>    	 -->	
+   		<result column="category_name" property="category_name"/>  
+   		<result column="sort" property="sort"/>  
+		<collection property="goodList" javaType="list" ofType="com.lifeshs.po.shop.SearchSkuDisplayPO">
+			<result column="goodName" property="goodName"/>	
+			<result column="id" property="id"/>			
+	    	<result column="goodsId" property="goodsId"/>    		
+    		<!-- <result column="skuAttribute" property="skuAttribute"/>   -->
+    		<result column="groupSpec" property="group_spec"/>
+    		<result column="marketPrice" property="marketPrice"/>
+    		<result column="favorablePrice" property="favorablePrice"/>    		
+    		<result column="inventory" property="inventory"/>  
+    		<result column="salesVolume" property="salesVolume"/> 
+    		<!-- <result column="attrName" property="attrName"/>  
+    		<result column="attrValue" property="attrValue"/>  -->
+    		<collection property="pictureUrls" javaType="list" ofType="com.lifeshs.shop.PictureDTO">
+	   	    		<result column="pictureUrl" property="pictureUrl"/>	 
+	   	    		<result column="masterGraph" property="masterGraph"/>	 	   	    		 
+	    	</collection>
+		</collection>
+	</resultMap>
+	<select id="showPreview" resultMap="showPreviewMap">	
+		SELECT
+			page.id as pid,page.category_name,page.sort,goods.goodsName as goodName,goods.category_id as cId,sku.*,pict.pictureUrl,pict.masterGraph
+		FROM
+			t_shop_page_goods AS page
+		LEFT JOIN t_shop_goods AS goods ON 1 = 1
+		RIGHT JOIN t_shop_sku AS sku ON goods.id = sku.goodsId
+		LEFT JOIN t_shop_picture pict on  pict.goodsId = goods.id		
+		WHERE
+			FIND_IN_SET(page.id, goods.label_ids)
+		AND 
+			goods.`status` =2			
+		AND 			
+			page.id = #{id}
+		group by goods.goodsName
+		<if test="filter != null ">
+		AND	goods.goodsName like "%${filter}%"
+		</if>
+		<if test="sort != null">  
+			ORDER BY sku.marketPrice ${sort};
+		</if>
+		
+		
+	</select>
+	
+	<resultMap type="com.lifeshs.po.shop.GoodsSkuPO" id="findGoodsInfoMap">				
+    		<result column="goodName" property="goodName"/>  
+    		<result column="details" property="details"/>  
+    		<result column="Instructions" property="Instructions"/>    		
+    		<result column="favorable_price" property="favorable_price"/>  
+    		<result column="market_price" property="market_price"/>  
+    		<result column="sales_volume" property="sales_volume"/>  
+    		<result column="spec_type" property="spec_type"/>   
+    		<result column="inventory" property="inventory"/>   		
+		<collection property="pictureUrl" javaType="list" ofType="java.lang.String">
+			<result column="pictureUrl"/>	 	       		
+		</collection>
+	</resultMap>
+	
+	<select id="findGoodsInfo" resultMap="findGoodsInfoMap">
+		SELECT
+			goods.goodsName as goodName,
+			goods.favorable_price,
+			goods.market_price,
+			goods.sales_volume,
+			goods.spec_type,
+			pic.pictureUrl,
+			goods.details,
+			goods.Instructions
+		FROM
+			t_shop_goods goods
+		LEFT JOIN t_shop_picture pic ON goods.id = pic.goodsId
+		WHERE goods.id = #{id}
+	</select>
+	
+		
+	<select id="findSku" resultType="com.lifeshs.shop.SkuDTO">
+		select * from t_shop_sku where goodsId = #{id}
+	</select>
+	
+	<select id="selectSku" resultType="com.lifeshs.shop.SkuDTO">
+		select * from t_shop_sku  where goodsId = #{goodsId}
+	</select>
+	
+	
+	<!-- <select id="selectSku" resultType="com.lifeshs.shop.SkuDTO">				
+		SELECT
+			sku.*,
+			CONCAT(attr. NAME,':',attr2. NAME) as attribute1
+			<if test="length gt 1">
+				,CONCAT(attr3. NAME,':',attr4. NAME) as attribute2
+			</if>
+			<if test="length gt 2">
+				,CONCAT(attr5. NAME,':',attr6. NAME) as attribute3
+			</if>
+			
+		FROM
+			t_shop_sku sku
+		LEFT JOIN t_shop_goods goods ON sku.goodsId = goods.id		
+		LEFT JOIN t_shop_attribute attr ON SUBSTRING_INDEX(
+			SUBSTRING_INDEX(sku.skuAttribute, ',', 1),
+			':',
+			1
+		) = attr.id
+		LEFT JOIN t_shop_attribute_value AS attr2 ON SUBSTRING_INDEX(
+			SUBSTRING_INDEX(sku.skuAttribute, ',', 1),
+			':',
+			- 1
+		) = attr2.id
+		<if test="length gt 1">
+				LEFT JOIN t_shop_attribute attr3 ON SUBSTRING_INDEX(
+				SUBSTRING_INDEX(
+					SUBSTRING_INDEX(sku.skuAttribute, ',', 2),
+					',',
+					- 1
+				),
+				':',
+				1
+			) = attr3.id
+			LEFT JOIN t_shop_attribute_value AS attr4 ON SUBSTRING_INDEX(
+				SUBSTRING_INDEX(
+					SUBSTRING_INDEX(sku.skuAttribute, ',', 2),
+					',',
+					- 1
+				),
+				':',
+				- 1
+			) = attr4.id
+		</if>
+		<if test="length gt 2">
+			LEFT JOIN t_shop_attribute attr5 ON SUBSTRING_INDEX(
+				SUBSTRING_INDEX(sku.skuAttribute, ',', - 3),
+				':',
+				1
+			) = attr5.id
+			LEFT JOIN t_shop_attribute_value AS attr6 ON SUBSTRING_INDEX(
+				SUBSTRING_INDEX(sku.skuAttribute, ',', - 3),
+				':',
+				- 1
+			) = attr6.id
+			
+		</if>
+		WHERE
+		sku.id = #{id}
+	</select> -->
+	
+	
+	
+	<select id="findGoodsEvaluate" resultType="com.lifeshs.shop.OrderEvaluateDTO">	
+		SELECT
+			tsoe.*
+		FROM
+			t_shop_goods tsg
+		LEFT JOIN t_shop_order_decompose tsod ON tsg.id = tsod.goodsId
+		RIGHT JOIN t_shop_order_evaluate tsoe ON tsod.id = tsoe.decompose_id
+		WHERE
+			tsg.id = #{goodsId}
+	</select>
+	
+	<select id="findSkuAttr" resultType="com.lifeshs.po.shop.RelationPO">
+		SELECT
+			re.goodsId,
+			attr1.id as attributeId,
+			attr1. NAME as attributeName,
+			attr2.id as attributeVId,
+			attr2. NAME as attributeVName
+		FROM
+			t_shop_attribute_relation re
+		LEFT JOIN t_shop_attribute attr1 ON re.attributeId = attr1.id
+		LEFT JOIN t_shop_attribute_value attr2 ON re.attributeVId = attr2.id
+		WHERE
+			re.goodsId = #{goodsId}
+	</select>
+	
+	<resultMap type="com.lifeshs.po.shop.SkuItem" id="selectByPrimaryKeyMap">				
+    		<result column="id" property="id"/>  
+    		<result column="goodsId" property="goodsId"/>  
+    		<result column="marketPrice" property="marketPrice"/> 
+    		<result column="favorablePrice" property="favorablePrice"/>  
+    		<result column="inventory" property="inventory"/>  
+    		<result column="salesVolume" property="salesVolume"/> 
+    		<result column="group_spec" property="group_spec"/>  
+    		<result column="shopId" property="shopId"/>  
+    		<result column="shopName" property="shopName"/>  
+    		<result column="goodsName" property="goodsName"/>  
+    		<result column="details" property="details"/>  
+    		<result column="Instructions" property="Instructions"/>  
+    		<result column="num" property="num"/>     		
+		<collection property="pictureUrls" javaType="list" ofType="com.lifeshs.shop.PictureDTO">
+			<result column="pictureUrl" property="pictureUrl"/>	 
+	   	    <result column="masterGraph" property="masterGraph"/>	       		
+		</collection>
+	</resultMap>
+	<select id="selectByPrimaryKey" resultMap="selectByPrimaryKeyMap">
+		SELECT
+				sku.*, shop.id as shopId,
+			shop.shopName as shopName,
+			pic.pictureUrl,
+			pic.masterGraph,
+			goods.goodsName,
+			goods.details,
+			goods.Instructions<!--,
+			 CONCAT(attr. NAME, ':', attr2. NAME) AS attribute1
+			<if test="length gt 1">
+				,CONCAT(attr3. NAME, ':', attr4. NAME) AS attribute2
+			</if>
+			<if test="length gt 2">
+				,CONCAT(attr5. NAME, ':', attr6. NAME) AS attribute3
+			</if> -->
+			
+		FROM
+			t_shop_sku sku
+		LEFT JOIN t_shop_goods goods ON sku.goodsId = goods.id
+		LEFT JOIN t_shop shop ON shop.id = goods.shopId
+		LEFT JOIN t_shop_picture pic ON pic.goodsId = goods.id				
+		<!-- LEFT JOIN t_shop_attribute attr ON SUBSTRING_INDEX(
+			SUBSTRING_INDEX(sku.skuAttribute, ',', 1),
+			':',
+			1
+		) = attr.id
+		LEFT JOIN t_shop_attribute_value AS attr2 ON SUBSTRING_INDEX(
+			SUBSTRING_INDEX(sku.skuAttribute, ',', 1),
+			':',
+			- 1
+		) = attr2.id
+		<if test="length gt 1">
+				LEFT JOIN t_shop_attribute attr3 ON SUBSTRING_INDEX(
+				SUBSTRING_INDEX(
+					SUBSTRING_INDEX(sku.skuAttribute, ',', 2),
+					',',
+					- 1
+				),
+				':',
+				1
+			) = attr3.id
+			LEFT JOIN t_shop_attribute_value AS attr4 ON SUBSTRING_INDEX(
+				SUBSTRING_INDEX(
+					SUBSTRING_INDEX(sku.skuAttribute, ',', 2),
+					',',
+					- 1
+				),
+				':',
+				- 1
+			) = attr4.id
+		</if>
+		<if test="length gt 2">
+			LEFT JOIN t_shop_attribute attr5 ON SUBSTRING_INDEX(
+				SUBSTRING_INDEX(sku.skuAttribute, ',', - 3),
+				':',
+				1
+			) = attr5.id
+			LEFT JOIN t_shop_attribute_value AS attr6 ON SUBSTRING_INDEX(
+				SUBSTRING_INDEX(sku.skuAttribute, ',', - 3),
+				':',
+				- 1
+			) = attr6.id
+			
+		</if> -->
+		WHERE
+		sku.id = #{id}
+		
+	</select>
+	
+	<select id="selectAttrLengthById" resultType="String">
+		select group_spec from t_shop_sku where id = #{itemId}
+	</select>
+	
+	<select id="getAddressById" resultType="com.lifeshs.shop.Address">
+		SELECT
+			*
+		FROM
+			t_user_address
+		WHERE
+			userId = #{userId}
+	</select>
+	
+	<insert id="addAddress" parameterType="com.lifeshs.shop.Address">
+		replace INTO t_user_address (
+			id,
+			userId,
+			receiverName,
+			contactNumber,
+			address,
+			street,
+			selected,
+			createDate,
+			display
+		)
+		VALUE
+			(#{id},#{userId},#{receiverName},#{contactNumber},#{address},#{street},#{selected},#{createDate},#{display})
+	</insert>
+	
+	<select id="queryAddressById" resultType="com.lifeshs.shop.Address">
+		SELECT * FROM t_user_address WHERE id = #{id}
+	</select>
+	
+	<insert id="addOrder" parameterType="com.lifeshs.shop.OrderDTO">
+		INSERT INTO t_shop_order (
+			orderNo,
+			userId,
+			money,
+			addressId,
+			createTime,
+			paymentType,
+			status
+		)
+		VALUE (#{orderNo},#{userId},#{money},#{addressId},#{createTime},#{paymentType},#{status})
+	</insert>
+	
+	<insert id="addOrderDecompose" parameterType="com.lifeshs.shop.OrderDecomposeDTO">
+		INSERT INTO t_shop_order_decompose (
+			orderNo,
+			shopId,
+			shopName,
+			goodsId,
+			goodsName,
+			status,			
+			amount,
+			discount_amount,
+			orderNotes,
+			transportCosts,			
+			<!-- createTime, -->
+			invoice,
+			attributeValue,
+			num,
+			price
+		)
+		VALUE (#{orderNo},#{shopId},#{shopName},#{goodsId},
+		#{goodsName},#{status},#{amount},#{discount_amount},
+		#{orderNotes},#{transportCosts},<!-- #{createTime}, -->
+		#{invoice},#{attributeValue},#{num},#{price})
+	</insert>
+	
+	<resultMap type="com.lifeshs.po.shop.OrderDetailsPo" id="getDetailsByOrderNoMap">
+		
+		<!-- <association property="com.lifeshs.shop.Address"> -->
+			<result  column="contactNumber" property="contactNumber"/>
+			<result column="addr" property="address"/>
+			<result column="receiverName" property="receiverName"/>
+		<!-- </association> -->
+		<association property="order" javaType="com.lifeshs.shop.OrderDTO">
+			<result  column="id" property="id"/>
+			<result column="orderNo" property="orderNo"/>
+			<result column="userId" property="userId"/>
+			<result  column="money" property="money"/>
+			<result column="addressId" property="addressId"/>
+			<result column="createTime" property="createTime"/>
+			<result  column="orderTime" property="orderTime"/>
+			<result column="paymentType" property="paymentType"/>
+			<result  column="status" property="status"/>
+		</association>
+		<collection  property="orderDecList" javaType="list" ofType="com.lifeshs.po.shop.OrderDecPO">
+			<result  column="orderNo" property="orderNo"/>
+			<result column="shopId" property="shopId"/>
+			<result column="shopName" property="shopName"/>
+			<result  column="goodsId" property="goodsId"/>
+			<result column="goodsName" property="goodsName"/>
+			<result column="num" property="num"/>
+			<result  column="price" property="price"/>
+			<result column="amount" property="amount"/>
+			<result column="transportCosts" property="transportCosts"/>
+			<!-- <result  column="createTime" property="createTime"/> -->
+			<result column="amount" property="amount"/>
+			<result column="attributeValue" property="attributeValue"/>
+			<result column="pictureUrl" property="pictureUrl"/>
+		</collection>
+	</resultMap>
+	
+	
+	<select id="getDetailsByOrderNo" resultMap="getDetailsByOrderNoMap">
+		SELECT
+			tso.*,tsod.*, tua.contactNumber,
+			tua.receiverName,
+			CONCAT(tua.address, tua.street) as addr,
+			tsp.pictureUrl
+		FROM
+			t_shop_order tso
+		LEFT JOIN t_shop_order_decompose tsod ON tso.orderNo = tsod.orderNo
+		LEFT JOIN t_user_address tua ON tua.id = tso.addressId
+		LEFT JOIN t_shop_picture tsp ON tsp.goodsId = tsod.goodsId
+		WHERE
+			tso.orderNo = #{orderNo}
+	</select>
+	
+	<select id="getLocalOrderByParam" resultType="com.lifeshs.shop.OrderDTO">
+		SELECT * FROM t_shop_order WHERE orderNo = #{orderNo}
+	</select>
+	
+	<select id="getOrderDecList" resultType="com.lifeshs.shop.OrderDecomposeDTO">
+		SELECT * FROM t_shop_order_decompose WHERE orderNo = #{orderNo}
+	</select>
+	
+	<update id="updataOrderStatusByOrderNo">
+		UPDATE  t_shop_order SET paymentType = #{paymentType} ,status = #{status} WHERE orderNo = #{orderNo}
+	</update>
+	
+	<update id="updataOrderDecStatusByOrderNo">
+		UPDATE  t_shop_order_decompose SET status = #{status} WHERE orderNo = #{orderNo}
+	</update>
+	
+	<insert id="addOrderRecord" parameterType="com.lifeshs.shop.OrderRecordDTO">
+		INSERT INTO t_shop_order_record (orderNo,moneyType,createTIme,money,payCost,payAccount,sellerAccount,remark)
+		VALUE (#{orderNo},#{moneyType},#{createTIme},#{money},#{payCost},#{payAccount},#{sellerAccount},#{remark})
+	</insert>
+
+	
+	<select id="getAdvertisement" resultType="java.util.Map">
+		SELECT
+			image,
+			goodsId,
+			sort,
+			shopId
+		FROM
+			t_shop_advertising_image
+		WHERE
+			STATUS = 1
+		ORDER BY
+			sort ASC
+		Limit 0,5
+	</select>
+	
+	
+	<delete id="delAddress">
+		DELETE FROM t_user_address WHERE id = #{id}
+	</delete>
+	
+	<update id="updateAddressDefault">
+		UPDATE t_user_address SET selected = #{selected} WHERE id = #{id}
+	</update>
+	
+	<resultMap type="com.lifeshs.po.shop.OrderPO" id="getOrderAllMap">
+		<result column="orderNo" property="orderNo"/>
+		<result column="money" property="money"/>
+		<result column="createTime" property="createTime"/>
+		<result column="status" property="status"/>
+		
+		<collection property="orderShopList" javaType="List" ofType="com.lifeshs.po.shop.OrderShopPO">		
+			<result column="shopId" property="shopId"/>
+			<result column="shopName" property="shopName"/>	
+			<result column="status1" property="status"/>
+			<result column="shippingNo" property="shippingNo"/>	
+			<collection property="orderList" javaType="List" ofType="com.lifeshs.po.shop.OrderDecPO">
+				<result column="id" property="id"/>
+				<result column="pictureUrl" property="pictureUrl"/>			
+				<result column="goodsName" property="goodsName"/>
+				<result column="num" property="num"/>
+				<result column="price" property="price"/>
+				<result column="amount" property="amount"/>
+				<result column="attributeValue" property="attributeValue"/>
+				<result column="goodsId" property="goodsId"/>	
+				<result column="skuId" property="skuId"/>			
+			</collection>
+		</collection>
+		
+		
+		
+	</resultMap>
+	<select id="getOrderAll" resultMap="getOrderAllMap">
+		SELECT
+			tso.orderNo,
+			tso.money,
+			tso.createTime,
+			tso.`status`,
+			tsod.id,
+			tsod.shopId,
+			tsod.shopName,
+			tsod.goodsName,
+			tsod.num,
+			tsod.price,
+			tsod.amount,
+			tsod.shippingNo,
+			tsod.`status` as status1,
+			IFNULL(tsod.attributeValue,'')as attributeValue,
+			tsp.pictureUrl,
+			tsod.goodsId ,
+			sku.id as skuId
+		FROM
+			t_shop_order tso
+		LEFT JOIN t_shop_order_decompose tsod ON tso.orderNo = tsod.orderNo
+		LEFT JOIN t_shop_picture tsp ON tsp.goodsId = tsod.goodsId		
+		LEFT JOIN t_shop_sku sku on sku.goodsId = tsod.goodsId
+		WHERE
+			tso.userId = #{userId}
+		AND tsp.masterGraph = 0
+		AND sku.group_spec = tsod.attributeValue
+		<if test="status != null">
+			AND tso.status = #{status}
+		</if>
+		ORDER BY
+			tso.createTime DESC
+	</select>
+	
+	<delete id="delOrder">
+		DELETE FROM t_shop_order WHERE orderNo = #{orderNo}
+	</delete>
+	
+	<delete id="delOrderDec">
+		DELETE FROM t_shop_order_decompose WHERE orderNo = #{orderNo}
+	</delete>
+	
+	<insert id="addOrderEvaluate" parameterType="com.lifeshs.shop.OrderEvaluateDTO">
+		INSERT INTO t_shop_order_evaluate (orderNo,content,pictures,addComment,anonymous,userId,userName,createTime,decompose_id)
+		VALUE (#{orderNo},#{content},#{pictures},#{addComment},#{anonymous},#{userId},#{userName},SYSDATE(),#{decomposeId})
+	</insert>
+	
+	<select id="selectOrderNoEvaluate" resultMap="getOrderAllMap">
+		SELECT
+			tso.orderNo,
+			tso.money,
+			tso.createTime,
+			tsod.id,
+			tsod.shopName,
+			tsod.goodsName,
+			tsod.num,
+			tsod.price,
+			tsod.amount,
+			tsod.attributeValue,
+			tsp.pictureUrl
+		FROM
+			t_shop_order tso
+		LEFT JOIN t_shop_order_decompose tsod ON tso.orderNo = tsod.orderNo
+		LEFT JOIN t_shop_picture tsp ON tsp.goodsId = tsod.goodsId
+		WHERE
+			tso.userId = #{userId}
+		AND tsod.`status` = 3
+		AND tsod.id  Not in (select decompose_id from t_shop_order_evaluate)
+		ORDER BY
+			tso.createTime DESC
+	</select>
+	
+	<select id="getUserInfo" resultType="com.lifeshs.po.user.UserPO">
+		select * from t_user where id = #{userId}
+	</select>
+	
+	<select id="selectSpecsFormat" resultType="String">
+		select sp.specs_format from t_shop_goods_spec sp where goods_id = #{goodsId} and deleted = 0
+	</select>
+	
+	
+	<resultMap type="com.lifeshs.shop.GoodsDTO" id="getOrderByCidMap">
+		<result column="id" property="id"/>
+		<result column="shopId" property="shopId"/>
+		<result column="goodsName" property="goodsName"/>
+		<result column="favorable_price" property="favorablePrice"/>
+		<result column="market_price" property="marketPrice"/>
+		<result column="mainPic" property="mainPic"/>
+		
+		<association property="category" javaType="com.lifeshs.shop.CategoryDTO">			
+			<result column="cName" property="cName"/>
+		</association>
+		<association property="getSku" javaType="com.lifeshs.shop.SkuDTO">			
+			<result column="skuId" property="id"/>
+		</association>
+	</resultMap>
+	
+	<select id="getOrderByCid" resultMap="getOrderByCidMap">
+		SELECT
+			sg.id,
+			sg.shopId,
+			sg.goodsName,
+			sg.favorable_price,
+			sg.market_price,
+			tsp.pictureUrl AS mainPic,
+			tsc.cName,
+			sku.id as skuId
+		FROM
+			t_shop_goods sg
+		LEFT JOIN t_shop_picture tsp ON sg.id = tsp.goodsId
+		LEFT JOIN t_shop_category tsc on sg.category_id = tsc.id
+		LEFT JOIN t_shop_sku sku on sku.goodsId=sg.id
+		WHERE
+			sg.category_id = #{cid}
+		AND sg.status = 2
+		<if test="filter != null ">
+		AND	sg.goodsName like "%${filter}%"
+		</if>
+		<if test="sort != null">  
+			ORDER BY sg.favorable_price ${sort};
+		</if>
+	</select>
+	
+	<update id="imageChange">
+		update t_user set photo = #{img} where id=#{id} 
+	</update>
+	
+
+
+	
+	<select id="selectShopBySearch" parameterType="map" resultType="map">
+		SELECT 
+			s.`id`,s.`shopName`,s.`orgId`,s.`createTime`,s.`state_time` AS stateTime,s.`userName`
+			,s.`mobile`,s.`telephone`,s.`address`,s.`state`
+			,s.`identification`,s.`identification_fore` AS identificationFore,s.`identification_back` AS identificationBack
+			,o.`orgName`
+		FROM t_shop s
+		LEFT JOIN t_org o ON s.`orgId`=o.`id`
+		<where>
+			<if test="state != null">AND s.`state`=#{state}</if>
+			<if test="shopName != null and shopName neq ''">AND s.`shopName` LIKE CONCAT('%',#{shopName},'%')</if>
+			<if test="userName !=null and userName != ''">
+	       		and s.userName like CONCAT('%', #{userName}, '%') 
+	     	</if>
+			<if test="orgName != null and orgName neq ''">AND o.`orgName` LIKE CONCAT('%',#{orgName},'%')</if>
+		</where>
+		ORDER BY s.`id` DESC
+			limit #{startRow},#{pageSize}
+	</select>
+	
+	<select id="pagingShopTotal" parameterType="map" resultType="int">
+		SELECT 
+			COUNT(1)
+		FROM t_shop s
+		LEFT JOIN t_org o ON s.`orgId`=o.`id`
+		<where>
+			<if test="state != null">AND s.`state`=#{state}</if>
+			<if test="shopName != null and shopName neq ''">AND s.`shopName` LIKE CONCAT('%',#{shopName},'%')</if>
+			<if test="orgName != null and orgName neq ''">AND o.`orgName` LIKE CONCAT('%',#{orgName},'%')</if>
+		</where>
+	</select>
+	
+	<select id="getOneById" resultType="map">
+		select * from t_shop where id = #{id} 
+		limit 1
+	</select>
+	
+	<!-- 审核&冻结&解冻 -->
+	<update id="chanageState">
+		update t_shop
+		<choose>
+			<when test="action == 1">set state=#{action},state_time=NOW() where id=#{id} and state=0</when>
+			<when test="action == 2">set state=#{action},state_time=NOW() where id=#{id} and (state=0 OR state=1)</when>
+			<when test="action == 3">set state=#{action},state_time=NOW() where id=#{id} and (state=2 OR state=4)</when>
+			<when test="action == 4">set state=#{action},state_time=NOW() where id=#{id} and state=3</when>
+		</choose>
+	</update>
+	
+	<!-- 插入商铺审核 -->
+	<insert id="addAuthit" parameterType="com.lifeshs.shop.ShopAuthitionDTO" useGeneratedKeys="true" keyProperty="id">
+		insert into t_shop_authit
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="shopId != null">shop_id,</if>
+			<if test="pass != null">pass,</if>
+			<if test="remarks != null">remarks,</if>
+			<if test="userId != null">user_id,</if>
+			<if test="authitTime != null">authit_time,</if>
+		</trim>
+		VALUES
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="shopId != null">#{shopId},</if>
+			<if test="pass != null">#{pass},</if>
+			<if test="remarks != null">#{remarks},</if>
+			<if test="userId != null">#{userId},</if>
+			<if test="authitTime != null">#{authitTime},</if>
+		</trim>
+	</insert>
+	
+	<!-- 添加商铺 -->
+    <insert id="saveShop" parameterType="com.lifeshs.shop.ShopDTO" useGeneratedKeys="true" keyProperty="id">
+		INSERT INTO t_shop
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+		    <if test="shopName != null and shopName neq ''">shopName,</if>
+		    <if test="createTime != null">createTime,</if>
+		    <if test="userName != null and userName neq ''">userName,</if>
+		    <if test="mobile != null and mobile neq ''">mobile,</if>
+		    <if test="state != null">state,</if>
+		    <if test="orgId != null">orgId,</if>
+		    <if test="userId != null">user_id,</if>
+		</trim>
+		VALUES
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="shopName != null and shopName neq ''">#{shopName},</if>
+		    <if test="createTime != null">#{createTime},</if>
+		    <if test="userName != null and userName neq ''">#{userName},</if>
+		    <if test="mobile != null and mobile neq ''">#{mobile},</if>
+		    <if test="state != null">#{state},</if>
+		    <if test="orgId != null">#{orgId},</if>
+		    <if test="userId != null">#{userId},</if>
+		</trim>
+    </insert>
+        
+    
+    <select id="OrderOut" resultType="com.lifeshs.shop.OrderDecomposeDTO">    	
+    	SELECT
+		 sod.*
+		FROM
+			t_shop_order so
+		LEFT JOIN t_shop_order_decompose sod ON so.orderNo = sod.orderNo
+		WHERE
+			so.status = 1
+		AND <![CDATA[ so.createTime <= NOW()-INTERVAL 24 HOUR ]]>
+    </select>
+    
+   	<update id="ResumeInventoryAndSales">
+   		UPDATE t_shop_sku set inventory=inventory + #{num} ,salesVolume = salesVolume - #{num} where goodsId=#{goodsId} AND group_spec = #{attributeValue}
+   	</update>
+   	
+   	<update id="deductStock">
+   		UPDATE t_shop_sku set inventory=inventory - #{num}  where id=#{skuId}
+   	</update>
+   	
+   	<select id="selectAutoCompletionOrder" resultType="com.lifeshs.shop.OrderDecomposeDTO">
+   		SELECT
+			od.*
+		FROM
+			t_shop_order so LEFT JOIN t_shop_order_decompose od on so.orderNo = od.orderNo
+		WHERE
+			so.`status` = 4
+		AND <![CDATA[ so.orderTime <= NOW() - INTERVAL 7 * 24 HOUR]]>
+   	</select>
+   	
+   	<update id="updateOrderDecStatusById">
+   		update t_shop_order_decompose set `status` = 3 where id = #{id}
+   	</update>
+   	
+   	<update id="updateOrderStatusByOrderNo">
+   		update t_shop_order set `status` = #{status} where orderNo = #{orderNo}
+   	</update>
+   	
+   	<update id="ReceiptConfirm">
+   		update t_shop_order_decompose set `status` = 3 where shippingNo = #{shippingNo}
+   	</update>
+   	
+   	<update id="addSkuSales">
+   		UPDATE t_shop_sku set salesVolume = salesVolume + #{num}  where id=#{skuId}
+   	</update>
+    
+</mapper>
+

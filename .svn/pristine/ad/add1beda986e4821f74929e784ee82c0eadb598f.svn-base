@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lifeshs.dao1.record.PhysicalAnalysisDao">
+    <select id="getAnalysis" resultType="com.lifeshs.po.record.PhysicalAnalysisPO">
+        SELECT <include refid="PHYSICAL_ANALYSIS_ALL_COLUMN" />
+        FROM t_record_physical_analysis
+        WHERE id = #{id}
+    </select>
+    
+    <select id="countAnalysisWithCondition" resultType="java.lang.Integer">
+        SELECT COUNT(1) FROM t_record_physical_analysis a
+        <where>
+            <!-- 体检报告限定 -->
+            <if test="recordPhysicalId != null">
+                a.recordPhysicalId = #{recordPhysicalId}
+            </if>
+            <!-- 回复限定 -->
+            <if test="reply != null">
+                <choose>
+                    <!-- 查询未回复记录 -->
+                    <when test="reply">AND a.reply IS NOT NULL</when>
+                    <!-- 查询已回复记录 -->
+                    <otherwise>AND a.reply IS NULL</otherwise>
+                </choose>
+            </if>
+            <!-- 删除状态限定 -->
+            <if test="deleted != null">
+                AND a.deleted = #{deleted}
+            </if>
+            <!-- 客服限定 -->
+            <if test="customerUserId != null">
+                AND a.customerUserId = #{customerUserId}
+            </if>
+            <!-- 阅读状态限定 -->
+            <if test="read != null">
+                AND a.`read` = #{read}
+            </if>
+            <!-- 用户id限定 -->
+            <if test="userId != null">
+                AND a.userId = #{userId}
+            </if>
+        </where>
+    </select>
+    
+    <select id="findAnalysisListWithCondition" resultType="com.lifeshs.po.record.PhysicalAnalysisPO">
+        SELECT <include refid="PHYSICAL_ANALYSIS_ALL_COLUMN" />
+        FROM t_record_physical_analysis a
+        <where>
+            <!-- 体检报告限定 -->
+            <if test="recordPhysicalId != null">
+                a.recordPhysicalId = #{recordPhysicalId}
+            </if>
+            <!-- 回复限定 -->
+            <if test="reply != null">
+                <choose>
+                    <!-- 查询未回复记录 -->
+                    <when test="reply">AND a.reply IS NOT NULL</when>
+                    <!-- 查询已回复记录 -->
+                    <otherwise>AND a.reply IS NULL</otherwise>
+                </choose>
+            </if>
+            <!-- 删除状态限定 -->
+            <if test="deleted != null">
+                AND a.deleted = #{deleted}
+            </if>
+            <!-- 客服限定 -->
+            <if test="customerUserId != null">
+                AND a.customerUserId = #{customerUserId}
+            </if>
+            <!-- 阅读状态限定 -->
+            <if test="read != null">
+                AND a.`read` = #{read}
+            </if>
+            <!-- 用户id限定 -->
+            <if test="userId != null">
+                AND a.userId = #{userId}
+            </if>
+        </where>
+        ORDER BY a.id
+        <if test="startRow != null and pageSize != null">
+            LIMIT #{startRow}, #{pageSize}
+        </if>
+    </select>
+    
+    <sql id="PHYSICAL_ANALYSIS_ALL_COLUMN">
+        id, recordPhysicalId, doctorSign, reply, customerUserId, userId, deleted, `read`, createDate, modifyDate
+    </sql>
+    
+    <update id="updateAnalysis" parameterType="com.lifeshs.po.record.PhysicalAnalysisPO">
+        UPDATE t_record_physical_analysis
+        SET modifyDate = NOW()
+        <if test="doctorSign != null">, doctorSign = #{doctorSign}</if>
+        <if test="reply != null">, reply = #{reply}</if>
+        <if test="customerUserId != null">, customerUserId = #{customerUserId}</if>
+        <if test="deleted != null">, deleted = #{deleted}</if>
+        <if test="read != null">, `read` = #{read}</if>
+        WHERE id = #{id}
+    </update>
+    
+    <update id="updateAnalysisListByRecordPhysicalId">
+        UPDATE t_record_physical_analysis
+        SET modifyDate = NOW()
+        <if test="read != null">, `read` = #{read}</if>
+        <if test="deleted != null">, deleted = #{deleted}</if>
+        WHERE recordPhysicalId = #{recordPhysicalId}
+        <if test="read">AND `reply` IS NOT NULL</if>
+    </update>
+    
+    <insert id="addAnalysis" parameterType="com.lifeshs.po.record.PhysicalAnalysisPO">
+        <selectKey resultType="java.lang.Integer" keyProperty="id">
+            SELECT LAST_INSERT_ID() AS id
+        </selectKey>
+        INSERT INTO t_record_physical_analysis(recordPhysicalId, doctorSign, reply, customerUserId, userId, deleted, `read`, createDate)
+        VALUES(#{recordPhysicalId}, #{doctorSign}, #{reply}, #{customerUserId}, #{userId}, FALSE, FALSE, NOW())
+    </insert>
+</mapper>

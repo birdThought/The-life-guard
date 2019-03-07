@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lifeshs.dao1.admin.adminDao">
+
+    <select id="findByAdminCount" parameterType="int" resultType="java.lang.Integer">
+      select
+        count(*)
+    from
+        t_admin_login al
+    order by
+        al.login_time desc
+    </select>
+
+    <select id="findByAdminData" resultType="com.lifeshs.po.admin.adminPO">
+         select
+        al.id,al.adminId,al.login_ip,al.login_time,
+        au.createDate,au.head,au.mobile,au.password,au.realName,au.role_id,au.userName
+    from
+        t_admin_login al
+    left outer join
+        t_admin_user au
+            on al.adminId=au.id
+    order by
+        al.login_time desc limit #{curPage},#{pageSize}
+    </select>
+
+    <select id="findByOperatingCount" parameterType="int" resultType="java.lang.Integer">
+        SELECT  count(*) FROM(
+        SELECT dl.id,dl.adminId,dl.createDate,dl.exception,dl.host,
+	    dl.paramData,dl.tableName,dl.type,al.head,al.mobile,al.password,al.realName,al.role_id,al.userName
+        FROM
+        t_db_log dl
+        inner join
+        t_admin_user al on dl.adminId = al.id
+        WHERE 1=1
+        <if test="type == null">
+            AND  dl.type in (0,1,2)
+        </if>
+        <if test="type != null">
+            AND dl.type = #{type}
+        </if>
+        <if test="realName != null">
+            AND al.realName = #{realName}
+        </if>
+        <if test="createDate != null">
+          dl.createDate = #{createDate}
+        </if>
+        order by
+        dl.id desc
+        )m
+    </select>
+
+    <select id="findByOperatingData" resultType="com.lifeshs.vo.visit.OperatingVo">
+        SELECT
+            dl.id,dl.adminId,dl.createDate,dl.exception,dl.host,dl.paramData,
+            dl.tableName,dl.type,al.head,al.mobile,al.password,al.realName,al.role_id,al.userName
+        from
+        t_db_log dl
+        inner join
+        t_admin_user al on dl.adminId=al.id
+		where 1 = 1
+        <if test="type == null">
+            AND  dl.type in (0,1,2)
+        </if>
+        <if test="type != null">
+            AND dl.type = #{type}
+        </if>
+        <if test="realName != null">
+            AND al.realName = #{realName}
+        </if>
+        <if test="createDate != null">
+            dl.createDate = #{createDate}
+        </if>
+        order by
+        dl.id desc
+        limit #{curPage},#{pageSize}
+    </select>
+    
+    <insert id="saveAdminUser" parameterType="com.lifeshs.po.admin.adminPO" useGeneratedKeys="true" keyProperty="id">
+		INSERT INTO t_admin_user
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+ 			<if test="userName != null and userName neq ''">userName,</if>
+		    <if test="password != null and password neq ''">`password`,</if>
+		    <if test="realName != null and realName neq ''">`name`,</if>
+		    <if test="photo != null and photo neq ''">`photo`,</if>
+		    <if test="status != null">`status`,</if>
+		    <if test="createDate != null">createDate,</if>
+		    <if test="agentId != null">agentId,</if>
+		    <if test="mobile != null and mobile neq ''">moblie,</if>
+		    <if test="agentNum != null">agentNum,</if>
+ 		</trim>
+		VALUES
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="userName != null and userName neq ''">#{userName},</if>
+		    <if test="password != null and password neq ''">#{password},</if>
+		    <if test="realName != null and realName neq ''">#{realName},</if>
+		    <if test="photo != null and photo neq ''">#{photo},</if>
+		    <if test="status != null">#{status},</if>
+		    <if test="createDate != null">#{createDate},</if>
+		    <if test="agentId != null">#{agentId},</if>
+		    <if test="mobile != null and mobile neq ''">#{mobile},</if>
+		    <if test="agentNum != null">#{agentNum},</if>
+		</trim>
+    </insert>
+    
+    
+    <insert id="saveAdminUserRole">
+    	INSERT INTO t_admin_user_role (userId,roleId) value (#{userId},12)
+    </insert>
+</mapper>

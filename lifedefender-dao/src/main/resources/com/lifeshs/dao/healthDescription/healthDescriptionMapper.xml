@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lifeshs.dao.healthDescription.IHealthDescriptionDao">
+
+    <select id="listNormalHealthPackageDescription" resultType="com.lifeshs.pojo.healthDescription.NormalHealthPackageDTO">
+        SELECT
+            hn.id, hp.`value` AS healthPackageParamBinaryValue, hn.`description`, hn.`status`
+        FROM t_data_health_description_normal hn
+            INNER JOIN t_data_health_package_param hp ON hp.id = hn.healthPackageParamId
+            INNER JOIN t_data_health_package_param_relation hpr ON hpr.healthPackageParamId = hp.id
+            INNER JOIN t_data_health_package h ON h.id = hpr.healthPackageId
+        WHERE
+            h.value = #{healthPackageBinaryValue}
+            AND `display` = TRUE
+            <if test="age != null">
+                AND startAge &lt;= #{age} AND #{age} &lt; endAge
+            </if>
+            <if test="gender != null">
+                AND gender = #{gender}
+            </if>
+            <if test="status != null">
+                AND `status` = #{status}
+            </if>
+    </select>
+    
+    <select id="listBloodSuagarDescription" resultType="com.lifeshs.pojo.healthDescription.BloodSugarDTO">
+        SELECT id, `status`, `description`, diabeticState FROM t_data_health_description_bloodsugar
+        <where>
+            `display` = TRUE
+            <if test="diabeticState != null">
+                AND diabeticState = #{diabeticState}
+            </if>
+            <if test="status != null">
+                AND `status` = #{status}
+            </if>
+            <if test="gender != null">
+                AND gender = #{gender}
+            </if>
+        </where>
+    </select>
+
+</mapper>

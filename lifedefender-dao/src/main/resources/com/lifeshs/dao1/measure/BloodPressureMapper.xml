@@ -1,0 +1,249 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lifeshs.dao1.measure.BloodPressureDao" >
+  <resultMap id="BaseResultMap" type="com.lifeshs.po.BloodPressurePO" >
+    <constructor >
+      <idArg column="id" jdbcType="INTEGER" javaType="java.lang.Integer" />
+      <arg column="userId" jdbcType="INTEGER" javaType="java.lang.Integer" />
+      <arg column="status" jdbcType="BIGINT" javaType="java.lang.Long" />
+      <arg column="diastolic" jdbcType="SMALLINT" javaType="java.lang.Short" />
+      <arg column="diastolicArea" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="diastolicStatusDescription" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="systolic" jdbcType="SMALLINT" javaType="java.lang.Short" />
+      <arg column="systolicArea" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="systolicStatusDescription" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="heartRate" jdbcType="SMALLINT" javaType="java.lang.Short" />
+      <arg column="heartRateArea" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="heartRateStatusDescription" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="measureDate" jdbcType="TIMESTAMP" javaType="java.util.Date" />
+      <arg column="deviceType" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="createDate" jdbcType="TIMESTAMP" javaType="java.util.Date" />
+      <arg column="dataType" jdbcType="SMALLINT" javaType="java.lang.Short" />
+    </constructor>
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, userId, status, diastolic, diastolicArea, diastolicStatusDescription, systolic, 
+    systolicArea, systolicStatusDescription, heartRate, heartRateArea, heartRateStatusDescription, 
+    measureDate, deviceType, createDate, dataType
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_measure_bloodpressure
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from t_measure_bloodpressure
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.lifeshs.po.BloodPressurePO" >
+    insert into t_measure_bloodpressure (id, userId, status, 
+      diastolic, diastolicArea, diastolicStatusDescription, 
+      systolic, systolicArea, systolicStatusDescription, 
+      heartRate, heartRateArea, heartRateStatusDescription, 
+      measureDate, deviceType, createDate, 
+      dataType)
+    values (#{id,jdbcType=INTEGER}, #{userId,jdbcType=INTEGER}, #{status,jdbcType=BIGINT}, 
+      #{diastolic,jdbcType=SMALLINT}, #{diastolicArea,jdbcType=VARCHAR}, #{diastolicStatusDescription,jdbcType=VARCHAR}, 
+      #{systolic,jdbcType=SMALLINT}, #{systolicArea,jdbcType=VARCHAR}, #{systolicStatusDescription,jdbcType=VARCHAR}, 
+      #{heartRate,jdbcType=SMALLINT}, #{heartRateArea,jdbcType=VARCHAR}, #{heartRateStatusDescription,jdbcType=VARCHAR}, 
+      #{measureDate,jdbcType=TIMESTAMP}, #{deviceType,jdbcType=VARCHAR}, #{createDate,jdbcType=TIMESTAMP}, 
+      #{dataType,jdbcType=SMALLINT})
+  </insert>
+  <insert id="insertSelective" parameterType="com.lifeshs.po.BloodPressurePO" >
+    insert into t_measure_bloodpressure
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="userId != null" >
+        userId,
+      </if>
+      <if test="status != null" >
+        status,
+      </if>
+      <if test="diastolic != null" >
+        diastolic,
+      </if>
+      <if test="diastolicArea != null" >
+        diastolicArea,
+      </if>
+      <if test="diastolicStatusDescription != null" >
+        diastolicStatusDescription,
+      </if>
+      <if test="systolic != null" >
+        systolic,
+      </if>
+      <if test="systolicArea != null" >
+        systolicArea,
+      </if>
+      <if test="systolicStatusDescription != null" >
+        systolicStatusDescription,
+      </if>
+      <if test="heartRate != null" >
+        heartRate,
+      </if>
+      <if test="heartRateArea != null" >
+        heartRateArea,
+      </if>
+      <if test="heartRateStatusDescription != null" >
+        heartRateStatusDescription,
+      </if>
+      <if test="measureDate != null" >
+        measureDate,
+      </if>
+      <if test="deviceType != null" >
+        deviceType,
+      </if>
+      <if test="createDate != null" >
+        createDate,
+      </if>
+      <if test="dataType != null" >
+        dataType,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="userId != null" >
+        #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=BIGINT},
+      </if>
+      <if test="diastolic != null" >
+        #{diastolic,jdbcType=SMALLINT},
+      </if>
+      <if test="diastolicArea != null" >
+        #{diastolicArea,jdbcType=VARCHAR},
+      </if>
+      <if test="diastolicStatusDescription != null" >
+        #{diastolicStatusDescription,jdbcType=VARCHAR},
+      </if>
+      <if test="systolic != null" >
+        #{systolic,jdbcType=SMALLINT},
+      </if>
+      <if test="systolicArea != null" >
+        #{systolicArea,jdbcType=VARCHAR},
+      </if>
+      <if test="systolicStatusDescription != null" >
+        #{systolicStatusDescription,jdbcType=VARCHAR},
+      </if>
+      <if test="heartRate != null" >
+        #{heartRate,jdbcType=SMALLINT},
+      </if>
+      <if test="heartRateArea != null" >
+        #{heartRateArea,jdbcType=VARCHAR},
+      </if>
+      <if test="heartRateStatusDescription != null" >
+        #{heartRateStatusDescription,jdbcType=VARCHAR},
+      </if>
+      <if test="measureDate != null" >
+        #{measureDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="deviceType != null" >
+        #{deviceType,jdbcType=VARCHAR},
+      </if>
+      <if test="createDate != null" >
+        #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="dataType != null" >
+        #{dataType,jdbcType=SMALLINT},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.lifeshs.po.BloodPressurePO" >
+    update t_measure_bloodpressure
+    <set >
+      <if test="userId != null" >
+        userId = #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=BIGINT},
+      </if>
+      <if test="diastolic != null" >
+        diastolic = #{diastolic,jdbcType=SMALLINT},
+      </if>
+      <if test="diastolicArea != null" >
+        diastolicArea = #{diastolicArea,jdbcType=VARCHAR},
+      </if>
+      <if test="diastolicStatusDescription != null" >
+        diastolicStatusDescription = #{diastolicStatusDescription,jdbcType=VARCHAR},
+      </if>
+      <if test="systolic != null" >
+        systolic = #{systolic,jdbcType=SMALLINT},
+      </if>
+      <if test="systolicArea != null" >
+        systolicArea = #{systolicArea,jdbcType=VARCHAR},
+      </if>
+      <if test="systolicStatusDescription != null" >
+        systolicStatusDescription = #{systolicStatusDescription,jdbcType=VARCHAR},
+      </if>
+      <if test="heartRate != null" >
+        heartRate = #{heartRate,jdbcType=SMALLINT},
+      </if>
+      <if test="heartRateArea != null" >
+        heartRateArea = #{heartRateArea,jdbcType=VARCHAR},
+      </if>
+      <if test="heartRateStatusDescription != null" >
+        heartRateStatusDescription = #{heartRateStatusDescription,jdbcType=VARCHAR},
+      </if>
+      <if test="measureDate != null" >
+        measureDate = #{measureDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="deviceType != null" >
+        deviceType = #{deviceType,jdbcType=VARCHAR},
+      </if>
+      <if test="createDate != null" >
+        createDate = #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="dataType != null" >
+        dataType = #{dataType,jdbcType=SMALLINT},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.lifeshs.po.BloodPressurePO" >
+    update t_measure_bloodpressure
+    set userId = #{userId,jdbcType=INTEGER},
+      status = #{status,jdbcType=BIGINT},
+      diastolic = #{diastolic,jdbcType=SMALLINT},
+      diastolicArea = #{diastolicArea,jdbcType=VARCHAR},
+      diastolicStatusDescription = #{diastolicStatusDescription,jdbcType=VARCHAR},
+      systolic = #{systolic,jdbcType=SMALLINT},
+      systolicArea = #{systolicArea,jdbcType=VARCHAR},
+      systolicStatusDescription = #{systolicStatusDescription,jdbcType=VARCHAR},
+      heartRate = #{heartRate,jdbcType=SMALLINT},
+      heartRateArea = #{heartRateArea,jdbcType=VARCHAR},
+      heartRateStatusDescription = #{heartRateStatusDescription,jdbcType=VARCHAR},
+      measureDate = #{measureDate,jdbcType=TIMESTAMP},
+      deviceType = #{deviceType,jdbcType=VARCHAR},
+      createDate = #{createDate,jdbcType=TIMESTAMP},
+      dataType = #{dataType,jdbcType=SMALLINT}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+
+  <select id="selectMeasureDatesByUserId" parameterType="map" resultType="com.lifeshs.po.BloodPressurePO">
+    SELECT measureDate,status
+    from t_measure_bloodpressure
+    where userId = #{userId}
+    and DATE_ADD(#{queryDate},interval 1 month) &gt;= measureDate
+    and measureDate &gt;= #{queryDate}
+  </select>
+
+  <select id="getLastDateByUserId" resultType="date" parameterType="integer">
+    SELECT measureDate
+    FROM t_measure_bloodpressure
+    WHERE userId = #{userId}
+    Order by measureDate desc
+    limit 1
+  </select>
+  
+  <select id="currentPressureDate" resultType="com.lifeshs.po.BloodPressurePO">
+    SELECT * FROM t_measure_bloodpressure
+    WHERE userId = #{userId}
+    AND  TO_DAYS(measureDate) = TO_DAYS(#{date})
+    limit 1
+  </select>
+</mapper>

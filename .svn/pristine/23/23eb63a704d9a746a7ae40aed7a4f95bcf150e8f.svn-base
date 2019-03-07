@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!-- 心电设备单独映射表 -->
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lifeshs.dao.device.IDeviceDao" >
+
+    <select id="listEcgWithPageSplit" resultMap="EcgDTO">
+        SELECT
+            e.id, e.userId, e.deviceType, e.dataType, e.date,
+            ed.id AS edId, ed.ecgMeasureId, ed.`status`, ed.heartRate, ed.measureDate, ed.image, ed.signType, ed.tags, ed.rhythmId,
+            r.id AS rId, r.name AS rName, r.meaning
+        FROM (
+            SELECT
+                id, userId, deviceType, dataType, date
+            FROM t_measure_ecg
+            WHERE
+                userId = #{userId}
+                AND deviceType LIKE CONCAT(#{deviceType}, '%')
+            ORDER BY date DESC
+            LIMIT #{startIndex}, #{pageSize}
+        ) e
+        LEFT JOIN t_measure_ecg_detail ed ON ed.ecgMeasureId = e.id
+        LEFT JOIN t_data_rhythm r ON r.id = ed.rhythmId
+        ORDER BY e.date DESC, ed.measureDate DESC
+    </select>
+
+    <select id="listEcgWithLatestDay" resultMap="EcgDTO">
+        SELECT
+            e.id, e.userId, e.deviceType, e.dataType, e.date,
+            ed.id AS edId, ed.ecgMeasureId, ed.`status`, ed.heartRate, ed.measureDate, ed.image, ed.signType, ed.tags, ed.rhythmId,
+            r.id AS rId, r.name AS rName, r.meaning
+        FROM t_measure_ecg e
+        LEFT JOIN t_measure_ecg_detail ed ON ed.ecgMeasureId = e.id
+        LEFT JOIN t_data_rhythm r ON r.id = ed.rhythmId
+        WHERE
+            e.userId = #{userId}
+            AND DATE_SUB(CURDATE(), INTERVAL 0 DAY) &lt;= date(e.date)
+            AND DATE_SUB(CURDATE(), INTERVAL 0 DAY) &gt;= date(e.date)
+            AND e.deviceType LIKE CONCAT(#{deviceType}, '%')
+        ORDER BY e.date DESC, ed.measureDate DESC
+    </select>
+
+    <select id="listEcgWithLatestWeek" resultMap="EcgDTO">
+        SELECT
+            e.id, e.userId, e.deviceType, e.dataType, e.date,
+            ed.id AS edId, ed.ecgMeasureId, ed.`status`, ed.heartRate, ed.measureDate, ed.image, ed.signType, ed.tags, ed.rhythmId,
+            r.id AS rId, r.name AS rName, r.meaning
+        FROM t_measure_ecg e
+        LEFT JOIN t_measure_ecg_detail ed ON ed.ecgMeasureId = e.id
+        LEFT JOIN t_data_rhythm r ON r.id = ed.rhythmId
+        WHERE
+            e.userId = #{userId}
+            AND DATE_SUB(CURDATE(), INTERVAL 1 WEEK) &lt; date(e.date)
+            AND DATE_SUB(CURDATE(), INTERVAL 0 WEEK) &gt;= date(e.date)
+            AND e.deviceType LIKE CONCAT(#{deviceType}, '%')
+        ORDER BY e.date DESC, ed.measureDate DESC
+    </select>
+
+    <select id="listEcgWithLatestMonth" resultMap="EcgDTO">
+        SELECT
+            e.id, e.userId, e.deviceType, e.dataType, e.date,
+            ed.id AS edId, ed.ecgMeasureId, ed.`status`, ed.heartRate, ed.measureDate, ed.image, ed.signType, ed.tags, ed.rhythmId,
+            r.id AS rId, r.name AS rName, r.meaning
+        FROM t_measure_ecg e
+        LEFT JOIN t_measure_ecg_detail ed ON ed.ecgMeasureId = e.id
+        LEFT JOIN t_data_rhythm r ON r.id = ed.rhythmId
+        WHERE
+            e.userId = #{userId}
+            AND DATE_SUB(CURDATE(), INTERVAL 1 MONTH) &lt; date(e.date)
+            AND DATE_SUB(CURDATE(), INTERVAL 0 MONTH) &gt;= date(e.date)
+            AND e.deviceType LIKE CONCAT(#{deviceType}, '%')
+        ORDER BY e.date DESC, ed.measureDate DESC
+    </select>
+
+    <select id="listEcgWithLatestThreeMonth" resultMap="EcgDTO">
+        SELECT
+            e.id, e.userId, e.deviceType, e.dataType, e.date,
+            ed.id AS edId, ed.ecgMeasureId, ed.`status`, ed.heartRate, ed.measureDate, ed.image, ed.signType, ed.tags, ed.rhythmId,
+            r.id AS rId, r.name AS rName, r.meaning
+        FROM t_measure_ecg e
+        LEFT JOIN t_measure_ecg_detail ed ON ed.ecgMeasureId = e.id
+        LEFT JOIN t_data_rhythm r ON r.id = ed.rhythmId
+        WHERE
+            e.userId = #{userId}
+            AND DATE_SUB(CURDATE(), INTERVAL 3 MONTH) &lt; date(e.date)
+            AND DATE_SUB(CURDATE(), INTERVAL 0 MONTH) &gt;= date(e.date)
+            AND e.deviceType LIKE CONCAT(#{deviceType}, '%')
+        ORDER BY e.date DESC, ed.measureDate DESC
+    </select>
+
+    <select id="listEcgWithSpecialDate" resultMap="EcgDTO">
+        SELECT
+            e.id, e.userId, e.deviceType, e.dataType, e.date,
+            ed.id AS edId, ed.ecgMeasureId, ed.`status`, ed.heartRate, ed.measureDate, ed.image, ed.signType, ed.tags, ed.rhythmId,
+            r.id AS rId, r.name AS rName, r.meaning
+        FROM t_measure_ecg e
+        LEFT JOIN t_measure_ecg_detail ed ON ed.ecgMeasureId = e.id
+        LEFT JOIN t_data_rhythm r ON r.id = ed.rhythmId
+        WHERE
+            userId = #{userId}
+            AND e.deviceType LIKE CONCAT(#{deviceType}, '%')
+            AND e.date = DATE_FORMAT(#{date}, '%Y-%m-%d')
+        ORDER BY e.date DESC, ed.measureDate DESC
+    </select>
+    
+    <select id="countEcgWithDateAndSignType" resultType="java.lang.Integer">
+        SELECT COUNT(1) FROM t_measure_ecg e
+        LEFT JOIN t_measure_ecg_detail ed ON ed.ecgMeasureId = e.id
+        WHERE
+            e.userId = #{userId}
+            AND e.deviceType LIKE CONCAT(#{deviceType}, '%')
+            AND e.date = #{date}
+            AND ed.signType = #{signType}
+            <if test="rhythmId != null">
+                AND ed.rhythmId = #{rhythmId}
+            </if>
+    </select>
+    
+    <select id="listEcgWithDateAndSignType" resultMap="EcgDTO">
+        SELECT
+            e.id, e.userId, e.deviceType, e.dataType, e.date,
+            ed.id AS edId, ed.ecgMeasureId, ed.`status`, ed.heartRate, ed.measureDate, ed.image, ed.signType, ed.tags, ed.rhythmId,
+            r.id AS rId, r.name AS rName, r.meaning
+        FROM t_measure_ecg e
+        LEFT JOIN t_measure_ecg_detail ed ON ed.ecgMeasureId = e.id
+        LEFT JOIN t_data_rhythm r ON r.id = ed.rhythmId
+        WHERE
+            e.userId = #{userId}
+            AND e.deviceType LIKE CONCAT(#{deviceType}, '%')
+            AND DATE_FORMAT(e.date, '%Y-%m-%d') = #{measureDate}
+            AND ed.signType = #{signType}
+            <if test="rhythmId != null"> AND ed.rhythmId = #{rhythmId}</if>
+        ORDER BY e.date DESC, ed.measureDate DESC
+        LIMIT #{startIndex}, #{pageSize}
+    </select>
+
+    <resultMap type="com.lifeshs.pojo.healthDevice.EcgDTO" id="EcgDTO">
+        <id column="id" property="id"/>
+        <result property="userId" column="userId"/>
+        <result property="deviceType" column="deviceType"/>
+        <result property="dataType" column="dataType"/>
+        <result property="date" column="date"/>
+        <result property="createDate" column="createDate"/>
+        <collection property="detailList" notNullColumn="edId" ofType="com.lifeshs.pojo.healthDevice.EcgDetailDTO">
+            <id property="id" column="edId"/>
+            <result property="ecgMeasureId" column="ecgMeasureId"/>
+            <result property="status" column="status"/>
+            <result property="heartRate" column="heartRate"/>
+            <result property="measureDate" column="measureDate"/>
+            <result property="image" column="image"/>
+            <result property="signType" column="signType"/>
+            <result property="tags" column="tags"/>
+            <result property="createDate" column="edCreateDate"/>
+            <result property="rhythmId" column="rhythmId"/>
+            <association property="ecgRhythm" javaType="com.lifeshs.pojo.data.EcgRhythmDTO">
+                <id property="id" column="rId"/>
+                <result property="name" column="rName"/>
+                <result property="meaning" column="meaning"/>
+                <!-- 这里使用延迟加载的方式获取原因跟治疗方法 -->
+                <collection property="reasonList" column="rId" ofType="java.lang.String" select="selectReason" />
+                <collection property="remedyList" column="rId" ofType="java.lang.String" select="selectRemedy"/>
+            </association>
+        </collection>
+    </resultMap>
+
+    <select id="selectReason" resultType="java.lang.String">
+        SELECT reason FROM t_data_rhythm_reason WHERE rhythmId = #{id}
+    </select>
+
+    <select id="selectRemedy" resultType="java.lang.String">
+        SELECT content FROM t_data_health_remedy WHERE rhythmId = #{id}
+    </select>
+    
+    <insert id="addEcg" parameterType="com.lifeshs.pojo.healthDevice.EcgDTO">
+        <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER">
+            SELECT LAST_INSERT_ID();
+        </selectKey>
+        INSERT INTO t_measure_ecg(userId, deviceType, dataType, date, createDate)
+        VALUES(#{userId}, #{deviceType}, #{dataType}, #{date}, NOW())
+    </insert>
+    
+    <insert id="addEcgDetail">
+        INSERT INTO t_measure_ecg_detail(ecgMeasureId, `status`, heartRate, measureDate, image, signType, tags, rhythmId, createDate)
+        VALUES
+        <foreach collection="detailList" item="d" separator=",">
+        (#{ecgMeasureId}, #{d.status}, #{d.heartRate}, #{d.measureDate}, #{d.image}, #{d.signType}, #{d.tags}, #{d.rhythmId}, NOW())
+        </foreach>
+    </insert>
+</mapper>

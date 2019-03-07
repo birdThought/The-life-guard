@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lifeshs.dao1.combo.ComboRelationDao">
+	<delete id="delRelationByVipComboIdAndcomboItemId">
+		DELETE FROM t_vip_combo_item_relation
+		WHERE vipComboId = #{vipComboId}
+	</delete>
+    
+    <delete id="delOrgUserRelationByVipComboId">
+        DELETE FROM t_vip_combo_orguser_relation
+        WHERE vipComboId = #{vipComboId} 
+        <if test="vipComboItemId != null">
+            and vipComboItemId=#{vipComboItemId}
+        </if>
+        <if test="userId != null and userId !=''">
+            and orgUserId=#{userId}
+        </if>
+    </delete>
+    
+	<!-- 添加关联关系 -->
+	<insert id="addComboRelation">
+		INSERT INTO 
+		t_vip_combo_item_relation(vipComboId,vipComboItemId,number,createDate)
+		VALUES(#{vipComboId},#{vipComboItemId},#{number},NOW())
+	</insert>
+    
+    <!-- 添加套餐与服务师关联关系 -->
+    <insert id="addComboOrgUserRelation">
+        INSERT INTO 
+        t_vip_combo_orguser_relation(vipComboId,vipComboItemId,orgUserId,createDate)
+        VALUES(#{comboId},#{vipComboItemId},#{orgUserId},NOW())
+    </insert>
+    
+    <!-- 添加套餐与服务师关联关系 -->
+    <select id="findComboOrgUserRelation" resultType="integer">
+        select COUNT(1) from t_vip_combo_orguser_relation r 
+        where r.vipComboId=#{comboId} 
+        and r.vipComboItemId=#{vipComboItemId} 
+        and r.orgUserId=#{orgUserId};
+    </select>
+    
+    <select id="findComboItemList" resultType="com.lifeshs.po.vip.VipComboItemRelationPO">
+        select m.id,m.`name`,r.number from t_vip_combo_item_relation r 
+        INNER JOIN t_vip_combo_item m on r.vipComboItemId = m.id 
+        where r.vipComboId = #{vipComboId}
+    </select>
+
+    
+    
+    <!-- <select id="findComboItemList" resultMap="vipComboItemOrgUserRelationMap">
+        select r.vipComboId,m.id, m.name, r.number ,u.id as uId,u.realName,o.id as oId,o.orgName from t_vip_combo_item m 
+        INNER JOIN t_vip_combo_item_relation r on r.vipComboItemId = m.id 
+        left join t_vip_combo_orguser_relation org on org.vipComboId = r.vipComboId and org.vipComboItemId = r.vipComboItemId 
+        left join t_org_user u  on u.id = org.orgUserId 
+        left JOIN t_org o on u.orgId = o.id
+        where r.vipComboId = #{vipComboId} 
+        
+    </select>
+    
+    <resultMap type="com.lifeshs.po.vip.VipComboItemServeUserRelationPO" id="vipComboItemOrgUserRelationMap">
+        <id column="id" property="id"/>
+        <result property="vipComboId" column="vipComboId"/>
+        <result property="name" column="name"/>
+        <result property="number" column="number"/>
+        <collection property="orgUserList" notNullColumn="uId" ofType="com.lifeshs.pojo.org.OrgUserDTO">
+            <id property="id" column="uId"/>
+            <result property="realName" column="realName"/>
+            <result property="orgId" column="orgId"/>
+            <association property="org" javaType="com.lifeshs.pojo.org.OrgDTO">
+                <id property="id" column="oId"/>
+                <result property="orgName" column="orgName"/>
+            </association>
+        </collection>
+    </resultMap> -->
+    
+    
+    
+    
+    
+
+</mapper>

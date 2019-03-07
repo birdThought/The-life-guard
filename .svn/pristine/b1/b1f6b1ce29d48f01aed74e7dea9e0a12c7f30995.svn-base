@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- 用户的上门地址（应用于上门服务），不是用户信息中的地址 -->
+<mapper namespace="com.lifeshs.dao1.project.ILessonDao" >
+    <!-- 得到单条健康课堂信息 -->
+    <select id="getLesson" parameterType="String" resultType="com.lifeshs.po.LessonPO">
+        SELECT * FROM t_project_lesson  WHERE code = #{projectCode};
+    </select>
+
+    <!-- 得到单条健康课堂信息（按环信ID） -->
+    <!-- <select id="findLessonByHuanxinId" parameterType="String" resultType="com.lifeshs.po.LessonPO">
+        SELECT * FROM t_project_lesson WHERE huanxinId = #{huanxinId};
+    </select> -->
+    
+    <!-- 得到课堂信息 （按环信ID） -->
+    <select id="findLessonByHuanxinId" parameterType="String" resultType="com.lifeshs.po.LessonPO">
+        SELECT * FROM t_project_lesson WHERE huanxinId IN <foreach collection="huanxinIdList" open="(" close=")" item="huanxinId" separator=",">#{huanxinId}</foreach>;
+    </select>
+
+    <!-- 得到健康课堂信息列表（按环信ID） -->
+    <select id="getLessonListByHX" parameterType="String" resultType="com.lifeshs.dto.manager.serve.GetLessonByHXData">
+        SELECT '02' as code,name,code as projectCode,image as photo,huanxinId,(select count(*) from t_order o where o.status=3 and o.projectCode=p.code) as userCount FROM t_project_lesson p
+        WHERE huanxinId in
+        <foreach collection="huanxinIds" open="(" close=")" separator="," index="index">
+            ${huanxinIds[index]}
+        </foreach>
+    </select>
+
+    <!-- 控制健康课堂禁言 -->
+    <select id="updateGag" >
+        UPDATE t_project_lesson SET silence=#{silence} WHERE code = #{projectCode};
+    </select>
+
+    <!--获取课堂群成员-->
+    <select id = "findLessonMemberList" resultType="com.lifeshs.po.UserPO">
+      SELECT DISTINCT(u.userName), u.userCode, u.photo
+      FROM t_order o
+      LEFT JOIN t_user u ON o.userId = u.id
+      WHERE o.projectCode = #{projectCode}
+    </select>
+
+    <select id="findLessonOutOfEndDate" resultType="com.lifeshs.po.LessonPO">
+        SELECT * FROM t_project_lesson
+        WHERE
+            endDate &lt; DATE_SUB(CURDATE(),INTERVAL #{remainDay} DAY)
+            AND `status` IN (1, 2)
+    </select>
+
+    <!--根据服务师获取课堂信息列表-->
+    <select id = "findLessonListByServices" resultType="com.lifeshs.po.LessonPO">
+        SELECT
+            o.subject as name, l.price, l.huanxinId, l.image, l.code
+        FROM
+            t_order o INNER JOIN t_project_lesson l ON o.projectCode = l.`code`
+        WHERE
+            o.status = 3 AND o.orderType = 1 AND o.orgUserId = #{orgUserId}
+            <if test="name != null">
+                AND l.`name` LIKE  CONCAT('%',#{name},'%')
+            </if>
+        GROUP BY o.projectCode LIMIT #{startRow}, #{pageSize}
+    </select>
+
+    <!--根据服务师获取课堂数目-->
+    <select id = "countLessonByServices" resultType="java.lang.Integer">
+        SELECT COUNT(m.n) FROM (
+            SELECT
+                count(1) as n
+            FROM
+                t_order o INNER JOIN t_project_lesson l ON o.projectCode = l.`code`
+            WHERE
+                o.status = 3 AND o.orderType = 1 AND o.orgUserId = #{orgUserId}
+                <if test="name != null">
+                    AND l.`name` LIKE  CONCAT('%',#{name},'%')
+                </if>
+            GROUP BY o.projectCode ) m
+    </select>
+
+    <!--修改课堂服务项目-->
+    <select id="updateLesson" parameterType="com.lifeshs.po.LessonPO">
+        UPDATE t_project_lesson
+        <trim prefix="set" suffixOverrides=",">
+            <if test="image!=null">image=#{image},</if>
+            <if test="name!=null">name=#{name},</if>
+            <if test="serveId!=null">serveId=#{serveId},</if>
+            <if test="lessonTime!=null">lessonTime=#{lessonTime},</if>
+            <if test="startDate!=null">startDate=#{startDate},</if>
+            <if test="endDate!=null">endDate=#{endDate},</if>
+            <if test="introduce!=null">introduce=#{introduce},</if>
+            <if test="price!=null">price=#{price},</if>
+            modifyDate = NOW()
+        </trim>
+        WHERE code = #{code}
+    </select>
+
+</mapper>

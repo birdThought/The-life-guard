@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- 机构的结算记录 -->
+<mapper namespace="com.lifeshs.dao1.order.IStatementDao" >
+    <!-- 得到服务师的服务项目列表 -->
+    <select id="findStatement" resultType="com.lifeshs.po.OrgStatementPO">
+        SELECT * FROM t_org_statement WHERE orgId = #{orgId} and yearMonth = #{month};
+    </select>
+
+    <!--获取多个月的机构结算-->
+    <select id = "findStatementList" resultType="com.lifeshs.po.OrgStatementPO">
+        SELECT * FROM t_org_statement s
+        WHERE orgId = #{orgId}
+        AND STR_TO_DATE(s.yearMonth, '%Y-%m') &lt;= STR_TO_DATE(#{endMonth}, '%Y-%m')
+        AND STR_TO_DATE(s.yearMonth, '%Y-%m') &gt;= STR_TO_DATE(#{startMonth}, '%Y-%m')
+    </select>
+
+    <!-- 获取月已结算清单 -->
+    <select id="getMonthOrderList" resultType="com.lifeshs.dto.manager.order.GetPaymentListData">
+        SELECT o.id,o.createDate,o.charge,o.profitShare,o.orgIncome,o.userId,u.realName,u.photo,o.subject FROM t_order o,t_user u WHERE o.userId=u.id and statementId = #{statementId}
+        order by createDate desc
+        limit #{startRow},#{lenght};
+    </select>
+
+    <!--将机构状态更改为‘未转账’状态-->
+    <update id="updateStatementStatus">
+        UPDATE t_org_statement s SET s.status = 2
+        WHERE s.orgId = #{orgId} AND s.id = #{statementId} AND s.status = 1
+    </update>
+
+    <select id="countStatement" resultType="java.lang.Integer">
+        SELECT COUNT(1) FROM t_org_statement s
+        LEFT JOIN t_org o ON o.id = s.orgId
+        <if test="userNo != null">AND o.parentId = #{userNo}</if>
+    </select>
+
+    <select id="findStatement2" resultType="com.lifeshs.po.OrgStatementPO">
+        SELECT s.*, o.orgName FROM t_org_statement s
+        LEFT JOIN t_org o ON o.id = s.orgId
+        <if test="userNo != null">AND o.parentId = #{userNo}</if>
+        ORDER BY id DESC
+        LIMIT #{startRow}, #{pageSize}
+    </select>
+</mapper>

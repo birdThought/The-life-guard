@@ -1,0 +1,130 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:aop="http://www.springframework.org/schema/aop" 
+       xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://www.springframework.org/schema/mvc
+       http://www.springframework.org/schema/mvc/spring-mvc.xsd
+       http://www.springframework.org/schema/context
+       http://www.springframework.org/schema/context/spring-context.xsd
+       http://www.springframework.org/schema/aop
+       http://www.springframework.org/schema/aop/spring-aop.xsd
+    ">
+	<import resource="classpath:spring-shiro-customer.xml" />
+    <!-- 引入cache -->
+	<import resource="classpath:lifedf-cache.xml" />
+	<aop:aspectj-autoproxy proxy-target-class="true" />
+
+	<!--开启shiro注解拦截  暂不开启，要求使用配置方式，以免不统一不便于阅读-->
+	<!--<bean class="org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor">-->
+		<!--<property name="securityManager" ref="securityManager"/>-->
+	<!--</bean>-->
+	
+	<!-- ApplicationContext -->
+	<bean class="com.lifeshs.utils.SpringContextHolder" lazy-init="false"></bean>
+	
+	<!-- 对模型视图名称的解析，即在模型视图名称添加前后缀 -->
+	<bean id="viewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+		<property name="viewClass" value="org.springframework.web.servlet.view.JstlView" />
+		<property name="contentType" value="text/html" />
+		<property name="prefix" value="/view/" />
+		<property name="suffix" value=".jsp" />
+		<property name="order" value="0"/>
+	</bean>
+
+	<mvc:resources mapping="/static/**" location="/static/" />
+	<mvc:annotation-driven>
+		<mvc:message-converters register-defaults="true">
+			<!--避免IE执行AJAX时,返回JSON出现下载文件 -->
+			<bean id="fastJsonHttpMessageConverter" class="com.alibaba.fastjson.support.spring.FastJsonHttpMessageConverter">
+				<property name="supportedMediaTypes">
+					<list>
+						<value>application/json;charset=UTF-8</value>
+					</list>
+				</property>
+			</bean>
+		</mvc:message-converters>
+	</mvc:annotation-driven>
+
+    <!-- 全局异常 -->
+    <bean class="com.lifeshs.customer.handler.CustomerExceptionHandler" />
+
+	<context:component-scan base-package="com.lifeshs.customer.controller" />
+    <context:component-scan base-package="com.lifeshs.customer.aop"/>
+
+	<!--<context:component-scan base-package="com.lifeshs.component" />
+	<context:component-scan base-package="com.lifeshs.utils" />
+	<context:component-scan base-package="com.lifeshs.security" />-->
+	<!--<context:component-scan base-package="com.lifeshs" />-->
+
+	<!-- 拦截器（开始） -->
+	<!--<mvc:interceptors>
+		<mvc:interceptor>
+			<mvc:mapping path="/**" />
+			<bean class="com.lifeshs.interceptors.EncodingInterceptor" />
+		</mvc:interceptor>
+		<mvc:interceptor>
+			<mvc:mapping path="/**" />
+			<bean class="com.lifeshs.interceptors.AuthInterceptor">
+				<property name="excludeUrls">
+					<list>
+						&lt;!&ndash; 企业机构注册接口 &ndash;&gt;
+						<value>orgControl.do?registerOrg</value>
+						<value>orgControl.do?improveOrgPage</value>
+						<value>orgControl.do?improveOrgMsg</value>
+						<value>zdPushDataController.do?pushData</value>
+					</list>
+				</property>
+				<property name="excludeStartWithUrls">
+					<list>
+						<value>login</value>
+						<value>register</value>
+						<value>pass</value>
+						<value>static</value> &lt;!&ndash;静态资源&ndash;&gt;
+						<value>releaseControl.do</value>
+						<value>testController.do</value>
+						<value>test/</value>
+						<value>commonControl</value>
+						<value>healthController.do</value>
+						<value>indexControl.do</value>
+						<value>informationControl.do</value>
+						<value>upload</value>
+						<value>checkNotify</value>
+						<value>app</value>
+						<value>mapp/</value>
+						<value>commonControl/uploadFile</value>
+						<value>commonControl/layUploadFile</value>
+						<value>oauthLoginControl.do</value>
+					</list>
+				</property>
+			</bean>
+		</mvc:interceptor>-->
+		<!--<mvc:interceptor>
+			<mvc:mapping path="/**"/>
+			<bean class="com.lifeshs.security.filter.SysPermissionInterceptor"></bean>
+		</mvc:interceptor>-->
+	<!--</mvc:interceptors>-->
+	<!-- 拦截器（结束） -->
+
+	<bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+		<!-- 3*1024*1024即是3*1MB -->
+        <property name="maxUploadSize" value="83886080"/>
+    </bean>
+
+	<!-- 全局异常处理 -->
+	<!--<bean id="systemExceptionHandler" class="com.lifeshs.support.plantform.handler.SystemExceptionHandler" />-->
+
+	<!--test-->
+	<!--<beans>-->
+		<!--<bean id="testController" class="com.lifeshs.controller.ly.TestController">-->
+			<!--<property name="testLiyueService" ref="testLiyueService">-->
+			<!--</property>-->
+		<!--</bean>-->
+		<!--<bean id="testLiyueService" class="com.lifeshs.service.terminal.app.impl.TestLiyueServiceImpl">-->
+
+		<!--</bean>-->
+	<!--</beans>-->
+</beans>

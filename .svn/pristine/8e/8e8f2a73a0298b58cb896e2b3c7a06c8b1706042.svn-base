@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lifeshs.dao1.transfer.TransferDeliceryDao">
+    <insert id="saveDelivery" parameterType="com.lifeshs.po.transfer.TransferDelivery">
+        INSERT INTO  t_user_Delivery(orderno,sfz,sname,JzyInfo,createtime) VALUES (#{orderno},#{sfz},#{sname},#{JzyInfo},NOW())
+    </insert>
+
+ <select id="findByOrderNo" resultType="com.lifeshs.po.transfer.TransferDelivery">
+        SELECT * FROM  t_user_Delivery WHERE orderno = #{orderno}
+    </select>
+    <update id="updateDelivery" parameterType="com.lifeshs.po.transfer.TransferDelivery">
+      UPDATE t_user_Delivery SET
+      orderno = #{orderno},
+      sfz = #{sfz},
+      sname = #{sname},
+      JzyInfo = #{JzyInfo},
+      createtime = #{createtime},
+      modifytime = NOW()
+      WHERE orderno = #{orderno}
+    </update>
+</mapper>

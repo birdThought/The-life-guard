@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lifeshs.dao1.systemManage.SportKindDao">
+		<!--查询运动种类(分页) -->
+	<select id="findSportKind" resultType="com.lifeshs.entity.data.TDataSportKind">
+		SELECT id,name FROM
+		t_data_sport_kind 
+		LIMIT #{startRow},#{pageSize}
+	</select>
+	<!-- 获取运动种类列表 -->
+	<select id="findsportKind" resultType="com.lifeshs.entity.data.TDataSportKind">
+		SELECT id,name FROM
+		t_data_sport_kind 
+	</select>
+	
+	<!-- 统计运动种类数量 -->
+	<select id="countSportKind" resultType="java.lang.Integer">
+		SELECT COUNT(1)
+		FROM
+		t_data_sport_kind 
+	</select>
+	
+	<!-- 添加运动种类 -->
+	<insert id="addSportKind" parameterType="com.lifeshs.entity.data.TDataSportKind">
+		INSERT INTO
+		t_data_sport_kind(name) VALUES(#{name})
+	</insert>
+	
+	<!-- 更改运动种类 -->
+	<update id="updateSportKind" parameterType="com.lifeshs.entity.data.TDataSportKind">
+		UPDATE t_data_sport_kind
+		SET name=#{name} WHERE id = #{id}
+	</update>
+	
+	<!-- 删除运动种类 -->
+	<delete id="deleteSportKind">
+		DELETE FROM t_data_sport_kind WHERE id = #{id}
+	</delete>
+</mapper>

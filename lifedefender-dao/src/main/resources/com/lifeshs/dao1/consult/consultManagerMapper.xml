@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lifeshs.dao1.consult.IConsultManagerDao">
+    <!-- 根据id获取资讯栏目信息（包括该栏目下的子栏目） -->
+    <select id="getColumnListById" resultMap="InformationColumnVOResultMap">
+        SELECT p.id AS pId,p.name AS pName,p.code AS pCode,p.parentId AS pParentId,p.orderNumber AS pOrderNumber,p.createDate AS pCreateDate,c.id AS cId,c.name AS cName,c.code AS cCode,c.parentId AS cParentId,c.orderNumber AS cOrderNumber,c.createDate AS cCreateDate
+        FROM t_information_column p
+        LEFT JOIN t_information_column c ON p.id=c.parentId
+        <where>
+            <if test="parentId != null">p.parentId = #{parentId}</if>
+        </where>
+        ORDER BY c.createDate DESC
+    </select>
+    
+    <resultMap type="com.lifeshs.vo.consult.InformationColumnVO" id="InformationColumnVOResultMap">
+        <id property="id" column="pId"/>
+        <result property="name" column="pName"/>
+        <result property="code" column="pCode"/>
+        <result property="parentId" column="pParentId"/>
+        <result property="orderNumber" column="pOrderNumber"/>
+        <result property="createDate" column="pCreateDate"/>
+        <collection property="itemList" column="pId" ofType="com.lifeshs.po.consult.InformationColumnPO">
+            <id property="id" column="cId"/>
+            <result property="name" column="cName"/>
+            <result property="code" column="cCode"/>
+            <result property="parentId" column="cParentId"/>
+            <result property="orderNumber" column="cOrderNumber"/>
+            <result property="createDate" column="cCreatDate"/>
+        </collection>
+    </resultMap>
+    
+    <!-- 根据id获取所有资讯信息总记录数 -->
+    <select id="getTotalRecord" resultType="int">
+        SELECT COUNT(*) FROM t_information i
+        WHERE i.columnId IN <foreach collection="columnIdList" item="id" open="(" close=")" separator=",">#{id}</foreach>
+    </select>
+    
+    <!-- 根据id获取所有资讯信息列表 -->
+    <select id="getInformationListById" resultType="com.lifeshs.po.consult.InformationPO">
+        SELECT i.id AS id,i.title AS title,i.content AS content,i.source AS source,i.auther AS auther,i.image AS image,i.columnId AS columnId,i.createDate AS createDate,i.modifyDate AS modifyDate
+        FROM t_information i
+        WHERE i.columnId IN <foreach collection="columnIdList" item="id" open="(" close=")" separator=",">#{id}</foreach>
+        ORDER BY i.createDate DESC
+        LIMIT #{startRow},#{pageSize}
+    </select>
+    
+    <!-- 根据id获取二级栏目资讯信息总记录数 -->
+    <select id="getSecondTotalRecord" resultType="int">
+        SELECT COUNT(*) FROM t_information
+        WHERE columnId = #{id}
+    </select>
+    
+    <!-- 根据id获取二级栏目资讯信息列表 -->
+    <select id="getSecondInformationListById" resultType="com.lifeshs.po.consult.InformationPO">
+        SELECT id,title,content,source,auther,image,columnId,createDate,modifyDate
+        FROM t_information
+        WHERE columnId = #{id}
+        ORDER BY createDate DESC
+        LIMIT #{startRow},#{pageSize}
+    </select>
+    
+    <!-- 添加资讯信息 -->
+    <insert id="addInformation" parameterType="com.lifeshs.po.consult.InformationPO">
+        INSERT INTO t_information
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="title != null">title,</if>
+            <if test="content != null">content,</if>
+            <if test="source != null">source,</if>
+            <if test="auther != null">auther,</if>
+            <if test="image != null">image,</if>
+            <if test="columnId != null">columnId,</if>
+            createDate
+        </trim>
+        <trim prefix="VALUES(" suffix=")" suffixOverrides=",">
+            <if test="title != null">#{title},</if>
+            <if test="content != null">#{content},</if>
+            <if test="source != null">#{source},</if>
+            <if test="auther != null">#{auther},</if>
+            <if test="image != null">#{image},</if>
+            <if test="columnId != null">#{columnId},</if>
+            NOW()
+        </trim>
+    </insert>
+    
+    <!-- 根据id删除资讯信息 -->
+    <delete id="delInformationById">
+        DELETE FROM t_information WHERE id = #{id}
+    </delete>
+    
+    <!-- 修改资讯信息 -->
+    <update id="updateInformation" parameterType="com.lifeshs.po.consult.InformationPO">
+        UPDATE t_information SET
+         <if test="title != null">title = #{title},</if>
+         <if test="content != null">content = #{content},</if>
+         <if test="source != null">source = #{source},</if>
+         <if test="auther != null">auther = #{auther},</if>
+         <if test="image != null">image = #{image},</if>
+         <if test="columnId != null">columnId = #{columnId},</if>
+        modifyDate = NOW()
+        WHERE id = #{id}
+    </update>
+    
+    <!-- 根据id获取一条资讯信息 -->
+    <select id="getInformationById" resultType="com.lifeshs.vo.consult.InformationVO">
+        SELECT i.id, i.title, i.content, i.source, i.auther, i.image, i.columnId, i.createDate, i.modifyDate, c.parentId AS parentColumnId
+        FROM t_information i
+        LEFT JOIN t_information_column c ON c.id = i.columnId
+        WHERE i.id = #{id}
+    </select>
+    
+    <!-- 添加资讯栏目 -->
+    <insert id="addColumn" parameterType="com.lifeshs.po.consult.InformationColumnPO">
+        INSERT INTO t_information_column
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="name != null">name,</if>
+            <if test="code != null">code,</if>
+            <if test="parentId != null">parentId,</if>
+            <if test="orderNumber != null">orderNumber,</if>
+            createDate
+        </trim>
+        <trim prefix="VALUES(" suffix=")" suffixOverrides=",">
+            <if test="name != null">#{name},</if>
+            <if test="code != null">#{code},</if>
+            <if test="parentId != null">#{parentId},</if>
+            <if test="orderNumber != null">#{orderNumber},</if>
+            NOW()
+        </trim>
+    </insert>
+    
+    <!-- 根据id删除资讯栏目 -->
+    <delete id="delColumnById">
+        DELETE FROM t_information_column WHERE id = #{id}
+    </delete>
+    
+    <!-- 修改资讯栏目 -->
+    <update id="updateColumn" parameterType="com.lifeshs.po.consult.InformationColumnPO">
+        UPDATE t_information_column
+        <set>
+            <if test="name != null">name = #{name},</if>
+            <if test="code != null">code = #{code},</if>
+            <if test="parentId != null">parentId = #{parentId},</if>
+            <if test="orderNumber != null">orderNumber = #{orderNumber},</if>
+        </set>
+        WHERE id = #{id}
+    </update>
+    
+    <!-- 根据id获取子栏目 -->
+    <select id="getChildColumnById" resultType="com.lifeshs.po.consult.InformationColumnPO">
+        SELECT * FROM t_information_column WHERE parentId = #{id};
+    </select>
+</mapper>

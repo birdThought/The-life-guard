@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lifeshs.dao.member.IPushDao">
+    <select id="getAppPushData" resultType="com.lifeshs.pojo.app.PushDataDTO">
+        SELECT id, deviceToken, userId, OS, systemVersion FROM t_user_app_push WHERE userId = #{userId} AND `display` = TRUE
+    </select>
+    
+    <insert id="addAppPushData" parameterType="com.lifeshs.pojo.app.PushDataDTO">
+        INSERT INTO t_user_app_push(
+            <if test="systemVersion != null">systemVersion,</if>
+            deviceToken, userId, OS, createDate, `display`)
+        VALUES(
+            <if test="systemVersion != null">#{systemVersion},</if>
+            #{deviceToken}, #{userId}, #{OS}, NOW(), TRUE)
+    </insert>
+    
+    <update id="deleteAppPushData" parameterType="java.lang.Integer">
+        UPDATE t_user_app_push SET `display` = FALSE WHERE id = #{id} AND `display` = TRUE
+    </update>
+    
+    <update id="deleteAppPushDataByUserId" parameterType="java.lang.Integer">
+        UPDATE t_user_app_push SET `display` = FALSE WHERE userId = #{userId} AND `display` = TRUE
+    </update>
+    
+    <update id="deleteAppPushDataByDeviceToken" parameterType="java.lang.String">
+        UPDATE t_user_app_push SET `display` = FALSE WHERE deviceToken = #{deviceToken} AND `display` = TRUE
+    </update>
+    
+    <select id="listMeasureReminderTask" resultType="com.lifeshs.pojo.member.MeasureReminderTaskDTO">
+        SELECT
+            p.deviceToken,
+            p.OS,
+            p.systemVersion,
+            d.devices,
+            d.reminderDetailId,
+            d.userId AS receiverId
+        FROM
+            t_user_measurement_reminder_detail d
+        LEFT JOIN t_user_app_push p ON d.userId = p.userId AND p.`display` = 1
+        INNER JOIN t_user_measurement_reminder r ON r.userId = d.userId
+        AND pushSwitch = 1
+        WHERE
+            (
+                (
+                    STR_TO_DATE(d.reminderTime, '%H:%i') &gt;= CURRENT_TIME ()
+                )
+                AND (
+                    STR_TO_DATE(d.reminderTime, '%H:%i') &lt; ADDTIME(CURRENT_TIME(), '00:05:00')
+                )
+            )
+        AND d.reminderStatus = 1
+        AND d.recordStatus = 1
+        AND FIND_IN_SET(#{day}, repeatCycle)
+    </select>
+    
+    <insert id="addPushTask" parameterType="com.lifeshs.pojo.app.PushTaskDTO">
+        INSERT INTO t_user_app_push_task(
+            reminderDetailId, status, createDate, errorMsg
+            <if test="taskId != null">, taskId</if>
+            <if test="msgId != null">, msgId</if>
+        )
+        VALUES(
+            #{reminderDetailId}, #{status}, NOW(), #{errorMsg}
+            <if test="taskId != null">, #{taskId}</if>
+            <if test="msgId != null">, #{msgId}</if>
+        )
+    </insert>
+    
+    <select id="MemberserviceRemind" resultType="com.lifeshs.po.push.MeasureReminderTaskPo">
+    	 SELECT
+			p.userId as receiverId,
+			p.deviceToken,
+			p.OS,
+			d.content
+		FROM
+			t_user_task_push d
+		LEFT JOIN t_user_app_push p on FIND_IN_SET(p.userId, d.receice_id)
+		 WHERE <![CDATA[d.send_time >= NOW()]]>
+		 AND <![CDATA[d.send_time < ADDTIME(NOW(), '00:01:00')]]>
+		 AND d. STATUS = 1
+		 AND p.`display` = 1
+		 <if test="day != null">
+		 AND FIND_IN_SET(#{day}, d.cycle)
+		 </if>
+		 GROUP BY p.deviceToken
+    </select>
+</mapper>

@@ -1,0 +1,151 @@
+body,div,ul,li,ol,h1,h2,h3,h4,h5,h6,input,textarea,select,p,dl,dt,dd,a,img,button,form,table,th,tr,td,tbody,article,aside,details,figcaption,figure,footer,header,hgroup,menu,nav,section{margin:0;padding:0;}
+body{font:normal 14px/1.5 Tahoma,"Lucida Grande",Verdana,"Microsoft Yahei",STXihei,hei;}
+em,i{font-style:normal;}
+strong{font-weight:normal;}
+a{text-decoration:none;color:#666666;font-family:Microsoft yahei,Tahoma,Arial,sans-serif;}
+ul,ol{list-style:none;}
+h1,h2,h3,h4,h5,h6{font-size:100%;font-family:Microsoft yahei;}
+img{border:none;vertical-align:middle;}
+/*忘记密码  必要样式*/
+.content{
+	min-height:650px;
+	background-color:#ddd;
+	padding-top:80px;
+}
+.content .web-width{
+	background-color:#fff;
+	width:480px;
+	margin:0 auto;
+	padding-bottom:10px;
+	border-radius:5px;
+	box-shadow: 0px 5px 10px 0px #888;
+	
+}
+.content .smallTitle{
+	padding-left:20px;
+	font-size:18px;
+	height:50px;
+	line-height:50px;
+	background-color:#f2f2f2;
+	border-radius:6px 6px 0 0;
+}
+.liucheng{
+	position:relative;
+	height:50px;
+	padding:20px 0 25px;
+	color:#6c6c6c;
+}
+.liucheng .line{
+	display:inline-block;
+	height:10px;
+	background-color:#e2e2e2;
+	position:absolute;
+	width:70%;
+	left:65px;
+	top:40px
+}
+.liucheng .buzhou{
+	position:relative;
+	display:inline-block;
+	width:30%;height:100%;
+	text-align:center;
+	z-index:9;
+	line-height:30px;
+}
+.liucheng .buzhou img{width:50px}
+.content .findPsw{
+	margin:20px 30px;
+}
+.content #findPsw{
+	margin-top:40px;
+}
+.findPsw ul li{
+	margin-bottom:20px;
+}
+.psw_strenth{
+	text-align:right;
+}
+.psw_strenth div{
+	width: 70px;
+	height: 10px;
+	margin-right:8px;
+	background-color:#ddd;
+	display:inline-block;
+}
+.findPsw .infor input:nth-of-type(1){
+	border:1px solid #dddddd;
+	border-radius:3px;
+	height:40px;
+	width:401px;
+	padding:0 8px;
+	outline-color: #48c858;
+	margin-top:8px;
+}
+
+
+
+.findPsw .infor .btnD{
+	font-size:16px;
+}
+.findPsw .icode input:nth-of-type(1){
+	border:1px solid #dddddd;
+	border-radius:3px;
+	height:35px;
+	width:254px;
+	margin-right:8px;
+	outline-color: #48c858;
+	padding:0 8px;
+	margin-top:8px
+}
+.findPsw .tijiao input{
+	background:#48c858;
+	font-size:16px;
+	color:white;
+	outline:none;
+	margin-top:15px;
+	cursor:pointer;
+	font-family:"Microsoft YaHei";
+}
+.findPsw .icode input:nth-of-type(2){
+	border:none;
+	border-radius:3px;
+	height:35px;
+	width:135px;
+	background:#48c858;
+	color:#fff;
+	cursor:pointer;
+	font-family:"Microsoft YaHei";
+	outline:none;
+}
+.findPsw .icode input:nth-of-type(2):active,.findPsw .tijiao input:active{
+	background-color:#36b646
+}
+.success{
+	margin-top:40px;
+}
+.content .success img{
+	margin:0 18px 0 30px;
+}
+.content .login{
+	margin:30px auto;
+	display:block;
+	border:none;
+	border-radius:3px;
+	height:40px;
+	width:417px;
+	background:#48c858;
+	font-size:16px;
+	text-align:center;
+	line-height:40px;
+	color:#fff;
+}
+.content .login:active{
+	background-color:#38bd4a
+}
+/* error提示 */
+label.error {
+	color:red;
+}
+input.error {
+	border: 1px solid red !important;
+}

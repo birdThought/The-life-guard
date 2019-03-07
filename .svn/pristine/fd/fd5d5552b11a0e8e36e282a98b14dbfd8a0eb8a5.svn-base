@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lifeshs.dao1.data.ModifyLogDao" >
+    <select id="findLatestLogList" resultType="com.lifeshs.po.data.ModifyLogPO">
+        SELECT <include refid="T_DATA_MODIFY_LOG_ALL_COLUMN" /> FROM t_data_modify_log
+        WHERE modifyDate &gt; #{datePoint}
+    </select>
+
+    <sql id="T_DATA_MODIFY_LOG_ALL_COLUMN">
+        id, tableName, modifyDate
+    </sql>
+
+</mapper>

@@ -1,0 +1,62 @@
+.item-content-left .item-img img{
+    	max-width:100% !important;
+    }
+@media screen and (min-width:320px) and (max-width: 640px) {
+    .item-content-left .item-img{
+        width: 90px !important;
+        height: 80px !important;
+    }
+    .item-content-left li .item-news{
+        margin-left: 100px !important;
+    }
+}
+@media screen and (max-width: 768px) {
+    .item-content-right{
+        position: static;
+        width: 100%;
+    }
+    .header,#searchForm,
+    .footer,.news-banner,
+    .spread,
+    .item-nav,
+    .healthInfor{
+        display: none;
+    }
+    .item_content,.item-content{
+    	padding:5px;
+        margin-top: 35px;
+    }
+    .item-content-left{
+       width: 100%;
+       padding-top: 10px !important;
+    }
+    .hwrap{
+        width: auto;
+    }
+    .item-content-left .item-img{
+        width: 100px;
+        height: 80px;
+    }
+    .item-content-left li .item-news{
+        margin-left: 110px;
+    }
+}
+
+/*���ض���*/
+#goTop{
+	position:absolute;
+	display:none;
+	width:36px;
+	height:32px;
+	line-height:32px;
+	text-align:center;
+	background:#bbb;
+	border:solid 1px #f9f9f8;
+	border-radius:6px;
+	box-shadow:0 1px 1px rgba(0, 0, 0, 0.2);
+	cursor:pointer;
+	}
+#goTop:hover{
+	background-position:16px 16px;
+	box-shadow:0 1px 1px rgba(0, 0, 0, 0.3);
+	}

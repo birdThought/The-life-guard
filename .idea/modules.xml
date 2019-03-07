@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/lifedefender.iml" filepath="$PROJECT_DIR$/lifedefender.iml" />
+      <module fileurl="file://$PROJECT_DIR$/lifedefender-api/lifedefender-api.iml" filepath="$PROJECT_DIR$/lifedefender-api/lifedefender-api.iml" />
+      <module fileurl="file://$PROJECT_DIR$/lifedefender-code-gen/lifedefender-code-gen.iml" filepath="$PROJECT_DIR$/lifedefender-code-gen/lifedefender-code-gen.iml" />
+      <module fileurl="file://$PROJECT_DIR$/lifedefender-common/lifedefender-common.iml" filepath="$PROJECT_DIR$/lifedefender-common/lifedefender-common.iml" />
+      <module fileurl="file://$PROJECT_DIR$/lifedefender-component/lifedefender-component.iml" filepath="$PROJECT_DIR$/lifedefender-component/lifedefender-component.iml" />
+      <module fileurl="file://$PROJECT_DIR$/lifedefender-config/lifedefender-config.iml" filepath="$PROJECT_DIR$/lifedefender-config/lifedefender-config.iml" />
+      <module fileurl="file://$PROJECT_DIR$/lifedefender-dao/lifedefender-dao.iml" filepath="$PROJECT_DIR$/lifedefender-dao/lifedefender-dao.iml" />
+      <module fileurl="file://$PROJECT_DIR$/lifedefender-mobile/lifedefender-mobile.iml" filepath="$PROJECT_DIR$/lifedefender-mobile/lifedefender-mobile.iml" />
+      <module fileurl="file://$PROJECT_DIR$/lifedefender-model/lifedefender-model.iml" filepath="$PROJECT_DIR$/lifedefender-model/lifedefender-model.iml" />
+      <module fileurl="file://$PROJECT_DIR$/lifedefender-openservice/lifedefender-openservice.iml" filepath="$PROJECT_DIR$/lifedefender-openservice/lifedefender-openservice.iml" />
+      <module fileurl="file://$PROJECT_DIR$/lifedefender-security/lifedefender-security.iml" filepath="$PROJECT_DIR$/lifedefender-security/lifedefender-security.iml" />
+      <module fileurl="file://$PROJECT_DIR$/lifedefender-service/lifedefender-service.iml" filepath="$PROJECT_DIR$/lifedefender-service/lifedefender-service.iml" />
+      <module fileurl="file://$PROJECT_DIR$/lifedefender-web/lifedefender-web.iml" filepath="$PROJECT_DIR$/lifedefender-web/lifedefender-web.iml" />
+      <module fileurl="file://$PROJECT_DIR$/lifedefender-webservice/lifedefender-webservice.iml" filepath="$PROJECT_DIR$/lifedefender-webservice/lifedefender-webservice.iml" />
+    </modules>
+  </component>
+</project>

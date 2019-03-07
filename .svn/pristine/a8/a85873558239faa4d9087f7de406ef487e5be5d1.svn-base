@@ -1,0 +1,19 @@
+"use strict";
+var InMemoryDataService = (function () {
+    function InMemoryDataService() {
+    }
+    InMemoryDataService.prototype.createDb = function () {
+        var menus = [
+            { id: 1, name: '首页' },
+            { id: 2, name: '测量' },
+            { id: 3, name: '服务' },
+            { id: 4, name: '我的' },
+            { id: 5, name: '帮助中心' },
+            { id: 6, name: '测试2' }
+        ];
+        return { menus: menus };
+    };
+    return InMemoryDataService;
+}());
+exports.InMemoryDataService = InMemoryDataService;
+//# sourceMappingURL=in-memory-data.service.js.map

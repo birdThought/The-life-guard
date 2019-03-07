@@ -1,0 +1,47 @@
+<!--<#assign base =rc.getContextPath()/>-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no">
+    <meta name="apple-mobile-web-app-title" content="生命守护">
+    <meta name="format-detection" content="telephone=yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <link rel="stylesheet" href="/static/css/reset.css">
+    <link rel="stylesheet" type="text/css" href="/static/css/help/help-app.css">
+    <title>帮助中心</title>
+</head>
+<body>
+	<header>
+		<div class="container clearfix">
+			<i></i>
+		</div>
+	</header><!-- /header -->
+	<article>
+		<div class="help-info">
+			<!--<p class="title-lists">1、产品概要</p>
+			<div>
+				<p class="sub-title-lists">1.1 使用范围</p>
+				<p>${helpDetail.content} 本机是体外检测（利用生化感应进行诊断），它不仅适用于全 血的血糖检测，也可用于微血管全血成份的检测，本机供医疗部门 及家庭健康作测量人体血糖浓度使用。生命守护血糖仪有蓝牙传输 功能，可连接APP使用。
+血液中的葡萄糖与试纸上的生化物发生微生化电流，而电流强 度取决于血样里的血糖含量，测试仪通过微处理器精密运算电流， 从而得出相应的血糖值。</p>
+				<div class="help-img">
+					<img src="${base}/static/images/help/demo/1.jpg" alt="">
+				</div>
+				
+			</div>-->
+		</div>
+	</article>
+</body>
+</html>
+<script src="/static/js/plugins/jquery/jquery-2.1.1.min.js"></script>
+<script src="/static/js/reset.js"></script>
+<script src="/static/js/help/help.js"></script>
+<script>
+    $(function () {
+        if( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) {
+            $('header').css('display', 'none');
+        }
+        help.getHelpDetail();
+    })
+</script>

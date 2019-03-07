@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lifeshs.dao1.visitor.IVisitorDao" >
+
+    <!--添加游客问题反馈-->
+    <insert id="addFeedBack" parameterType="com.lifeshs.po.visitor.FeedBackPO">
+        <selectKey resultType="java.lang.Integer" order="AFTER" keyProperty="id">
+            SELECT LAST_INSERT_ID() AS ID
+        </selectKey>
+        INSERT INTO t_visitor_feedback(name, mobile, email, content, ip, createDate)VALUES (#{name}, #{mobile}, #{email}, #{content}, #{ip}, NOW())
+    </insert>
+</mapper>

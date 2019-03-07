@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lifeshs.dao1.measure.UaDao" >
+  <resultMap id="BaseResultMap" type="com.lifeshs.po.UaPO" >
+    <constructor >
+      <idArg column="id" jdbcType="INTEGER" javaType="java.lang.Integer" />
+      <arg column="userId" jdbcType="INTEGER" javaType="java.lang.Integer" />
+      <arg column="status" jdbcType="BIGINT" javaType="java.lang.Long" />
+      <arg column="UA" jdbcType="REAL" javaType="java.lang.Float" />
+      <arg column="UAStatusDescription" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="UAArea" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="measureDate" jdbcType="TIMESTAMP" javaType="java.util.Date" />
+      <arg column="deviceType" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="createDate" jdbcType="TIMESTAMP" javaType="java.util.Date" />
+      <arg column="dataType" jdbcType="SMALLINT" javaType="java.lang.Short" />
+    </constructor>
+  </resultMap>
+  <!-- 尿酸 -->
+
+  <sql id="Base_Column_List" >
+    id, userId, status, UA, UAStatusDescription, UAArea, measureDate, deviceType, createDate, 
+    dataType
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_measure_ua
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from t_measure_ua
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.lifeshs.po.UaPO" >
+    insert into t_measure_ua (id, userId, status, 
+      UA, UAStatusDescription, UAArea, 
+      measureDate, deviceType, createDate, 
+      dataType)
+    values (#{id,jdbcType=INTEGER}, #{userId,jdbcType=INTEGER}, #{status,jdbcType=BIGINT}, 
+      #{UA,jdbcType=REAL}, #{UAStatusDescription,jdbcType=VARCHAR}, #{UAArea,jdbcType=VARCHAR}, 
+      #{measureDate,jdbcType=TIMESTAMP}, #{deviceType,jdbcType=VARCHAR}, #{createDate,jdbcType=TIMESTAMP}, 
+      #{dataType,jdbcType=SMALLINT})
+  </insert>
+  <insert id="insertSelective" parameterType="com.lifeshs.po.UaPO" >
+    insert into t_measure_ua
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="userId != null" >
+        userId,
+      </if>
+      <if test="status != null" >
+        status,
+      </if>
+      <if test="UA != null" >
+        UA,
+      </if>
+      <if test="UAStatusDescription != null" >
+        UAStatusDescription,
+      </if>
+      <if test="UAArea != null" >
+        UAArea,
+      </if>
+      <if test="measureDate != null" >
+        measureDate,
+      </if>
+      <if test="deviceType != null" >
+        deviceType,
+      </if>
+      <if test="createDate != null" >
+        createDate,
+      </if>
+      <if test="dataType != null" >
+        dataType,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="userId != null" >
+        #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=BIGINT},
+      </if>
+      <if test="UA != null" >
+        #{UA,jdbcType=REAL},
+      </if>
+      <if test="UAStatusDescription != null" >
+        #{UAStatusDescription,jdbcType=VARCHAR},
+      </if>
+      <if test="UAArea != null" >
+        #{UAArea,jdbcType=VARCHAR},
+      </if>
+      <if test="measureDate != null" >
+        #{measureDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="deviceType != null" >
+        #{deviceType,jdbcType=VARCHAR},
+      </if>
+      <if test="createDate != null" >
+        #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="dataType != null" >
+        #{dataType,jdbcType=SMALLINT},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.lifeshs.po.UaPO" >
+    update t_measure_ua
+    <set >
+      <if test="userId != null" >
+        userId = #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=BIGINT},
+      </if>
+      <if test="UA != null" >
+        UA = #{UA,jdbcType=REAL},
+      </if>
+      <if test="UAStatusDescription != null" >
+        UAStatusDescription = #{UAStatusDescription,jdbcType=VARCHAR},
+      </if>
+      <if test="UAArea != null" >
+        UAArea = #{UAArea,jdbcType=VARCHAR},
+      </if>
+      <if test="measureDate != null" >
+        measureDate = #{measureDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="deviceType != null" >
+        deviceType = #{deviceType,jdbcType=VARCHAR},
+      </if>
+      <if test="createDate != null" >
+        createDate = #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="dataType != null" >
+        dataType = #{dataType,jdbcType=SMALLINT},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.lifeshs.po.UaPO" >
+    update t_measure_ua
+    set userId = #{userId,jdbcType=INTEGER},
+      status = #{status,jdbcType=BIGINT},
+      UA = #{UA,jdbcType=REAL},
+      UAStatusDescription = #{UAStatusDescription,jdbcType=VARCHAR},
+      UAArea = #{UAArea,jdbcType=VARCHAR},
+      measureDate = #{measureDate,jdbcType=TIMESTAMP},
+      deviceType = #{deviceType,jdbcType=VARCHAR},
+      createDate = #{createDate,jdbcType=TIMESTAMP},
+      dataType = #{dataType,jdbcType=SMALLINT}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+
+  <select id="selectMeasureDatesByUserId" resultType="com.lifeshs.po.UaPO" parameterType="map">
+    SELECT measureDate,status
+    from t_measure_ua
+    where userId = #{userId}
+    and DATE_ADD(#{queryDate},interval 1 month) &gt;= measureDate
+    and measureDate &gt;= #{queryDate}
+  </select>
+
+  <select id="getLastDateByUserId" resultType="date" parameterType="integer">
+    SELECT measureDate
+    FROM t_measure_ua
+    WHERE userId = #{userId}
+    Order by measureDate desc
+    limit 1
+  </select>
+
+  <select id="getLastestData" resultType="com.lifeshs.po.UaPO">
+    SELECT *
+    FROM t_measure_ua
+    WHERE userId = #{userId}
+    Order by measureDate desc
+    limit 1
+  </select>
+</mapper>

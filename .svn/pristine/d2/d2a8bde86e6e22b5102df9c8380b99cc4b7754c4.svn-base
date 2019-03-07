@@ -1,0 +1,59 @@
+.head-line {
+}
+.menu-list-one ol > li > ul > li > h1 {
+    line-height:4rem;
+    margin-bottom:1.0rem;
+}
+.menu-list-one ol > li > ul > li > h2 {
+    margin-bottom:1.5rem;
+}
+.menu-list-one ol > li > ul > li > h3 {
+    line-height:3rem;
+}
+.menu-list-one ol > li > ul > li > p {
+    line-height:2.4rem;
+}
+.platform-des ul li {
+    margin-bottom:2rem;
+}
+.history003 ul li {
+    margin-bottom:2rem;
+}
+.li-spac-one .head-line {
+    text-align: left;
+    margin:0;
+}
+.menu-list-one ol > li > ul > li > p {
+    color: #333;
+    line-height:2.6rem;
+}
+.o2o-service li:last-of-type {
+    margin-top:6.4rem;
+}
+.service-title-area {
+    width:100%;
+    padding-left: 4rem;
+}
+.menu-list-one ol > li > ul > li > h1 {
+    margin-bottom:3rem;
+    line-height:5rem;
+}
+.menu-area-six ol li li div p {
+    line-height:3rem;
+}
+.history003 {
+    position: relative;
+}
+.broatfast {
+    position: absolute;
+    right:3rem;
+    bottom:10rem;
+}
+.doctor001 {
+    margin-top:14%;
+}
+@media screen and (max-width: 650px) {
+    .service-title-area {
+        padding-left:0;
+    }
+}

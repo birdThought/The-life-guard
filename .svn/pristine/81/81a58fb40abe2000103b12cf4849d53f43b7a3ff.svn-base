@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lifeshs.dao.data.IAreaDao" >
+
+	<select id="findAllProvince" resultType="java.util.HashMap">
+		select code,name from t_data_area where code REGEXP '[0-9]{2}[0]{4}';
+	</select>
+	
+	<select id="findCity" parameterType="String" resultType="java.util.HashMap">
+		select code,name from t_data_area where code REGEXP #{value};
+	</select>
+	
+	<select id="findDistrict" parameterType="String" resultType="java.util.HashMap">
+		select code,name from t_data_area where code REGEXP #{value};
+	</select>
+	
+	<select id="getProvinceName" resultType="java.lang.String">
+		SELECT name FROM t_data_area WHERE code = #{provinceCode}
+	</select>
+	
+	<select id="getCityName" resultType="java.lang.String">
+		SELECT name FROM t_data_area WHERE code = #{cityCode}
+	</select>
+	
+	<select id="getDistrictName" resultType="java.lang.String">
+		SELECT name FROM t_data_area WHERE code = #{districtCode}
+	</select>
+	
+	<select id="getAreaNameByCode" resultType="com.lifeshs.pojo.data.AreaVO">
+		{CALL selectAreaNameByCode(#{provinceCode}, #{cityCode}, #{districtCode})}
+	</select>
+	
+	<select id="getAreaCode" resultType="java.lang.String">
+		SELECT code FROM t_data_area WHERE name LIKE CONCAT('%',#{areaName},'%')
+	</select>
+
+	<select id="getCode" resultType="java.lang.String">
+		SELECT code FROM t_data_area WHERE name = #{name}
+    </select>
+
+	<select id="findByCode" parameterType="string" resultType="java.lang.String">
+		 SELECT
+        o1.name province,
+        o2.name city,
+        o3.name district
+    FROM
+        t_data_area o1,
+        t_data_area o2,
+        t_data_area o3
+    WHERE
+        o1.code=#{provinceCode}
+        AND o2.code=#{cityCode}
+        AND o3.code=#{districtCode}
+	</select>
+</mapper>

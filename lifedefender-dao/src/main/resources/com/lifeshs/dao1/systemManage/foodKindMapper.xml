@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lifeshs.dao1.systemManage.FoodKindDao">
+
+	<!--查询食物种类 -->
+	<select id="findFoodKind" resultType="com.lifeshs.entity.record.TDataFoodKind">
+		SELECT id,name FROM
+		t_data_food_kind 
+		LIMIT #{startRow},#{pageSize}
+	</select>
+	
+	<select id="findfoodkind" resultType="com.lifeshs.entity.record.TDataFoodKind">
+		SELECT id,name FROM
+		t_data_food_kind 
+	</select>
+	
+	<!-- 统计食物种类数量 -->
+	<select id="countFoodKind" resultType="java.lang.Integer">
+		SELECT COUNT(1)
+		FROM
+		t_data_food_kind 
+	</select>
+
+	<!-- 添加食物种类 -->
+	<insert id="addFoodKind" parameterType="com.lifeshs.entity.record.TDataFoodKind">
+		INSERT INTO
+		t_data_food_kind(name) VALUES(#{name})
+	</insert>
+
+	<!-- 更改食物种类 -->
+	<update id="updateFoodKind" parameterType="com.lifeshs.entity.record.TDataFoodKind">
+		UPDATE t_data_food_kind
+		SET name=#{name} WHERE id = #{id}
+	</update>
+
+	<!-- 删除食物种类 -->
+	<delete id="deleteFoodKind">
+		DELETE FROM t_data_food_kind WHERE id = #{id}
+	</delete>
+</mapper>

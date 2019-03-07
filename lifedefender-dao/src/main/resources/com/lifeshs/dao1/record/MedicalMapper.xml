@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lifeshs.dao1.record.MedicalDao">
+
+    <select id="getMedical" resultMap="medicalVO">
+        SELECT
+            r.id, r.userId, r.title, r.visitingDate, r.hospital,
+            r.doctorDiagnosis, r.basicCondition, r.createDate, r.modifyDate,
+            d.name AS departments,
+            c.id AS courseId, c.courseType, c.remark AS courseRemark, c.visitingDate AS courseVisitingDate,
+            c.createDate AS courseCreateDate, c.modifyDate AS courseModifyDate,
+            i.id AS imgId, i.img, i.createDate AS imgCreateDate, i.modifyDate AS imgModifyDate
+        FROM t_record_medical r
+        INNER JOIN t_data_department d ON d.id = r.departmentId
+        LEFT JOIN t_record_medical_course c ON c.medicalId = r.id
+        LEFT JOIN t_record_medical_course_img i ON i.medicalCourseId = c.id
+        WHERE r.id = #{id}
+    </select>
+
+    <select id="findMedicalByIdAndUserId" resultMap="medicalVO">
+        SELECT
+            r.id, r.userId, r.title, r.visitingDate, r.hospital,
+            r.doctorDiagnosis, r.basicCondition, r.createDate, r.modifyDate,
+            d.name AS departments,
+            c.id AS courseId, c.courseType, c.remark AS courseRemark, c.visitingDate AS courseVisitingDate,
+            c.createDate AS courseCreateDate, c.modifyDate AS courseModifyDate,
+            i.id AS imgId, i.img, i.createDate AS imgCreateDate, i.modifyDate AS imgModifyDate
+        FROM t_record_medical r
+        INNER JOIN t_data_department d ON d.id = r.departmentId
+        LEFT JOIN t_record_medical_course c ON c.medicalId = r.id
+        LEFT JOIN t_record_medical_course_img i ON i.medicalCourseId = c.id
+        WHERE r.id = #{id} AND r.userId = #{userId}
+    </select>
+
+    <select id="findBasicMedicalByUserIdList" resultMap="medicalBasicVO">
+        SELECT
+            r.id, r.userId, r.title, r.visitingDate, r.hospital,
+            r.doctorDiagnosis, r.basicCondition, r.createDate, r.modifyDate,
+            d.name AS departments
+        FROM t_record_medical r
+        INNER JOIN t_data_department d ON d.id = r.departmentId
+        WHERE userId = #{userId}
+        ORDER BY r.visitingDate DESC, id DESC
+        LIMIT #{startRow}, #{pageSize}
+    </select>
+
+    <select id="countMedical">
+        SELECT COUNT(1) FROM t_record_medical WHERE userId = #{userId}
+    </select>
+
+    <select id="findMedicalByUserIdList" resultMap="medicalVO">
+        SELECT
+            r.id, r.userId, r.title, r.visitingDate, r.hospital,
+            r.doctorDiagnosis, r.basicCondition, r.createDate, r.modifyDate,
+            d.name AS departments,
+            c.id AS courseId, c.courseType, c.remark AS courseRemark, c.visitingDate AS courseVisitingDate,
+            c.createDate AS courseCreateDate, c.modifyDate AS courseModifyDate,
+            i.id AS imgId, i.img, i.createDate AS imgCreateDate, i.modifyDate AS imgModifyDate
+        FROM (
+            SELECT id, userId, title, visitingDate, hospital, doctorDiagnosis, basicCondition, createDate, modifyDate, departmentId
+            FROM t_record_medical
+            WHERE userId = #{userId}
+            ORDER BY visitingDate DESC, id DESC
+            LIMIT #{startRow}, #{pageSize}
+        ) r
+        INNER JOIN t_data_department d ON d.id = r.departmentId
+        LEFT JOIN t_record_medical_course c ON c.medicalId = r.id
+        LEFT JOIN t_record_medical_course_img i ON i.medicalCourseId = c.id
+        ORDER BY r.visitingDate DESC, r.id DESC
+    </select>
+
+    <resultMap type="com.lifeshs.vo.record.MedicalBasicVO" id="medicalBasicVO">
+        <id property="id" column="id" />
+        <result property="userId" column="userId"/>
+        <result property="title" column="title"/>
+        <result property="visitingDate" column="visitingDate"/>
+        <result property="hospital" column="hospital"/>
+        <result property="departments" column="departments"/>
+        <result property="doctorDiagnosis" column="doctorDiagnosis"/>
+        <result property="basicCondition" column="basicCondition"/>
+        <result property="createDate" column="createDate"/>
+        <result property="modifyDate" column="modifyDate"/>
+    </resultMap>
+    
+    <resultMap type="com.lifeshs.vo.record.MedicalVO" id="medicalVO" extends="medicalBasicVO">
+        <collection property="courseList" ofType="com.lifeshs.vo.record.MedicalCourseVO" notNullColumn="courseId">
+            <id property="id" column="courseId"/>
+            <result property="medicalId" column="id"/>
+            <result property="courseType" column="courseType"/>
+            <result property="remark" column="courseRemark"/>
+            <result property="visitingDate" column="courseVisitingDate"/>
+            <result property="createDate" column="courseCreateDate"/>
+            <result property="modifyDate" column="courseModifyDate"/>
+            <collection property="imgList" ofType="com.lifeshs.po.record.MedicalCourseImgPO" notNullColumn="imgId">
+                <id property="id" column="imgId"/>
+                <result property="medicalCourseId" column="courseId"/>
+                <result property="img" column="img"/>
+                <result property="createDate" column="imgCreateDate"/>
+                <result property="modifyDate" column="imgModifyDate"/>
+            </collection>
+        </collection>
+    </resultMap>
+
+    <insert id="addMedical" parameterType="com.lifeshs.po.record.MedicalPO">
+        <selectKey resultType="java.lang.Integer" order="AFTER" keyProperty="id">
+            SELECT LAST_INSERT_ID() AS ID
+        </selectKey>
+        INSERT INTO t_record_medical(userId, title, visitingDate, hospital, departmentId, doctorDiagnosis, basicCondition, createDate)
+        VALUES(#{userId}, #{title}, #{visitingDate}, #{hospital}, #{departmentId}, #{doctorDiagnosis}, #{basicCondition}, NOW())
+    </insert>
+
+    <delete id="delMedicalByIdAndUserId">
+        DELETE FROM t_record_medical WHERE id = #{id} AND userId = #{userId}
+    </delete>
+
+</mapper>

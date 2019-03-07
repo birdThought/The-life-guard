@@ -1,0 +1,362 @@
+@charset "utf-8";
+*:before,*:after,*{box-sizing:border-box;
+-moz-box-sizing:border-box; /* Firefox */
+-webkit-box-sizing:border-box; /* Safari */
+}
+.container{
+	width:918px;
+	height:840px;
+	border:1px solid #ddd;
+	margin:20px 40px;
+}
+.family_member{
+	height:60px;
+	line-height:60px;
+	font-size:18px;
+	margin:0 30px 0;
+	border-bottom:1px dashed #ddd;
+}
+.family_member:after{
+	clear:both;
+	content:"";
+	display:block;
+	width:0;
+	height:0;
+	visibility:hidden;
+}
+.family_member h3{
+	float:left;
+	font-weight:400;
+}
+.family_member .search{
+	float:right ;
+}
+#searchForm, #addForm{
+	min-width: 0px;
+}
+.search input[type=search]{
+	width:300px;
+	height:30px;
+	padding:0 8px;
+	border:1px solid #ddd;
+	border-radius:3px
+}
+.search button{
+	width:80px;
+	height:30px;
+	border:1px solid #48c858;
+	background:#48c858;
+	border-radius:3px;
+	font-size:16px;
+	color:#fff;
+	outline:none;
+	margin: 0px;
+}
+.search input:last-child:active{
+	background:#38ba48;
+}
+#password {
+	padding-left: 10px;
+}
+.container table{
+	width:860px;
+	border-collapse:collapse;
+	line-height:40px;
+	margin-left:30px;
+	text-align:center;
+}
+.container th{
+	background:#f0f0f0;
+	border-bottom:1px solid #ddd;
+}
+.container td{
+	border-bottom:1px dashed #ddd;
+}
+.familyMem td:first-child{
+	width:20%;
+}
+.familyMem td:first-child{
+	text-align:left;
+	padding-left:40px;
+}
+.familyMem td:nth-of-type(2){
+	width:10%;
+	text-align:left;
+}
+.container td span.current{
+	padding:4px 10px;
+	background:#CBFFDB;
+	border-radius:5px;
+	color:#48c858; 
+	font-size:12px;
+	cursor:default
+	}
+/* 主账户信息 */
+.container ul.nav_tab{
+	height:50px;
+	line-height:50px;
+	border-bottom:1px solid #ddd;
+	margin:0 30px 0;
+	padding-left:30px;
+	overflow:hidden;
+}
+.container ul.nav_tab li{
+	float:left;
+}
+ul.nav_tab li span{
+	position:relative;
+	font-size:16px;
+	border:1px solid #ddd;
+	padding:6px 20px;
+	margin-right:30px;
+	border-radius:5px;
+	background-color:#f0f0f0;
+}
+ul.nav_tab li:first-child span{
+	background:#f0f0f0 url(../images/back.png) no-repeat 14px center;
+	padding-left:40px;
+}
+.masterInfor{
+	margin:40px 30px;
+	font-size:18px;
+}
+.masterInfor li{
+	margin-bottom:20px;
+}
+.masterInfor li em:last-child{
+	font-weight:200;
+	color:#777;
+}
+.masterInfor li:first-child:after{
+	content:"";
+	clear:both;
+	display:block;
+	width:0;
+	height:0;
+	visibility:hidden;
+}
+.masterInfor li:first-child img{
+	float:left;
+	margin-right:60px;
+}
+.masterInfor li:first-child div{
+	padding-top:10px;
+	float:left;
+	font-size:20px;
+	line-height:30px;
+}
+.masterInfor li:first-child span{
+	font-weight:300;
+	padding:2px 10px;
+	background:#d9fbe0;
+	border:1px solid #48c858;
+	border-radius:3px;
+	margin-left:8px;
+	color:#48c858;
+}
+.masterInfor li:first-child small{
+	font-weight:100;
+	letter-spacing:3px;
+	color:#777;
+}
+.masterInfor li:not(:first-child){
+	margin-left:40px;
+	overflow:hidden;
+}
+.masterInfor li:not(:first-child) em{
+	float: left;
+}
+.masterInfor li:not(:first-child) p{
+	float:left;
+	width:320px;
+	color:#333;
+	border-bottom:1px dashed #ddd;
+	margin-left:70px;
+}
+/* 添加成员 */
+.container p{
+	height:50px;
+	line-height:50px;
+	padding-left:30px;
+	font-size:16px;
+}
+.container p em{
+	color:#61cf6e;
+}
+table.addMember {
+	word-break:break-all;
+	table-layout:fixed;
+}
+.addMember td span{
+	padding:4px 14px;
+	border:1px solid #48c858;
+	color:#fff;
+	background-color:#48c858;
+	border-radius:5px;
+}
+.layUp {
+	display: none;
+}
+.layUp input,label{
+	margin-left:30px;
+	margin-top:6px;
+}
+.layUp input{
+	width:320px;
+	height:32px;
+	border:1px solid #ddd;
+	border-radius:5px;
+}
+/* 新增成员 */
+.container > h3{
+	margin:0 30px;
+	line-height:60px;
+	height:60px;
+	font-weight:300;
+	font-size:18px;
+	border-bottom:1px dashed #ddd;
+}
+form{
+	min-width:500px;
+	font-size:16px;
+}
+.container form h3{
+	margin:0 30px;
+	line-height: 60px;
+	height:60px;
+	font-weight:500;
+	font-size:20px;
+}
+form.memberRegister li{
+	margin-bottom:10px;
+	padding-left:50px
+}
+
+form .newInfor input{
+	width:200px;
+	height:32px;
+	border:1px solid #ddd;
+	border-radius:3px;
+	margin-left:50px;
+	padding:0 8px;
+}
+form.memberRegister .code input:nth-of-type(1){
+	width:200px;
+	height:34px;
+	border:1px solid #ddd;
+	border-radius:5px;
+	margin-right:10px;
+	margin-left:50px;
+}
+form.memberRegister .code input:nth-of-type(2){
+	width:100px;
+	height:34px;
+	border:1px solid #ddd;
+	background-color:#218bde;
+	border-radius:5px;
+	color:#fff;
+	margin-right:5px;
+}
+form.memberRegister li:last-child .moument{
+	color:#4a9de6;
+}
+form button{
+	width:100px;
+	height:34px;
+	border:none;
+	background:#48c858;
+	border-radius:5px;
+	font-size:16px;
+	color:#fff;
+	margin-top:20px;
+	margin-left:180px;
+	font-family:微软雅黑;
+	outline:none;
+	cursor:pointer
+}
+form button:active{
+	background:#34af44;
+}
+/*新增成员 */
+.memberSet ul{
+	width:382px;
+}
+.memberSet ul li{
+	margin-left:30px;
+	margin-bottom:10px;
+}
+.memberSet .newInfor{
+	text-align:right ;
+}
+.memberSet .newInfor input[name="mobile"] {
+	
+}
+.memberSet input{
+}
+.memberSet ul li:first-child:after{
+	content:"";
+	display:block;
+	width:0;
+	height:0;
+	clear:both;
+	visibility:hidden;
+}
+.memberSet li:first-child img{
+	float:left;
+}
+.memberSet li:first-child div{
+	float:left;
+	padding-top:20px;
+}
+li:first-child div input[type="text"]{
+	margin-left:60px;
+	width:130px;
+	height:34px;
+	border:1px  solid #ddd;
+	border-radius:5px;
+}
+li:first-child div input[type="button"]{
+	height:34px;
+	border:1px solid #ddd;
+	border-radius:5px;
+	
+	width: 96px;
+    margin-left: 60px;
+    text-indent: 0px;
+    background-color: #f1f1f1;
+    color: #000;
+}
+.memberSet li:nth-of-type(5){
+	padding-left:30px;
+}
+li:nth-of-type(5) label{
+	padding-right:55px;
+}
+.memberSet li:nth-of-type(8){
+	padding-left:150px;
+}
+.memberSet .appentUnit,
+.memberSet .appentUnitKG{
+	position: relative;
+}
+.memberSet .appentUnit:after {
+	content:"CM";
+	display:block;
+	width:20px;
+	height:20px;
+	visibility:visible;
+	position:absolute;
+	right:10px;
+	top:15%;
+}
+.memberSet .appentUnitKG:after {
+	content:"KG";
+	display:block;
+	width:20px;
+	height:20px;
+	visibility:visible;
+	position:absolute;
+	right:10px;
+	top:15%;
+}
+

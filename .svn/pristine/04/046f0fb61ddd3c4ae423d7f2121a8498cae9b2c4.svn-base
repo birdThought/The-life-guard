@@ -1,0 +1,570 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lifeshs.dao1.order.OrgDAO" >
+  <resultMap id="BaseResultMap" type="com.lifeshs.po.OrgPO" >
+    <constructor >
+      <idArg column="id" jdbcType="INTEGER" javaType="java.lang.Integer" />
+      <arg column="orgName" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="orgCode" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="logo" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="orgVerified" jdbcType="TINYINT" javaType="java.lang.Byte" />
+      <arg column="verifiedCause" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="tel" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="orgType" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="contacts" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="contactInformation" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="businessLicense" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="accountType" jdbcType="TINYINT" javaType="java.lang.Byte" />
+      <arg column="account" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="status" jdbcType="TINYINT" javaType="java.lang.Byte" />
+      <arg column="type" jdbcType="TINYINT" javaType="java.lang.Byte" />
+      <arg column="parent" jdbcType="INTEGER" javaType="java.lang.Integer" />
+      <arg column="province" jdbcType="CHAR" javaType="java.lang.String" />
+      <arg column="city" jdbcType="CHAR" javaType="java.lang.String" />
+      <arg column="district" jdbcType="CHAR" javaType="java.lang.String" />
+      <arg column="street" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="longitude" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="latitude" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="about" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="createDate" jdbcType="TIMESTAMP" javaType="java.util.Date" />
+      <arg column="modifyDate" jdbcType="TIMESTAMP" javaType="java.util.Date" />
+      <arg column="isRecommend" jdbcType="BIT" javaType="java.lang.Boolean" />
+      <arg column="businessLicenseNumber" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="businessLicenseTwo" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="workField" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="bankAccount" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="bankDistrict" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="bankBranch" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="legalPerson" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="legalPersonGender" jdbcType="TINYINT" javaType="java.lang.Byte" />
+      <arg column="legalPersonIdCard" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="legalPersonPicOne" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="legalPersonPicTwo" jdbcType="VARCHAR" javaType="java.lang.String" />
+    </constructor>
+  </resultMap>
+  <resultMap id="ResultMapWithBLOBs" type="com.lifeshs.po.OrgPO" >
+    <constructor >
+      <idArg column="id" jdbcType="INTEGER" javaType="java.lang.Integer" />
+      <arg column="orgName" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="orgCode" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="logo" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="orgVerified" jdbcType="TINYINT" javaType="java.lang.Byte" />
+      <arg column="verifiedCause" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="tel" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="orgType" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="contacts" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="contactInformation" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="businessLicense" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="accountType" jdbcType="TINYINT" javaType="java.lang.Byte" />
+      <arg column="account" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="status" jdbcType="TINYINT" javaType="java.lang.Byte" />
+      <arg column="type" jdbcType="TINYINT" javaType="java.lang.Byte" />
+      <arg column="parent" jdbcType="INTEGER" javaType="java.lang.Integer" />
+      <arg column="province" jdbcType="CHAR" javaType="java.lang.String" />
+      <arg column="city" jdbcType="CHAR" javaType="java.lang.String" />
+      <arg column="district" jdbcType="CHAR" javaType="java.lang.String" />
+      <arg column="street" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="longitude" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="latitude" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="about" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="createDate" jdbcType="TIMESTAMP" javaType="java.util.Date" />
+      <arg column="modifyDate" jdbcType="TIMESTAMP" javaType="java.util.Date" />
+      <arg column="isRecommend" jdbcType="BIT" javaType="java.lang.Boolean" />
+      <arg column="businessLicenseNumber" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="businessLicenseTwo" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="workField" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="bankAccount" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="bankDistrict" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="bankBranch" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="legalPerson" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="legalPersonGender" jdbcType="TINYINT" javaType="java.lang.Byte" />
+      <arg column="legalPersonIdCard" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="legalPersonPicOne" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="legalPersonPicTwo" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="detail" jdbcType="LONGVARCHAR" javaType="java.lang.String" />
+    </constructor>
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, orgName, orgCode, logo, orgVerified, verifiedCause, tel, orgType, contacts, contactInformation, 
+    businessLicense, accountType, account, status, type, parent, province, city, district, 
+    street, longitude, latitude, about, createDate, modifyDate, isRecommend, businessLicenseNumber, 
+    businessLicenseTwo, workField, bankAccount, bankDistrict, bankBranch, legalPerson, 
+    legalPersonGender, legalPersonIdCard, legalPersonPicOne, legalPersonPicTwo
+  </sql>
+  <sql id="Blob_Column_List" >
+    detail
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="ResultMapWithBLOBs" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from t_org
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from t_org
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.lifeshs.po.OrgPO" >
+    insert into t_org (id, orgName, orgCode, 
+      logo, orgVerified, verifiedCause, 
+      tel, orgType, contacts, 
+      contactInformation, businessLicense, accountType, 
+      account, status, type, 
+      parent, province, city, district, 
+      street, longitude, latitude, 
+      about, createDate, modifyDate, 
+      isRecommend, businessLicenseNumber, businessLicenseTwo, 
+      workField, bankAccount, 
+      bankDistrict, bankBranch, legalPerson, 
+      legalPersonGender, legalPersonIdCard, legalPersonPicOne, 
+      legalPersonPicTwo, detail)
+    values (#{id,jdbcType=INTEGER}, #{orgName,jdbcType=VARCHAR}, #{orgCode,jdbcType=VARCHAR}, 
+      #{logo,jdbcType=VARCHAR}, #{orgVerified,jdbcType=TINYINT}, #{verifiedCause,jdbcType=VARCHAR}, 
+      #{tel,jdbcType=VARCHAR}, #{orgType,jdbcType=VARCHAR}, #{contacts,jdbcType=VARCHAR}, 
+      #{contactInformation,jdbcType=VARCHAR}, #{businessLicense,jdbcType=VARCHAR}, #{accountType,jdbcType=TINYINT}, 
+      #{account,jdbcType=VARCHAR}, #{status,jdbcType=TINYINT}, #{type,jdbcType=TINYINT}, 
+      #{parent,jdbcType=INTEGER}, #{province,jdbcType=CHAR}, #{city,jdbcType=CHAR}, #{district,jdbcType=CHAR}, 
+      #{street,jdbcType=VARCHAR}, #{longitude,jdbcType=VARCHAR}, #{latitude,jdbcType=VARCHAR}, 
+      #{about,jdbcType=VARCHAR}, #{createDate,jdbcType=TIMESTAMP}, #{modifyDate,jdbcType=TIMESTAMP}, 
+      #{isRecommend,jdbcType=BIT}, #{businessLicenseNumber,jdbcType=VARCHAR}, #{businessLicenseTwo,jdbcType=VARCHAR}, 
+      #{workField,jdbcType=VARCHAR}, #{bankAccount,jdbcType=VARCHAR}, 
+      #{bankDistrict,jdbcType=VARCHAR}, #{bankBranch,jdbcType=VARCHAR}, #{legalPerson,jdbcType=VARCHAR}, 
+      #{legalPersonGender,jdbcType=TINYINT}, #{legalPersonIdCard,jdbcType=VARCHAR}, #{legalPersonPicOne,jdbcType=VARCHAR}, 
+      #{legalPersonPicTwo,jdbcType=VARCHAR}, #{detail,jdbcType=LONGVARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.lifeshs.po.OrgPO" >
+    insert into t_org
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="orgName != null" >
+        orgName,
+      </if>
+      <if test="orgCode != null" >
+        orgCode,
+      </if>
+      <if test="logo != null" >
+        logo,
+      </if>
+      <if test="orgVerified != null" >
+        orgVerified,
+      </if>
+      <if test="verifiedCause != null" >
+        verifiedCause,
+      </if>
+      <if test="tel != null" >
+        tel,
+      </if>
+      <if test="orgType != null" >
+        orgType,
+      </if>
+      <if test="contacts != null" >
+        contacts,
+      </if>
+      <if test="contactInformation != null" >
+        contactInformation,
+      </if>
+      <if test="businessLicense != null" >
+        businessLicense,
+      </if>
+      <if test="accountType != null" >
+        accountType,
+      </if>
+      <if test="account != null" >
+        account,
+      </if>
+      <if test="status != null" >
+        status,
+      </if>
+      <if test="type != null" >
+        type,
+      </if>
+      <if test="parent != null" >
+        parent,
+      </if>
+      <if test="province != null" >
+        province,
+      </if>
+      <if test="city != null" >
+        city,
+      </if>
+      <if test="district != null" >
+        district,
+      </if>
+      <if test="street != null" >
+        street,
+      </if>
+      <if test="longitude != null" >
+        longitude,
+      </if>
+      <if test="latitude != null" >
+        latitude,
+      </if>
+      <if test="about != null" >
+        about,
+      </if>
+      <if test="createDate != null" >
+        createDate,
+      </if>
+      <if test="modifyDate != null" >
+        modifyDate,
+      </if>
+      <if test="isRecommend != null" >
+        isRecommend,
+      </if>
+      <if test="businessLicenseNumber != null" >
+        businessLicenseNumber,
+      </if>
+      <if test="businessLicenseTwo != null" >
+        businessLicenseTwo,
+      </if>
+      <if test="workField != null" >
+        workField,
+      </if>
+      <if test="bankAccount != null" >
+        bankAccount,
+      </if>
+      <if test="bankDistrict != null" >
+        bankDistrict,
+      </if>
+      <if test="bankBranch != null" >
+        bankBranch,
+      </if>
+      <if test="legalPerson != null" >
+        legalPerson,
+      </if>
+      <if test="legalPersonGender != null" >
+        legalPersonGender,
+      </if>
+      <if test="legalPersonIdCard != null" >
+        legalPersonIdCard,
+      </if>
+      <if test="legalPersonPicOne != null" >
+        legalPersonPicOne,
+      </if>
+      <if test="legalPersonPicTwo != null" >
+        legalPersonPicTwo,
+      </if>
+      <if test="detail != null" >
+        detail,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="orgName != null" >
+        #{orgName,jdbcType=VARCHAR},
+      </if>
+      <if test="orgCode != null" >
+        #{orgCode,jdbcType=VARCHAR},
+      </if>
+      <if test="logo != null" >
+        #{logo,jdbcType=VARCHAR},
+      </if>
+      <if test="orgVerified != null" >
+        #{orgVerified,jdbcType=TINYINT},
+      </if>
+      <if test="verifiedCause != null" >
+        #{verifiedCause,jdbcType=VARCHAR},
+      </if>
+      <if test="tel != null" >
+        #{tel,jdbcType=VARCHAR},
+      </if>
+      <if test="orgType != null" >
+        #{orgType,jdbcType=VARCHAR},
+      </if>
+      <if test="contacts != null" >
+        #{contacts,jdbcType=VARCHAR},
+      </if>
+      <if test="contactInformation != null" >
+        #{contactInformation,jdbcType=VARCHAR},
+      </if>
+      <if test="businessLicense != null" >
+        #{businessLicense,jdbcType=VARCHAR},
+      </if>
+      <if test="accountType != null" >
+        #{accountType,jdbcType=TINYINT},
+      </if>
+      <if test="account != null" >
+        #{account,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=TINYINT},
+      </if>
+      <if test="type != null" >
+        #{type,jdbcType=TINYINT},
+      </if>
+      <if test="parent != null" >
+        #{parent,jdbcType=INTEGER},
+      </if>
+      <if test="province != null" >
+        #{province,jdbcType=CHAR},
+      </if>
+      <if test="city != null" >
+        #{city,jdbcType=CHAR},
+      </if>
+      <if test="district != null" >
+        #{district,jdbcType=CHAR},
+      </if>
+      <if test="street != null" >
+        #{street,jdbcType=VARCHAR},
+      </if>
+      <if test="longitude != null" >
+        #{longitude,jdbcType=VARCHAR},
+      </if>
+      <if test="latitude != null" >
+        #{latitude,jdbcType=VARCHAR},
+      </if>
+      <if test="about != null" >
+        #{about,jdbcType=VARCHAR},
+      </if>
+      <if test="createDate != null" >
+        #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifyDate != null" >
+        #{modifyDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isRecommend != null" >
+        #{isRecommend,jdbcType=BIT},
+      </if>
+      <if test="businessLicenseNumber != null" >
+        #{businessLicenseNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="businessLicenseTwo != null" >
+        #{businessLicenseTwo,jdbcType=VARCHAR},
+      </if>
+      <if test="workField != null" >
+        #{workField,jdbcType=VARCHAR},
+      </if>
+      <if test="bankAccount != null" >
+        #{bankAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="bankDistrict != null" >
+        #{bankDistrict,jdbcType=VARCHAR},
+      </if>
+      <if test="bankBranch != null" >
+        #{bankBranch,jdbcType=VARCHAR},
+      </if>
+      <if test="legalPerson != null" >
+        #{legalPerson,jdbcType=VARCHAR},
+      </if>
+      <if test="legalPersonGender != null" >
+        #{legalPersonGender,jdbcType=TINYINT},
+      </if>
+      <if test="legalPersonIdCard != null" >
+        #{legalPersonIdCard,jdbcType=VARCHAR},
+      </if>
+      <if test="legalPersonPicOne != null" >
+        #{legalPersonPicOne,jdbcType=VARCHAR},
+      </if>
+      <if test="legalPersonPicTwo != null" >
+        #{legalPersonPicTwo,jdbcType=VARCHAR},
+      </if>
+      <if test="detail != null" >
+        #{detail,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.lifeshs.po.OrgPO" >
+    update t_org
+    <set >
+      <if test="orgName != null" >
+        orgName = #{orgName,jdbcType=VARCHAR},
+      </if>
+      <if test="orgCode != null" >
+        orgCode = #{orgCode,jdbcType=VARCHAR},
+      </if>
+      <if test="logo != null" >
+        logo = #{logo,jdbcType=VARCHAR},
+      </if>
+      <if test="orgVerified != null" >
+        orgVerified = #{orgVerified,jdbcType=TINYINT},
+      </if>
+      <if test="verifiedCause != null" >
+        verifiedCause = #{verifiedCause,jdbcType=VARCHAR},
+      </if>
+      <if test="tel != null" >
+        tel = #{tel,jdbcType=VARCHAR},
+      </if>
+      <if test="orgType != null" >
+        orgType = #{orgType,jdbcType=VARCHAR},
+      </if>
+      <if test="contacts != null" >
+        contacts = #{contacts,jdbcType=VARCHAR},
+      </if>
+      <if test="contactInformation != null" >
+        contactInformation = #{contactInformation,jdbcType=VARCHAR},
+      </if>
+      <if test="businessLicense != null" >
+        businessLicense = #{businessLicense,jdbcType=VARCHAR},
+      </if>
+      <if test="accountType != null" >
+        accountType = #{accountType,jdbcType=TINYINT},
+      </if>
+      <if test="account != null" >
+        account = #{account,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=TINYINT},
+      </if>
+      <if test="type != null" >
+        type = #{type,jdbcType=TINYINT},
+      </if>
+      <if test="parent != null" >
+        parent = #{parent,jdbcType=INTEGER},
+      </if>
+      <if test="province != null" >
+        province = #{province,jdbcType=CHAR},
+      </if>
+      <if test="city != null" >
+        city = #{city,jdbcType=CHAR},
+      </if>
+      <if test="district != null" >
+        district = #{district,jdbcType=CHAR},
+      </if>
+      <if test="street != null" >
+        street = #{street,jdbcType=VARCHAR},
+      </if>
+      <if test="longitude != null" >
+        longitude = #{longitude,jdbcType=VARCHAR},
+      </if>
+      <if test="latitude != null" >
+        latitude = #{latitude,jdbcType=VARCHAR},
+      </if>
+      <if test="about != null" >
+        about = #{about,jdbcType=VARCHAR},
+      </if>
+      <if test="createDate != null" >
+        createDate = #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifyDate != null" >
+        modifyDate = #{modifyDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isRecommend != null" >
+        isRecommend = #{isRecommend,jdbcType=BIT},
+      </if>
+      <if test="businessLicenseNumber != null" >
+        businessLicenseNumber = #{businessLicenseNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="businessLicenseTwo != null" >
+        businessLicenseTwo = #{businessLicenseTwo,jdbcType=VARCHAR},
+      </if>
+      <if test="workField != null" >
+        workField = #{workField,jdbcType=VARCHAR},
+      </if>
+      <if test="bankAccount != null" >
+        bankAccount = #{bankAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="bankDistrict != null" >
+        bankDistrict = #{bankDistrict,jdbcType=VARCHAR},
+      </if>
+      <if test="bankBranch != null" >
+        bankBranch = #{bankBranch,jdbcType=VARCHAR},
+      </if>
+      <if test="legalPerson != null" >
+        legalPerson = #{legalPerson,jdbcType=VARCHAR},
+      </if>
+      <if test="legalPersonGender != null" >
+        legalPersonGender = #{legalPersonGender,jdbcType=TINYINT},
+      </if>
+      <if test="legalPersonIdCard != null" >
+        legalPersonIdCard = #{legalPersonIdCard,jdbcType=VARCHAR},
+      </if>
+      <if test="legalPersonPicOne != null" >
+        legalPersonPicOne = #{legalPersonPicOne,jdbcType=VARCHAR},
+      </if>
+      <if test="legalPersonPicTwo != null" >
+        legalPersonPicTwo = #{legalPersonPicTwo,jdbcType=VARCHAR},
+      </if>
+      <if test="detail != null" >
+        detail = #{detail,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.lifeshs.po.OrgPO" >
+    update t_org
+    set orgName = #{orgName,jdbcType=VARCHAR},
+      orgCode = #{orgCode,jdbcType=VARCHAR},
+      logo = #{logo,jdbcType=VARCHAR},
+      orgVerified = #{orgVerified,jdbcType=TINYINT},
+      verifiedCause = #{verifiedCause,jdbcType=VARCHAR},
+      tel = #{tel,jdbcType=VARCHAR},
+      orgType = #{orgType,jdbcType=VARCHAR},
+      contacts = #{contacts,jdbcType=VARCHAR},
+      contactInformation = #{contactInformation,jdbcType=VARCHAR},
+      businessLicense = #{businessLicense,jdbcType=VARCHAR},
+      accountType = #{accountType,jdbcType=TINYINT},
+      account = #{account,jdbcType=VARCHAR},
+      status = #{status,jdbcType=TINYINT},
+      type = #{type,jdbcType=TINYINT},
+      parent = #{parent,jdbcType=INTEGER},
+      province = #{province,jdbcType=CHAR},
+      city = #{city,jdbcType=CHAR},
+      district = #{district,jdbcType=CHAR},
+      street = #{street,jdbcType=VARCHAR},
+      longitude = #{longitude,jdbcType=VARCHAR},
+      latitude = #{latitude,jdbcType=VARCHAR},
+      about = #{about,jdbcType=VARCHAR},
+      createDate = #{createDate,jdbcType=TIMESTAMP},
+      modifyDate = #{modifyDate,jdbcType=TIMESTAMP},
+      isRecommend = #{isRecommend,jdbcType=BIT},
+      businessLicenseNumber = #{businessLicenseNumber,jdbcType=VARCHAR},
+      businessLicenseTwo = #{businessLicenseTwo,jdbcType=VARCHAR},
+      workField = #{workField,jdbcType=VARCHAR},
+      bankAccount = #{bankAccount,jdbcType=VARCHAR},
+      bankDistrict = #{bankDistrict,jdbcType=VARCHAR},
+      bankBranch = #{bankBranch,jdbcType=VARCHAR},
+      legalPerson = #{legalPerson,jdbcType=VARCHAR},
+      legalPersonGender = #{legalPersonGender,jdbcType=TINYINT},
+      legalPersonIdCard = #{legalPersonIdCard,jdbcType=VARCHAR},
+      legalPersonPicOne = #{legalPersonPicOne,jdbcType=VARCHAR},
+      legalPersonPicTwo = #{legalPersonPicTwo,jdbcType=VARCHAR},
+      detail = #{detail,jdbcType=LONGVARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.lifeshs.po.OrgPO" >
+    update t_org
+    set orgName = #{orgName,jdbcType=VARCHAR},
+      orgCode = #{orgCode,jdbcType=VARCHAR},
+      logo = #{logo,jdbcType=VARCHAR},
+      orgVerified = #{orgVerified,jdbcType=TINYINT},
+      verifiedCause = #{verifiedCause,jdbcType=VARCHAR},
+      tel = #{tel,jdbcType=VARCHAR},
+      orgType = #{orgType,jdbcType=VARCHAR},
+      contacts = #{contacts,jdbcType=VARCHAR},
+      contactInformation = #{contactInformation,jdbcType=VARCHAR},
+      businessLicense = #{businessLicense,jdbcType=VARCHAR},
+      accountType = #{accountType,jdbcType=TINYINT},
+      account = #{account,jdbcType=VARCHAR},
+      status = #{status,jdbcType=TINYINT},
+      type = #{type,jdbcType=TINYINT},
+      parent = #{parent,jdbcType=INTEGER},
+      province = #{province,jdbcType=CHAR},
+      city = #{city,jdbcType=CHAR},
+      district = #{district,jdbcType=CHAR},
+      street = #{street,jdbcType=VARCHAR},
+      longitude = #{longitude,jdbcType=VARCHAR},
+      latitude = #{latitude,jdbcType=VARCHAR},
+      about = #{about,jdbcType=VARCHAR},
+      createDate = #{createDate,jdbcType=TIMESTAMP},
+      modifyDate = #{modifyDate,jdbcType=TIMESTAMP},
+      isRecommend = #{isRecommend,jdbcType=BIT},
+      businessLicenseNumber = #{businessLicenseNumber,jdbcType=VARCHAR},
+      businessLicenseTwo = #{businessLicenseTwo,jdbcType=VARCHAR},
+      workField = #{workField,jdbcType=VARCHAR},
+      bankAccount = #{bankAccount,jdbcType=VARCHAR},
+      bankDistrict = #{bankDistrict,jdbcType=VARCHAR},
+      bankBranch = #{bankBranch,jdbcType=VARCHAR},
+      legalPerson = #{legalPerson,jdbcType=VARCHAR},
+      legalPersonGender = #{legalPersonGender,jdbcType=TINYINT},
+      legalPersonIdCard = #{legalPersonIdCard,jdbcType=VARCHAR},
+      legalPersonPicOne = #{legalPersonPicOne,jdbcType=VARCHAR},
+      legalPersonPicTwo = #{legalPersonPicTwo,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

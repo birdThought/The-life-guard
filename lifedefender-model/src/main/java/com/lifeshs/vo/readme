@@ -1,0 +1,1 @@
+vo包：业务层处理的数据对象，由controller将dto转换成vo传入，service将vo传入dao层，如果字段差不多，也可以把dto当vo用

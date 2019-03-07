@@ -1,0 +1,44 @@
+@charset "utf-8";
+*{margin:0;padding:0;}
+body{font:normal 14px/1.5 Tahoma,"Lucida Grande",Verdana,"Microsoft Yahei",STXihei,hei;}
+em,i{font-style:normal;}
+strong{font-weight:normal;}
+a{text-decoration:none;color:#666666;font-family:Microsoft yahei,Tahoma,Arial,sans-serif;}
+ul,ol{list-style:none;}
+h1,h2,h3,h4,h5,h6{font-size:100%;font-family:Microsoft yahei;}
+img{border:none;vertical-align:middle;}
+*,*:before,*:after{
+	box-sizing:border-box;
+	-moz-box-sizing:border-box; /* Firefox */
+	-webkit-box-sizing:border-box; /* Safari */
+}
+.fl{float:left;}
+.fr{float:right;}
+dl{
+	margin:0;
+}
+li > dl> dt{
+	font-weight:600;
+}
+.text-center{
+	padding:10px 15px;
+	margin:0 auto;
+}
+.text-center h2{
+	text-align:center;
+	font-size:20px;
+}
+.text-center p{
+	font-weight:600;
+	text-indent:2em;
+	font-size:15px;
+}
+.text-center ul li{
+	margin-bottom:12px;
+}
+.text-center ul li > dl > dt{
+	font-size:15px;
+}
+.text-center ul li > dl > dd{
+    padding-left:1em;
+}

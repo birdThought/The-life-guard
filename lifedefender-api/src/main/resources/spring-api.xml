@@ -1,0 +1,68 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:aop="http://www.springframework.org/schema/aop" xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://www.springframework.org/schema/context
+       http://www.springframework.org/schema/context/spring-context.xsd
+       http://www.springframework.org/schema/aop
+       http://www.springframework.org/schema/aop/spring-aop.xsd http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd">
+    <aop:aspectj-autoproxy proxy-target-class="true"/>
+    <mvc:annotation-driven/>
+    <mvc:default-servlet-handler/>
+    
+    <import resource="classpath:spring/applicationContext.xml"/>
+
+    <!-- 引入cache -->
+    <import resource="classpath:lifedf-cache.xml" />
+
+    <!-- api中不建议加入视图解析器，只作为一个单纯的api接口使用 -->
+    <!-- FreeMarker视图解析 -->
+    <!-- <bean id="viewResolver" class="org.springframework.web.servlet.view.freemarker.FreeMarkerViewResolver">
+        <property name="viewClass" value="org.springframework.web.servlet.view.freemarker.FreeMarkerView"/>
+        <property name="contentType" value="text/html;charset=UTF-8"/>
+        <property name="cache" value="true"/>
+        <property name="suffix" value=".html"/>
+        <property name="order" value="0" />
+        if you want to use the Spring FreeMarker macros, set this property to true
+        <property name="exposeSpringMacroHelpers" value="true"/>
+        <property name="requestContextAttribute" value="requestContext"/>
+    </bean> -->
+
+    <!--&lt;!&ndash; freemarker的配置 &ndash;&gt;-->
+    <!-- <bean id="freemarkerConfigurer"
+          class="org.springframework.web.servlet.view.freemarker.FreeMarkerConfigurer">
+        <property name="templateLoaderPath" value="/views/" />
+        <property name="defaultEncoding" value="UTF-8" />
+        <property name="freemarkerSettings">
+            <props>
+                <prop key="template_update_delay">3</prop>
+                <prop key="locale">zh_CN</prop>
+                <prop key="datetime_format">yyyy-MM-dd HH:mm:ss</prop>
+                <prop key="date_format">yyyy-MM-dd</prop>
+                <prop key="number_format">#.##</prop>
+                <prop key="defaultEncoding">UTF-8</prop>
+            </props>
+        </property>
+        <property name="freemarkerVariables">
+            <map>
+                <entry key="xml_escape" value-ref="fmXmlEscape"/>
+            </map>
+        </property>
+    </bean>
+    <bean id="fmXmlEscape" class="freemarker.template.utility.XmlEscape" /> -->
+
+    <!-- 扫描api与aop包 -->
+    <context:component-scan base-package="com.lifeshs.app.api"/>
+    <context:component-scan base-package="com.lifeshs.app.aop"/>
+    
+    <!-- 全局异常 -->
+    <bean id="apiExceptionHandler" class="com.lifeshs.app.handler.ApiExceptionHandler" />
+    
+    <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+        <!-- 3*1024*1024即是3*1MB -->
+        <property name="maxUploadSize" value="5242880"/>
+    </bean>
+</beans>

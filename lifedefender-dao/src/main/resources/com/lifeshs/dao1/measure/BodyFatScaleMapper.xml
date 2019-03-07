@@ -1,0 +1,569 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lifeshs.dao1.measure.BodyFatScaleDao" >
+  <resultMap id="BaseResultMap" type="com.lifeshs.po.BodyFatScalePO" >
+    <constructor >
+      <idArg column="id" jdbcType="INTEGER" javaType="java.lang.Integer" />
+      <arg column="userId" jdbcType="INTEGER" javaType="java.lang.Integer" />
+      <arg column="status" jdbcType="BIGINT" javaType="java.lang.Long" />
+      <arg column="weight" jdbcType="REAL" javaType="java.lang.Float" />
+      <arg column="weightArea" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="weightStatusDescription" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="axungeRatio" jdbcType="REAL" javaType="java.lang.Float" />
+      <arg column="axungeRatioArea" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="axungeRatioStatusDescription" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="WHR" jdbcType="REAL" javaType="java.lang.Float" />
+      <arg column="WHRArea" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="WHRStatusDescription" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="BMI" jdbcType="REAL" javaType="java.lang.Float" />
+      <arg column="BMIArea" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="BMIStatusDescription" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="fatFreeWeight" jdbcType="REAL" javaType="java.lang.Float" />
+      <arg column="fatFreeWeightArea" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="fatFreeWeightStatusDescription" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="muscle" jdbcType="REAL" javaType="java.lang.Float" />
+      <arg column="muscleArea" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="muscleStatusDescription" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="moisture" jdbcType="REAL" javaType="java.lang.Float" />
+      <arg column="moistureArea" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="moistureStatusDescription" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="boneWeight" jdbcType="REAL" javaType="java.lang.Float" />
+      <arg column="boneWeightArea" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="boneWeightStatusDescription" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="bodyage" jdbcType="SMALLINT" javaType="java.lang.Short" />
+      <arg column="bodyageArea" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="bodyageStatusDescription" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="baseMetabolism" jdbcType="REAL" javaType="java.lang.Float" />
+      <arg column="baseMetabolismArea" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="baseMetabolismStatusDescription" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="proteide" jdbcType="REAL" javaType="java.lang.Float" />
+      <arg column="proteideArea" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="proteideStatusDescription" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="visceralFat" jdbcType="REAL" javaType="java.lang.Float" />
+      <arg column="visceralFatArea" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="visceralFatStatusDescription" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="measureDate" jdbcType="TIMESTAMP" javaType="java.util.Date" />
+      <arg column="deviceType" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="createDate" jdbcType="TIMESTAMP" javaType="java.util.Date" />
+      <arg column="dataType" jdbcType="SMALLINT" javaType="java.lang.Short" />
+    </constructor>
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, userId, status, weight, weightArea, weightStatusDescription, axungeRatio, axungeRatioArea, 
+    axungeRatioStatusDescription, WHR, WHRArea, WHRStatusDescription, BMI, BMIArea, BMIStatusDescription, 
+    fatFreeWeight, fatFreeWeightArea, fatFreeWeightStatusDescription, muscle, muscleArea, 
+    muscleStatusDescription, moisture, moistureArea, moistureStatusDescription, boneWeight, 
+    boneWeightArea, boneWeightStatusDescription, bodyage, bodyageArea, bodyageStatusDescription, 
+    baseMetabolism, baseMetabolismArea, baseMetabolismStatusDescription, proteide, proteideArea, 
+    proteideStatusDescription, visceralFat, visceralFatArea, visceralFatStatusDescription, 
+    measureDate, deviceType, createDate, dataType
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_measure_bodyfatscale
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from t_measure_bodyfatscale
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.lifeshs.po.BodyFatScalePO" >
+    insert into t_measure_bodyfatscale (id, userId, status, 
+      weight, weightArea, weightStatusDescription, 
+      axungeRatio, axungeRatioArea, axungeRatioStatusDescription, 
+      WHR, WHRArea, WHRStatusDescription, 
+      BMI, BMIArea, BMIStatusDescription, 
+      fatFreeWeight, fatFreeWeightArea, fatFreeWeightStatusDescription, 
+      muscle, muscleArea, muscleStatusDescription, 
+      moisture, moistureArea, moistureStatusDescription, 
+      boneWeight, boneWeightArea, boneWeightStatusDescription, 
+      bodyage, bodyageArea, bodyageStatusDescription, 
+      baseMetabolism, baseMetabolismArea, baseMetabolismStatusDescription, 
+      proteide, proteideArea, proteideStatusDescription, 
+      visceralFat, visceralFatArea, visceralFatStatusDescription, 
+      measureDate, deviceType, createDate, 
+      dataType)
+    values (#{id,jdbcType=INTEGER}, #{userId,jdbcType=INTEGER}, #{status,jdbcType=BIGINT}, 
+      #{weight,jdbcType=REAL}, #{weightArea,jdbcType=VARCHAR}, #{weightStatusDescription,jdbcType=VARCHAR}, 
+      #{axungeRatio,jdbcType=REAL}, #{axungeRatioArea,jdbcType=VARCHAR}, #{axungeRatioStatusDescription,jdbcType=VARCHAR}, 
+      #{WHR,jdbcType=REAL}, #{WHRArea,jdbcType=VARCHAR}, #{WHRStatusDescription,jdbcType=VARCHAR}, 
+      #{BMI,jdbcType=REAL}, #{BMIArea,jdbcType=VARCHAR}, #{BMIStatusDescription,jdbcType=VARCHAR}, 
+      #{fatFreeWeight,jdbcType=REAL}, #{fatFreeWeightArea,jdbcType=VARCHAR}, #{fatFreeWeightStatusDescription,jdbcType=VARCHAR}, 
+      #{muscle,jdbcType=REAL}, #{muscleArea,jdbcType=VARCHAR}, #{muscleStatusDescription,jdbcType=VARCHAR}, 
+      #{moisture,jdbcType=REAL}, #{moistureArea,jdbcType=VARCHAR}, #{moistureStatusDescription,jdbcType=VARCHAR}, 
+      #{boneWeight,jdbcType=REAL}, #{boneWeightArea,jdbcType=VARCHAR}, #{boneWeightStatusDescription,jdbcType=VARCHAR}, 
+      #{bodyage,jdbcType=SMALLINT}, #{bodyageArea,jdbcType=VARCHAR}, #{bodyageStatusDescription,jdbcType=VARCHAR}, 
+      #{baseMetabolism,jdbcType=REAL}, #{baseMetabolismArea,jdbcType=VARCHAR}, #{baseMetabolismStatusDescription,jdbcType=VARCHAR}, 
+      #{proteide,jdbcType=REAL}, #{proteideArea,jdbcType=VARCHAR}, #{proteideStatusDescription,jdbcType=VARCHAR}, 
+      #{visceralFat,jdbcType=REAL}, #{visceralFatArea,jdbcType=VARCHAR}, #{visceralFatStatusDescription,jdbcType=VARCHAR}, 
+      #{measureDate,jdbcType=TIMESTAMP}, #{deviceType,jdbcType=VARCHAR}, #{createDate,jdbcType=TIMESTAMP}, 
+      #{dataType,jdbcType=SMALLINT})
+  </insert>
+  <insert id="insertSelective" parameterType="com.lifeshs.po.BodyFatScalePO" >
+    insert into t_measure_bodyfatscale
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="userId != null" >
+        userId,
+      </if>
+      <if test="status != null" >
+        status,
+      </if>
+      <if test="weight != null" >
+        weight,
+      </if>
+      <if test="weightArea != null" >
+        weightArea,
+      </if>
+      <if test="weightStatusDescription != null" >
+        weightStatusDescription,
+      </if>
+      <if test="axungeRatio != null" >
+        axungeRatio,
+      </if>
+      <if test="axungeRatioArea != null" >
+        axungeRatioArea,
+      </if>
+      <if test="axungeRatioStatusDescription != null" >
+        axungeRatioStatusDescription,
+      </if>
+      <if test="WHR != null" >
+        WHR,
+      </if>
+      <if test="WHRArea != null" >
+        WHRArea,
+      </if>
+      <if test="WHRStatusDescription != null" >
+        WHRStatusDescription,
+      </if>
+      <if test="BMI != null" >
+        BMI,
+      </if>
+      <if test="BMIArea != null" >
+        BMIArea,
+      </if>
+      <if test="BMIStatusDescription != null" >
+        BMIStatusDescription,
+      </if>
+      <if test="fatFreeWeight != null" >
+        fatFreeWeight,
+      </if>
+      <if test="fatFreeWeightArea != null" >
+        fatFreeWeightArea,
+      </if>
+      <if test="fatFreeWeightStatusDescription != null" >
+        fatFreeWeightStatusDescription,
+      </if>
+      <if test="muscle != null" >
+        muscle,
+      </if>
+      <if test="muscleArea != null" >
+        muscleArea,
+      </if>
+      <if test="muscleStatusDescription != null" >
+        muscleStatusDescription,
+      </if>
+      <if test="moisture != null" >
+        moisture,
+      </if>
+      <if test="moistureArea != null" >
+        moistureArea,
+      </if>
+      <if test="moistureStatusDescription != null" >
+        moistureStatusDescription,
+      </if>
+      <if test="boneWeight != null" >
+        boneWeight,
+      </if>
+      <if test="boneWeightArea != null" >
+        boneWeightArea,
+      </if>
+      <if test="boneWeightStatusDescription != null" >
+        boneWeightStatusDescription,
+      </if>
+      <if test="bodyage != null" >
+        bodyage,
+      </if>
+      <if test="bodyageArea != null" >
+        bodyageArea,
+      </if>
+      <if test="bodyageStatusDescription != null" >
+        bodyageStatusDescription,
+      </if>
+      <if test="baseMetabolism != null" >
+        baseMetabolism,
+      </if>
+      <if test="baseMetabolismArea != null" >
+        baseMetabolismArea,
+      </if>
+      <if test="baseMetabolismStatusDescription != null" >
+        baseMetabolismStatusDescription,
+      </if>
+      <if test="proteide != null" >
+        proteide,
+      </if>
+      <if test="proteideArea != null" >
+        proteideArea,
+      </if>
+      <if test="proteideStatusDescription != null" >
+        proteideStatusDescription,
+      </if>
+      <if test="visceralFat != null" >
+        visceralFat,
+      </if>
+      <if test="visceralFatArea != null" >
+        visceralFatArea,
+      </if>
+      <if test="visceralFatStatusDescription != null" >
+        visceralFatStatusDescription,
+      </if>
+      <if test="measureDate != null" >
+        measureDate,
+      </if>
+      <if test="deviceType != null" >
+        deviceType,
+      </if>
+      <if test="createDate != null" >
+        createDate,
+      </if>
+      <if test="dataType != null" >
+        dataType,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="userId != null" >
+        #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=BIGINT},
+      </if>
+      <if test="weight != null" >
+        #{weight,jdbcType=REAL},
+      </if>
+      <if test="weightArea != null" >
+        #{weightArea,jdbcType=VARCHAR},
+      </if>
+      <if test="weightStatusDescription != null" >
+        #{weightStatusDescription,jdbcType=VARCHAR},
+      </if>
+      <if test="axungeRatio != null" >
+        #{axungeRatio,jdbcType=REAL},
+      </if>
+      <if test="axungeRatioArea != null" >
+        #{axungeRatioArea,jdbcType=VARCHAR},
+      </if>
+      <if test="axungeRatioStatusDescription != null" >
+        #{axungeRatioStatusDescription,jdbcType=VARCHAR},
+      </if>
+      <if test="WHR != null" >
+        #{WHR,jdbcType=REAL},
+      </if>
+      <if test="WHRArea != null" >
+        #{WHRArea,jdbcType=VARCHAR},
+      </if>
+      <if test="WHRStatusDescription != null" >
+        #{WHRStatusDescription,jdbcType=VARCHAR},
+      </if>
+      <if test="BMI != null" >
+        #{BMI,jdbcType=REAL},
+      </if>
+      <if test="BMIArea != null" >
+        #{BMIArea,jdbcType=VARCHAR},
+      </if>
+      <if test="BMIStatusDescription != null" >
+        #{BMIStatusDescription,jdbcType=VARCHAR},
+      </if>
+      <if test="fatFreeWeight != null" >
+        #{fatFreeWeight,jdbcType=REAL},
+      </if>
+      <if test="fatFreeWeightArea != null" >
+        #{fatFreeWeightArea,jdbcType=VARCHAR},
+      </if>
+      <if test="fatFreeWeightStatusDescription != null" >
+        #{fatFreeWeightStatusDescription,jdbcType=VARCHAR},
+      </if>
+      <if test="muscle != null" >
+        #{muscle,jdbcType=REAL},
+      </if>
+      <if test="muscleArea != null" >
+        #{muscleArea,jdbcType=VARCHAR},
+      </if>
+      <if test="muscleStatusDescription != null" >
+        #{muscleStatusDescription,jdbcType=VARCHAR},
+      </if>
+      <if test="moisture != null" >
+        #{moisture,jdbcType=REAL},
+      </if>
+      <if test="moistureArea != null" >
+        #{moistureArea,jdbcType=VARCHAR},
+      </if>
+      <if test="moistureStatusDescription != null" >
+        #{moistureStatusDescription,jdbcType=VARCHAR},
+      </if>
+      <if test="boneWeight != null" >
+        #{boneWeight,jdbcType=REAL},
+      </if>
+      <if test="boneWeightArea != null" >
+        #{boneWeightArea,jdbcType=VARCHAR},
+      </if>
+      <if test="boneWeightStatusDescription != null" >
+        #{boneWeightStatusDescription,jdbcType=VARCHAR},
+      </if>
+      <if test="bodyage != null" >
+        #{bodyage,jdbcType=SMALLINT},
+      </if>
+      <if test="bodyageArea != null" >
+        #{bodyageArea,jdbcType=VARCHAR},
+      </if>
+      <if test="bodyageStatusDescription != null" >
+        #{bodyageStatusDescription,jdbcType=VARCHAR},
+      </if>
+      <if test="baseMetabolism != null" >
+        #{baseMetabolism,jdbcType=REAL},
+      </if>
+      <if test="baseMetabolismArea != null" >
+        #{baseMetabolismArea,jdbcType=VARCHAR},
+      </if>
+      <if test="baseMetabolismStatusDescription != null" >
+        #{baseMetabolismStatusDescription,jdbcType=VARCHAR},
+      </if>
+      <if test="proteide != null" >
+        #{proteide,jdbcType=REAL},
+      </if>
+      <if test="proteideArea != null" >
+        #{proteideArea,jdbcType=VARCHAR},
+      </if>
+      <if test="proteideStatusDescription != null" >
+        #{proteideStatusDescription,jdbcType=VARCHAR},
+      </if>
+      <if test="visceralFat != null" >
+        #{visceralFat,jdbcType=REAL},
+      </if>
+      <if test="visceralFatArea != null" >
+        #{visceralFatArea,jdbcType=VARCHAR},
+      </if>
+      <if test="visceralFatStatusDescription != null" >
+        #{visceralFatStatusDescription,jdbcType=VARCHAR},
+      </if>
+      <if test="measureDate != null" >
+        #{measureDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="deviceType != null" >
+        #{deviceType,jdbcType=VARCHAR},
+      </if>
+      <if test="createDate != null" >
+        #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="dataType != null" >
+        #{dataType,jdbcType=SMALLINT},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.lifeshs.po.BodyFatScalePO" >
+    update t_measure_bodyfatscale
+    <set >
+      <if test="userId != null" >
+        userId = #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=BIGINT},
+      </if>
+      <if test="weight != null" >
+        weight = #{weight,jdbcType=REAL},
+      </if>
+      <if test="weightArea != null" >
+        weightArea = #{weightArea,jdbcType=VARCHAR},
+      </if>
+      <if test="weightStatusDescription != null" >
+        weightStatusDescription = #{weightStatusDescription,jdbcType=VARCHAR},
+      </if>
+      <if test="axungeRatio != null" >
+        axungeRatio = #{axungeRatio,jdbcType=REAL},
+      </if>
+      <if test="axungeRatioArea != null" >
+        axungeRatioArea = #{axungeRatioArea,jdbcType=VARCHAR},
+      </if>
+      <if test="axungeRatioStatusDescription != null" >
+        axungeRatioStatusDescription = #{axungeRatioStatusDescription,jdbcType=VARCHAR},
+      </if>
+      <if test="WHR != null" >
+        WHR = #{WHR,jdbcType=REAL},
+      </if>
+      <if test="WHRArea != null" >
+        WHRArea = #{WHRArea,jdbcType=VARCHAR},
+      </if>
+      <if test="WHRStatusDescription != null" >
+        WHRStatusDescription = #{WHRStatusDescription,jdbcType=VARCHAR},
+      </if>
+      <if test="BMI != null" >
+        BMI = #{BMI,jdbcType=REAL},
+      </if>
+      <if test="BMIArea != null" >
+        BMIArea = #{BMIArea,jdbcType=VARCHAR},
+      </if>
+      <if test="BMIStatusDescription != null" >
+        BMIStatusDescription = #{BMIStatusDescription,jdbcType=VARCHAR},
+      </if>
+      <if test="fatFreeWeight != null" >
+        fatFreeWeight = #{fatFreeWeight,jdbcType=REAL},
+      </if>
+      <if test="fatFreeWeightArea != null" >
+        fatFreeWeightArea = #{fatFreeWeightArea,jdbcType=VARCHAR},
+      </if>
+      <if test="fatFreeWeightStatusDescription != null" >
+        fatFreeWeightStatusDescription = #{fatFreeWeightStatusDescription,jdbcType=VARCHAR},
+      </if>
+      <if test="muscle != null" >
+        muscle = #{muscle,jdbcType=REAL},
+      </if>
+      <if test="muscleArea != null" >
+        muscleArea = #{muscleArea,jdbcType=VARCHAR},
+      </if>
+      <if test="muscleStatusDescription != null" >
+        muscleStatusDescription = #{muscleStatusDescription,jdbcType=VARCHAR},
+      </if>
+      <if test="moisture != null" >
+        moisture = #{moisture,jdbcType=REAL},
+      </if>
+      <if test="moistureArea != null" >
+        moistureArea = #{moistureArea,jdbcType=VARCHAR},
+      </if>
+      <if test="moistureStatusDescription != null" >
+        moistureStatusDescription = #{moistureStatusDescription,jdbcType=VARCHAR},
+      </if>
+      <if test="boneWeight != null" >
+        boneWeight = #{boneWeight,jdbcType=REAL},
+      </if>
+      <if test="boneWeightArea != null" >
+        boneWeightArea = #{boneWeightArea,jdbcType=VARCHAR},
+      </if>
+      <if test="boneWeightStatusDescription != null" >
+        boneWeightStatusDescription = #{boneWeightStatusDescription,jdbcType=VARCHAR},
+      </if>
+      <if test="bodyage != null" >
+        bodyage = #{bodyage,jdbcType=SMALLINT},
+      </if>
+      <if test="bodyageArea != null" >
+        bodyageArea = #{bodyageArea,jdbcType=VARCHAR},
+      </if>
+      <if test="bodyageStatusDescription != null" >
+        bodyageStatusDescription = #{bodyageStatusDescription,jdbcType=VARCHAR},
+      </if>
+      <if test="baseMetabolism != null" >
+        baseMetabolism = #{baseMetabolism,jdbcType=REAL},
+      </if>
+      <if test="baseMetabolismArea != null" >
+        baseMetabolismArea = #{baseMetabolismArea,jdbcType=VARCHAR},
+      </if>
+      <if test="baseMetabolismStatusDescription != null" >
+        baseMetabolismStatusDescription = #{baseMetabolismStatusDescription,jdbcType=VARCHAR},
+      </if>
+      <if test="proteide != null" >
+        proteide = #{proteide,jdbcType=REAL},
+      </if>
+      <if test="proteideArea != null" >
+        proteideArea = #{proteideArea,jdbcType=VARCHAR},
+      </if>
+      <if test="proteideStatusDescription != null" >
+        proteideStatusDescription = #{proteideStatusDescription,jdbcType=VARCHAR},
+      </if>
+      <if test="visceralFat != null" >
+        visceralFat = #{visceralFat,jdbcType=REAL},
+      </if>
+      <if test="visceralFatArea != null" >
+        visceralFatArea = #{visceralFatArea,jdbcType=VARCHAR},
+      </if>
+      <if test="visceralFatStatusDescription != null" >
+        visceralFatStatusDescription = #{visceralFatStatusDescription,jdbcType=VARCHAR},
+      </if>
+      <if test="measureDate != null" >
+        measureDate = #{measureDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="deviceType != null" >
+        deviceType = #{deviceType,jdbcType=VARCHAR},
+      </if>
+      <if test="createDate != null" >
+        createDate = #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="dataType != null" >
+        dataType = #{dataType,jdbcType=SMALLINT},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.lifeshs.po.BodyFatScalePO" >
+    update t_measure_bodyfatscale
+    set userId = #{userId,jdbcType=INTEGER},
+      status = #{status,jdbcType=BIGINT},
+      weight = #{weight,jdbcType=REAL},
+      weightArea = #{weightArea,jdbcType=VARCHAR},
+      weightStatusDescription = #{weightStatusDescription,jdbcType=VARCHAR},
+      axungeRatio = #{axungeRatio,jdbcType=REAL},
+      axungeRatioArea = #{axungeRatioArea,jdbcType=VARCHAR},
+      axungeRatioStatusDescription = #{axungeRatioStatusDescription,jdbcType=VARCHAR},
+      WHR = #{WHR,jdbcType=REAL},
+      WHRArea = #{WHRArea,jdbcType=VARCHAR},
+      WHRStatusDescription = #{WHRStatusDescription,jdbcType=VARCHAR},
+      BMI = #{BMI,jdbcType=REAL},
+      BMIArea = #{BMIArea,jdbcType=VARCHAR},
+      BMIStatusDescription = #{BMIStatusDescription,jdbcType=VARCHAR},
+      fatFreeWeight = #{fatFreeWeight,jdbcType=REAL},
+      fatFreeWeightArea = #{fatFreeWeightArea,jdbcType=VARCHAR},
+      fatFreeWeightStatusDescription = #{fatFreeWeightStatusDescription,jdbcType=VARCHAR},
+      muscle = #{muscle,jdbcType=REAL},
+      muscleArea = #{muscleArea,jdbcType=VARCHAR},
+      muscleStatusDescription = #{muscleStatusDescription,jdbcType=VARCHAR},
+      moisture = #{moisture,jdbcType=REAL},
+      moistureArea = #{moistureArea,jdbcType=VARCHAR},
+      moistureStatusDescription = #{moistureStatusDescription,jdbcType=VARCHAR},
+      boneWeight = #{boneWeight,jdbcType=REAL},
+      boneWeightArea = #{boneWeightArea,jdbcType=VARCHAR},
+      boneWeightStatusDescription = #{boneWeightStatusDescription,jdbcType=VARCHAR},
+      bodyage = #{bodyage,jdbcType=SMALLINT},
+      bodyageArea = #{bodyageArea,jdbcType=VARCHAR},
+      bodyageStatusDescription = #{bodyageStatusDescription,jdbcType=VARCHAR},
+      baseMetabolism = #{baseMetabolism,jdbcType=REAL},
+      baseMetabolismArea = #{baseMetabolismArea,jdbcType=VARCHAR},
+      baseMetabolismStatusDescription = #{baseMetabolismStatusDescription,jdbcType=VARCHAR},
+      proteide = #{proteide,jdbcType=REAL},
+      proteideArea = #{proteideArea,jdbcType=VARCHAR},
+      proteideStatusDescription = #{proteideStatusDescription,jdbcType=VARCHAR},
+      visceralFat = #{visceralFat,jdbcType=REAL},
+      visceralFatArea = #{visceralFatArea,jdbcType=VARCHAR},
+      visceralFatStatusDescription = #{visceralFatStatusDescription,jdbcType=VARCHAR},
+      measureDate = #{measureDate,jdbcType=TIMESTAMP},
+      deviceType = #{deviceType,jdbcType=VARCHAR},
+      createDate = #{createDate,jdbcType=TIMESTAMP},
+      dataType = #{dataType,jdbcType=SMALLINT}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+
+  <select id="selectMeasureDatesByUserId" resultType="com.lifeshs.po.BodyFatScalePO" parameterType="map">
+    SELECT measureDate,status
+    from t_measure_bodyfatscale
+    where userId = #{userId}
+    and DATE_ADD(#{queryDate},interval 1 month) &gt;= measureDate
+    and measureDate &gt;= #{queryDate}
+  </select>
+
+  <select id="getLastDateByUserId" resultType="date" parameterType="integer">
+    SELECT measureDate
+    FROM t_measure_bodyfatscale
+    WHERE userId = #{userId}
+    Order by measureDate desc
+    limit 1
+  </select>
+
+  <select id="currrntDodyfatsDate" resultType="com.lifeshs.po.BodyFatScalePO">
+    SELECT * FROM t_measure_bodyfatscale
+    WHERE userId = #{userId}
+    AND  TO_DAYS(measureDate) = TO_DAYS(#{date})
+    limit 1
+  </select>
+</mapper>

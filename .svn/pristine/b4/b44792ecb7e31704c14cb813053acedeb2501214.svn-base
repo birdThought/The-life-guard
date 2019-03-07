@@ -1,0 +1,196 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lifeshs.dao.device.IDeviceDao" >
+    
+    <select id="selectDeviceDataWithSpecificDate" parameterType="java.util.HashMap" resultType="java.util.HashMap">
+        Select ${columnNames} From ${table}
+        Where date_format(measureDate,'%Y-%m-%d') = #{measureDate} And userId = #{userId} And deviceType LIKE '%${deviceType}%' 
+        Order By measureDate
+    </select>
+    <!-- 通过date字段进行查询 -->
+    <select id="selectDeviceDataWithSpecificDateByDate" parameterType="java.util.HashMap" resultType="java.util.HashMap">
+        Select ${columnNames} From ${table}
+        Where date_format(date,'%Y-%m-%d') = #{date} And userId = #{userId} And deviceType LIKE '%${deviceType}%' 
+        Order By id DESC
+    </select>
+    <select id="selectDeviceDataWithSpecificDatePageSplit" parameterType="java.util.HashMap" resultType="java.util.HashMap">
+        Select ${columnNames} From ${table}
+        Where userId = #{userId} And deviceType LIKE '%${deviceType}%'
+        Order By ${orderby} DESC LIMIT ${start},${pageSize}
+    </select>
+    <select id="selectDeviceAllData" parameterType="java.util.HashMap" resultType="java.util.HashMap">
+        Select ${columnNames} From ${table}
+        Where userId = #{userId} And deviceType LIKE '%${deviceType}%' 
+        Order By id DESC
+    </select>
+    
+    <select id="selectDeviceDataStandard" parameterType="java.util.HashMap" resultType="java.util.HashMap">
+        Select id, min, max, createDate From t_data_health_standard_value
+        <!-- Where healthType ='${healthType}'  And sex = ${sex} And  ageStart &lt;= ${age} And ${age} &lt;= ageEnd -->
+        <where>
+            healthType ='${healthType}'
+            <if test="sex != null">
+                And sex = ${sex}
+            </if>
+            <choose>
+                <when test="age == null">
+                    And ageStart &lt;= 10 And 10 &lt;= ageEnd
+                </when>
+                <otherwise>
+                    And ageStart &lt;= ${age} And ${age} &lt;= ageEnd
+                </otherwise>
+            </choose>
+        </where>
+    </select>
+    
+    <select id="selectDeviceDataLastest" parameterType="java.util.HashMap" resultType="java.util.HashMap">
+        Select ${columnNames} From ${table}
+        <where>
+            <foreach collection="condition.keys" item="key" index="index" separator="and">
+                ${key} = #{condition[${key}]}
+            </foreach>
+            <if test="measureDate != null">
+                And date_format(measureDate,'%Y-%m-%d') = #{measureDate}
+            </if>
+        And (deviceType LIKE CONCAT(CONCAT('%', #{deviceType}), '%'))
+        </where>
+        Order By measureDate DESC Limit 1
+    </select>
+
+    <select id="selectDeviceDataByDayHour" parameterType="java.util.HashMap"
+            resultType="java.util.HashMap">
+        Select ${columnNames}
+        From ${table}
+        <where>
+            <foreach collection="condition.keys" item="key" index="index" separator="and">
+                ${key} = #{condition[${key}]}
+            </foreach>
+            <if test="measureDate != null">
+                And date_format(measureDate,'%Y-%m-%d') = #{measureDate}
+            </if>
+            And (deviceType LIKE CONCAT(CONCAT('%', #{deviceType}), '%'))
+        </where>
+        GROUP BY date_format(measureDate,'%Y-%m-%d %h')
+        ORDER BY id DESC ;
+    </select>
+
+    <select id="selectDeviceDataLastestDate" parameterType="java.util.HashMap" resultType="java.util.HashMap">
+        Select ${columnNames} From ${table}
+        <where>
+            <foreach collection="condition.keys" item="key" index="index" separator="and">
+                ${key} = #{condition[${key}]}
+            </foreach>
+        And date_format(date,'%Y-%m-%d') = #{date}
+        And (deviceType LIKE CONCAT(#{deviceType}, '%'))
+        </where>
+        Order By date DESC Limit 1
+    </select>
+    
+    <!-- device commond  start-->
+    <select id="findCommond" resultType="java.util.HashMap">
+        select 
+            dc.`name`,dc.eventName as eventname,dc.repeats,dc.time,dc.msg,
+            dc.timeSize as timesize,dc.msgSize as msgsize,dc.type,dc.op
+        from t_terminal_commond dc where dc.imei = #{imei} and dc.userId = #{userId} and dc.`status` = 0
+    </select>
+    
+    <!-- 更新commond -->
+    <update id="updateCommond">
+        update t_terminal_commond set sendTime = NOW(),status = 1 where imei = #{imei} and userId = #{userId} and `status` = 0
+    </update>
+    <!--  device commond  end-->
+    
+    <!-- 按照terminalType查询已绑定的设备记录 -->
+    <select id="selectDeviceIsBindingLimitType" resultType="com.lifeshs.entity.device.TUserTerminal">
+        Select id, userId, imei, name, mobile, terminalType, 
+            heartFrequency, locationFrequency, autoFrequency70, autoFrequency50,
+            autoFrequency30, operationMode, status, createDate, modifyDate
+        From t_user_terminal
+        Where imei = #{imei, jdbcType=VARCHAR} And terminalType = #{terminalType, jdbcType=VARCHAR}
+        Limit 1
+    </select>
+    
+    <select id="selectLatestLocation" resultType="com.lifeshs.entity.device.TSportLocation">
+        Select id, userId, longitude, latitude, address, measureDate From t_sport_location
+        Where userId = #{userId} And productModel = #{productModel}
+        Order By measureDate Desc
+        Limit ${limit}
+    </select>
+    
+    <select id="selectLocationByDate" resultType="com.lifeshs.entity.device.TSportLocation">
+        Select longitude, latitude, address, measureDate From t_sport_location
+        Where
+        <![CDATA[   userId = #{userId} And productModel = #{productModel} And measureDate >= #{startTime} And measureDate <= #{endTime} ]]> 
+        Order By measureDate
+    </select>
+    
+    <select id="selectTracksOrderByParam" resultType="com.lifeshs.entity.member.TUserMonitorTrack">
+        Select
+            t.id, t.userDeviceId, t.number, t.name, t.startTime, t.endTime, t.enabled, t.createDate From t_user_monitorTrack t
+        Where
+            t.userDeviceId = #{deviceId}
+        Order By ${orderParam} ${order}
+    </select>
+    
+    <select id = "selectDeviceDataCountByMeasureDate" resultType = "int">
+        SELECT
+            COUNT(1)
+        FROM
+            (
+            SELECT
+                COUNT(1)
+            FROM
+                ${tableName}
+            WHERE
+                deviceType LIKE '%${deviceType}%'
+            AND userId = ${userId}
+            GROUP BY
+                DATE_FORMAT(measureDate, '%Y-%m-%d')
+        ) a
+    </select>
+
+    <select id="findByC3Sum" parameterType="int" resultType="java.lang.Integer">
+        SELECT
+	    count(1)
+        FROM
+	    t_user_terminal ut
+        INNER JOIN t_user u ON ut.userId = u.id
+        where ut.userId = u.id
+        <if test="status != null">
+        and  ut.`status` = #{status}
+        </if>
+        <if test="name != null">
+        AND   (u.userName LIKE CONCAT("%", #{name} ,"%"))
+        </if>
+        <if test="imei != null">
+        AND   (ut.imei LIKE CONCAT("%", #{imei} ,"%"))
+        </if>
+        <if test="date != null">
+        AND TO_DAYS(ut.createDate) =TO_DAYS(#{date})
+        </if>
+    </select>
+    <select id="findByDataList" resultType="com.lifeshs.vo.member.MemberC3Vo">
+        SELECT
+	     u.userName,u.mobile,u.realName,ut.imei,ut.createDate,ut.`status`
+        FROM
+          t_user_terminal ut
+        INNER JOIN t_user u ON ut.userId = u.id
+        WHERE  ut.userId = u.id
+        <if test="status != null">
+            and  ut.`status` = #{status}
+        </if>
+        <if test="condition == 0">
+            AND   (u.userName LIKE CONCAT("%", #{name} ,"%"))
+        </if>
+        <if test="condition == 1">
+            AND   (u.realName LIKE CONCAT("%", #{name} ,"%"))
+        </if>
+        <if test="imei != null">
+            AND   (ut.imei LIKE CONCAT("%", #{imei} ,"%"))
+        </if>
+        <if test="date != null">
+            AND TO_DAYS(ut.createDate) =TO_DAYS(#{date})
+        </if>
+        limit #{curPage},#{pageSize}
+    </select>
+</mapper>

@@ -1,0 +1,7 @@
+   name: liyue
+   value: !!str 123456
+   servers:
+        - dev.lifekeepers.cn
+        - prod.lifekeepers.cn
+   message: test
+   env: ${lifedefender_openservice_log:logpath}

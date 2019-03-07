@@ -1,0 +1,9 @@
+<h3>Top Menus</h3>
+<div class="grid grid-pad">
+    <a *ngFor="let menu of menus" [routerLink]="['/detail', menu.id]" class="col-1-4">
+        <div class="module menu">
+            <h4>{{menu.name}}</h4>
+        </div>
+    </a>
+</div>
+<menu-search></menu-search>

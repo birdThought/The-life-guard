@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lifeshs.dao1.customer.ICustomerOrderDao" >
+	
+		
+	<!-- 更改工单信息 -->
+	<update id="updateOrder">
+		UPDATE t_vip_service_apply SET
+			<if test="data.customerRemark !=null">
+			customerRemark = #{data.customerRemark},
+			</if>
+			<if test="data.sureDate !=null">
+				sureDate = #{data.sureDate},
+			</if>
+			<if test="data.orgName !=null">
+				orgName = #{data.orgName},
+			</if>
+			<if test="data.address !=null">
+				address = #{data.address},
+			</if>
+			<if test="data.status != null">
+				 `status` = #{data.status},
+			</if>
+			modifyDate = NOW()
+			WHERE id = #{id}
+	</update>
+	
+	<!-- 统计总工单数量 -->
+	<select id="countOrder" resultType="java.lang.Integer">
+		SELECT COUNT(*) FROM t_vip_service_apply 
+	</select>
+	
+	<!-- 统计未提交工单数量 -->
+	<select id="countNotOrder" resultType="java.lang.Integer">
+		SELECT COUNT(*) FROM t_vip_service_apply 
+		WHERE `status` = 0
+
+	</select>
+	
+	<!-- 统计提交成功工单数量 -->
+	<select id="countSuccessOrder" resultType="java.lang.Integer">
+		SELECT COUNT(*) FROM t_vip_service_apply 
+			WHERE `status` = 1
+	</select>
+	
+		<!-- 统计提交失败工单数量 -->
+	<select id="countFailOrder" resultType="java.lang.Integer">
+		SELECT COUNT(*) FROM t_vip_service_apply 
+			WHERE `status` = 2
+	</select>
+	
+	<!-- 根据id获取工单信息 -->
+	<select id="getOrder" resultType="com.lifeshs.po.customer.CustomerOrderPo">
+	SELECT a.id,b.userName,c.gender,
+			b.mobile,d.`name` as serveName
+			,a.appoinDate,a.userRemark,a.customerRemark,
+			a.sureDate,a.orgName,a.address,a.createDate,a.`status`
+			FROM t_vip_service_apply a
+		LEFT JOIN t_user b ON a.userId=b.id
+		LEFT JOIN t_user_record c ON  a.userId=c.userId
+		LEFT JOIN t_vip_combo_item d ON a.vipComboItemId=d.id
+	WHERE a.id = #{id}
+	</select>
+	
+	<!-- 获取工单列表 -->
+	<select id="findOrderList" resultType="com.lifeshs.po.customer.CustomerOrderPo">
+		SELECT a.id,b.userName,c.gender,
+				b.mobile,d.`name` as serveName
+				,a.appoinDate,a.userRemark,a.customerRemark,
+				a.sureDate,a.orgName,a.address,a.createDate,a.`status`
+				FROM t_vip_service_apply a
+			LEFT JOIN t_user b ON a.userId=b.id
+			LEFT JOIN t_user_record c ON  a.userId=c.userId
+			LEFT JOIN t_vip_combo_item d ON a.vipComboItemId=d.id
+		LIMIT #{startRow},#{pageSize}
+	</select>
+	
+	<!-- 获取未提交的工单列表 -->
+	<select id="findNotOrderList" resultType="com.lifeshs.po.customer.CustomerOrderPo">
+		SELECT a.id,b.userName,c.gender,
+				b.mobile,d.`name` as serveName
+				,a.appoinDate,a.userRemark,a.customerRemark,
+				a.sureDate,a.orgName,a.address,a.createDate,a.`status`
+				FROM t_vip_service_apply a
+			LEFT JOIN t_user b ON a.userId=b.id
+			LEFT JOIN t_user_record c ON  a.userId=c.userId
+			LEFT JOIN t_vip_combo_item d ON a.vipComboItemId=d.id
+		<if test="status != null">
+			WHERE a.`status` = 0
+		</if>
+		LIMIT #{startRow},#{pageSize}
+	</select>
+	
+	<!-- 获取提交成功的工单列表 -->
+	<select id="findSuccessOrderList" resultType="com.lifeshs.po.customer.CustomerOrderPo">
+		SELECT a.id,b.userName,c.gender,
+				b.mobile,d.`name` as serveName
+				,a.appoinDate,a.userRemark,a.customerRemark,
+				a.sureDate,a.orgName,a.address,a.createDate,a.`status`
+				FROM t_vip_service_apply a
+			LEFT JOIN t_user b ON a.userId=b.id
+			LEFT JOIN t_user_record c ON  a.userId=c.userId
+			LEFT JOIN t_vip_combo_item d ON a.vipComboItemId=d.id
+			<if test="status != null">
+			WHERE a.`status` = 1
+			</if>
+		LIMIT #{startRow},#{pageSize}
+	</select>
+	
+	<!-- 获取提交失败的工单列表 -->
+	<select id="findFailOrderList" resultType="com.lifeshs.po.customer.CustomerOrderPo">
+		SELECT a.id,b.userName,c.gender,
+				b.mobile,d.`name` as serveName
+				,a.appoinDate,a.userRemark,a.customerRemark,
+				a.sureDate,a.orgName,a.address,a.createDate,a.`status`
+			FROM t_vip_service_apply a
+			LEFT JOIN t_user b ON a.userId=b.id
+			LEFT JOIN t_user_record c ON  a.userId=c.userId
+			LEFT JOIN t_vip_combo_item d ON a.vipComboItemId=d.id
+			<if test="status != null">
+			WHERE a.`status` = 2
+			</if>
+		LIMIT #{startRow},#{pageSize}
+	</select>
+</mapper>

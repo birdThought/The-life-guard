@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lifeshs.dao.log.ILogDao">
+    <select id="getLastLogLogin" parameterType="java.lang.Integer" resultType="com.lifeshs.pojo.log.LoginLogDTO">
+        SELECT
+          MAX(loginTime) AS loginTime, userType, userId, userName, orgId, terminalType, ip
+        FROM
+          t_log_login
+        WHERE
+          userId = #{userId}
+    </select>
+
+    <insert id="addSensitiveLog" >
+        INSERT INTO
+        t_log_sensitive_operation(userId, userType, operationType, generateData, newData, createDate, ip)
+        VALUES
+        (#{userId}, #{userType.value}, #{operationType.value}, #{generateData}, #{newData}, NOW(), #{ip})
+    </insert>
+
+
+    <select id="findByLogDataList" resultType="com.lifeshs.vo.visit.OperatingVo">
+      SELECT
+            log.id,log.ip,log.loginTime, log.orgId, log.terminalType, log.userId,log.userName,log.userType,o.id,o.about,o.account,o.accountType,
+            o.businessLicense, o.city,o.contactInformation,o.contacts,o.createDate,o.detail,o.district,o.isRecommend,o.latitude,o.logo,o.longitude,o.modifyDate,
+            o.orgCode,o.orgName,o.orgType,o.orgVerified,o.parent,o.province, o. STATUS,o.street,o.tel,o.type,o.verifiedCause
+        FROM
+            t_log_login log
+        LEFT OUTER JOIN t_org o ON log.orgId = o.id
+        WHERE
+        <if test="user != null | mech != null">
+            log.userType IN (#{user},#{mech})
+        </if>
+        <if test="user == null">
+            log.userType IN (#{mech})
+        </if>
+        <if test="mech == null">
+            log.userType IN (#{user})
+        </if>
+        <if test="terminalType != null">
+            AND log.terminalType = #{terminalType}
+        </if>
+        ORDER BY
+            log.loginTime DESC
+        LIMIT #{curPage},#{pageSize}
+    </select>
+
+    <select id="findByLoginCount" parameterType="int" resultType="java.lang.Integer">
+        select count(*) from(
+            SELECT
+                log.id, log.ip, log.loginTime, log.orgId,log.terminalType,log.userId, log.userName,log.userType,o.about,o.account,o.accountType,
+                o.businessLicense,o.city,o.contactInformation,o.contacts,o.createDate,o.detail,o.district,o.isRecommend,o.latitude,o.logo,
+                o.longitude,o.modifyDate,o.orgCode,o.orgName,o.orgType,o.orgVerified,o.parent,o.province,o. STATUS,o.street,o.tel,o.type,o.verifiedCause
+            FROM
+                t_log_login log
+            LEFT OUTER JOIN t_org o ON log.orgId = o.id
+            WHERE
+        <if test="user != null | mech != null">
+            log.userType IN (#{user},#{mech})
+        </if>
+        <if test="user == null">
+            log.userType IN (#{mech})
+        </if>
+        <if test="mech == null">
+            log.userType IN (#{user})
+        </if>
+        <if test="terminalType != null">
+            AND log.terminalType = #{terminalType}
+        </if>
+            ORDER BY
+                log.loginTime DESC
+)m
+
+    </select>
+
+</mapper>

@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lifeshs.dao1.business.IUserDao">
+
+	<resultMap id="BaseResultMap" type="com.lifeshs.po.business.BusinessUserPO">
+		<id column="b_id" property="id"/>
+		<result column="b_userName" property="userName"/>
+		<result column="b_password" property="password"/>
+		<result column="b_name" property="name"/>
+		<result column="b_status" property="status"/>
+		<result column="b_createDate" property="createDate"/>
+		<result column="b_superior" property="superior"/>
+		<collection property="business" column="b_id" ofType="com.lifeshs.po.business.BusinessUserPO">
+		<result column="id" property="id"/>
+		<result column="tb_userName" property="userName"/>
+		<result column="tb_password" property="password"/>
+		<result column="tb_name" property="name"/>
+		<result column="tb_status" property="status"/>
+		<result column="tb_createDate" property="createDate"/>
+		<result column="tb_superior" property="superior"/>
+		</collection>
+	</resultMap>
+
+	<select id="findByCountManAgeMent" parameterType="int" resultType="java.lang.Integer">
+		select count(1) from(
+		SELECT tbu.userName,tbu.`name`,tbu.createDate,tbu.type
+		FROM
+		t_business_user tbu
+		INNER JOIN t_business b ON tbu.superior = b.id
+		WHERE
+		tbu.superior=#{id}
+		AND tbu.type != 0
+    )m
+	</select>
+
+	<!--<select id="findByAllSell" resultMap="BaseResultMap">
+		SELECT
+		b.id b_id,tb.id,b.userName AS b_userName,b.PASSWORD AS b_password,b.name as b_name,b.`status` as b_status,b.createDate AS b_createDate,b.superior AS b_superior,
+		tb.userName as tb_userName,tb.password as tb_password,tb.name as tb_name,tb.`status` as tb_status,tb.createDate as tb_createDate,tb.superior as tb_superior
+		FROM
+		t_business_user b
+		INNER JOIN t_business tb on b.superior = tb.id
+		where b.superior =#{id}
+		ORDER BY tb.createDate DESC
+		LIMIT #{curPage},#{pageSize}
+	</select>-->
+	<select id="findByAllSell" resultType="com.lifeshs.po.business.BusinessUserPO">
+		SELECT tbu.userName,tbu.`name`,tbu.createDate,tbu.type
+		FROM
+		t_business_user tbu
+		INNER JOIN t_business b ON tbu.superior = b.id
+		WHERE
+		tbu.superior=#{id}
+		AND tbu.type != 0
+		ORDER BY tbu.createDate DESC
+		LIMIT #{curPage},#{pageSize}
+	</select>
+
+	<!--根据用户名获取用户 -->
+	<select id="getUserByUserName" resultType="com.lifeshs.po.business.BusinessPo">
+		SELECT * FROM t_business u WHERE u.name = #{name}
+	</select>
+	<!--根据用户名获取用户 登录用 -->
+	<select id="getUserByBusiness" resultType="com.lifeshs.po.business.BusinessUserPO">
+		SELECT * FROM t_business_user  WHERE userName = #{userName}
+	</select>
+
+	<!-- 根据用户id获取用户 -->
+	<select id="getUser" resultType="com.lifeshs.po.business.BusinessUserPO">
+		SELECT
+		<include refid="BUSINESS_ALL_COLUMN" />
+		FROM t_business_user u WHERE u.id = #{id}
+	</select>
+
+	<sql id="BUSINESS_ALL_COLUMN">id, userName, password, name, status,createDate, modifyDate,superior,type</sql>
+
+	<update id="updateUser" parameterType="com.lifeshs.po.business.BusinessUserPO">
+		UPDATE t_business SET
+		<if test="password != null">password = #{password},</if>
+		<if test="name != null">name = #{name},</if>
+		<if test="photo != null">photo = #{photo},</if>
+		<if test="status != null">status = #{status},</if>
+		modifyDate = NOW()
+		WHERE id = #{id}
+	</update>
+
+	<!--获取用户列表 -->
+	<select id="findUserList" resultType="com.lifeshs.po.business.BusinessPo">
+		SELECT id, name,status,contactMan,phone,type
+		FROM t_business
+        <where>
+            <if test="name != null">name LIKE CONCAT(#{name}, '%')</if>
+        </where>
+        <if test="startRow != null and pageSize != null">
+    		limit #{startRow}, #{pageSize}
+        </if>
+	</select>
+
+	<!--获取用户数量 -->
+	<select id="countUser" resultType="java.lang.Integer">
+		SELECT count(1) FROM t_business
+	</select>
+
+	<!--修改账户密码 -->
+	<select id="updatePassword">
+		UPDATE t_business
+		SET password = #{password}, modifyDate = NOW()
+		WHERE id = #{userId}
+	</select>
+
+	<!-- 添加渠道商 -->
+	<insert id="saveBusiness" useGeneratedKeys="true" keyProperty="id" parameterType="com.lifeshs.po.business.BusinessPo">
+		INSERT INTO
+		t_business(name,status,contactMan,phone,email,type,createDate,logo)
+		VALUES(#{name},#{status},#{contactMan},#{phone},#{email},#{type},NOW(),#{logo})
+	</insert>
+
+	<insert id="saveBusinessUser" parameterType="com.lifeshs.po.business.BusinessUserPO">
+		INSERT INTO t_business_user(userName,password,name,status,phone,email,address,type,superior,createDate)VALUES(
+		#{userName},#{password},#{name},#{status},#{phone},#{email},#{address},#{type},#{superior},NOW()
+		)
+	</insert>
+
+	<!-- 更改渠道商 -->
+	<update id="updateBusiness">
+		UPDATE t_business_user
+		SET 
+		<if test="userName != null">
+		userName = #{userName},
+		</if>
+		<if test="name != null">
+		name = #{name},
+		</if>
+		<if test="phone != null">
+		phone = #{phone},
+		</if>
+		<if test="email != null">
+		email = #{email},
+		</if>
+		<if test="address != null">
+		address = #{address},
+		</if>
+		modifyDate = NOW()
+		WHERE id=#{id}
+	</update>
+</mapper>

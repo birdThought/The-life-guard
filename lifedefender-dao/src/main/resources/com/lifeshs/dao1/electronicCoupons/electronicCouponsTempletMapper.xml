@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lifeshs.dao1.electronicCoupons.ElectronicCouponsTempletDao">
+
+    <insert id="addTemplet" parameterType="com.lifeshs.po.electronicCoupons.ElectronicCouponsTempletPO">
+        INSERT INTO t_electronic_coupons_templet(name, price, orgId, serveCode, serveItemId, overdueModel, validDay, endDate, createDate, serveItemName, projectCode, projectName)
+        VALUES(#{name},#{price},#{orgId},#{serveCode},#{serveItemId},#{overdueModel},#{validDay},#{endDate},NOW(), #{serveItemName}, #{projectCode}, #{projectName})
+    </insert>
+
+    <update id="updateTemplet" parameterType="com.lifeshs.po.electronicCoupons.ElectronicCouponsTempletPO">
+        UPDATE t_electronic_coupons_templet
+        SET
+        <if test="name!=null">
+            name = #{name},
+        </if>
+        <if test="price!=null">
+            price = #{price},
+        </if>
+        <if test="orgId!=null">
+            orgId = #{orgId},
+        </if>
+        <if test="serveCode!=null">
+            serveCode = #{serveCode},
+        </if>
+        <if test="serveItemId!=null">
+            serveItemId = #{serveItemId},
+        </if>
+        <if test="overdueModel!=null">
+            overdueModel = #{overdueModel},
+        </if>
+        <if test="validDay!=null">
+            validDay = #{validDay},
+        </if>
+        <if test="deleted!=null">
+            deleted = #{deleted},
+        </if>
+        modifyDate = NOW()
+        WHERE id = #{id}
+    </update>
+
+    <select id="getTemplet" resultType="com.lifeshs.po.electronicCoupons.ElectronicCouponsTempletPO">
+        SELECT * FROM t_electronic_coupons_templet WHERE id=#{id}
+    </select>
+
+    <select id="countTempletWithCondition" resultType="java.lang.Integer">
+        SELECT COUNT(*) FROM t_electronic_coupons_templet WHERE deleted = FALSE
+    </select>
+
+    <select id="findTempletListWithCondition" resultMap="templetVO">
+        SELECT
+            t.id, t.name AS tName, t.price AS tPrice, t.orgId AS tOrgId, t.serveCode AS tServeCode,
+            t.serveItemId AS tServeItemId, t.projectCode AS tProjectCode, t.overdueModel AS tOverdueModel,
+            t.validDay AS tValidDay, t.endDate AS tEndDate, t.deleted AS tDeleted, t.createDate AS tCreateDate,
+            t.modifyDate AS tModifyDate, t.serveItemName AS tServeItemName, t.projectName AS tProjectName,
+            o.orgName AS oName
+        FROM t_electronic_coupons_templet t
+        LEFT JOIN t_org o ON o.id = t.orgId
+        WHERE
+            t.deleted = FALSE
+            <if test="orgId != null">
+                AND t.orgId = #{orgId}
+            </if>
+            <if test="projectCode != null">
+                AND t.projectCode = #{projectCode}
+            </if>
+            <if test="serveItemId != null">
+                AND t.serveItemId = #{serveItemId}
+            </if>
+        ORDER BY t.id DESC
+        <if test="startRow != null and pageSize != null">
+            LIMIT #{startRow}, #{pageSize}
+        </if>
+    </select>
+
+    <resultMap type="com.lifeshs.vo.electronicCoupons.CouponsTempletVO" id="templetVO">
+        <id property="id" column="tId"/>
+        <result property="name" column="tName"/>
+        <result property="price" column="tPrice"/>
+        <result property="orgId" column="tOrgId"/>
+        <result property="serveCode" column="tServeCode"/>
+        <result property="serveItemId" column="tServeItemId"/>
+        <result property="projectCode" column="tProjectCode"/>
+        <result property="overdueModel" column="tOverdueModel"/>
+        <result property="validDay" column="tValidDay"/>
+        <result property="endDate" column="tEndDate"/>
+        <result property="deleted" column="tDeleted"/>
+        <result property="createDate" column="tCreateDate"/>
+        <result property="modifyDate" column="tModifyDate"/>
+        <result property="orgName" column="oName"/>
+        <result property="projectName" column="tProjectName"/>
+        <result property="serveItemName" column="tServeItemName"/>
+    </resultMap>
+
+</mapper>

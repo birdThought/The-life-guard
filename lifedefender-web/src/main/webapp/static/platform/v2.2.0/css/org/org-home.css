@@ -1,0 +1,154 @@
+/*
+* @Author: Administrator
+* @Date:   2017-05-02 12:05:44
+* @Last Modified by:   Administrator
+* @Last Modified time: 2017-05-03 11:22:58
+*/
+.main-content .member-task li{
+	background-color:#fff;
+	width:49%; 
+	float: left;
+	height: 210px;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+.main-content .member-task li:first-child{
+	margin-right: 2%;
+}
+.main-content .member-task li dl{
+	font-size: 16px;
+}
+.main-content .member-task li dt{
+	color:#10bb71;
+}
+.main-content .member-task li dd.count{
+	font-size: 22px;
+	color:#ff3f36;
+}
+.main-content .member-task li dd.manage{
+	margin-top: 20px;
+}
+.main-content .member-task li dd em{
+	font-size: 28px;
+}
+.org-part2{
+	margin-top: 20px;
+	margin-bottom: 10px;
+}
+.org-part2 ul li:nth-of-type(1) span:hover {
+	border-bottom: 1px dashed #1acf73;
+}
+.org-part2 ul li:nth-of-type(2) span:hover {
+	border-bottom: 1px dashed #1acf73;
+}
+.org-part2 ul{
+	width: 272px;
+	float:left;
+}
+.org-part2 ul li{
+	background-color: #fff;
+	font-size:16px;
+	height: 142px;
+	margin-bottom: 12px;
+	text-align: center;
+}
+.org-part2 ul li span{
+	margin-top: 36px;
+	display: inline-block;
+	margin-bottom: 22px;
+}
+.org-part2 ul li p{
+	color:#ff5235;
+	font-size: 20px;
+}
+.org-part2 ul li p em{
+	font-size: 28px;
+}
+.org-part2 > div{
+	float: left;
+	margin-left: 20px;
+	width:700px;
+	height: 450px;
+}
+.org-part2 > div >div{
+	width:100%;
+	height: 100%;
+}
+.org-items-note,.spread-service{
+	background-color: #fff;
+}
+.org-title{
+	font-size: 18px;
+	padding-top:18px;
+	padding-bottom: 16px;
+	padding-right: 18px;
+	border-bottom: 1px solid #ddd;
+}
+.org-title h3{
+	padding-left: 8px;
+	margin-left: 20px;
+	border-left: 3px solid #3598dc;
+}
+.org-title a{
+	color:#3598dc;
+}
+.org-items-note ul{
+	padding:20px;
+	margin-bottom: 20px;
+}
+.note-bg{
+	width: 160px;
+	height: 136px;
+	text-align: center;
+	position: relative;
+	margin-right: 10px;
+}
+
+.note-bg span{
+	position: absolute;
+	left: 0;
+	bottom: 0;
+	height: 40px;
+	width: 100%;
+	font-size: 18px;
+	background-color:rgba(0,0,0,0.4);
+	text-align: center;
+	color:#fff;
+}
+.note-bg img{
+	width: 100%;
+	height: 100%;
+}
+.org-items-note ul dd{
+	width: 780px;
+	margin-bottom: 10px;
+}
+.org-items-note ul dd a,
+.spread-service-lists ul a{
+	display: inline-block;
+	width: 100%;
+	color:#666;
+	font-size: 18px;
+	text-overflow: ellipsis;
+	white-space:nowrap;
+	overflow: hidden;
+}
+.spread-service-lists {
+	padding:20px;
+}
+.spread-service-lists ul{
+	width:49%;
+}
+.spread-service-lists ul:first-child{
+	margin-left:2%;
+}
+.spread-service-lists ul li a:before{
+	content:"";
+	height: 4px;
+	width: 4px;
+	background-color: #63bb56; 
+	display: inline-block;;
+	vertical-align: middle;
+	margin-right: 10px;
+}

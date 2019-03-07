@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!-- 体检报告单独映射表 -->
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lifeshs.dao.record.IRecordDao" >
+	<select id="selectPhysicalsByUserId" parameterType="java.util.HashMap" resultType="java.util.HashMap">
+		Select p.id,
+			p.userId,
+			p.title,
+			p.physicalsOrg,
+			p.img1,
+			p.img2,
+			p.img3,
+			p.createDate,
+			p.description,
+			p.id,
+			p.physicalsDate
+		From 
+			t_record_physicals p
+		Where 
+			p.userId =#{userId}
+		Order By 
+			p.physicalsDate DESC
+	</select>
+	<select id="selectPhysicalsByUserIdPageSplit" parameterType="java.util.HashMap" resultType="java.util.HashMap">
+		Select p.id,
+			p.userId,
+			p.title,
+			p.physicalsOrg,
+			p.img1,
+			p.img2,
+			p.img3,
+			p.createDate,
+			p.description,
+			p.id,
+			p.physicalsDate
+		From 
+			t_record_physicals p
+		Where 
+			p.userId =#{userId}
+		Order By 
+			p.physicalsDate DESC, p.id DESC LIMIT #{startIndex},#{pageSize}
+	</select>
+	<select id="selectPhysicalsCountByUserId" parameterType="java.util.HashMap" resultType="java.lang.Integer">
+		Select Count(*) From t_record_physicals
+		Where userId =#{userId}
+	</select>
+	
+	<!-- 根据日期与用户ID获取体检报告信息 -->
+	<select id="selectPhysicalsByPhysicalsDateAndUserId" resultType="com.lifeshs.entity.record.TRecordPhysicals">
+		SELECT
+			p.id,
+			p.userId,
+			p.title,
+			p.physicalsOrg,
+			p.img1,
+			p.img2,
+			p.img3,
+			p.createDate,
+			p.description
+		FROM
+			t_record_physicals p
+		WHERE
+			p.physicalsDate = #{physicalsDate}
+		AND p.userId = #{userId};
+	</select>
+</mapper>

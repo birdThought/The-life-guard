@@ -1,0 +1,395 @@
+.message-left {
+    position: absolute;
+    height: 840px;
+    width: 30%;
+    background: #fff;
+    border-right: 1px solid #ddd;
+}
+
+.message-right {
+    position: relative;
+    height: 840px; 
+    width: 70%;
+    left: 30%;
+    background: #fff;
+}
+
+.message-left .search-container {
+    height: 60px;
+    border-bottom: 1px solid #eee;
+    padding-top: 15px;
+}
+
+.message-left .search-bg {
+    height: 40px;
+    background: url('../../../../static/images/search-bg.png') no-repeat;
+    margin: 0 10px;
+    line-height: 35px;
+}
+
+.message-left .search-bg:before {
+    content: "";
+    background: url('../../../../static/images/search.png') no-repeat;
+    display: inline-block;
+    width: 20px;
+    height: 40px;
+    margin-top: 10px;
+    margin-left: 12px;
+    position: absolute;
+}
+
+.message-left .search-bg input {
+    margin-left: 35px;
+    width: 80%;
+    border: none;
+    font-family: 'Microsoft YaHei';
+    background: #f1f1f2;
+    font-size: 15px;
+    outline: none;
+}
+
+.message-contact-list {
+    overflow-y: auto;
+}
+
+.message-contact-list .contact-other-contain {
+    height: 40px;
+    padding: 0 8px;
+    line-height: 40px;
+    position: relative;
+}
+
+.message-contact-list .contact-other-contain button {
+    border: none;
+    outline: none;
+    background: #fff;
+    font-size: 20px;
+    color: #9c9c9c;
+    cursor: pointer;
+}
+
+.message-contact-list .contact-other-contain span {
+    position: absolute;
+    right: 10px;
+    font-size: 16px;
+    color: #8c8c8c;
+}
+
+.message-contact-list .contact-item {
+    height: 80px;
+    padding: 5px 8px;
+    cursor: pointer;
+}
+
+.message-contact-list .contact-item:hover {
+    background: #f1f1f2;
+}
+
+.message-contact-list .contact-item-action {
+    background: #f1f1f2;
+}
+
+.message-contact-list .contact-item .contact-head {
+    border-radius: 50%;
+    width: 55px;
+    height: 55px;
+    margin-top: 7px;
+    position: absolute;
+}
+
+.message-contact-list .contact-item .contact-item-recent-msg {
+}
+
+
+.message-contact-list .contact-item .contact-item-right {
+    position: relative;
+    left: 62px;
+    width: 75%;
+    padding-top: 10px;
+}
+
+.message-contact-list .contact-item .contact-item-right .contact-item-nick {
+}
+
+.message-contact-list .contact-item .contact-item-right .contact-item-status {
+    background: #48c858;
+    text-align: center;
+    color: #fff;
+    border-radius: 3px;
+    font-size: 12px;
+    padding: 1px 8px;
+    margin-left: 5px;
+}
+
+.message-contact-list .contact-item .contact-item-right .contact-item-time {
+    font-size: 13px;
+    right: 0px;
+    position: absolute;
+    top: 13px;
+    color: #6c6c6c;
+}
+
+.message-contact-list .contact-item .contact-item-right p {
+    margin-top: 5px;
+    color: #6c6c6c;
+}
+
+.message-contact-list .contact-item .contact-item-right p .contact-item-unread {
+    display: inline-block;
+    background-color: red;
+    border-radius: 50%;
+    color: white;
+    width: 20px;
+    height: 20px;
+    position: absolute;
+    right: 0;
+    font-size: 13px;
+    line-height: 20px;
+    text-align: center;
+}
+
+.message-right .message-title {
+    font-size: 16px;
+    border-bottom: 1px solid #ddd;
+    height: 60px;
+    padding-left: 15px;
+    line-height: 60px;
+}
+
+.message-right .base-message-contain {
+    padding: 10px;
+    overflow-y: auto;
+    max-height: 720px;
+}
+
+.message-right .base-message-contain .base-message-item {
+    position: relative;
+    margin: 5px 0;
+}
+
+.message-right .base-message-contain .base-message-item .base-message-item-head {
+    position: absolute;
+    width: 13%;
+    min-height: 60px;
+    text-align: right;
+    padding-right: 8px;
+}
+
+.message-right .base-message-contain .base-message-item .base-message-item-head img {
+    border-radius: 50%;
+    width: 55px;
+    height: 55px;
+    margin-top: 7px;
+}
+
+.message-right .base-message-contain .base-message-item .base-message-item-notify {
+    position: relative;
+    width: 87%;
+    min-height: 60px;
+    left: 13%;
+    padding-top: 8px;
+}
+
+.message-right .base-message-contain .base-message-item .base-message-item-notify .base-message-item-notify-name {
+    font-size: 15px;
+}
+
+.message-right .base-message-contain .base-message-item .base-message-item-notify .base-message-item-notify-time {
+    margin-left: 10px;
+    color: #6c6c6c;
+}
+
+.message-right .base-message-contain .base-message-item .base-message-item-notify .base-message-item-notify-msg {
+    padding: 4px 8px;
+    background-color: #eee;
+    display: inline-block;
+    margin: 5px 0;
+    letter-spacing: 2px;
+    color: #6c6c6c;
+}
+
+.message-right .chat-msg-contain {
+    height: 550px;
+    border-bottom: 1px solid #ddd;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+.message-right .chat-msg-contain .chat-tips {
+    margin: 15px 50px;
+    background: #f1f1f1;
+    padding: 10px;
+    border: 1px solid #ddd;
+}
+
+.message-right .chat-msg-contain .chat-item {
+    padding: 10px 0;
+    margin: 5px 0;
+    position: relative;
+}
+
+.message-right .chat-msg-contain .chat-item .chat-left-head {
+    position: absolute;
+    width: 13%;
+    min-height: 60px;
+    text-align: right;
+    padding-right: 8px;
+}
+.message-right .chat-msg-contain .chat-item .chat-left-head img,.message-right .chat-msg-contain .chat-item .chat-right-head img{
+    border-radius: 50%;
+    width: 55px;
+    height:55px;
+
+}
+
+.message-right .chat-msg-contain .chat-item .chat-left-msg {
+    position: relative;
+    left: 14%;
+}
+
+.message-right .chat-msg-contain .chat-item .chat-left-msg-arrow {
+    min-width: 30px;
+    max-width: 80%;
+    min-height: 40px;
+    background: #f0f0f0;
+    border-radius: 5px;
+    display: inline-block;
+    padding: 8px;
+    color: #6c6c6c;
+    margin-top: 5px;
+    position: relative;
+    word-break: break-all;
+}
+
+.message-right .chat-msg-contain .chat-item .chat-left-msg-arrow:after {
+    content: "";
+    position: absolute;
+    top: 8px;
+    left: -14px;
+    width: 0;
+    height: 0;
+    font-size: 0;
+    border: solid 8px;
+    border-color: transparent #f0f0f0 transparent transparent;
+}
+
+.message-right .chat-msg-contain .chat-item .chat-right-head {
+    position: absolute;
+    width: 13%;
+    min-height: 60px;
+    text-align: left;
+    padding-right: 8px;
+    right: 0;
+}
+
+.message-right .chat-msg-contain .chat-item .chat-right-msg {
+    position: relative;
+    left: 5%;
+    text-align: right;
+}
+
+.message-right .chat-msg-contain .chat-item .chat-right-msg .chat-right-send-status {
+    display: inline-block;
+    width: 25px;
+    height: 25px;
+    margin-right: 18px;
+    margin-top: 2px;
+    border-radius: 50%;
+    position: relative;
+    right: 18%;
+}
+.message-right .chat-msg-contain .chat-item .chat-right-msg .chat-right-send-status img{
+    width: 23px
+}
+
+.message-right .chat-msg-contain .chat-item .chat-right-msg-arrow {
+    min-width: 30px;
+    max-width: 79%;
+    min-height: 40px;
+    background: #dcfbe6;
+    border-radius: 5px;
+    display: inline-block;
+    padding: 8px;
+    color: #6c6c6c;
+    margin-top: 5px;
+    position: relative;
+    right: 20%;
+    word-break: break-all;
+}
+
+.message-right .chat-msg-contain .chat-item .chat-right-msg-arrow:after {
+    content: "";
+    position: absolute;
+    top: 8px;
+    right: -14px;
+    width: 0;
+    height: 0;
+    font-size: 0;
+    border: solid 8px;
+    border-color: transparent transparent transparent #dcfbe6;
+}
+
+.message-right .chat-msg-contain .chat-item .chat-item-name-time {
+    font-size: 15px;
+}
+
+.message-right .chat-msg-contain .chat-item .chat-item-name-time span {
+    margin-left: 10px;
+    font-size: 14px;
+    color: #6c6c6c;
+}
+
+.message-right .chat-msg-contain .chat-item .chat-right-msg .chat-item-name-time {
+    text-align: right;
+    padding-right: 20%;
+}
+
+.chat-right-bottom {
+}
+
+.chat-text-inp {
+    width: 100%;
+    resize: none;
+    padding: 18px;
+    border: none;
+    outline: none;
+    font-size: 15px;
+    font-family: 'Microsoft YaHei';
+}
+
+.send-btn-contain {
+    text-align: right;
+    padding-right: 18px;
+    height: 50px;
+    padding-top: 5px;
+}
+
+.send-btn-contain button {
+    border: none;
+    outline: none;
+    cursor: pointer;
+}
+
+.send-btn-contain .send-btn {
+    font-family: 'Microsoft YaHei';
+    font-size: 15px;
+    color: #fff;
+    padding: 6px 22px;
+    border-radius: 3px;
+    background: #31d02a;
+    margin-left: 20px;
+}
+
+.send-btn-contain .send-btn:active {
+    background: #59bb46;
+}
+
+.search-contain-list {
+    background: rgba(0, 0, 0, 0.37);
+    z-index: 999;
+    height: 780px;
+    position: absolute;
+    width: 100%;
+    display: none;
+    overflow-y:auto
+}

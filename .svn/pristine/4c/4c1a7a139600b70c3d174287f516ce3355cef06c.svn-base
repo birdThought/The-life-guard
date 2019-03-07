@@ -1,0 +1,141 @@
+@charset "utf-8";
+
+header {
+    background-color: #44c660;
+    padding: .2rem .3rem;
+}
+header i {
+    float: left;
+    width: .18rem;
+    height: .32rem;
+    background-image: url(/static/images/publiclesson/back.png);
+    background-size: .18rem .32rem;
+    margin: .1rem;
+}
+header .container p {
+    text-align: center;
+    color: #fff;
+    font-size: .36rem;
+}
+.hot-video{
+	background:#b9bab4 url(/static/images/publiclesson/banner.png) no-repeat;
+	background-size:100% auto;
+	width: 100%;
+	height: 4.04rem;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	flex-direction: column;
+}
+.hot-video h3{
+	color: #fff;
+	font-weight: 500;
+	letter-spacing: .01rem;
+	font-size: .28rem;
+	font-family: Impact Regular;
+}
+.hot-video div{
+	background: #fff;
+	width: .6rem;
+	height: .06rem;
+	margin-top: .18rem;
+}
+.hot-video h1{
+	font-weight: 500;
+	color: #fff;
+	font-size: .36rem;
+	letter-spacing: .2rem;
+	margin-top:.3rem;
+}
+.hot-video .play{
+	margin-top: .26rem;
+	width: .9rem;
+	height: .9rem;
+	background: url(/static/images/publiclesson/play.png) no-repeat center;
+	background-size:100% auto;
+}
+.classes ul{
+	padding-top: .3rem;
+	background-color: #f5f5f5;
+}
+.classes ul li{
+	margin-bottom: .3rem;
+	background-color: #fff;	
+}
+.classes ul li > a{
+	display:flex;
+	justify-content:center;
+	align-items: center;
+	height:3.3rem;
+	background-image: url(/static/images/publiclesson/banner-1.png);
+	background-size: 100% auto;
+}
+.classes ul li:nth-of-type(2) > a{
+	background-image: url(/static/images/publiclesson/banner-2.png);
+}
+.classes ul li:nth-of-type(3) > a{
+	background-image: url(/static/images/publiclesson/banner-3.png);
+}
+.classes ul li:nth-of-type(4) > a{
+	background-image: url(/static/images/publiclesson/banner-4.png);
+}
+.classes ul li:nth-of-type(5) > a{
+	background-image: url(/static/images/publiclesson/banner-5.png);
+}
+.classes ul li > a .play{
+	width: .9rem;
+    height: .9rem;
+    background: url(/static/images/publiclesson/play.png) no-repeat center;
+    background-size: 100% auto;
+}
+.classes ul li p{
+	color:#333;
+	line-height: .8rem;
+	font-size: .28rem;
+	display:flex;
+	justify-content:space-between;
+	padding-left: .1rem;
+	padding-right: .2rem;
+}
+.classes ul li p .count{
+	font-size: .24rem;
+}
+.classes li dl{
+	width: 100%;
+	margin-left: .2rem;
+	padding-bottom: .2rem;
+}
+.classes li dl dt{
+	font-size: .28rem;
+	color:#333;
+}
+.classes li dl dd{
+	font-size: .24rem;
+	color: #666;
+	margin-top: .08rem;
+} 
+.classes li dl dd span:first-child:before{
+	content: "";
+	width: .2rem;
+	height: .24rem;
+	display: inline-block;
+	background-image:url(/static/images/publiclesson/paus.png); 
+	background-size: 100% auto;
+	margin-right: 6px;
+}
+.classes li dl dd span:last-child:before{
+	content: "";
+	width: .24rem;
+	height: .24rem;
+	display: inline-block;
+	background-image:url(/static/images/publiclesson/time.png); 
+	background-size: 100% auto;
+	margin-left:10px ;
+	margin-right: 6px;
+}
+
+@media screen and (max-width:420px) {
+	.classes ul li > a{
+		height:2.92rem !important;
+	}
+}

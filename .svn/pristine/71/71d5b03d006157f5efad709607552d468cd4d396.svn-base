@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!-- 血糖仪设备单独映射表 -->
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lifeshs.dao.device.IDeviceDao">
+
+    <sql id="selectGlucometerColumn">status,bloodSugar,bloodSugarArea,bloodSugarStatusDescription,measureType,measureDate
+    </sql>
+
+    <select id="selectGlucometerWithSplit" parameterType="java.util.HashMap"
+        resultType="java.util.HashMap">
+        SELECT
+        <include refid="selectGlucometerColumn" />
+        FROM t_measure_glucometer
+        <where>
+            userId = #{userId} AND deviceType LIKE CONCAT('%', #{deviceType},
+            '%')
+            <if test="measureType != null">
+                AND measureType = #{measureType}
+            </if>
+        </where>
+        ORDER BY measureDate DESC LIMIT #{start},#{pageSize}
+    </select>
+
+    <select id="selectGlucometerWithSpecialMonth" parameterType="java.util.HashMap"
+        resultType="java.util.HashMap">
+        SELECT
+        <include refid="selectGlucometerColumn" />
+        FROM t_measure_glucometer
+        <where>
+            userId = #{userId} AND deviceType LIKE CONCAT('%', #{deviceType},
+            '%')
+            <choose>
+                <when test="measureDate != null">
+                    AND DATE_FORMAT(measureDate, '%Y-%m') = #{measureDate}
+                </when>
+                <when test="measureType != null">
+                    AND measureType = #{measureType}
+                </when>
+            </choose>
+        </where>
+        ORDER BY measureDate DESC
+    </select>
+
+    <select id="selectGlucometerWithDay" parameterType="java.util.HashMap"
+        resultType="java.util.HashMap">
+        SELECT
+        <include refid="selectGlucometerColumn" />
+        FROM t_measure_glucometer
+        <where>
+            userId = #{userId} AND
+            DATE_SUB(CURDATE(), INTERVAL 0 DAY) &lt;= date(measureDate) AND
+            DATE_SUB(CURDATE(), INTERVAL 0 DAY) &gt;= date(measureDate) AND
+            deviceType LIKE CONCAT(#{deviceType}, '%')
+            <choose>
+                <when test='measureType !=null'>
+                    AND measureType = #{measureType}
+                </when>
+            </choose>
+        </where>
+        ORDER BY measureDate DESC
+    </select>
+
+    <select id="selectGlucometerWithWeek" parameterType="java.util.HashMap"
+        resultType="java.util.HashMap">
+        SELECT
+        <include refid="selectGlucometerColumn" />
+        FROM t_measure_glucometer
+        <where>
+            userId = #{userId} AND
+            DATE_SUB(CURDATE(), INTERVAL 1 WEEK) &lt; date(measureDate) AND
+            DATE_SUB(CURDATE(), INTERVAL 0 WEEK) &gt;= date(measureDate) AND
+            deviceType LIKE CONCAT(#{deviceType}, '%')
+            <choose>
+                <when test='measureType !=null'>
+                    AND measureType = #{measureType}
+                </when>
+            </choose>
+        </where>
+        ORDER BY measureDate DESC
+    </select>
+
+    <select id="selectGlucometerWithMonth" parameterType="java.util.HashMap"
+        resultType="java.util.HashMap">
+        SELECT
+        <include refid="selectGlucometerColumn" />
+        FROM t_measure_glucometer
+        <where>
+            userId = #{userId} AND
+            DATE_SUB(CURDATE(), INTERVAL 1 MONTH) &lt; date(measureDate) AND
+            DATE_SUB(CURDATE(), INTERVAL 0 MONTH) &gt;= date(measureDate) AND
+            deviceType LIKE CONCAT(#{deviceType}, '%')
+            <choose>
+                <when test='measureType !=null'>
+                    AND measureType = #{measureType}
+                </when>
+            </choose>
+        </where>
+        ORDER BY measureDate DESC
+    </select>
+
+    <select id="selectGlucometerWithThreeMonth" parameterType="java.util.HashMap"
+        resultType="java.util.HashMap">
+        SELECT
+        <include refid="selectGlucometerColumn" />
+        FROM t_measure_glucometer
+        <where>
+            userId = #{userId} AND
+            DATE_SUB(CURDATE(), INTERVAL 3 MONTH) &lt; date(measureDate) AND
+            DATE_SUB(CURDATE(), INTERVAL 0 MONTH) &gt;= date(measureDate) AND
+            deviceType LIKE CONCAT(#{deviceType}, '%')
+            <choose>
+                <when test='measureType !=null'>
+                    AND measureType = #{measureType}
+                </when>
+            </choose>
+        </where>
+        ORDER BY measureDate DESC
+    </select>
+
+    <!-- 查询健康标准值 -->
+    <!-- sex : 0代表餐后 1代表餐前 -->
+    <select id="selectHealthStandardValueByGlucometer" resultType="java.util.HashMap">
+        Select healthType,sex,min,max
+        From t_data_health_standard_value t
+        <where>
+            t.healthType = '血糖'
+        </where>
+    </select>
+
+</mapper>

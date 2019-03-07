@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lifeshs.dao.shop.goods.ShopLabelDao">
+	<resultMap type="com.lifeshs.shop.LabelDTO" id="LabelDTO">
+		<id column="id" property="id" />
+		<result column="labelName" property="labelName" />
+		<result column="sort" property="sort" />
+	</resultMap>
+	
+	<select id="findAllLabel" resultMap="LabelDTO">
+		select id,labelName,sort
+		from t_shop_label
+	</select>
+</mapper>

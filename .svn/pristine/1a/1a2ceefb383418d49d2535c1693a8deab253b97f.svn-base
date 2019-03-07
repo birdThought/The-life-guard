@@ -1,0 +1,80 @@
+#SESSION
+sessionVersion=sessionVersion
+#
+#
+#
+randCodeLength=4
+#
+randCodeType=5
+
+#
+#mail.serverHost = smtp.126.com
+#mail.serverPort = 25
+#mail.validate = true
+#mail.userName = mdsh920@126.com
+#
+#mail.password =
+#mail.fromAddress = mdsh920@126.com
+
+mail.serverHost = smtp.qq.com
+mail.serverPort = 587
+mail.validate = true
+mail.userName = 
+mail.password = 
+mail.fromAddress = 
+
+#
+sms.org.unmber = 215462
+sms.user = admin
+sms.password = tz1234567
+
+#
+#baidu.ak = Ojjn6VINPSbLT1T87zwGsyiB
+#baidu.ak = i7QOOG81qeyTB5QvRmwqnipj
+baidu.ak = D2b4558ebed15e52558c6a766c35ee73
+
+# Hao Service
+haosercice.key = 2f54c60ef7284eb9829582c21c1f62df
+#
+# 4f1505cda79646beaf1d17a745056042
+
+#Mina
+mina.port = :8301
+mina.port.hl = :8302
+#
+mina.bothIdleTime = 900
+mina.reuseAddress = true
+mina.receiveBufferSize = 5242880
+mina.readBufferSize = 5242880
+mina.soLinger = 0
+
+#ProjectName
+project.name = lifeshs.web
+
+pay.android.appId = 2016012001107639
+pay.android.pId = 2088901849463260
+#pay.android.targetId = MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDJpz4CVCKjEIQ6ZbO+pFIBmBc54vCfWAmRxNr7+Pu3NZUPBJcw16s5SVm+RZkmpzR0KZZrkFpEDAnU7K5KB+FWAK1a/HK8ngH0Jb22oGszEOgD2bABirxHVwitfMJWp0psjwRnKFjfb7GsdeI5pl8OErKJH9/0ETddxGasR0ZBDwIDAQAB
+pay.android.publicKey = MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDDI6d306Q8fIfCOaTXyiUeJHkrIvYISRcc73s3vF1ZT7XN8RNPwJxo8pWaJMmvyTn9N4HQ632qJBVHf8sxHi/fEsraprwCtzvzQETrNRwVxLO5jVmRGi60j8Ue1efIlzPXV9je9mkjzOmdssymZkh2QhUrCmZYI/FCEa3/cNMW0QIDAQAB
+pay.android.rsaPrivate = MIICdgIBADANBgkqhkiG9w0BAQEFAASCAmAwggJcAgEAAoGBAK8IwS5nPD/QVUuNqtMAKgWD4Nb+Cjlq09lESqbH17z/bw7Od6GBXHgcIRfZWEh98qcZANPsPSnwT5GU9bKq0P6rgfXgp7Q/33s0xWNsPyPDkid2QdU3oZRYlCbT2J2+d7+wUhKvL1RYMfNcIhKS0MvJUQcQ8X/VliDOBQ9UJyhtAgMBAAECgYEArqpm1J6SYf/Mzhtt5ydXx68llIVnwIpZI4vhjvMH14Ny2OyyNsm3c+hmIb1zOsvsdFEgIVqyYoJ7dISYdpW8/W+6H0Xjy3ftT7fMwY1Vdq261tUXXGY7K03/aIz7SOpYuiemLej19Ojbb6kc1/4eGfScHUvfrfedcDMRF+Dj8MUCQQDWCT3rHngzYFwq0ieso0N5ie7dOznrfDCfk8sH5p8ruB4cmr7jzN/xv5+nmYRMVTWbJyBa/9DXItd4BPIq+5TzAkEA0Vn0fuuwYQeUa6gMKQ1J+GUDscipqD0a4Nn4tIagN584uzsjxov/wzagPPENF2NKGr1vwkxRqDS6Cs+VPnMlHwJAAR7FQzDCokoz0UmOSZoFJWKybFf+ApyAyKUGYAE1/g2VosKwkxKkbWh6Vm84QQoFIM3AnplOJ4IYLJmiBtWQPwJAMNRgeLIUg6026x1ZKMIWvL8i63a4S6tk94kfv0ufVxnmK5WRtJ+22huFqHE48nmQMUh6JsGSUj9qHVdpohVNVQJAJo0Yq7vcfmiuKL3RPqlVMDYLKxqAav6T8aevaOaEcHG23xs8mzSV6xtCvvyzWDKcejIAPYuLHkavOGczNafyVg==
+
+#微信key
+weixin.appId = wx41788e1c7590fd26
+weixin.secret = 67b0f497f5dc300d5cc4318a270fa519
+weixin.grantType = authorization_code
+
+#QQ key
+qq.appId = 101395798
+qq.secret = e4e70d80118250a0f7dc9fd3b74155eb
+qq.grant_type = authorization_code
+#qq.redirect_uri = http://test.lifeshs.com/oauthLoginControl.do?qq
+qq.redirect_uri = http://www.lifekeepers.cn/oauthLoginControl.do?qq
+
+#umeng data
+umeng.app.android.key = 58f7288e65b6d6305f001094
+umeng.app.android.masterSecret = fgofh9zuxsqxnbm1ezsbamcxdlglbsp3
+umeng.app.ios.key = 58c90ccd6e27a426c200064c
+umeng.app.ios.masterSecret = yb1zcx0pyieefunql4gbzqkqttsyfeza
+umeng.mapp.android.key = 595b7af3677baa520700091f
+umeng.mapp.android.masterSecret = go3yo1emetxzv5yyxjtmpcithzwhsbsr
+umeng.mapp.ios.key = 593923c1310c9350e2000b5c
+umeng.mapp.ios.masterSecret = 3keiirpcunay8ufur8dlo4ndkaaudicy

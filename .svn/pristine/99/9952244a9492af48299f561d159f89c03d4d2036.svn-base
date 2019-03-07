@@ -1,0 +1,77 @@
+em{
+  font-style: normal;
+}
+#tags
+{
+    width: 406px;
+    color: #777;
+}
+
+#tags span{
+    font-size: 12px;
+    font-weight: normal;
+    line-height: 18px;
+    position: relative;
+    display: inline-block;
+    height: 20px;
+    margin-right: 3px;
+    margin-bottom: 3px;
+    padding: 4px 15px 2px 4px;
+    cursor: pointer;
+    transition: all .2s ease 0s;
+    vertical-align: baseline;
+    white-space: nowrap;
+    color: #fff;
+    background-color: #409eff;
+    bottom: -33px;
+}
+#tags .close{
+    font-size: 12px;
+    font-weight: bold;
+    line-height: 20px;
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    float: none;
+    width: 18px;
+    padding: 0;
+    cursor: pointer;
+    text-align: center;
+    opacity: 1;
+    color: #fff;
+    border: 0 none;
+    background: transparent none repeat scroll 0 0;
+    text-shadow: none;
+}
+#tags .close:hover{
+  background: #ffb800;
+}
+#inputTags[type='text'],
+#inputTags[type='text']:focus{
+    line-height: 25px;
+    display: inline;
+    width: 190px;
+    margin: 0;
+    padding: 0 6px;
+    box-shadow: none;
+    position: absolute;
+    left: 0;
+}
+
+.albtn{
+    line-height: 30px;
+    display: block;
+    width: 100px;
+    height: 30px;
+    margin: 0 auto;
+    cursor: pointer;
+    text-align: center;
+    color: #fff;
+    background: #ffb800;
+}
+#multi_name label {
+    width: 40px;
+    padding: 6px 0;
+    text-align: left;
+}

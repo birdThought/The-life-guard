@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lifeshs.dao.shop.ShopOrderDao">
+	<select id="getOrderList" parameterType="map" resultType="map">
+		SELECT 
+		d.`id`,d.`orderNo`,o.`createTime`,o.`userId`,u.`userName`,u.`mobile`
+		,d.`shopName`,d.`goodsId`,d.`status`,d.`goodsName`
+		,d.`amount`,d.`discount_amount` AS discountAmount
+		,d.`num`,d.shippingNo,d.`price`
+		FROM t_user u
+		INNER JOIN t_shop_order o ON o.`userId`=u.`id`
+		INNER JOIN t_shop_order_decompose d ON d.`orderNo`=o.`orderNo`
+		<where>
+			<if test="orderNo != null and '' neq orderNo">AND o.`orderNo`=#{orderNo}</if>
+			<if test="shopId != null">AND d.`shopId`=#{shopId}</if>
+			<if test="status != null">AND d.`status`=#{status}</if>
+			<if test="mobile != null and '' neq mobile">AND u.`mobile` LIKE CONCAT('%',#{mobile},'%')</if>
+			<if test="userName != null and '' neq userName">AND u.`userName` LIKE CONCAT('%',#{userName},'%')</if>
+			<if test="shopName != null and '' neq shopName">AND d.`shopName` LIKE CONCAT('%',#{shopName},'%')</if>
+		</where>
+		order by o.id desc
+		limit #{startRow},#{pageSize}
+	</select>
+	
+	<select id="getTotalOfOrders" parameterType="map" resultType="int">
+		SELECT 
+		COUNT(1)
+		FROM t_user u
+		INNER JOIN t_shop_order o ON o.`userId`=u.`id`
+		INNER JOIN t_shop_order_decompose d ON d.`orderNo`=o.`orderNo`
+		<where>
+			<if test="orderNo != null and '' neq orderNo">AND o.`orderNo`=#{orderNo}</if>
+			<if test="shopId != null">AND d.`shopId`=#{shopId}</if>
+			<if test="status != null">AND d.`status`=#{status}</if>
+			<if test="mobile != null and '' neq mobile">AND u.`mobile` LIKE CONCAT('%',#{mobile},'%')</if>
+			<if test="userName != null and '' neq userName">AND u.`userName` LIKE CONCAT('%',#{userName},'%')</if>
+			<if test="shopName != null and '' neq shopName">AND d.`shopName` LIKE CONCAT('%',#{shopName},'%')</if>
+		</where>
+	</select>
+</mapper>

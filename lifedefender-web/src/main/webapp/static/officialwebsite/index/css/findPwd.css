@@ -1,0 +1,143 @@
+/*
+* @Author: Administrator
+* @Date:   2017-03-15 10:06:25
+* @Last Modified by:   Administrator
+* @Last Modified time: 2017-03-15 16:45:48
+*/
+.item-content{
+	margin-top:0;
+	margin-bottom: 0;
+	position: relative;
+	background: url(../../../images/PC.jpg) no-repeat ;
+	background-size: 100% 100%;
+	min-height: 500px;
+	padding: 140px;
+}
+.findPwd{
+	background-color:#fff;
+	width: 480px;
+	margin: 0 auto;
+    padding-bottom: 10px;
+    border-radius: 5px;
+    box-shadow: 1px 2px 5px #ccc;
+    padding-left: 30px;
+    padding-right: 30px;
+   
+}
+.findPwd_title{
+	text-indent: 2em;
+    background-color: #f0f0f0;
+    margin-left: -30px;
+    margin-right: -30px;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+    
+}
+.findPwd_title h3{
+	margin-top: 0;
+    margin-bottom: 0;
+    line-height: 50px;
+}
+.liucheng {
+    position: relative;
+    padding: 20px 0 8px;
+    color: #6c6c6c;
+}
+.liucheng .line {
+    display: inline-block;
+    height: 10px;
+    background-color: #e2e2e2;
+    position: absolute;
+    width: 70%;
+    left: 65px;
+    top: 50px;
+}
+.liucheng .buzhou {
+    position: relative;
+    display: inline-block;
+    width: 30%;
+    height: 100%;
+    text-align: center;
+    z-index: 9;
+    line-height: 40px;
+}
+.findpwd_form li{
+	margin-bottom: 15px;
+}
+.findpwd_form li input{
+	border: 1px solid #ddd;
+	padding: 0 10px;
+    outline-color: #48c858;
+    height: 40px;
+    border-radius: 5px;
+}
+.findpwd_form li.infor input,
+.findpwd_form li input[type=submit]{
+	width: 100%;
+}
+.findpwd_form li.code input[type=text]{
+	width: 55%;
+}
+.findpwd_form li.code input[type=button]{
+	width: 44%;
+}
+.findpwd_form li input[type=submit],
+.findpwd_form li input[type=button]{
+	font-size: 16px;
+	color: #fff;
+	background-color: #48c858;
+}
+/* step_2 */
+/* 密码强度 */
+.psw_strenth {
+    text-align: right;
+    padding-right: 10%;
+}
+.psw_strenth div {
+    width: 70px;
+    height: 10px;
+    margin-right: 8px;
+    background-color: #ddd;
+    display: inline-block;
+}
+
+/* step_3 */
+.findpwd_form ul li.setFlex img{
+	width: 40px;
+}
+.setFlex{
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	min-height: 60px;
+}
+.setFlex div{
+	padding-right: 15px;
+}
+@media (min-width: 320px) and (max-width: 480px){
+	.findPwd{
+		width:280px;
+	}
+	.findpwd_form li input{
+		 height: 30px;
+	}
+	.findpwd_form li.code input[type=text]{
+		width: 53%;
+	}
+	.liucheng .line{
+		left: 30px;
+    	top: 40px;
+    	height: 6px;
+	}
+	.findPwd .buzhou img{
+		width: 40px;
+		height: auto;
+	}
+	.psw_strenth div {
+	    width: 30px;
+	    height: 6px;
+	}
+}
+label.error {
+	color: red;
+}

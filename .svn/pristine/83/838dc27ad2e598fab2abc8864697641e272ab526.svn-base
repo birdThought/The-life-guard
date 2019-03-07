@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lifeshs.dao1.order.IOrderRefundDao" >
+  <resultMap id="BaseResultMap" type="com.lifeshs.po.OrderRefundPO" >
+    <constructor >
+      <idArg column="id" jdbcType="INTEGER" javaType="java.lang.Integer" />
+      <arg column="orderNumber" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="outRequestNo" jdbcType="VARCHAR" javaType="java.lang.String"/>
+      <arg column="cause" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="refundTime" jdbcType="TIMESTAMP" javaType="java.util.Date" />
+      <arg column="status" jdbcType="TINYINT" javaType="java.lang.Byte" />
+      <arg column="auditorId" jdbcType="INTEGER" javaType="java.lang.Integer" />
+      <arg column="auditorTime" jdbcType="TIMESTAMP" javaType="java.util.Date" />
+      <arg column="completeTime" jdbcType="TIMESTAMP" javaType="java.util.Date" />
+    </constructor>
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, orderNumber, outRequestNo, cause, refundTime, status, auditorId, auditorTime, completeTime
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_order_refund
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from t_order_refund
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.lifeshs.po.OrderRefundPO" >
+    insert into t_order_refund (id, orderNumber, outRequestNo,cause,
+      refundTime, status, auditorId, 
+      auditorTime, completeTime)
+    values (#{id,jdbcType=INTEGER}, #{orderNumber,jdbcType=VARCHAR}, #{cause,jdbcType=VARCHAR}, 
+      #{refundTime,jdbcType=TIMESTAMP}, #{status,jdbcType=TINYINT}, #{auditorId,jdbcType=INTEGER}, 
+      #{auditorTime,jdbcType=TIMESTAMP}, #{completeTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.lifeshs.po.OrderRefundPO" >
+    insert into t_order_refund
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="orderNumber != null" >
+        orderNumber,
+      </if>
+      <if test="outRequestNo != null" >
+        outRequestNo,
+      </if>
+      <if test="cause != null" >
+        cause,
+      </if>
+      <if test="refundTime != null" >
+        refundTime,
+      </if>
+      <if test="status != null" >
+        status,
+      </if>
+      <if test="auditorId != null" >
+        auditorId,
+      </if>
+      <if test="auditorTime != null" >
+        auditorTime,
+      </if>
+      <if test="completeTime != null" >
+        completeTime,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="orderNumber != null" >
+        #{orderNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="outRequestNo != null">
+        #{outRequestNo,jdbcType=VARCHAR},
+      </if>
+      <if test="cause != null" >
+        #{cause,jdbcType=VARCHAR},
+      </if>
+      <if test="refundTime != null" >
+        #{refundTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=TINYINT},
+      </if>
+      <if test="auditorId != null" >
+        #{auditorId,jdbcType=INTEGER},
+      </if>
+      <if test="auditorTime != null" >
+        #{auditorTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="completeTime != null" >
+        #{completeTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.lifeshs.po.OrderRefundPO" >
+    update t_order_refund
+    <set >
+      <if test="orderNumber != null" >
+        orderNumber = #{orderNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="outRequestNo !=null">
+        outRequestNo = #{outRequestNo,jdbcType=VARCHAR},
+      </if>
+      <if test="cause != null" >
+        cause = #{cause,jdbcType=VARCHAR},
+      </if>
+      <if test="refundTime != null" >
+        refundTime = #{refundTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=TINYINT},
+      </if>
+      <if test="auditorId != null" >
+        auditorId = #{auditorId,jdbcType=INTEGER},
+      </if>
+      <if test="auditorTime != null" >
+        auditorTime = #{auditorTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="completeTime != null" >
+        completeTime = #{completeTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.lifeshs.po.OrderRefundPO" >
+    update t_order_refund
+    set orderNumber = #{orderNumber,jdbcType=VARCHAR},
+      outRequestNo = #{outRequestNo,jdbcType=VARCHAR},
+      cause = #{cause,jdbcType=VARCHAR},
+      refundTime = #{refundTime,jdbcType=TIMESTAMP},
+      status = #{status,jdbcType=TINYINT},
+      auditorId = #{auditorId,jdbcType=INTEGER},
+      auditorTime = #{auditorTime,jdbcType=TIMESTAMP},
+      completeTime = #{completeTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+
+  <!--以下为手写-->
+  <select id="getOrderRefundPOByOrderNumber" parameterType="string" resultMap="BaseResultMap">
+    SELECT <include refid="Base_Column_List"/>
+    FROM t_order_refund
+    WHERE orderNumber = #{orderNumber}
+  </select>
+
+
+</mapper>

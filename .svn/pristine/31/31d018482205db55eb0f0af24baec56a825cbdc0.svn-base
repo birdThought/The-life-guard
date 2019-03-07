@@ -1,0 +1,221 @@
+#recent_chat {
+    text-align: center;
+    color: #fff;
+    cursor: pointer;
+    background-color: #0093ff;
+    width: 50px;
+    height: 50px;
+    line-height: 50px;
+    border-radius: 50%;
+    position: fixed;
+    right: 15px;
+    bottom: 15px
+}
+
+.chat_container {
+    background: #fff;
+    width: 900px;
+    height: 700px;
+    margin: 0 auto;
+    box-shadow: 0px -1px 25px #fff;
+    position: relative;
+    z-index: 999999999;
+}
+
+.chat-left-contain {
+    position: absolute;
+    height: 700px;
+    background: #1f3144;
+    width: 200px;
+    overflow-y: auto;
+}
+
+.chat-right-contain {
+    position: relative;
+    left: 200px;
+    width: 700px;
+}
+
+.chat-right-contain .contact-title {
+    text-align: center;
+    border-bottom: 1px solid #ddd;
+    padding: 10px 0;
+    font-size: 16px;
+}
+
+.chat-right-contain .chat-msg-contain {
+    height: 430px;
+    overflow-y: auto;
+}
+
+.chat-right-contain .chat-right-bottom {
+    border-top: 1px solid #ddd;
+}
+
+.chat-right-contain .chat-tools-contain {
+    height: 50px;
+    line-height: 50px;
+    background-color: #eee;
+    padding: 0 13px
+}
+
+.chat-right-contain .chat-tools-contain .chat-tools-item {
+    cursor: pointer
+}
+
+.chat-right-contain .chat-text-inp {
+    width: 100%;
+    resize: none;
+    padding: 8px;
+    border: none;
+    outline: none;
+    font-size: 15px;
+}
+
+.chat-right-contain .send-btn-contain {
+    text-align: right;
+    padding-right: 15px;
+    height: 50px;
+    line-height: 50px;
+}
+
+.chat-right-contain .send-btn-contain button {
+    border: none;
+    font-family: "Microsoft YaHei";
+    outline: none;
+    padding: 6px 25px;
+    border-radius: 3px;
+    color: #fff;
+    background: #31d02a;
+    cursor: pointer;
+}
+
+.chat-right-contain .send-btn-contain button:active {
+    background: #59bb46;
+}
+
+.chat-item {
+    padding: 15px 8px;
+    position: relative;
+}
+
+.chat-item .timeline {
+    text-align: center;
+    margin-bottom: 12px;
+}
+
+.chat-item .timeline span {
+    padding: 5px 15px;
+    background: #eee;
+    border-radius: 3px;
+}
+
+.chat-right-item {
+    text-align: right;
+}
+
+.chat-left-item {
+    text-align: left;
+}
+
+.chat-item .chat-head {
+    width: 50px;
+    height: 50px;
+    background: #ddd;
+    position: absolute;
+}
+
+.chat-item .chat-status {
+    width: 25px;
+    height: 25px;
+    position: relative;
+    right: 83px;
+    outline: none;
+    border: none;
+    background: transparent;
+}
+.chat-item .chat-status img{
+    width:23px;
+}
+
+.chat-left-item .chat-left-head {
+    left: 10px;
+}
+
+.chat-right-item .chat-right-head {
+    right: 20px;
+}
+
+.chat-item-left-arrow {
+    position: relative;
+    min-width: 30px;
+    max-width: 580px;
+    min-height: 40px;
+    background: #F8C301;
+    border-radius: 5px;
+    display: inline-block;
+    padding: 13px 8px;
+    left: 70px;
+    word-break: break-all;
+}
+
+.chat-item-left-arrow:after {
+    content: "";
+    position: absolute;
+    top: 13px;
+    left: -16px;
+    width: 0;
+    height: 0;
+    font-size: 0;
+    border: solid 8px;
+    border-color: #fff #F8C301 #fff #fff;
+}
+
+.chat-item-right-arrow {
+    position: relative;
+    min-width: 30px;
+    max-width: 580px;
+    min-height: 40px;
+    background: #48c858;
+    border-radius: 5px;
+    display: inline-block;
+    padding: 13px 8px;
+    right: 80px;
+    border: 1px solid #ddd;
+    word-break: break-all;
+}
+
+.chat-item-right-arrow:after {
+    content: "";
+    position: absolute;
+    top: 13px;
+    right: -16px;
+    width: 0;
+    height: 0;
+    font-size: 0;
+    border: solid 8px;
+    border-color: #fff #fff #fff #48c858;
+}
+
+.chat-left-contain .chat-contacts-item {
+    background: #235a82;
+    text-align: center;
+    font-size: 18px;
+    padding: 10px 0;
+    color: #fff;
+    cursor: pointer;
+}
+
+.chat-left-contain .chat-contacts-item span {
+    border-radius: 50%;
+    background-color: red;
+    color: #fff;
+    width: 25px;
+    height: 25px;
+    display: inline-block;
+}
+
+.chat-left-contain .chat-action {
+    color: #000;
+    background: #fff;
+}

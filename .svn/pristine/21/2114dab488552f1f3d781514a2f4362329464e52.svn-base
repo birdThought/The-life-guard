@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lifeshs.dao.device.IDeviceDao" >
+
+<select id="selectBandWithSplit" parameterType="java.util.HashMap" resultType="java.util.HashMap">
+SELECT date,steps,mileage,kcal,sleepDuration,shallowDuration,deepDuration,wakeupDuration FROM t_sport_band WHERE 
+userId = ${userId} AND
+deviceType LIKE '%${deviceType}%' 
+ORDER BY date DESC LIMIT ${start},${pageSize}
+</select>
+
+<select id="selectBandWithDay" parameterType="java.util.HashMap" resultType="java.util.HashMap">
+SELECT date,steps,mileage,kcal,sleepDuration,shallowDuration,deepDuration,wakeupDuration FROM t_sport_band
+<where>
+    userId = ${userId} AND deviceType LIKE '%${deviceType}%' AND
+    <choose>
+        <when test = "date == null">
+        DATE_SUB(CURDATE(), INTERVAL 0 DAY) &lt;= date(date) AND
+        DATE_SUB(CURDATE(), INTERVAL 0 DAY) &gt;= date(date)
+        ORDER BY date DESC
+        </when>
+        <otherwise>
+        date = #{date}
+        </otherwise>
+    </choose>
+</where>
+
+</select>
+
+<select id="selectBandWithWeek" parameterType="java.util.HashMap" resultType="java.util.HashMap">
+SELECT date,steps,mileage,kcal,sleepDuration,shallowDuration,deepDuration,wakeupDuration FROM t_sport_band WHERE 
+userId = ${userId} AND
+DATE_SUB(CURDATE(), INTERVAL 1 WEEK) &lt; date(date) AND
+DATE_SUB(CURDATE(), INTERVAL 0 WEEK) &gt;= date(date) AND
+deviceType LIKE '%${deviceType}%'
+ORDER BY date DESC
+</select>
+
+<select id="selectBandWithMonth" parameterType="java.util.HashMap" resultType="java.util.HashMap">
+SELECT date,steps,mileage,kcal,sleepDuration,shallowDuration,deepDuration,wakeupDuration FROM t_sport_band WHERE
+userId = ${userId} AND
+DATE_SUB(CURDATE(), INTERVAL 1 MONTH) &lt; date(date) AND
+DATE_SUB(CURDATE(), INTERVAL 0 MONTH) &gt;= date(date) AND
+deviceType LIKE '%${deviceType}%'
+ORDER BY date DESC
+</select>
+
+<select id="selectBandWithThreeMonth" parameterType="java.util.HashMap" resultType="java.util.HashMap">
+SELECT date,steps,mileage,kcal,sleepDuration,shallowDuration,deepDuration,wakeupDuration FROM t_sport_band WHERE 
+userId = ${userId} AND
+DATE_SUB(CURDATE(), INTERVAL 3 MONTH) &lt; date(date) AND
+DATE_SUB(CURDATE(), INTERVAL 0 MONTH) &gt;= date(date) AND
+deviceType LIKE '%${deviceType}%'
+ORDER BY date DESC
+</select>
+
+<select id="selectLatestBandWithDate" resultType="java.util.HashMap">
+    SELECT date,steps,mileage,kcal,shallowDuration,deepDuration,wakeupDuration FROM t_sport_band
+        WHERE userId = #{userId}
+            /*AND DATE_FORMAT(date, '%Y-%m-%d') = #{date}*/
+            AND (deviceType LIKE #{terminalType} OR deviceType = 'Browser')
+        ORDER BY date DESC LIMIT 1
+</select>
+
+<select id="selectLatestBand" resultType="java.util.HashMap">
+    SELECT date,steps,mileage,kcal,shallowDuration,deepDuration,wakeupDuration FROM t_sport_band
+    WHERE userId = #{userId}
+    AND (deviceType LIKE #{terminalType} OR deviceType = 'Browser')
+    ORDER BY date DESC LIMIT 1
+</select>
+
+<select id="selectBandWithDate" resultType="com.lifeshs.entity.device.TSportBand">
+    SELECT * FROM t_sport_band WHERE userId = #{userId} AND DATE_FORMAT(date, '%Y-%m-%d') = #{date} ORDER BY id DESC LIMIT 1
+</select>
+
+</mapper>

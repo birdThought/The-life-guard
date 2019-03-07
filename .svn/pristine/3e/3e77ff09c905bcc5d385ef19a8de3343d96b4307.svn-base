@@ -1,0 +1,4 @@
+"use strict";
+// export const ApiDomain ="http://localhost:8011";
+exports.ApiDomain = "http://opent.lifekeepers.cn";
+//# sourceMappingURL=app-config.js.map

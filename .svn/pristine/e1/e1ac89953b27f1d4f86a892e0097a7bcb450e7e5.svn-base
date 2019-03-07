@@ -1,0 +1,286 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lifeshs.dao1.drugs.DrugsDao">
+
+    <!-- 应用端 -->
+	<!--统计药品数量 -->
+	<select id="countLocalDrugs" resultType="java.lang.Integer">
+		SELECT COUNT(1) FROM 
+		t_drugs 
+		WHERE 1=1 
+        <if test="productName != null">
+            and productName like CONCAT('%', #{productName}, '%') 
+        </if>
+        <if test="productAttribute != null">
+            and productAttribute = #{productAttribute} 
+        </if>
+        <if test="prescriptionType != null">
+            and prescriptionType = #{prescriptionType}
+        </if>
+	</select>
+	
+    
+    
+    <!-- 管理端 -->
+	<!-- 获取药品列表 -->
+	<select id="listLocalDrugs" resultType="com.lifeshs.po.drugs.DrugsPO">
+		<include refid="select_drudg_data"></include>
+        <if test="productName != null">
+            and productName like CONCAT('%', #{productName}, '%') 
+        </if>
+        <if test="productAttribute != null">
+            and productAttribute = #{productAttribute} 
+        </if>
+        <if test="prescriptionType != null">
+            and prescriptionType = #{prescriptionType}
+        </if>
+		LIMIT #{startRow},#{pageSize}
+	</select>
+    
+    
+    <!-- 根据code获取药品 -->
+    <select id="getDrugsByCode" resultType="com.lifeshs.po.drugs.DrugsPO">
+        select id,productCode,productName from t_drugs 
+        where productCode = #{productCode}
+    </select>
+    
+    
+    
+    
+    <!-- 获取药品分类 -->
+    <select id="findDrusType" resultType="com.lifeshs.po.drugs.DrugsTypePO">
+       select d.firstClassName,d.secondClassName,d.thirdClassName from t_drugs d where 1=1 
+        group by d.firstClassName,d.secondClassName,d.thirdClassName 
+        order by d.firstClassName,d.secondClassName,d.thirdClassName 
+    </select>
+
+
+
+    <!-- 应用端 -->
+    <!-- 添加订单 -->
+    <insert id="addLocalOrder" parameterType="com.lifeshs.po.drugs.OrderPO">
+        <selectKey resultType="java.lang.Integer" order="AFTER" keyProperty="id">
+            SELECT LAST_INSERT_ID() AS ID 
+        </selectKey>
+        INSERT INTO `t_drugs_order` (`orderNo`,`userId`,`consignee`,`mobilephone`,`town`,`address`,`money`,`physCode`,`status`,`createDate`,`clinicalDiagnosis`,`doctorAdvice`) 
+        VALUES (#{orderNo}, #{userId}, #{consignee},#{mobilephone},#{town},#{address}, #{money}, #{physCode}, #{status}, NOW(), #{clinicalDiagnosis},#{doctorAdvice});
+    </insert>
+    <insert id="addOrderProduct" parameterType="com.lifeshs.po.drugs.OrderProductPO">
+        <selectKey resultType="java.lang.Integer" order="AFTER" keyProperty="id">
+            SELECT LAST_INSERT_ID() AS ID 
+        </selectKey>
+        INSERT INTO `t_drugs_order_product` (`orderNo`, `productCode`, `productName`, `actualPrice`, `amount`, `packing`, `dosage`) 
+        VALUES 
+        <foreach collection="orderProduct" item="d" separator=",">
+        (#{d.orderNo}, #{d.productCode}, #{d.productName}, #{d.actualPrice}, #{d.amount}, #{d.packing},#{d.dosage}) 
+        </foreach>
+    </insert>
+    
+    <select id="getOrderProductList" resultType="com.lifeshs.po.drugs.OrderProductPO">
+        select p.id,p.orderNo,p.productCode,p.productName,p.actualPrice,p.amount,p.packing,p.dosage from t_drugs_order_product p 
+        where 1=1 
+        <if test="orderNo != null">
+             and orderNo = #{orderNo}
+        </if>
+    </select>
+
+    <!--修改订单产品信息-->
+    <update id = "updateProduct" parameterType="com.lifeshs.po.drugs.OrderProductPO">
+        UPDATE t_drugs_order_product set 
+            <if test="productCode != null">
+                productCode=#{productCode}
+            </if>
+            <if test="productName != null">
+                ,productName=#{productName}
+            </if>
+            <if test="actualPrice != null">
+                ,actualPrice=#{actualPrice}
+            </if>
+            <if test="amount != null">
+                ,amount = #{amount}
+            </if>
+            <if test="packing != null">
+                ,packing=#{packing}
+            </if>
+            <if test="dosage != null">
+                ,dosage=#{dosage}
+            </if>
+            where 1=1 and orderNo = #{currentOrderNo}
+    </update>
+
+    <!--修改订单信息-->
+    <update id = "updateOrder" parameterType="com.lifeshs.po.drugs.OrderPO">
+        UPDATE t_drugs_order set 
+                status=#{status}
+            <if test="orderTime != null">
+                ,orderTime=#{orderTime}
+            </if>
+            <if test="externalOrderNo != null">
+                ,externalOrderNo=#{externalOrderNo}
+            </if>
+            <if test="orderNotes != null">
+                ,orderNotes=#{orderNotes}
+            </if>
+            <if test="invoice != null">
+                ,invoice=#{invoice}
+            </if>
+            <if test="money != null">
+                ,money=#{money}
+            </if>
+            <if test="userId != null">
+                ,userId = #{userId}
+            </if>
+            <if test="consignee != null">
+                ,consignee=#{consignee}
+            </if>
+            <if test="paymentType != null">
+                ,paymentType=#{paymentType}
+            </if>
+             <if test="transportCosts != null">
+                ,transportCosts=#{transportCosts} 
+            </if>
+            <if test="payAccount != null">
+                ,payAccount=#{payAccount}
+            </if>
+            <if test="sellerAccount != null">
+                ,sellerAccount=#{sellerAccount} 
+            </if>
+            <if test="payCost != null">
+                ,payCost=#{payCost} 
+            </if>
+            where 1=1 and orderNo = #{orderNo}
+    </update>
+   
+    <!--统计订单数量 -->
+    <select id="countLocalOrder" resultType="java.lang.Integer">
+        select count(1) from t_drugs_order o 
+        INNER JOIN t_drugs_order_product p on o.orderNo = p.orderNo 
+        WHERE 1=1 
+    </select>
+    
+
+    <!-- 获取订单列表 -->
+    <select id="getLocalOrderList" resultType="com.lifeshs.po.drugs.OrderPO">
+        select <include refid="select_drudg_data"></include> 
+        ,p.productCode,p.productName,p.actualPrice,p.amount,p.packing 
+        from t_drugs_order o 
+        INNER JOIN t_drugs_order_product p on o.orderNo = p.orderNo 
+        WHERE 1=1 
+        LIMIT #{startRow},#{pageSize}
+    </select>
+    
+    <!-- 获取订单列表 -->
+    <select id="getOrderList" resultMap="OrderMap">
+        select o.id,o.orderNo,o.status,o.money,o.shippingNo ,o.invoice,o.userId ,o.externalOrderNo,o.orderNotes,o.orderTime,o.consignee,
+            o.paymentType,o.transportCosts,
+            p.id as pId,p.productCode,p.productName,p.actualPrice,p.amount,p.packing,p.dosage
+        FROM t_drugs_order o 
+        LEFT JOIN t_drugs_order_product p on o.orderNo = p.orderNo 
+        LIMIT #{startRow},#{pageSize}
+    </select>
+    
+    <!-- 获取订单列表 -->
+    <select id="getLocalOrderByParam" resultMap="OrderMap">
+        select o.id,o.orderNo,o.status,o.money,o.shippingNo ,o.invoice,o.userId , o.externalOrderNo,o.orderNotes,o.orderTime,o.consignee,
+            o.paymentType,o.transportCosts,o.clinicalDiagnosis,o.doctorAdvice
+            ,p.id as pId,p.orderNo as pOrderNo ,p.productCode,p.productName,p.actualPrice,p.amount,p.packing,p.dosage 
+        FROM t_drugs_order o 
+        inner join t_drugs_order_product p on o.orderNo = p.orderNo 
+        WHERE 1=1 
+        and o.orderNo = #{orderNo}
+    </select>
+    
+    <resultMap type="com.lifeshs.po.drugs.OrderPO" id="OrderMap">
+        <id column="id" property="id"/>
+        <result property="userId" column="userId"/>
+        <result property="orderNo" column="orderNo" jdbcType="VARCHAR" />
+        <result property="status" column="status"/>
+        <result property="money" column="money"/>
+        <result property="shippingNo" column="shippingNo"/>
+        <result property="invoice" column="invoice"/>
+        <result property="clinicalDiagnosis" column="clinicalDiagnosis"/>
+        <result property="doctorAdvice" column="doctorAdvice"/>
+        <collection property="orderProductList" resultMap="ProductMap">
+        </collection>
+    </resultMap>
+    
+    <resultMap type="com.lifeshs.po.drugs.OrderProductPO" id="ProductMap">
+        <id property="id" column="pId"/>
+        <result property="orderNo" column="pOrderNo" jdbcType="VARCHAR" />
+        <result property="productCode" column="productCode"/>
+        <result property="productName" column="productName"/>
+        <result property="amount" column="amount"/>
+        <result property="actualPrice" column="actualPrice"/>
+        <result property="packing" column="packing"/>
+        <result property="dosage" column="dosage"/>
+    </resultMap>
+    
+    
+    
+    
+    <!-- 获取最后同步的时间 -->
+    <select id="getSyncLastDate" resultType="java.lang.String">
+        select max(nextTime) as nextTime from t_drugs_sync_record  
+    </select>
+    
+    <select id="getPrescriptionType" resultType="com.lifeshs.po.drugs.PrescriptionType">
+        SELECT
+        prescriptionType,prescriptionName
+        FROM t_drugs_prescription_type   
+        WHERE 1=1 
+    </select>
+    
+    <select id="getProductAttribute" resultType="com.lifeshs.po.drugs.ProductAttribute">
+        SELECT
+        productAttribute,productName 
+        FROM t_drugs_product_attribute   
+        WHERE 1=1 
+    </select>
+    
+    
+    
+
+    
+    <!-- 客户端 -->
+    <!-- 获取药品列表 -->
+    <select id="findDrusListByName" resultType="com.lifeshs.po.drugs.DrugsPO">
+        <include refid="select_drudg_data"></include>
+        <if test="firstClassName != null">
+            and firstClassName =#{firstClassName} 
+        </if>
+        <if test="secondClassName != null">
+            and secondClassName =#{secondClassName} 
+        </if>
+        <if test="productName != null">
+            and productName like CONCAT('%', #{productName}, '%') 
+        </if>
+        LIMIT #{startRow},#{pageSize}
+    </select>
+    
+    <!-- 同步药品 -->
+    <insert id="saveDrugsList" parameterType="com.lifeshs.po.drugs.DrugsPO">
+        <selectKey resultType="java.lang.Integer" order="AFTER" keyProperty="id">
+            SELECT LAST_INSERT_ID() AS ID 
+        </selectKey>
+        INSERT INTO t_drugs (`productCode`, `productName`, `mainProductCode`, `productStatusType`, `channelPrice`, `manufacturer`, `prescriptionType`, `productInventory`, `productAttribute`, `thumbnailUrl`, `introduction`,`firstClassName`,`secondClassName`,`thirdClassName`,`packing`, `barCode`, `productImageUrl`, `approvalNumber`, `commonTitle`, `brandName`, `packingProduct`, `productmainmaterial`, `characters`, `dosage`, `adverse`, `taboo`, `precautions`, `drugInteractions`, `storage`, `massDate`,`syncTime`) 
+        VALUES (#{productCode}, #{productName}, #{mainProductCode}, #{productStatusType}, #{channelPrice}, #{manufacturer}, #{prescriptionType}, #{productInventory}, #{productAttribute}, #{thumbnailUrl}, #{introduction},#{firstClassName},#{secondClassName},#{thirdClassName}, #{packing}, #{barCode}, #{productImageUrl}, #{approvalNumber}, #{commonTitle}, #{brandName}, #{packingProduct}, #{productmainmaterial}, #{characters}, #{dosage}, #{adverse}, #{taboo}, #{precautions}, #{drugInteractions}, #{storage}, #{massDate},#{syncTime});
+    </insert>
+    
+    <!-- 药品同步记录 -->
+    <insert id="saveSyncRecord" parameterType="com.lifeshs.po.drugs.SyncRecordPO">
+        INSERT INTO t_drugs_sync_record (`userId`, `syncTime`, `nextTime`, `content`) 
+        VALUES (#{userId}, #{syncTime}, #{nextTime}, #{content});
+    </insert>
+    
+    <!-- 药品字段 -->
+    <sql id="select_drudg_data">
+        SELECT
+            id,productCode,productName,mainProductCode,productStatusType,channelPrice,manufacturer,prescriptionType,
+            productInventory,productAttribute,thumbnailUrl,introduction,firstClassName,secondClassName,thirdClassName,packing,barCode,productImageUrl,approvalNumber,
+            commonTitle,brandName,packingProduct,productmainmaterial,characters,dosage,adverse,taboo,precautions,
+            drugInteractions,storage,massDate
+        FROM t_drugs   
+        WHERE 1=1 
+    </sql>
+
+</mapper>

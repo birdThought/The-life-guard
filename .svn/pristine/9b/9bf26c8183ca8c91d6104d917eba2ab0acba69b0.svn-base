@@ -1,0 +1,102 @@
+/* 初始化 */
+body,div,ul,li,ol,h1,h2,h3,h4,h5,h6,input,textarea,select,p,dl,dt,dd,a,img,button,form,table,th,tr,td,tbody,article,aside,details,figcaption,figure,footer,header,hgroup,menu,nav,section{margin:0;padding:0;}
+body{font:normal 14px/1.5 "Microsoft Yahei",Tahoma,"Lucida Grande",Verdana,STXihei,hei;}
+em,i{font-style:normal;}
+strong{font-weight:normal;}
+a{text-decoration:none;color:#666666;font-family:Microsoft yahei,Tahoma,Arial,sans-serif;}
+ul,ol{list-style:none;}
+h1,h2,h3,h4,h5,h6{font-size:100%;font-family:Microsoft yahei;}
+img{border:none;vertical-align:middle;max-width: 100%;height: auto;}
+
+*,*:before,*:after{
+    box-sizing:border-box;
+    -moz-box-sizing:border-box; /* Firefox */
+    -webkit-box-sizing:border-box; /* Safari */
+}
+.fl{float:left;}
+.fr{float:right;}
+.clearfix:before,
+.clearfix:after{
+    content:"";
+    display:block;
+    height:0;
+    clear:both;
+    visibility:hidden;
+}
+.wrap{
+    margin: 0 auto;
+}
+.container{
+    width: 1200px;
+    margin: 0 auto;
+}
+[ng-cloak]{
+    display:none;
+}
+
+/*基础属性*/
+.none {
+    display: none;
+}
+.cursor-pointer {
+    cursor: pointer;
+}
+/*颜色*/
+.color_deepskyblue {
+    color: deepskyblue;
+}
+.color_red {
+    color: red;
+}
+.color_orange {
+    color: orange;
+}
+.red {
+    color: red;
+}
+.color_white {
+    color: white;
+}
+.color_10bb71 {
+    color: #10bb71;
+}
+.color_666 {
+    color: #666;
+}
+/*button*/
+.button_blue {
+    border: 0px;
+    background-color: deepskyblue;
+    padding: 5px 10px 5px 10px;
+    border-radius: 2px;
+    color: white;
+    cursor: pointer;
+}
+.button_blue:hover {
+    background-color: #85daf7;
+}
+.button_blue_1 {
+    border: 0px;
+    background-color: deepskyblue;
+    padding: 10px 15px 10px 15px;
+    border-radius: 2px;
+    color: white;
+    cursor: pointer;
+}
+.button_blue_1:hover {
+    background-color: #85daf7;
+}
+.button_blue_2 {
+    border: 0px;
+    background-color: #9a9a9a;
+    padding: 10px 15px 10px 15px;
+    border-radius: 2px;
+    color: white;
+    cursor: pointer;
+}
+
+/*line*/
+.line-height_24 {
+    line-height: 24px;
+}
+

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- 用户的上门地址（应用于上门服务），不是用户信息中的地址 -->
+<mapper namespace="com.lifeshs.dao1.store.IStoreDao" >
+
+    <!-- 根据服务师Id获取机构 -->
+    <select id="findStoreByServices" parameterType="int" resultType="com.lifeshs.po.StorePO">
+        SELECT * FROM t_org o
+        LEFT JOIN t_org_user ou ON o.id = ou.orgId
+        WHERE ou.id = #{orgUserId};
+    </select>
+
+</mapper>

@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="war" name="lifedefender-openservice:war">
+    <output-path>$PROJECT_DIR$/lifedefender-openservice/target</output-path>
+    <root id="archive" name="lifedefender-openservice-0.0.1-SNAPSHOT.war">
+      <element id="artifact" artifact-name="lifedefender-openservice:war exploded" />
+    </root>
+  </artifact>
+</component>

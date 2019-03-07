@@ -1,0 +1,17 @@
+store包：包含所有管理APP的接口，逐渐取代manager包，manager是以前版本的旧包
+
+管理APP的接口方法，在AOP里我统一做了解析，不需要在service层解析json了，参考sore.EmployeeController，具体如下：
+1.每个控制器方法至少有一个默认参数SubmitDTO sumbitDTO（SubmitDTO里封装了一些通用数据，如用户信息，终端类型等），如：
+    public @ResponseBody JSONObject getEmployee(SubmitDTO sumbitDTO）
+2.如果提交的json串里只有一个值，直接用String valuename来接收，valuename须与json中的名字一致，如：
+    public @ResponseBody JSONObject getEmployee(SubmitDTO sumbitDTO, String userId）
+3.如果提交的json串里只有多个值，可以定义一个与json中的所有元素结构一致的数据类，如：
+    public @ResponseBody JSONObject getEmployee(SubmitDTO sumbitDTO, AddOrderInfo addOrderInfo）
+4,已经默认建好了几个可被共用的数据类（在com.lifeshs.dto.*），可直接使用：
+    4.1 UpPagingData：如果终端json只包含分页信息，可使用此类:getEmployee(SubmitDTO sumbitDTO, UpPagingData upPagingData）
+    4.2 UpDatePagingData：终端json除了包含分页信息还包含时间段查询
+    4.3 UpMonthPagingData：终端json除了包含分页信息还包含按月查询
+    4.4 UpSearchPagingData：终端json除了包含分页信息还包含关键字查询
+
+5.如果还是想使用json串，直接在第二个参数使用String json即可，如：
+    public @ResponseBody JSONObject getEmployee(SubmitDTO sumbitDTO, String json）

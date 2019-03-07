@@ -1,0 +1,8 @@
+section.content-right > div.layui-container:first-child {
+    width: auto !important;
+    padding-top: 15px;
+    border: 1px solid #ddd;
+    background-color: #fff;
+    padding: 20px;
+    margin-top: 20px;
+}

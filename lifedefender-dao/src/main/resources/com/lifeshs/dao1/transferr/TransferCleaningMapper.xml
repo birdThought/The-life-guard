@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lifeshs.dao1.transfer.TransferCleaningDao">
+    <insert id="saveTransferOrder" parameterType="com.lifeshs.po.transfer.TransferCleaning">
+        INSERT INTO t_user_Cleaning(id,appid,accesstoken,orderno,totalprice,platformprice,companyprice,nurseprice,customername,customermobile,workprovince,
+        workcity,workdistrict,workaddress,familyarea,population,gender,`language`,jobname,details,youxiqi,yonggongshijian,yonggongshichang,createdate,modifytime,Info)
+        VALUES (
+        #{id},#{appid},#{accesstoken},#{orderno},#{totalprice},#{platformprice},#{companyprice},#{nurseprice},#{customername},#{customermobile},#{workprovince},
+        #{workcity},#{workdistrict},#{workaddress},#{familyarea},#{population},#{gender},#{language},#{jobname},#{details},#{youxiqi},#{yonggongshijian},#{yonggongshichang},
+        NOW(),#{modifytime},#{Info}
+        )
+    </insert>
+    <select id="findByTransferId" resultType="com.lifeshs.po.transfer.TransferCleaning">
+        SELECT * FROM t_user_Cleaning where id = #{id}
+    </select>
+
+    <select id="findByOrderNO" resultType="com.lifeshs.po.transfer.TransferCleaning">
+        SELECT * FROM t_user_Cleaning WHERE orderno = #{oderNo}
+    </select>
+</mapper>

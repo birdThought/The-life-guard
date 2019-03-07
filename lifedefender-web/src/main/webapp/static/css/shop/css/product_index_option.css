@@ -1,0 +1,99 @@
+* {
+	/*outline: 1px solid red;*/
+}
+
+
+/*1.价格描述*/
+
+.product_bar_price {
+	/*display: flex;*/
+	padding: 1rem 0.5rem 1rem 0.5rem;
+	border-bottom: 1px solid #eeeeee;
+}
+
+.product_bar_price>div {
+	padding: 0.3rem 0 0.3rem 0;
+}
+
+
+/*2.plus功效*/
+
+.product_bar_effect {
+	/*width: 100%;*/
+	overflow: hidden;
+	padding: 1rem 0.5rem 1rem 0.5rem;
+	border-bottom: 1px solid #eeeeee;
+}
+
+.product_bar_effect>div {
+	float: left;
+	width: 50%;
+	/*outline: 1px solid red;*/
+}
+
+
+/*2.详细描述*/
+
+.product_bar_effect_describe {
+	padding: 1rem 0.5rem 1rem 0.5rem;
+	color: #999999;
+	border-bottom: 1px solid #eeeeee;
+}
+
+.product_bar_effect_describe>div {
+	padding: 0.3rem 0 0.3rem 0;
+}
+
+
+/*3.数量选择*/
+
+.product_bar_sum {
+	padding: 1rem 0.5rem 1rem 0.5rem;
+	border-bottom: 1px solid #eeeeee;
+}
+
+.product_bar_sum_option {
+	border-radius: 1rem;
+	padding: 0.5rem 0.5rem 0.5rem 0.5rem;
+	border: 1px solid #333333;
+}
+
+.product_bar_sum_option>span {
+	display: inline-block;
+	padding: 0.5rem 0.5rem 0.5rem 0.5rem;
+	/*outline:1px solid #333333;*/
+}
+
+.sum_option {
+	outline: 1px solid #333333;
+}
+
+
+/*4.电话留言*/
+
+.product_bar_phone {
+	padding: 1rem 0.5rem 1rem 0.5rem;
+	border-bottom: 1px solid #eeeeee;
+}
+
+
+/*5.图文描述*/
+.product_bar_img{
+	display: flex;
+	align-items: center;
+	font-size: 1.3rem;
+	padding: 1rem 0.5rem 1rem 0.5rem;
+}
+/*6.咨询按钮*/
+.product_bar_ask {
+	display: flex;
+	justify-content: center;
+}
+.product_bar_ask span{
+	display: inline-block;
+	text-align: center;
+	padding:0.3rem 1rem 0.3rem 1rem;
+	border:1px solid #ff5a7d;
+	border-radius: 0.8rem;
+	color:#ff5a7d;
+}

@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <annotationProcessing>
+      <profile name="Maven default annotation processors profile" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <module name="lifedefender-api" />
+        <module name="lifedefender-code-gen" />
+        <module name="lifedefender-common" />
+        <module name="lifedefender-component" />
+        <module name="lifedefender-config" />
+        <module name="lifedefender-dao" />
+        <module name="lifedefender-mobile" />
+        <module name="lifedefender-model" />
+        <module name="lifedefender-openservice" />
+        <module name="lifedefender-security" />
+        <module name="lifedefender-service" />
+        <module name="lifedefender-web" />
+        <module name="lifedefender-webservice" />
+      </profile>
+    </annotationProcessing>
+    <bytecodeTargetLevel target="1.8">
+      <module name="lifedefender" target="1.5" />
+      <module name="lifedefender-api" target="1.8" />
+      <module name="lifedefender-code-gen" target="1.5" />
+      <module name="lifedefender-common" target="1.7" />
+      <module name="lifedefender-component" target="1.7" />
+      <module name="lifedefender-config" target="1.5" />
+      <module name="lifedefender-dao" target="1.5" />
+      <module name="lifedefender-mobile" target="1.7" />
+      <module name="lifedefender-model" target="1.7" />
+      <module name="lifedefender-openservice" target="1.5" />
+      <module name="lifedefender-security" target="1.7" />
+      <module name="lifedefender-service" target="1.8" />
+      <module name="lifedefender-web" target="1.7" />
+      <module name="lifedefender-webservice" target="1.5" />
+    </bytecodeTargetLevel>
+  </component>
+</project>

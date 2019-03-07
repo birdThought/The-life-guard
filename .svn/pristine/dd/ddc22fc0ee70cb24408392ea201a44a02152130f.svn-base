@@ -1,0 +1,61 @@
+#allmap {width: 770px;height:420px;border:1px solid #dee;}
+.lineSearch {
+
+}
+input {
+    width:100%;
+    height:3rem;
+    padding-left: 2.4rem;
+    outline:none;
+    border:1px solid #eee;
+    background: #fff;
+}
+.map-container {
+    width: 770px;
+    height:auto;
+    margin:40px auto;
+    position: relative;
+}
+.BMap_noprint {
+    left:20px!important;
+}
+.BMapLabel {
+    position: relative !important;
+    display: block !important;
+    cursor: inherit;
+    border: none !important;
+    white-space: nowrap;
+    font-style: normal;
+    font-variant: normal;
+    font-weight: normal;
+    font-stretch: normal;
+    font-size: 22px;
+    padding-left: 0.5rem !important;
+    color: #333;
+    font-family: arial, sans-serif;
+    z-index: 80;
+    user-select: none;
+    left: 20px;
+    top: -10px;
+    line-height: 26px !important;
+}
+.BMap_Marker .BMapLabel::after {
+    position: absolute;
+    content: '';
+    border-width: 11px;
+    border-color: transparent skyblue transparent transparent;
+    left: -22px;
+    border-style: solid;
+    border-radius: 0px 0px 0 2px;
+    width: 14px;
+    top: 2px;
+}
+.BMap_cpyCtrl,.anchorBL{
+    display: none;!important;
+}
+.message {
+    padding-right: 0;
+}
+.tree-nav {
+    margin-top: 3rem;
+}

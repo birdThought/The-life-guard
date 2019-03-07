@@ -1,0 +1,283 @@
+@charset "utf-8";
+
+header {
+    padding: .2rem .3rem;
+    box-shadow: 0 2px 0 1px rgba(0,0,0,.1)
+}
+header i {
+    float: left;
+    width: .18rem;
+    height: .32rem;
+    background-image: url(../images/back.png);
+    background-size: .18rem .32rem;
+    margin: .1rem;
+}
+header .container p {
+    text-align: center;
+    color: #333;
+    font-size: .36rem;
+}
+/* 公益课堂 */
+.nav{
+	height:1rem;
+	display:flex;
+	padding-left:.1rem;
+	padding-right:.1rem;
+	line-height: 1rem;
+	border-bottom: 1px solid #eee;
+}
+.nav a{
+	text-align: center;
+	flex:1;
+	color:#333;
+	font-size: .3rem;
+}
+.nav a.on{
+	color:#44c660;
+	border-bottom: 2px solid #44c660;
+}
+.hot-class li{
+	display: flex;
+	justify-content: center;
+	border-bottom: 1px solid #eee;
+	padding:.22rem .18rem;
+}
+.hot-class li dl dt{
+	color:#333;
+	font-size: .3rem;
+}
+.hot-class li dl dd{
+	margin-top: .3rem;
+}
+.hot-class li dl .infor{
+	color:#666;
+	font-size: .24rem;
+}
+.hot-class li dl .time{
+	color:#999;
+	font-size: .22rem;
+}
+/* 陆安听单 */
+.nurse{
+	padding:.18rem;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+.nurse div,.hot-class li div{
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	width: 2.3rem;
+	height: auto;
+}
+.nurse div img{
+	width: 90%;
+}
+
+.nurse dl,.hot-class li dl{
+	padding-left: .3rem;
+	flex:3;
+}
+.nurse dt{
+	color:#333;
+	font-size: .3rem;
+}
+.nurse dd{
+	margin-top: .12rem;
+	color:#666;
+	font-size: .24rem;
+}
+.nurse dd em{
+	font-size: .28rem;
+}
+/* class-content */
+.class-content {
+	padding:.18rem;
+}
+.class-content h3{
+	font-size:.28rem;
+	color:#da6904;
+	font-weight: 500;
+}
+.class-content li:after{
+	content:"";
+	clear:both;
+	display:block;
+	visibility: hidden;
+}
+.class-content li{
+	display: flex;
+	align-items: center;
+	margin-top: .2rem;
+}
+.class-content li div{
+	width: 1rem;
+	height: 1rem;
+	border-radius: 50%;
+	background:url(../images/class-bg.png) no-repeat;
+	background-size:100% auto; 
+}
+.class-content li div{
+	position: relative;
+}
+.class-content li div:before{
+	content: '';
+	position: absolute;
+	left: 50%;
+	top:50%;
+	width: .28rem;
+	height: .34rem;
+	background-image: url(../images/pause.png);
+	background-size: .28rem .34rem;
+	-webkit-transform: translate(-50%,-50%);
+	   -moz-transform: translate(-50%,-50%);
+	    -ms-transform: translate(-50%,-50%);
+	     -o-transform: translate(-50%,-50%);
+	        transform: translate(-50%,-50%);
+}
+.class-content li dl{
+	width: 100%;
+	margin-left: .2rem;
+	border-bottom:  1px solid #eee;
+	padding-bottom: .2rem;
+}
+.class-content li dl dt{
+	position:relative;
+}
+.class-content li dl dt a{
+	font-size: .28rem;
+	color:#333;
+	display:inline-block;
+	width:80%;
+}
+.class-content li dl dt span{
+	font-size: .24rem;
+	color:#999;
+	position:absolute;
+	top:0;
+	right:4px;
+}
+.class-content li dl dd{
+	font-size: .24rem;
+	color: #666;
+	margin-top: .08rem;
+} 
+.class-content li dl dd span:first-child:before,
+.classes li div span:first-child:before{
+	content: "";
+	width: .2rem;
+	height: .24rem;
+	display: inline-block;
+	background-image:url(../images/paus.png); 
+	background-size: .2rem .24rem;
+	margin-right: 6px;
+}
+.class-content li dl dd span:last-child:before,
+.classes li div span:last-child:before{
+	content: "";
+	width: .24rem;
+	height: .24rem;
+	display: inline-block;
+	background-image:url(../images/time.png);
+	background-size: .24rem .24rem; 
+	margin-left:10px ;
+	margin-right: 6px;
+}
+/*vedio */
+.classes{
+	margin-top: .2rem;
+	background-color: #f5f5f5;
+}
+.classes li{
+	background-color: #fff;
+	margin-bottom: .2rem;
+}
+.classes li > a {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 3.3rem;
+    background-image: url(../images/yangshencao001.png);
+    background-size: 100% auto;
+}
+.classes li:nth-of-type(2) >a {
+	background-image: url(../images/manyundong005.png);
+}
+.classes li:nth-of-type(3) >a{
+	background-image: url(../images/manyundong002.png);
+}
+.classes li:nth-of-type(4) >a {
+	background-image: url(../images/manyundong003.png);
+}
+.classes li:last-child > a{
+	background-image: url(../images/manyundong.png);
+}
+@media screen and (max-width: 420px)
+.classes li > a {
+    height: 2.92rem !important;
+}
+ .play{
+	width: .9rem;
+    height: .9rem;
+    background: url(../images/play.png) no-repeat center;
+    background-size: 100% auto;
+}
+.classes li p{
+	color:#333;
+	font-size: .28rem;
+	line-height: 2;
+	padding-left: .2rem;
+	padding-right: .2rem;
+}
+.classes li > div{
+	padding-left: .2rem;
+	padding-bottom: .1rem;
+	line-height: 1.8;
+}
+.classes li div span{
+	color:#999;
+	font-size: .24rem;
+}
+.hot-list {
+	display: block;
+	list-style: none;
+}
+.hot-list li {
+	display: flex;
+	justify-content: center;
+	border-bottom: 1px solid #eee;
+	padding:.22rem .18rem;
+}
+.hot-list li dl {
+	padding-left:.3rem;
+	flex:3;
+}
+.hot-list li dl dt {
+	color: #333;
+	font-size:.26rem;
+}
+	.hot-list li dl dt .infor {
+		color: #666;
+		font-size:.24rem;
+	}
+	.hot-list li dl .time {
+		color: #999;
+		font-size:.22rem;
+	}
+	.hot-list li dl dd {
+		margin-top:.3rem;
+	}
+	.hot-list li div {
+		display: flex;
+		justify-content: center;
+		width:2.3rem;
+		height:auto;
+	}
+.db{
+	display: block;
+}
+.dn{
+	display: none;
+}

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lifeshs.dao.fence.IFenceDao" >
+	<!-- 查询围栏 -->
+	<select id="findFenceByList" parameterType="java.lang.Integer" resultType="com.lifeshs.entity.member.TUserElectronicFence">
+		select 
+			ef.id,ef.userDeviceId,ef.number,ef.longitude,ef.latitude,ef.radius,
+		  	ef.address,ef.warningType,ef.warningPhone,ef.mapType,ef.startTime1,ef.endTime1,
+			ef.startTime2,ef.endTime2,ef.startTime3,ef.endTime3,ef.enabled,ef.modifyDate
+		 from t_user_electronicFence ef where ef.userDeviceId = #{userDeviceId}
+	</select>
+	
+	<select id="findFenceByListOrderByNumber" resultType="com.lifeshs.entity.member.TUserElectronicFence">
+		Select
+			ef.id,ef.userDeviceId,ef.number,ef.longitude,ef.latitude,ef.radius,
+		  	ef.address,ef.warningType,ef.warningPhone,ef.mapType,ef.startTime1,ef.endTime1,
+			ef.startTime2,ef.endTime2,ef.startTime3,ef.endTime3,ef.enabled,ef.modifyDate
+		 From t_user_electronicFence ef where ef.userDeviceId = #{userDeviceId}
+		 Order By ef.number
+	</select>
+	
+</mapper>

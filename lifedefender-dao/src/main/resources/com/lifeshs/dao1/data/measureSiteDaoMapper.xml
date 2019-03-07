@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lifeshs.dao1.data.MeasureSiteDao" >
+   
+    
+    <select id="selectSizeStatusById" resultType="com.lifeshs.pojo.data.MeasureSite">        
+        SELECT
+			*
+		FROM
+			t_data_measure_site
+		WHERE
+			orgId = #{orgId}
+                
+    </select>
+    
+    <insert id="addDataSize" parameterType="com.lifeshs.pojo.data.MeasureSite">   	
+    		<selectKey resultType="Integer" order="AFTER" keyProperty="id">    			
+          		SELECT LAST_INSERT_ID()         		
+      		</selectKey>
+    	
+    	INSERT INTO t_data_measure_site (    		
+			NAME,
+			longitude,
+			latitude,
+			cityAreaCode,
+			logo,
+			banner,
+			phoneNumber,
+			createDate,
+			free,
+			address,
+			orgId,
+			statusMap
+			
+		)
+		VALUES
+			(#{name},#{longitude},#{latitude},#{cityAreaCode},#{logo},#{banner},#{phoneNumber},#{createDate},#{free},#{address},#{orgId},#{statusMap})
+    	
+    </insert>
+    
+    <update id="updateDataSize">
+    	update t_data_measure_site set 
+			NAME = #{measureSite.name},
+			longitude = #{measureSite.longitude},
+			latitude = #{measureSite.latitude},
+			cityAreaCode = #{measureSite.cityAreaCode},
+			logo = #{measureSite.logo},
+			banner = #{measureSite.banner},
+			phoneNumber = #{measureSite.phoneNumber},
+			createDate = #{measureSite.createDate},
+			free = #{measureSite.free},
+			address = #{measureSite.address},
+			orgId = #{measureSite.orgId},
+			statusMap = #{measureSite.statusMap}
+		where id = #{SiteId}
+    </update>
+    
+    
+
+    <insert id="addDataSizeOpeningTime">
+    	
+    	INSERT INTO t_data_measure_site_openingtime (
+    		
+			siteId,
+			startTime,
+			endTime
+		)
+		VALUES
+			(#{orgId},#{startTime},#{endTime})
+    </insert>
+    
+    <insert id="addDataSizeOpeningTime2">
+    	
+    	INSERT INTO t_data_measure_site_openingtime (
+    		
+			siteId,
+			startTime,
+			endTime
+		)
+		VALUES
+			(#{SiteId},#{startTime},#{endTime})
+    </insert>
+    
+    
+    <delete id="delDataSizeOpeningTime">
+    	DELETE from t_data_measure_site_openingtime where siteId = #{orgId}
+    </delete>
+    
+    
+    <select id="selectSizeTimeById" resultType="com.lifeshs.pojo.data.MeasureSiteOpeningTime">
+    	SELECT
+			*
+		FROM
+			t_data_measure_site_openingtime
+		WHERE
+			siteId = #{SizeId}
+    </select>
+    
+</mapper>

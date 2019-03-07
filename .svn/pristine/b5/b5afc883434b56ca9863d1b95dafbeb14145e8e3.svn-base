@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lifeshs.dao1.electronicCoupons.ElectronicCouponsDao">
+
+	<insert id="addCoupons">
+		INSERT INTO
+		t_user_electronic_coupons(templetId,userId,`status`,name,orgId,serveCode,serveItemId,projectCode,price,endDate,createDate)
+		VALUES(#{templetId},#{userId},#{status},#{name},#{orgId},#{serveCode},#{serveItemId},#{projectCode},#{price},#{endDate},NOW())
+	</insert>
+
+	<insert id="addCouponsList">
+		INSERT INTO
+		t_user_electronic_coupons(templetId,userId,`status`,name,orgId,serveCode,serveItemId,projectCode,price,endDate,createDate)
+		VALUES
+		<foreach collection="couponsList" item="coupons" separator=",">
+			(#{coupons.templetId},#{coupons.userId},#{coupons.status},#{coupons.name},#{coupons.orgId},#{coupons.serveCode},#{coupons.serveItemId},#{coupons.projectCode},#{coupons.price},#{coupons.endDate},NOW())
+		</foreach>
+	</insert>
+
+	<update id="updateCoupons" parameterType="com.lifeshs.po.user.UserElectronicCouponsPO">
+		UPDATE t_user_electronic_coupons
+		SET
+		<if test="templetId!=null">
+			templetId = #{templetId},
+		</if>
+		<if test="status!=null">
+			status = #{status},
+		</if>
+		<if test="orgId!=null">
+			orgId = #{orgId},
+		</if>
+		<if test="serveCode!=null">
+			serveCode = #{serveCode},
+		</if>
+		<if test="serveItemId!=null">
+			serveItemId = #{serveItemId},
+		</if>
+        <if test="projectCode != null">
+            projectCode = #{projectCode},
+        </if>
+		<if test="price!=null">
+			price = #{price},
+		</if>
+		modifyDate = NOW()
+		WHERE id = #{id}
+        <if test="userId != null">AND userId = #{userId}</if>
+	</update>
+
+    <update id="updateCouponsListStatus">
+        UPDATE t_user_electronic_coupons SET `status` = #{status}
+        WHERE id IN <foreach collection="idList" open="(" close=")" item="id" separator=",">#{id}</foreach>
+    </update>
+
+	<select id="getCoupons" resultType="com.lifeshs.po.user.UserElectronicCouponsPO">
+		SELECT * FROM t_user_electronic_coupons WHERE id = #{id}
+	</select>
+
+	<select id="countCouponsWithCondition" resultType="java.lang.Integer">
+		SELECT COUNT(1) FROM t_user_electronic_coupons WHERE userId = #{userId}
+		<if test="serveCode != null">AND serveCode = #{serveCode}</if>
+        <if test="projectCode != null">AND projectCode = #{projectCode}</if>
+		<if test="serveItemId != null">AND serveItemId = #{serveItemId}</if>
+		<if test="status != null">AND `status` = #{status}</if>
+	</select>
+
+	<select id="findCouponsListWithCondition" resultType="com.lifeshs.po.user.UserElectronicCouponsPO">
+		SELECT * FROM t_user_electronic_coupons WHERE userId = #{userId}
+		<if test="serveCode != null">AND serveCode = #{serveCode}</if>
+        <if test="projectCode != null">AND projectCode = #{projectCode}</if>
+		<if test="serveItemId != null">AND serveItemId = #{serveItemId}</if>
+		<if test="status != null">AND `status` = #{status}</if>
+        ORDER BY status, id DESC
+		LIMIT #{startRow},#{pageSize}
+	</select>
+
+    <select id="coutUsableCoupons" resultType="java.lang.Integer">
+        SELECT COUNT(1) FROM t_user_electronic_coupons
+        WHERE
+            userId = #{userId}
+            AND projectType = #{projectType}
+            AND projectCode = #{projectCode}
+            AND `status` = 0
+            <if test="serveItemId != null">
+                AND (serveItemId = #{serveItemId} OR serveItemId IS NULL)
+            </if>
+    </select>
+
+    <select id="findUsableCouponsList" resultType="com.lifeshs.po.user.UserElectronicCouponsPO">
+        SELECT *
+        FROM t_user_electronic_coupons
+        WHERE
+            userId = #{userId}
+            AND projectType = #{projectType}
+            AND projectCode = #{projectCode}
+            AND `status` = 0
+            <if test="serveItemId != null">
+                AND (serveItemId = #{serveItemId} OR serveItemId IS NULL)
+            </if>
+        ORDER BY id
+        LIMIT #{startRow}, #{pageSize}
+    </select>
+
+    <select id="findCouponsListOutOfEndDate" resultType="com.lifeshs.po.user.UserElectronicCouponsPO">
+        SELECT <include refid="couponsAllColumn"/> FROM t_user_electronic_coupons 
+        WHERE
+            `status` = 0
+            <if test="remainDay != null">
+                AND endDate &lt;= DATE_ADD(NOW(),INTERVAL #{remainDay} DAY)
+            </if>
+    </select>
+    
+    <sql id="couponsAllColumn">id, templetId, userId, status, name, orgId, serveCode, serveItemId, projectCode, price, endDate, createDate, modifyDate</sql>
+</mapper>

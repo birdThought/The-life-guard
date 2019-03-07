@@ -1,0 +1,196 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--门店-员工管理-->
+<mapper namespace="com.lifeshs.dao.org.employee.IEmployeeManageDao">
+
+    <!--获取员工列表-->
+    <select id = "listEmployee" resultMap="employeeDTO">
+        SELECT
+            <include refid="employeeAllColumn" />
+        FROM
+            t_org_user u
+        WHERE
+        (u.userType = 1 OR u.userType = 2)
+        AND
+        u.orgId = #{orgId}
+        <if test="realName != null">
+            AND u.realName LIKE CONCAT('%', #{realName}, '%')
+        </if>
+            <!-- limit #{startIndex}, #{pageSize} -->
+    </select>
+
+    <resultMap type = "com.lifeshs.pojo.org.employee.EmployeeDTO" id = "employeeDTO">
+        <id column = "id" property = "id"/>
+        <association property="countOfMember" column="id" select="countOfMemberByOrgUser"/>
+        <association property="countOfOrder" column="id" select="countOfOrderByOrgUser"/>
+        <association property="earning" column="id" select="getEarningByOrgUser"/>
+        <association property="org" column="orgId" select="com.lifeshs.dao.org.OrgDao.getOrg" />
+        <!--<collection property="project" column="id" ofType="java.util.List" select="listServiceByOrgUser"/>-->
+    </resultMap>
+
+    <!--获取服务项目-->
+    <select id = "listServiceByOrgUser"></select>
+
+    <!--获取会员数量（现有会员，不包含已过期会员）-->
+    <select id = "countOfMemberByOrgUser" resultType="java.lang.Integer">
+        SELECT
+            COUNT(DISTINCT(userId))
+        FROM
+            t_order
+        WHERE
+            status = 3
+        AND
+            orgUserId = #{id}
+    </select>
+
+    <!--获取订单数量-->
+    <select id = "countOfOrderByOrgUser" resultType="java.lang.Integer">
+        select
+            COUNT(1)
+        FROM
+            t_order
+        WHERE
+            DATE_SUB(CURDATE(), INTERVAL 0 DAY) &gt;= date(createDate)
+        AND
+            status in (3, 4)
+        AND
+            orgUserId = #{id}
+    </select>
+
+    <!--获取本月收益-->
+    <select id = "getEarningByOrgUser" resultType="java.lang.Double">
+        select
+            SUM(charge)
+        FROM
+            t_order
+        WHERE
+            DATE_SUB(CURDATE(), INTERVAL 1 MONTH) &lt;= date(createDate)
+        AND
+            status in (3, 4)
+        AND
+            orgUserId = #{id}
+    </select>
+
+    <!--获取员工总数量-->
+    <select id = "getCountOfEmployee" resultType="java.lang.Integer">
+        SELECT
+            COUNT(1)
+        FROM
+            t_org_user u
+        WHERE
+        (u.userType = 1 OR u.userType = 2)
+        AND
+            u.orgId = #{orgId}
+        <if test="realName != null">
+            AND u.realName LIKE CONCAT('%', #{realName}, '%')
+        </if>
+    </select>
+
+    <!--更新员工状态(todo: 可根据具体需求加修改字段)-->
+    <update id = "updateEmployee">
+        UPDATE
+            t_org_user
+        SET
+            modifyDate = NOW()
+            <if test = "status != null">
+                ,`status` = #{status}
+            </if>
+        WHERE
+            id = #{orgUserId}
+    </update>
+
+    <!--添加员工-->
+    <insert id = "addEmployee" parameterType="com.lifeshs.pojo.org.employee.EmployeeRegisterDTO">
+        <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+        INSERT INTO
+            t_org_user
+            <trim prefix="(" suffix=")" suffixOverrides=",">
+                createDate,
+                <if test="parentId != null">parentId,</if>
+                <if test="photo != null">photo,</if>
+                <if test="realName != null">realName,</if>
+                <if test="idCard != null">idCard,</if>
+                <if test="idCardPicOne != null">idCardPicOne,</if>
+                <if test="idCardPicTwo != null">idCardPicTwo,</if>
+                <if test="userType != null">userType,</if>
+                <if test="professionalName != null">professionalName,</if>
+                <if test="professionalPic != null">professionalPic,</if>
+                <if test="userName != null">userName,</if>
+                <if test="password != null">password,</if>
+                <if test="mobile != null">mobile,</if>
+                <if test="userCode != null">userCode,</if>
+                <if test="orgId != null">orgId,</if>
+                <if test="status != null">status,</if>
+                <if test="expertise != null">expertise,</if>
+                <if test="address != null">address,</if>
+                <if test="about != null">about,</if>
+                <if test="gender != null">sex,</if>
+                <if test="birthday != null">birthday,</if>
+                <if test="mobileVerified != null">mobileVerified,</if>
+                userNo
+            </trim>
+            <trim prefix="VALUES(" suffix=")" suffixOverrides=",">
+                NOW(),
+                <if test="parentId != null">#{parentId},</if>
+                <if test="photo != null">#{photo},</if>
+                <if test="realName != null">#{realName},</if>
+                <if test="idCard != null">#{idCard},</if>
+                <if test="idCardPicOne != null">#{idCardPicOne},</if>
+                <if test="idCardPicTwo != null">#{idCardPicTwo},</if>
+                <if test="userType != null">#{userType},</if>
+                <if test="professionalName != null">#{professionalName},</if>
+                <if test="professionalPic != null">#{professionalPic},</if>
+                <if test="userName != null">#{userName},</if>
+                <if test="password != null">#{password},</if>
+                <if test="mobile != null">#{mobile},</if>
+                <if test="userCode != null">#{userCode},</if>
+                <if test="orgId != null">#{orgId},</if>
+                <if test="status != null">#{status},</if>
+                <if test="expertise != null">#{expertise},</if>
+                <if test="address != null">#{address},</if>
+                <if test="about != null">#{about},</if>
+                <if test="gender != null">#{gender},</if>
+                <if test="birthday != null">#{birthday},</if>
+                <if test="mobileVerified != null">#{mobileVerified},</if>
+                CONCAT('O',(SELECT Auto_increment FROM information_schema.tables WHERE table_schema in ('lifekeepers_v2','lifekeepers_test','lifekeepers_dev') and TABLE_NAME='t_org_user'))
+            </trim>
+    </insert>
+    
+    <select id="getEmployee" resultMap="employeeDTO">
+        SELECT <include refid="employeeAllColumn" /> FROM t_org_user u WHERE u.id = #{id}
+    </select>
+    
+    <!-- 根据用户编号查询 -->
+    <select id="findEmployeeUserNo" resultMap="employeeDTO">
+        SELECT <include refid="employeeAllColumn" /> FROM t_org_user u WHERE u.userNo = #{userNo}
+    </select>
+    
+    <select id="getEmployeeByUserCode" resultMap="employeeDTO">
+        SELECT <include refid="employeeAllColumn" /> FROM t_org_user u WHERE u.userCode = #{userCode}
+    </select>
+    
+    <select id="findOrgUserByProjectCode" resultMap="employeeDTO">
+        SELECT <include refid="employeeAllColumn" /> FROM t_org_user u
+        INNER JOIN t_project_orguser_relation r ON r.orgUserId = u.id
+        WHERE u.`status` = 0 AND r.projectCode = #{projectCode}
+    </select>
+    
+    <select id="findServeUserByUserCode" resultMap="employeeDTO">
+        SELECT <include refid="employeeAllColumn" /> FROM t_org_user u
+        WHERE u.`status` = 0 AND u.userCode IN <foreach collection="userCodeList" open="(" close=")" separator="," item="uCode">#{uCode}</foreach>
+    </select>
+    
+    <select id="findEmployee" resultMap="employeeDTO">
+        SELECT <include refid="employeeAllColumn" /> FROM t_org_user u
+        WHERE u.`status` = 0 AND u.id = #{id}
+    </select>
+    
+    <sql id="employeeAllColumn">
+        u.id,u.userNo, u.userName, u.photo, u.realName, u.sex as gender, u.birthday, u.mobile,u.idCard,u.email,
+            u.userType, u.status, u.address, u.professionalName, u.expertise, u.about, u.orgId, u.userCode,u.idCard
+    </sql>
+    
+    
+</mapper>

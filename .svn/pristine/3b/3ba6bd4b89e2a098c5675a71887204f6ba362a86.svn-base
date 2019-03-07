@@ -1,0 +1,15 @@
+dao层：接收service的调用和vo参数，把vo参数转换成PO，执行数据库操作，允许service层直接把po当成vo使用，则传入的po无需转换，
+从数据库查询po对象，根据需要，转换po成vo，或直接把po当成vo传回给service。
+
+命名规范：
+1.getXXX   使用主键获取单个实体，或使用count、max等获取单个数值
+2.findXxxByName  通过非主键字段查询
+3.findXXX  通过多条件查询方式查询单个实体
+3.findXXXList  通过多条件查询方式查询零到多个实体
+4.addXXX   添加一条新的记录
+5.updateXXX 修改一条记录
+6.updateXXXList 修改一批记录
+7.delXXX   删除一条记录
+8.delXXXList 删除一批记录
+
+原则上IXXXDao里的方法应使用确定的参数，避免使用map，这样只需要注意String的注入问题，使用#{}，如果使用map，要注意所有参数所注入问题

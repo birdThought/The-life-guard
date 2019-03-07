@@ -1,0 +1,284 @@
+.tip-contain {
+	min-width: 80px;
+	padding: 10px;
+	background: #000;
+	color: #fff;
+	border-radius: 5px;
+	display: inline-block;
+	font-size: 10px;
+	text-align: center;
+	opacity: 0.8;
+	position: absolute;
+	display: none
+}
+
+.tip-contain:after {
+	content: "";
+	width: 0;
+	position: absolute;
+	height: 0;
+	border-left: 12px solid transparent;
+	border-right: 12px solid transparent;
+	border-top: 8px solid #000;
+	top: 38px;
+	left: 30px
+}
+
+.person_dialog_contain {
+	background: #fff;
+	padding: 20px;
+	margin: 0 auto;
+	width: 650px;
+	min-height: 450px;
+}
+
+.person_dialog_contain .diet_record_list, .person_dialog_contain .test_report_list,
+	.person_dialog_contain .sick_record {
+	margin: 15px 10px;
+}
+
+.date_contain {
+	height: 40px;
+	line-height: 40px;
+	background: #eceeef;
+	margin: 10px 0;
+	text-align: center;
+	position: relative;
+	font-size: 15px;
+	font-weight: bold;
+}
+
+.date_contain .pre_v {
+	display: inline-block;
+	vertical-align: middle;
+	line-height: 20px;
+	position: absolute;
+	left: 20px;
+	top: 8px;
+}
+
+.date_contain .next_d {
+	display: inline-block;
+	vertical-align: middle;
+	line-height: 20px;
+	position: absolute;
+	right: 20px;
+	top: 8px;
+}
+
+.date_contain .next_d img {
+	transform: rotateY(-180deg);
+}
+
+.person_dialog_contain .diet_record_list li {
+	border-bottom: 1px dashed #ccc;
+	font-size: 16px;
+	padding: 10px 0;
+}
+
+.person_dialog_contain .diet_record_list li .timeDiet {
+	margin-bottom: 6px;
+}
+
+.person_dialog_contain .diet_record_list li .timeDiet .spot {
+	display: inline-block;
+	width: 10px;
+	height: 10px;
+	background: #3598dc;
+	border-radius: 50%;
+	margin-right: 15px;
+}
+
+.person_dialog_contain .diet_record_list .food {
+	color: #6c6c6c;
+	font-size: 15px;
+	padding-left: 24px;
+}
+
+.person_dialog_contain .test_report_list .report_item {
+	margin-bottom: 15px;
+}
+
+.person_dialog_contain .test_report_list .report_item .report_date {
+	padding-right: 15px;
+	border-right: 1px solid #ccc;
+	margin-right: 15px;
+}
+
+.person_dialog_contain .test_report_list .report_item {
+	padding: 10px;
+	border: 1px solid #ccc;
+	font-size: 16px;
+}
+
+.person_dialog_contain .test_report_list .report_item .remark {
+	padding: 8px 0;
+}
+
+.person_dialog_contain .test_report_list .report_item .img_set li {
+	display: inline-block;
+	margin: 8px 15px 8px 0;
+}
+
+.person_dialog_contain .test_report_list .report_item .img_set li img {
+	width: 90px;
+	height: 90px;
+}
+
+.person_dialog_contain .baseMsg {
+	min-height: 300px;
+	padding: 15px 10px;
+}
+
+.person_dialog_contain .baseMsg .userImg {
+	position: absolute;
+	width: 120px;
+	text-align: center;
+	padding-top: 15px;
+}
+
+.person_dialog_contain .baseMsg .baseContain {
+	position: relative;
+	left: 120px;
+	min-height: 300px;
+	width: 470px;
+	padding: 10px;
+}
+
+.person_dialog_contain .baseMsg .baseContain h2 {
+	font-size: 20px;
+}
+
+.person_dialog_contain .baseMsg .baseContain .msg_table {
+	width: 100%;
+	font-size: 16px;
+	padding: 10px 0;
+	line-height: 29px;
+}
+
+.person_dialog_contain .sick_record li {
+	padding: 10px;
+	border: 1px solid #ccc;
+	font-size: 16px;
+	position: relative;
+	min-height: 130px;
+	margin-bottom: 10px;
+}
+
+.person_dialog_contain .sick_record li img {
+	position: absolute;
+	right: 8px;
+	width: 110px;
+	height: 110px;
+}
+
+.person_dialog_contain .sick_record li .sick_data {
+	margin-right: 120px;
+	font-size: 16px;
+}
+
+.person_dialog_contain .sick_record li .sick_data p {
+	margin: 3px 0;
+}
+
+.person_dialog_contain .sick_record li .sick_data p:first-child {
+	color: #48c858;
+	font-size: 17px;
+}
+
+.person_dialog_contain .sick_record li .sick_data p:nth-child(2) {
+	color: #6c6c6c;
+}
+
+.person_dialog_contain .sick_record li .sick_data p:last-child {
+	color: #9c9c9c;
+	font-size: 15px;
+}
+
+.healthTable {
+	width: 100%;
+	font-size: 16px;
+}
+
+.healthTable tr:first-child {
+	color: #3598dc;
+	font-weight: bold;
+	height: 40px;
+	line-height: 40px;
+}
+
+.healthTable tr.healthdata-result td{
+	border-bottom: 1px dashed #ddd;
+	font-size: 15px;
+	padding: 8px 0;
+}
+
+.dialog_contain {
+	background: #fff;
+	padding: 20px;
+	margin: 0 auto;
+	width: 650px;
+	min-height: 250px;
+	position: relative;
+}
+
+.dialog_contain .groupName_set {
+	font-size: 15px;
+	padding: 10px 20px;
+	margin-bottom: 10px;
+}
+
+.dialog_contain .groupName_set label {
+	font-weight: bold;
+}
+
+.dialog_contain .groupName_set input[type=text] {
+	padding: 3px 8px;
+	border: 1px solid #ddd;
+	font-size: 15px;
+	width: 200px;
+	margin-left: 8px;
+	outline-color: #3598dc;
+}
+
+.dialog_contain .enter {
+	border: none;
+	outline: none;
+	border-radius: 3px;
+	padding: 5px 20px;
+	background: #3598dc;
+	color: #fff;
+	cursor: pointer;
+	font-family: 'Microsoft YaHei';
+}
+
+.dialog_contain .enter:hover {
+	background: #328ac4;
+}
+
+.dialog_contain .cacel {
+	border: none;
+	outline: none;
+	border-radius: 3px;
+	padding: 5px 20px;
+	border: 1px solid #ccc;
+	background-color: #fff;
+	margin-left: 30px;
+	cursor: pointer;
+	font-family: 'Microsoft YaHei';
+}
+
+.dialog_contain .cacel:hover {
+	background: #f1f1f1;
+}
+
+.manager {
+	color: #3598dc;
+	cursor: pointer
+}
+
+.groupMember {
+	min-height: 490px;
+	position: relative;
+	margin-top: 10px
+}

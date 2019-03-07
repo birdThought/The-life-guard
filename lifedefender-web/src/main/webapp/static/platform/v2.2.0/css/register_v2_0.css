@@ -1,0 +1,290 @@
+/*
+* @Author: Administrator
+* @Date:   2017-04-10 14:09:40
+* @Last Modified by:   Administrator
+* @Last Modified time: 2017-04-20 16:20:46
+*/
+html{
+	overflow-x:hidden;
+	overflow-y:auto;
+}
+.register_content{
+	padding-top: 40px;
+}
+.register_content p.introduce{
+	color:#666;
+	font-size: 16px;
+	margin-bottom: 50px;
+}
+.step-line{
+	width: 100%;
+	height: 8px;
+	border-radius: 5px;
+	background-color: #e4e4e4;
+	position: relative;
+	margin-bottom: 100px;
+}
+.step-line > div{
+	float: left;
+	width: 400px;
+	position: absolute;
+	top:0;
+	height: 100%;
+}
+.step-line > div:nth-of-type(2){
+	left:400px;
+}
+.step-line > div:nth-of-type(3){
+	left:800px;
+}
+
+.step-line > div:nth-of-type(5) {
+	left: 960px;
+}
+.step-line > div:nth-of-type(1){
+	border-top-left-radius: 5px;
+	border-bottom-left-radius: 5px;
+	left:0;
+	background-color: #369239;
+}
+.step-line ul{
+	position: absolute;
+	left:0;
+	top:-14px;
+}
+.step-line ul li{
+	width:400px;
+	float: left;
+	text-align: center;
+}
+.step-line ul li p{
+	margin-top:16px;
+	color:#999;
+	font-size:16px;
+}
+.step-line ul li p.on{
+	color:#369239;
+}
+.step-line ul li p.pass{
+	color:#8dbb8e;
+}
+.step-line ul li div{
+	margin:0 auto;
+	width:30px;
+	height: 30px;
+	background-image:url(/static/platform/v2.2.0/images/icon/login-icon.png);
+}
+.step-line ul div.step-1{
+	background-position: -165px top;
+
+}
+.step-line ul div.step-2{
+	background-position: -203px top;
+}
+.step-line ul div.step-3{
+	background-position: -127px top;
+}
+
+/* step-2 */
+.step-line > div.step-1{
+	background-color: #8dbb8e;
+}
+.step-line > ul.step-1 li p.on{
+
+}
+.step-line > div.step-2{
+	background-color:#369239;
+}
+
+/* step-3 */
+.step-line > div.step-3{
+	border-top-right-radius: 5px;
+	border-bottom-right-radius: 5px;
+}
+
+/* register input style */
+.register_content form[name = "content-form"] {
+	/*width:650px;*/
+	padding-bottom: 220px;
+}
+.register_content form h5{
+	line-height: 40px;
+	font-weight: 500;
+	float: left;
+	width:100px;
+	text-align: right;
+	color:#666;
+	font-size: 16px;
+	margin-right: 20px;
+}
+.register_content form ul li{
+	margin-bottom: 44px;
+}
+.register_content form ul li:after{
+	content: "";
+	display: block;
+	clear: both;
+	visibility: hidden;
+	height:0; 
+}
+.register_content form input[type=text],
+.register_content form input[type=password],
+.register_content form select{
+	width: 380px;
+	height: 40px;
+	border:1px solid #cacaca;
+	text-indent: 16px;
+	outline-color: #369239;
+	float: left;
+	margin-right: 18px;
+	font-size: 14px;
+}
+.register_content form input[type=submit]{
+	background-color:#369239;
+	color:#fff;
+	font-size: 18px;
+	height: 48px;
+	border:1px solid #369239;
+	width: 340px;
+	border-radius: 8px;
+	cursor: pointer;
+}
+.register_content form .msg-lay{
+	color:#999;
+	font-size: 14px;
+	width: 120px;
+	height: 40px;
+	float: left;
+
+}
+.register_content form .msg-lay-1{
+	margin-top: 4px;
+	width: 30px;
+	height: 30px;
+	display: inline-block;
+	background-image: url(/static/platform/v2.2.0/images/icon/login-icon.png);
+	background-position: -165px top;
+	display: none;
+}
+.psw_strenth{
+	vertical-align: top;
+}
+.psw_strenth span{
+	display: block;
+}
+.psw_strenth div{
+	width: 28px;
+    height: 5px;
+    margin-right: 6px;
+    background-color: #ddd;
+    display: inline-block;
+}
+.get-code{
+	cursor: pointer;
+	width:120px;
+	height: 40px;
+	background-color:#369239;
+	color:#fff;
+	border:1px solid #369239;
+	border-radius: 4px;
+	font-size: 14px;
+	/*padding: 22px;*/
+}
+.argument{
+	text-align: center;
+}
+.argument p{
+	font-size: 16px;
+	color:#666;
+}
+.argument input[type = "button"] {
+	background-color: #369239;
+	color: #fff;
+	font-size: 18px;
+	height: 48px;
+	border: 1px solid #369239;
+	width: 340px;
+	border-radius: 8px;
+	cursor: pointer;
+}
+.register_content form dl{
+	display: inline-block;
+}
+.register_content form dl dd{
+	display: inline-block;
+	margin-right: 50px;
+}
+.magic-radio + label:after{
+	top: 5px;
+    left: 5px;
+    box-sizing: border-box;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background-color: #369239;
+    border-color:#369239;
+}
+.register_content form li.step-2-btn{
+	padding-top: 70px;
+	padding-left: 120px;
+}
+a.btn-1{
+	color:#fff;
+	background-color: #cacaca;
+	font-size: 18px;
+	display: inline-block;
+	border-radius:6px;
+	width:160px;
+	height: 50px;
+	line-height: 50px;
+	text-align: center;
+	cursor: pointer;
+}
+a.btn-2{
+	background-color: #369239;
+	margin-left: 50px;
+	cursor: pointer;
+}
+a.btn-3{
+	background-color:#86be88;
+	display:inline-block;
+	height: 60px;
+	width: 360px;
+	color:#fff;
+	text-align: center;
+	line-height: 60px;
+	font-size: 20px;
+	border-radius: 8px;
+	cursor: pointer;
+}
+.register_content section{
+	text-align: center;
+	padding-bottom: 510px;
+}
+.register_content section div{
+	width: 70px;
+	height: 70px;
+	margin:0 auto;
+	background-image:url(/static/platform/v2.2.0/images/icon/login-icon.png);
+	background-position: -233px top;
+}
+.register_content section h3{
+	color:#fe7800;
+	font-size: 24px;
+	margin-top:20px;
+	margin-bottom: 90px;
+}
+.submit {
+	background-color: #369239;
+	color: #fff;
+	font-size: 18px;
+	height: 48px;
+	border: 1px solid #369239;
+	width: 340px;
+	border-radius: 8px;
+	cursor: pointer;
+}
+.img-list img {
+	width: 240px;
+	height: 180px;
+}

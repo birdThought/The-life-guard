@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html>
+	<!--step1,2:首页-->
+
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="initial-scale=1,maximum-scale=1, minimum-scale=1">
+		<title>单选及多选</title>
+		<link rel="stylesheet" href="/static/platform/v2.2.0/css/thirdpart/jztx/home_index.css" />
+		<script type="text/javascript" src="/static/platform/v2.2.0/js/thirdpart/jztx/vue.js"></script>
+		<script type="text/javascript" src="/static/platform/v2.2.0/js/thirdpart/jztx/mode.js"></script>
+		<script type="text/javascript" src="/static/platform/v2.2.0/js/thirdpart/jztx/jq.js"></script>
+		<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+		<script type="text/javascript" src="/static/platform/v2.2.0/js/thirdpart/jztx/data.js"></script>
+	</head>
+
+	<body>
+		<!--布局块-->
+		<div class="bg"></div>
+
+		<div id="block_form" :style="!isStep1&(onlyClick ==5 ||onlyClick ==10) ?'min-height:80rem;':!isStep1&onlyClick==6?'min-height:55rem;':''">
+			<!--表单背景-->
+			<div class="block_form_bg"></div>
+			<!--end 表单背景-->
+
+			<div class="block_img">
+				<img src="img/man.png" style="width: 5rem;height: 5rem;" />
+			</div>
+
+			<!--提示-->
+			<div class="block_tip">
+				<label style="color: orange;"><b>step {{isStep1?'1':'2'}}</b></label>
+				<div v-if="title!=''||title!=null">{{title}}</div>
+				<div>请选择您需要的服务项目</div>
+			</div>
+			<!--end 提示-->
+			<!--选择框块-->
+			<div class="block_option">
+				<ul v-if="isStep1" v-for="item,index in data">
+					<li @click="clickItem(index,$event)" @mouseenter="hover(index,$event)" @mouseleave="hoverout(index,$event)" :style="hoverIndex==index||onlyClick==index?'border:1px solid white;color: white;':'border: 1px solid #8aced4;color: #8aced4;'">{{item.name}}</li>
+				</ul>
+				<ul v-if="!isStep1" v-for="item,index in subdata.subjob">
+					<li @click="clickItem(index,$event)" @mouseenter="hover(index,$event)" @mouseleave="hoverout(index,$event)" :style="hoverIndex==index||clickIndex[index]?'border:1px solid white;color: white;':'border: 1px solid #8aced4;color: #8aced4;'">{{item.name}}</li>
+				</ul>
+			</div>
+			<!--end 选择框块-->
+		</div>
+
+		<!--按钮块-->
+		<div id="block_btn" class="block_btn" style="display: flex;justify-content: center;">
+			<div v-if="!isStep1">
+				<div @click="backword($event)">上一步</div>
+			</div>
+			<div>
+				<div @click="forword($event)">下一步</div>
+			</div>
+		</div>
+		<!--end 按钮块-->
+		<!--布局块-->
+		<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+		<script>
+			var isStep1 = sessionStorage.getItem('isStep1') == null ? true : sessionStorage.getItem('isStep1');
+			var step1_index = sessionStorage.getItem("step1") == null ? -1 : sessionStorage.getItem("step1");
+			var title = sessionStorage.getItem('title');
+		</script>
+		<script>
+			var home = new Vue({
+				el: '#block_form',
+				data: {
+					isStep1,
+					data: data.jobtype,
+					subdata: [],
+					hoverIndex: -1,
+					//单选(第一步)
+					onlyClick: -1,
+					//多选(第二步)
+					clickIndex: [],
+					title
+				},
+				mounted: function() {
+
+					axios.post('/thirdParty/jztx/getJobType',{
+						objJson: objJson
+					}).then(response => {
+						this.data = response.data;
+					}).catch(error => {
+						console.log(error)
+					});
+					//第一个!:是把字符串变成boolean值。
+					if(!!isStep1 & step1_index != -1) {
+						//注：加载静态数据（仍需更改）
+						this.isStep1 = !isStep1;
+						this.subdata = data.jobtype[step1_index];
+						this.onlyClick = step1_index;
+					}
+					for(var i = 0; i < this.data.length; i++) {
+						this.clickIndex[i] = false;
+					}
+				},
+				methods: {
+					//点击及hover事件
+					clickItem: function(index, event) {
+						if(this.isStep1) {
+							this.onlyClick = index;
+							this.subdata = this.data[index];
+						} else {
+							Vue.set(this.clickIndex, index, !this.clickIndex[index]);
+						}
+					},
+					hover: function(index, event) {
+						this.hoverIndex = index;
+					},
+					hoverout: function(index, event) {
+						if(this.onlyClick != index && this.isStep1) {
+							event.target.style.border = '1px solid rgb(138, 206, 212)';
+							event.target.style.color = 'rgb(138, 206, 212)';
+						} else if(!this.clickIndex[index] && !this.isStep1) {
+							event.target.style.border = '1px solid rgb(138, 206, 212)';
+							event.target.style.color = 'rgb(138, 206, 212)';
+						}
+					}
+				}
+			});
+
+			var block_btn = new Vue({
+				el: '#block_btn',
+				data: {
+					isStep1
+				},
+				mounted: function() {
+					this.isStep1 = !isStep1;
+				},
+				methods: {
+					//上一步
+					backword: function(event) {
+						if(!home.isStep1) {
+							home.isStep1 = !home.isStep1;
+							this.isStep1 = !this.isStep1;
+						}
+					},
+					//下一步
+					forword: function(event) {
+						if(home.isStep1) {
+							home.isStep1 = !home.isStep1;
+							this.isStep1 = !this.isStep1;
+							sessionStorage.setItem('title', home.data[home.onlyClick].name);
+						} else {
+							var arrStr = [];
+							for(var i = 0; i < home.clickIndex.length; i++) {
+								if(home.clickIndex[i] == true) {
+									arrStr.push(i);
+								}
+							}
+
+							//下一步完成时，保存到本地变量中
+							sessionStorage.setItem('title', home.data[home.onlyClick].name);
+							sessionStorage.setItem("step1", home.onlyClick);
+							sessionStorage.setItem("step1_temp", home.data[home.onlyClick].template);
+							sessionStorage.setItem("step2", home.clickIndex);
+							sessionStorage.setItem("step2_index", arrStr);
+							window.location = 'option.html';
+						}
+
+					}
+				}
+			});
+		</script>
+
+		<!--未完成，1.隐藏上一步，2.下一步点击3.-->
+
+	</body>
+
+</html>

@@ -1,0 +1,46 @@
+.imgSet{
+	margin-top:15px
+}
+.upload{
+	margin-top:10px
+}
+.imgSet li{
+ 	display:inline-block;
+ 	margin:0 8px 8px 0;
+}
+.imgSet li .image_box{
+	width: 100px;
+	height: 100px;
+	position:relative;
+	
+}
+.imgSet img{
+	width: 100px;
+	height: 100px;
+} 
+.imgSet li .image_box div{
+	position:absolute;
+	height:25px;
+	line-height:25px;
+	bottom:0;
+	text-align:right;
+	width:100%;
+	padding-right:8px;
+	color:#fff;
+	background-color:#000;
+	opacity:0.8;
+}
+
+.imgSet li .image_box div img{
+	width:13px;
+	height:14px;
+	vertical-align: middle;
+}
+.description textarea{
+	margin-left : 0; 
+	width : 443px;
+	height : 80px;
+	padding:8px;
+	border-radius:5px;
+	
+}

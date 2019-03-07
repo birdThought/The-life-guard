@@ -1,0 +1,222 @@
+﻿<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="initial-scale=1,maximum-scale=1, minimum-scale=1">
+		<title></title>
+		<link rel="stylesheet" href="css/bootstrap.css" />
+		<link rel="stylesheet" href="layui/css/layui.css" />
+		<script type="text/javascript" src="js/jq.js"></script>
+		<!--<link href="http://www.jq22.com/jquery/bootstrap-3.3.4.css" rel="stylesheet">-->
+		<style>
+			/*头部*/
+			
+			.header_shop {
+				position: fixed;
+				width: 100%;
+				list-style-type: none;
+				margin: 0;
+				padding: 0;
+				top: 0;
+				height: 1.5rem;
+				color: white;
+				padding: 1rem 0 1rem 0;
+				/*border-bottom: 1px solid white;*/
+				background-color: #44c05e;
+				text-align: center;
+			}
+			
+			.header_shop_bg {
+				position: relative;
+				width: 100%;
+				list-style-type: none;
+				margin: 0;
+				padding: 0;
+				height: 1.5rem;
+				padding: 1rem 0 1rem 0;
+			}
+			
+			.header_shop .header_icon {
+				width: 20%;
+				text-align: left;
+			}
+			
+			.header_shop .header_title {
+				width: 60%;
+				text-align: center;
+			}
+		</style>
+		<style>
+			body {
+				margin: 0;
+				padding: 0;
+			}
+			
+			.block_author_describe * {
+				/*outline: 1px solid red;*/
+				text-align: center;
+				background-color: #63be5e;
+			}
+			
+			.block_author_img {}
+			
+			.block_author_img img {
+				width: 10rem;
+				height: 10rem;
+			}
+			/*账号描述*/
+			
+			.block_author_describe_bar {
+				font-size: 0.9rem;
+				text-align: center;
+				padding: 0.1rem 1rem 0.1rem 1rem;
+			}
+			/*个人信息表单*/
+			
+			.block_author_form_bar {
+				font-size: 1rem;
+				display: flex;
+				justify-content: space-between;
+				padding: 1rem 1rem 1rem 1rem;
+				border-bottom: 1px solid #dddddd;
+			}
+			
+			.block_author_form_bar_left {
+				display: flex;
+				align-items: center;
+			}
+			
+			.block_author_form_bar_right {
+				width: 0.7rem;
+				height: 1.2rem;
+			}
+			
+			.block_btn {
+				position: fixed;
+				bottom: 0.5rem;
+				width: 100%;
+			}
+			
+			.block_btn_exit {
+				color: white;
+				text-align: center;
+				border-radius: 0.5rem;
+				padding: 1rem 0 1rem 0;
+				margin-left: 1rem;
+				margin-right: 1rem;
+				background-color: #f3ad4d;
+			}
+		</style>
+	</head>
+
+	<body>
+		<!--头选择项-->
+		<ul class="header_shop">
+			<li class="header_title" style="height: 1.2rem;">
+				<label></label>
+			</li>
+		</ul>
+		<!--end 头选择项-->
+		<ul class="header_shop_bg"></ul>
+
+		<div class="block_author_describe">
+			<div class="block_author_img">
+				<img src="img/author.png" />
+			</div>
+			<div class="block_author_describe_bar">
+				<div></div>
+			</div>
+			<div class="block_author_describe_bar">
+				<div></div>
+			</div>
+		</div>
+
+		<style>
+			input::-webkit-outer-spin-button,
+			input::-webkit-inner-spin-button {
+				-webkit-appearance: none;
+			}
+			
+			input[type="number"] {
+				-moz-appearance: textfield;
+			}
+		</style>
+		<div style="display: flex;justify-content: center;">
+			<form class="form-horizontal" style="margin-top: 3rem;text-align: center;">
+				<div class="form-group">
+					<div class="col-sm-10" style="display: flex;justify-content: center;">
+						<input type="file" />
+					</div>
+				</div>
+				<div class="form-group">
+					<label for="inputEmail3" class="col-sm-2 control-label">管理机构名称</label>
+					<div class="col-sm-10">
+						<input type="text" class="form-control" style="width: 40rem;">
+					</div>
+				</div> 
+				<div class="form-group">
+					<label for="inputPassword3" class="col-sm-2 control-label">所在地区</label>
+					<div class="col-sm-10" data-toggle="distpicker" style="width: 40rem;">
+						<select></select>
+						<select></select>
+						<select></select>
+					</div>
+				</div>
+                <div class="form-group">
+                    <label for="inputStreet3" class="col-sm-2 control-label">详细地址</label>
+                    <div class="col-sm-10">
+                        <input type="number" class="form-control" style="width: 40rem;">
+                    </div>
+                </div>
+				<div class="form-group">
+					<label for="inputPassword3" class="col-sm-2 control-label">公司电话</label>
+					<div class="col-sm-10">
+						<input type="number" class="form-control" style="width: 40rem;">
+					</div>
+				</div>
+				<div class="form-group">
+					<label for="inputPassword3" class="col-sm-2 control-label">手机号码</label>
+					<div class="col-sm-10">
+						<input type="number" class="form-control" style="width: 40rem;">
+					</div>
+				</div>
+				<div class="form-group">
+					<label for="inputPassword3" class="col-sm-2 control-label">登录账号</label>
+					<div class="col-sm-10">
+						<input type="text" class="form-control" style="width: 40rem;">
+					</div>
+				</div>
+				<div class="form-group">
+					<label for="inputPassword3" class="col-sm-2 control-label">登录密码</label>
+					<div class="col-sm-10">
+						<input type="password" class="form-control" style="width: 40rem;">
+					</div>
+				</div>
+				<!--<div class="form-group">
+					<div class="col-sm-offset-2 col-sm-10">
+						<button type="submit" class="btn btn-default">注册</button>
+					</div>
+				</div>-->
+			</form>
+		</div>
+
+		<div class="block_btn">
+			<div class="block_btn_exit" id="test2">注册</div>
+		</div>
+	</body>
+	<script src="http://www.jq22.com/jquery/1.11.1/jquery.min.js"></script>
+	<script src="js/distpicker.data.js"></script>
+	<script src="js/distpicker.js"></script>
+	<script src="js/main.js"></script>
+
+	<script>
+		$('#mine_describe').click(function() {
+			window.location = 'mine_desribe.html';
+		});
+		$('#address').click(function() {
+			window.location = 'address.html';
+		});
+	</script>
+
+</html>

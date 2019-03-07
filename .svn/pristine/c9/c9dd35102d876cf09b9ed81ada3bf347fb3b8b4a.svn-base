@@ -1,0 +1,292 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lifeshs.dao.org.lesson.ILessonGroupDao">
+
+    <select id="listServeLesson" resultMap="LessonGroup">
+        <include refid="selectAllColumnInnerJoinTOrgServeAndTServe" />
+        WHERE og.orgServeId = #{orgServeId}
+    </select>
+
+    <select id="listServeUserLesson" resultMap="LessonGroup">
+        <include refid="selectAllColumnInnerJoinTOrgServeAndTServe" />
+            INNER JOIN t_org_group_orguser ogou ON ogou.groupId = og.id
+        WHERE ogou.orgUserId = #{serveUserId}
+    </select>
+
+    <select id="listMemberLesson" resultMap="LessonGroup">
+        <include refid="selectAllColumnInnerJoinTOrgServeAndTServe" />
+            INNER JOIN t_order od ON od.serveGroupId = og.id AND od.`status` = 3
+        WHERE od.userId = #{memberId}
+    </select>
+
+    <select id="getLesson" resultMap="LessonGroup">
+        <include refid="selectAllColumnInnerJoinTOrgServeAndTServe" />
+        WHERE og.id = #{id}
+    </select>
+
+    <resultMap type="com.lifeshs.pojo.org.group.LessonDTO" id="LessonGroup">
+        <id property="id" column="id"/>
+        <collection property="courseTime" ofType="com.lifeshs.pojo.org.group.CourseTimeDTO" column="id" select="selectLessonGroupDetail"/>
+        <collection property="userOrders" ofType="com.lifeshs.pojo.order.UserOrderDTO" column="id" select="selectGroupOrder" />
+        <collection property="orgUsers" ofType="com.lifeshs.pojo.org.group.LessonGroupOrgUserDTO" column="id" select="selectGroupOrgUser" />
+    </resultMap>
+
+    <select id="selectLessonGroupDetail" resultType="com.lifeshs.pojo.org.group.CourseTimeDTO">
+        SELECT weeks, startTime FROM t_org_group_lesson WHERE groupId = #{id}
+    </select>
+    
+    <select id="selectGroupOrder" resultType="com.lifeshs.pojo.order.UserOrderDTO">
+        SELECT
+            o.id AS orderId, o.chargeMode AS orderChargeMode, u.id AS userId,
+            u.photo AS userPhoto, u.userCode AS userCode, u.realName AS userRealName
+        FROM t_order o
+            INNER JOIN t_user u ON u.id = o.userId
+        WHERE o.serveGroupId = #{id} AND o.`status` = 3 AND o.orderType = 1
+    </select>
+    
+    <select id="selectGroupOrgUser" resultType="com.lifeshs.pojo.org.group.LessonGroupOrgUserDTO">
+        SELECT u.id, u.userCode, u.photo, u.realName, u.userType AS orgUserType, u.mobile, u.sex, u.email, u.tel, u.detail, u.about
+        FROM t_org_group_orguser gu
+            INNER JOIN t_org_user u ON u.id = gu.orgUserId
+        WHERE gu.groupId = #{id}
+    </select>
+
+    <!-- 全字段select语句 -->
+    <sql id="selectAllColumnInnerJoinTOrgServeAndTServe">
+        SELECT
+            og.id, og.huanxinId, og.photo, og.name, og.silence, og.defaultGroup, og.orgServeId, og.description, og.creatorId
+        FROM t_org_group og
+            <!-- 暂时注释 -->
+            <!-- INNER JOIN t_org_serve os ON os.id = og.orgServeId
+            INNER JOIN t_serve s ON s.id = os.serveId AND s.`code` = "02" -->
+    </sql>
+
+    <insert id="addLesson" parameterType="com.lifeshs.pojo.org.group.LessonDTO">
+        <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+        INSERT INTO t_org_group
+            <!-- 创建日期，环信ID，群组名称，机构服务ID -->
+            <trim prefix="(" suffix=")" suffixOverrides=",">
+                creatorId,createDate,huanxinId,name,orgServeId,
+                <if test="defaultGroup != null">defaultGroup,</if>
+                <if test="photo != null">photo,</if>
+                <if test="description != null">description,</if>
+                <if test="startDate != null">startDate,</if>
+                <if test="endDate != null">endDate,</if>
+            </trim>
+            <trim prefix="VALUES(" suffix=")" suffixOverrides=",">
+                #{creatorId},NOW(),#{huanxinId},#{name},#{orgServeId},
+                <if test="defaultGroup != null">#{defaultGroup},</if>
+                <if test="photo != null">#{photo},</if>
+                <if test="description != null">#{description},</if>
+                <if test="startDate != null">#{startDate},</if>
+                <if test="endDate != null">#{endDate},</if>
+            </trim>
+    </insert>
+
+    <delete id="deleteCourseTime">
+        DELETE FROM t_org_group_lesson WHERE groupId = #{groupId}
+    </delete>
+    
+    <insert id="addCourseTime">
+        INSERT INTO t_org_group_lesson(groupId, weeks, startTime)
+        VALUES
+        <foreach collection="courseTimeDTOs" item="item" index="index" separator="," >
+            (#{groupId},#{item.weeks},#{item.startTime})  
+        </foreach>
+    </insert>
+
+    <update id="updateLesson">
+        UPDATE t_org_group
+        SET
+            <trim suffixOverrides=",">
+                <if test="photo != null">
+                    photo = #{photo},
+                </if>
+                <if test="name != null">
+                    name = #{name},
+                </if>
+                <if test="silence != null">
+                    silence = #{silence},
+                </if>
+                <if test="description != null">
+                   description = #{description}
+                </if>
+            </trim>
+            WHERE
+                id = #{id} LIMIT 1
+    </update>
+
+    <delete id="deleteLesson">
+        DELETE FROM t_org_group WHERE id = #{id} LIMIT 1
+    </delete>
+
+    <insert id="addOrgUser">
+        INSERT INTO t_org_group_orguser(groupId, orgUserId, createDate)
+        VALUES
+        <foreach collection="userIds" item="item" index="index" separator=",">
+            (#{groupId}, #{item}, NOW())
+        </foreach>
+    </insert>
+    
+    <delete id="removeOrgUser">
+        DELETE FROM t_org_group_orguser WHERE groupId = #{groupId} AND orgUserId IN
+        <trim prefix="(" suffix=")">
+            <foreach collection="userIds" item="item" index="index"
+                separator=",">#{item}</foreach>
+        </trim>
+    </delete>
+
+    <select id="listLagerNumberOfBuyer" resultMap="RecommendedLesson">
+        SELECT
+            p.id, COUNT(DISTINCT(o.userId)) AS buyerCount
+        FROM
+            t_project_lesson p
+        LEFT JOIN t_order o ON o.projectCode = p.`code` AND o.`status` IN (3, 4)
+        WHERE p.`status` = 2
+        GROUP BY p.id
+        ORDER BY buyerCount DESC
+        LIMIT #{limit}
+    </select>
+    
+    <resultMap type="com.lifeshs.pojo.serve.lesson.RecommendedLessonDTO" id="RecommendedLesson">
+        <result column="buyerCount" property="buyerCount" />
+        <association property="lessonProject" column="id" select="selectProjectLesson" />
+    </resultMap>
+
+    <select id="selectProjectLesson" resultMap="LessonProject">
+        SELECT l.*, COUNT(DISTINCT(o.userId)) AS validOrderCount FROM t_project_lesson l
+        INNER JOIN t_order o ON o.projectCode = l.code AND o.`status` IN (3)
+        WHERE l.id = #{id}
+    </select>
+
+    <resultMap type="com.lifeshs.pojo.serve.lesson.LessonProjectDTO" id="LessonProject">
+        <result column="code" property="code" />
+        <association property="org" column="orgId" select="com.lifeshs.dao.org.OrgDao.getOrg" />
+        <association property="serve" column="serveId" select="com.lifeshs.dao.serve.ServeDao.getServeType" />
+        <collection property="serveUserList" column="code" fetchType="eager" select="selectLessonProjectServeUser" />
+    </resultMap>
+    
+    <select id="selectLessonProjectServeUser" resultType="com.lifeshs.pojo.org.employee.EmployeeDTO">
+        SELECT u.* FROM t_project_orguser_relation r INNER JOIN t_org_user u ON u.id = r.orgUserId
+        WHERE r.projectCode = #{code}
+    </select>
+
+    <select id="listLessonWithCondition" resultMap="RecommendedLesson">
+        SELECT p.id, COUNT(DISTINCT(o.userId)) AS buyerCount FROM t_project_lesson p
+        LEFT JOIN t_order o ON o.projectCode = p.`code`
+        INNER JOIN t_org org ON org.id = p.orgId AND org.orgVerified = 1 AND org.`status` = 0 AND org.isPublic=0
+        INNER JOIN t_data_serve_type2 AS st ON p.serveId = st.id
+        INNER JOIN t_data_serve_type AS st1 ON st1.Id = st.serveId
+        <where>
+            <include refid="searchLessonCondition" />
+        </where>
+        <!-- 排序方式按照购买数量(倒序)，课堂创建日期，课堂ID -->
+        GROUP BY p.id
+        ORDER BY buyerCount DESC, p.createDate ASC, p.id ASC
+        LIMIT #{startIndex}, #{pageSize}
+    </select>
+    
+    <select id="countLessonWithCondition" resultType="java.lang.Integer">
+        SELECT COUNT(1) FROM t_project_lesson p
+        INNER JOIN t_org org ON org.id = p.orgId AND org.orgVerified = 1 AND org.`status` = 0 AND org.isPublic=0
+        INNER JOIN t_data_serve_type2 AS st ON p.serveId = st.id
+        INNER JOIN t_data_serve_type AS st1 ON st1.Id = st.serveId
+        <where>
+            <include refid="searchLessonCondition" />
+        </where>
+    </select>
+    
+    <!-- 查找课堂的条件 -->
+    <sql id="searchLessonCondition">
+        p.`status` = 2
+        <!-- 价格筛选 -->
+        <if test="priceType != null">
+            <choose>
+                <when test="priceType == 'equals'">
+                    AND p.price = #{startPrice}
+                </when>
+                <when test="priceType == 'notEquals'">
+                    AND p.price &lt;&gt; #{startPrice}
+                </when>
+                <when test="priceType == 'between'">
+                    AND (#{startPrice} &lt;= p.price AND p.price &lt;= #{endPrice})
+                </when>
+                <when test="priceType == 'over'">
+                    AND p.price &gt; #{endPrice}
+                </when>
+                <when test="priceType == 'overInclude'">
+                    AND p.price &gt;= #{endPrice}
+                </when>
+                <when test="priceType == 'under'">
+                    AND p.price &lt; #{startPrice}
+                </when>
+                <when test="priceType == 'underInclude'">
+                    AND p.price &lt;= #{startPrice}
+                </when>
+            </choose>
+        </if>
+        <!-- 类型筛选 -->
+        <if test="type != null and type.length()==4">
+            AND st.code = #{type}
+        </if>
+        <if test="type != null and type.length()==2">
+            AND st1.code = #{type}
+        </if>
+        <!-- 课堂名称筛选 -->
+        <if test="likeName != null">
+            AND p.`name` REGEXP CONCAT('^.*', #{likeName}, '.*\\[.+\\]$')
+        </if>
+    </sql>
+
+
+
+    <select id="findLessonByOrgId" resultMap="RecommendedLesson">
+        SELECT
+            p.id, COUNT(DISTINCT(o.userId)) AS buyerCount
+        FROM
+            t_project_lesson p
+        LEFT JOIN t_order o ON o.projectCode = p.`code` AND o.`status` IN (3, 4)
+        WHERE p.orgId = #{orgId} AND p.`status` = 2
+        GROUP BY p.id
+    </select>
+
+    <select id="findLessonByServeUserId" resultMap="RecommendedLesson">
+        SELECT
+            p.id, COUNT(DISTINCT(o.userId)) AS buyerCount
+        FROM
+            t_project_lesson p
+        LEFT JOIN t_order o ON o.projectCode = p.`code` AND o.`status` IN (3, 4)
+        INNER JOIN t_project_orguser_relation r ON r.projectCode = p.`code`
+        WHERE r.orgUserId = #{serveUserId} AND p.`status` = 2
+        GROUP BY p.id
+    </select>
+
+    <select id="findLesson" resultMap="RecommendedLesson">
+        SELECT
+            p.id, COUNT(DISTINCT(o.userId)) AS buyerCount
+        FROM
+            t_project_lesson p
+        LEFT JOIN t_order o ON o.projectCode = p.`code` AND o.`status` IN (3, 4)
+        WHERE p.id = #{id} AND p.`status` = 2/** 状态是上线中的项目 */
+    </select>
+
+    <select id="findLessonByProjectCode" resultMap="RecommendedLesson">
+        SELECT
+            p.id, COUNT(DISTINCT(o.userId)) AS buyerCount
+        FROM
+            t_project_lesson p
+        LEFT JOIN t_order o ON o.projectCode = p.`code` AND o.`status` IN (3, 4)
+        WHERE p.`code` = #{projectCode}
+    </select>
+
+
+
+
+
+
+
+
+
+</mapper>

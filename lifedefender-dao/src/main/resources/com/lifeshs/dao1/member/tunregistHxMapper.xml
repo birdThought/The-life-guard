@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lifeshs.dao1.member.TunregistHxDao">
+    <select id="findByList" resultType="com.lifeshs.entity.huanxin.TUnregistHx">
+        select id,createDate,errorCode,password,username
+    from
+        t_unregist_hx limit #{curPage},#{pageSize}
+    </select>
+    <select id="findBySum" parameterType="int" resultType="java.lang.Integer">
+        SELECT count(*) FROM t_unregist_hx
+    </select>
+
+    <select id="findByAll" resultType="com.lifeshs.entity.huanxin.TUnregistHx">
+        SELECT * FROM t_unregist_hx
+    </select>
+</mapper>

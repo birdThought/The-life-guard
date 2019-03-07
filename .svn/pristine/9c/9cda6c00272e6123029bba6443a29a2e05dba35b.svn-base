@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+	<!--step4:填写内容-->
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="initial-scale=1,maximum-scale=1, minimum-scale=1">
+		<title></title>
+		<link rel="stylesheet" href="/static/platform/v2.2.0/css/thirdpart/jztx/home_index.css" />
+		<script type="text/javascript" src="/static/platform/v2.2.0/js/thirdpart/jztx/jq.js" ></script>
+		<script type="text/javascript" src="/static/platform/v2.2.0/js/thirdpart/jztx/mode.js"></script>
+		<script type="text/javascript" src="/static/platform/v2.2.0/js/thirdpart/jztx/vue.js"></script>
+		<!-- 引入样式 -->
+		<link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+		<!-- 引入组件库 -->
+		<script src="https://unpkg.com/element-ui/lib/index.js"></script>
+	</head>
+
+	<body>
+		<div class="bg"></div>
+
+		<div id="block_form" style="height: 38rem;">
+			<!--表单背景-->
+			<div class="block_form_bg"></div>
+			<!--end 表单背景-->
+
+			<div class="block_img">
+				<img src="img/man.png" style="width: 5rem;height: 5rem;" />
+			</div>
+
+			<!--提示-->
+			<div class="block_tip">
+				<label style="color: orange;"><b>step 4</b></label>
+				<div>{{title}}</div>
+				<div>请选择您需要的服务项目</div>
+			</div>
+			<!--end 提示-->
+			<!--选择框块-->
+			<div class="block_option">
+				<el-input style="font-size: 1rem;" type="textarea" :autosize="{ minRows: 10, maxRows: 18}" placeholder="写您的更多需求，如家政员籍贯、年龄、学历、工作经验等。" v-model="textarea">
+				</el-input>
+			</div>
+			<!--end 选择框块-->
+		</div>
+
+		<!--按钮块-->
+		<div id="block_btn" class="block_btn">
+			<div>
+				<div @click="back($event)">上一步</div>
+			</div>
+			<div>
+				<div @click="forword($event)">下一步</div>
+			</div>
+		</div>
+		<!--end 按钮块-->
+		<script>
+			var title = sessionStorage.getItem('title');
+			var home = new Vue({
+				el: '#block_form',
+				data: {
+					isStep: true,
+					hoverIndex: -1,
+					//单选(第一步)
+					onlyClick: -1,
+					//多选(第二步)
+					clickIndex: [],
+					textarea: '',
+					title
+				},
+				mounted: function() {
+
+				},
+				methods: {}
+			});
+			var block_btn = new Vue({
+				el: '#block_btn',
+				methods: {
+					back: function(event) {
+						window.location = 'option.html';
+					},
+					forword: function(event) {
+						sessionStorage.setItem('step4',home.textarea);
+						window.location = 'form.html'
+					}
+				}
+			});
+		</script>
+	</body>
+
+</html>

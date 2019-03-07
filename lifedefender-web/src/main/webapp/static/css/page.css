@@ -1,0 +1,66 @@
+.page_Container {
+	text-align: center;
+	height: 50px;
+	line-height: 50px;
+	margin: 10px 0
+}
+
+.page {
+	border: 1px solid #ddd;
+	padding: 8px 15px;
+	transition: background-color 0.3s;
+	cursor: pointer;
+	margin: 0 2px;
+	-moz-user-select: none;
+	-webkit-user-select: none;
+	-ms-user-select: none;
+	-khtml-user-select: none;
+	user-select: none;
+}
+
+.page_pre {
+	margin-right: 8px
+}
+
+.page_next {
+	margin-right: 10px;
+}
+
+.page_dian {
+	margin: 0 8px
+}
+
+.page:hover {
+	background-color: #3598dc;
+	color: #fff;
+}
+.page_action{
+	background-color: #3598dc;
+	color: #fff;
+}
+.page_input {
+	margin: 0 8px;
+	width: 40px;
+	border: 1px solid #ddd;
+	outline: #3598dc;
+	padding: 3px 6px
+}
+
+.page_input_enter {
+	border: 1px solid #ddd;
+	outline: none;
+	font-family: 'Microsoft YaHei';
+	background: #fff;
+	margin-left: 8px;
+	font-size: 15px;
+	padding: 3px 8px;
+	cursor: pointer
+}
+
+.page_input_enter:hover {
+	color: #3598dc
+}
+input::-webkit-input-placeholder {
+	color: #cdd;
+    font-size: 16px;
+}

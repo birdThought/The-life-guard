@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lifeshs.dao1.systemManage.MeasureReasonDao">
+
+	<!-- 获取测量建议列表 -->
+	<select id="findMessageReason" resultMap="MessageReasonVo">
+		SELECT
+			a.id AS aId,
+			a.createDate AS aCreateDate,
+			a.healthPackageParamId AS aHealthPackageParimId,
+			a.professional AS aProfessional,
+			a.reason AS aReason,
+			a.`status` AS aStatus,
+			b.id AS bId,
+			b.`name` AS bName,
+			b.name_cn AS bName_cn,
+			b.`value` AS bValue
+		FROM
+			t_data_health_reason a
+		INNER JOIN t_data_health_package_param b ON a.healthPackageParamId = b.id
+	    <where>
+	    <if test="healthPackageParamId !=null">
+	    	a.healthPackageParamId = #{healthPackageParamId}
+	    </if>
+	    </where>
+	    LIMIT #{startRow},#{pageSize}
+	</select>
+	
+	<!-- 统计测量建议数量 -->
+	<select id="countReason" resultType="java.lang.Integer">
+	 	SELECT COUNT(1)
+	    FROM
+			t_data_health_reason a
+		INNER JOIN t_data_health_package_param b ON a.healthPackageParamId = b.id
+	    <where>
+	    <if test="healthPackageParamId !=null">
+	    	a.healthPackageParamId = #{healthPackageParamId}
+	    </if>
+	    </where>
+	</select>
+
+	<!--添加测量建议-->
+	<insert id="addReason" parameterType="com.lifeshs.vo.systemManage.MeasureReasonVo">
+		INSERT INTO t_data_health_reason(healthPackageParamId,reason,status,professional,createDate)
+		VALUES(#{healthPackageParamId},#{reason},#{status},#{professional},NOW())
+	</insert>
+	
+	<!-- 编辑测量建议 -->
+	<update id="updateReason" parameterType="com.lifeshs.vo.systemManage.MeasureReasonVo">
+		UPDATE t_data_health_reason
+		<set>
+			<if test="reason !=null">
+				reason = #{reason},
+			</if>
+			<if test="status != null">
+				status = #{status},
+			</if>
+			<if test="professional != null">
+				professional = #{professional},
+			</if>
+				modifyDate = NOW()
+		</set>
+		WHERE id = #{id}
+	</update>
+	
+	<!-- 删除测量建议 -->
+	<delete id="deleteReason">
+		DELETE FROM t_data_health_reason WHERE id = #{id}
+	</delete>
+	
+	<!-- 获取健康参数列表 -->
+	<select id="getHealthParamById" resultType="com.lifeshs.po.data.HealthPackParamPO">
+		SELECT * FROM t_data_health_package_param 
+	</select>
+	
+	<!-- 映射 -->
+	 <resultMap type="com.lifeshs.vo.systemManage.MeasureReasonVo" id="MessageReasonVo">  
+        <id column="aId" property="id"/>  
+        <result column="aReason" property="reason"/>  
+		<result column="aStatus" property="status"/>
+		<result column="aProfessional" property="professional"/>
+		<result column="aHealthPackageParamId" property="healthPackageParamId"/>
+		<result column="aCreateDate" property="createDate"/>
+		<result column="aModifyDate" property="modifyDate"/>     
+        <association property="healthPackageParam" notNullColumn="bId"
+        	javaType="com.lifeshs.po.data.HealthPackParamPO">  
+            <id column="bId" property="id"/>  
+            <result column="bName" property="name"/>
+            <result column="bName_cn" property="name_cn"/> 
+            <result column="bValue" property="value"/>  
+        </association>  
+    </resultMap>  
+</mapper>

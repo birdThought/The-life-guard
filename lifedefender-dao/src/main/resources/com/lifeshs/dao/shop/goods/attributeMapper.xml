@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lifeshs.dao.shop.goods.AttributeDao">
+
+	<resultMap type="com.lifeshs.shop.AttributeDTO" id="attrWithValuesMap">
+		<id column="id" property="id" />
+		<result column="name" property="name" />
+		<result column="shopId" property="shopId" />
+		<result column="cid" property="cid" />
+		<!-- 属性值 -->
+		<collection property="attributeValues" ofType="com.lifeshs.shop.AttributeValueDTO">
+			<id column="vid" property="id"/>
+			<result column="vname" property="name"/>
+			<result column="id" property="attributeId"/>
+			<result column="selected" property="selected"/><!-- 用来判断是否被选中 -->
+		</collection>
+		
+	</resultMap>
+	
+	<!-- 添加商品时调用 -->
+	<select id="getAttributeByCategoryAndShop" resultMap="attrWithValuesMap">
+		SELECT a.id,a.cid,a.name,a.shop_id AS shopId
+		,v.id AS vid,v.name AS vname,0 AS selected
+		FROM t_shop_attribute a
+		INNER JOIN t_shop_attribute_value v ON a.id=v.attributeId
+		<where>
+			<if test="categoryId != null">
+				AND a.cid=#{categoryId}
+			</if>
+			AND (a.shop_id=-1 
+			<if test="shopId != null">
+				OR a.shop_id=#{shopId}
+			</if>
+			)
+			<if test="status != null">
+			AND a.status=#{status}
+			</if>
+		</where>
+	</select>
+	
+	<!-- 修改商品时调用 -->
+	<select id="getAttrsByCondition" resultMap="attrWithValuesMap">
+			SELECT 
+		  a.id,a.cid,a.name,a.shop_id AS shopId
+		   ,v.id AS vid,v.name AS vname,IF(r.goodsId IS NULL,0,1) AS selected
+		  FROM t_shop_attribute a
+		  INNER JOIN t_shop_attribute_value v ON a.id=v.attributeId
+		  LEFT JOIN t_shop_attribute_relation r ON v.id=r.attributeVId AND r.goodsId=#{goodsId}
+		  <where>
+			<if test="categoryId != null">
+				AND a.cid=#{categoryId}
+			</if>
+			AND (a.shop_id=-1 
+			<if test="shopId != null">
+				OR a.shop_id=#{shopId}
+			</if>
+			)
+			<if test="status != null">
+			AND a.status=#{status}
+			</if>
+		</where>
+	</select>
+	
+	<insert id="insertAttr" parameterType="com.lifeshs.shop.AttributeDTO" useGeneratedKeys="true" keyProperty="id">
+			INSERT INTO t_shop_attribute
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="cid != null">cid,</if>
+			<if test="name != null">`name`,</if>
+			<if test="sort != null">sort,</if>
+			<if test="status != null">`status`,</if>
+			<if test="createTime != null">createTime,</if>
+			<if test="shopId != null">shop_id,</if>
+		</trim>
+		VALUES
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="cid != null">#{cid},</if>
+			<if test="name != null">#{name},</if>
+			<if test="sort != null">#{sort},</if>
+			<if test="status != null">#{status},</if>
+			<if test="createTime != null">#{createTime},</if>
+			<if test="shopId != null">#{shopId},</if>
+		</trim>
+	</insert>
+	
+	<insert id="insertAttrValue" parameterType="com.lifeshs.shop.AttributeValueDTO" useGeneratedKeys="true" keyProperty="id">
+		INSERT INTO t_shop_attribute_value
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="attributeId != null">attributeId,</if>
+			<if test="name != null">`name`,</if>
+		</trim>
+		VALUES
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="attributeId != null">#{attributeId},</if>
+			<if test="name != null">#{name},</if>
+		</trim>
+	</insert>
+	
+	<!-- 批量插入 属性值-->
+	<insert id="batchInsertAttrValues">
+		INSERT INTO t_shop_attribute_value
+				(attributeId,name)
+		 VALUES	
+		<foreach collection="attributeValues" item="val" separator=",">
+           	(#{val.attributeId},#{val.name})  
+		</foreach>
+	</insert>
+	
+	<!-- 批量插入'属性'和'值'的关系 -->
+	<insert id="batchInsertRelations">
+		INSERT INTO t_shop_attribute_relation
+			(goodsId,attributeId,attributeVId)
+		VALUES
+		<foreach collection="relations" item="rela" separator=",">
+			(#{gid},#{rela.attributeId},#{rela.attributeVId})
+		</foreach>
+	</insert>
+	
+	<delete id="removeSkusByGoodsId">
+		DELETE FROM t_shop_sku where goodsId=#{goodsId}
+	</delete>
+	
+	<delete id="removeRelationsByGoodsId">
+		DELETE FROM t_shop_attribute_relation WHERE goodsId=#{goodsId}
+	</delete>
+	
+	<delete id="removeAttrsByIds">
+		DELETE n.*,v.* FROM t_shop_attribute n 
+		LEFT JOIN t_shop_attribute_value v ON n.id=v.attributeId
+		WHERE n.id IN(${ids})
+	</delete>
+	
+	<!-- 查询商品动态属性  -->
+	<select id="selectAttrRelationByGoodsId" resultType="map">
+		SELECT 
+		a.id AS aid,a.name AS aname
+		,v.id AS vid,v.name AS vname
+		FROM t_shop_attribute_relation r
+		INNER JOIN t_shop_attribute a ON r.attributeId=a.id
+		INNER JOIN t_shop_attribute_value v ON r.attributeVId=v.id
+		WHERE r.goodsId=#{gid}
+	</select>
+	
+</mapper>

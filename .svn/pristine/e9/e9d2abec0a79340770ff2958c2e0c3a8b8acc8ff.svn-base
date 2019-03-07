@@ -1,0 +1,47 @@
+*{
+	/*outline: 1px solid red;*/
+}
+ img{
+    	width: auto;
+    	height: auto;
+    	max-width: 100%;
+    	max-height: 100%;	
+}
+/*商品条目*/
+.product_list_flex{
+	display:flex;
+	/*float: left;*/
+	position: relative;
+	padding:1rem 1rem 1rem 1rem;
+	border-bottom: 1px solid #eeeeee;
+}
+
+/*左布局*/
+.product_list_flex_left{
+	display: flex;
+	width: 20%;
+	justify-content: center;
+	align-items: center;
+}
+.product_list_flex_left img{
+}
+
+/*右布局*/
+.product_list_flex_right{
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+}
+
+/*商品标题*/
+.product_list_flex_title{
+	padding-top: 1rem;
+	padding-left: 1rem;
+	
+}
+
+/*商品价格*/
+.product_list_flex_price{
+	padding-left:1rem;
+	color: #ff2c2c;
+}

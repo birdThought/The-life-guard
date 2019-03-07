@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lifeshs.dao1.push.OrgUserDeviceTokenDao">
+    <select id="findDeviceTokenByUserId" resultType="com.lifeshs.po.push.OrgUserDeviceTokenPO">
+        SELECT <include refid="T_ORG_USER_APP_PUSH_ALL_COLUMN" /> FROM t_org_user_app_push
+        WHERE userId = #{userId} AND deleted = FALSE
+        ORDER BY id DESC LIMIT 1
+    </select>
+    
+    <select id="findDeviceTokenByUserIdList" resultType="com.lifeshs.po.push.OrgUserDeviceTokenPO">
+        SELECT <include refid="T_ORG_USER_APP_PUSH_ALL_COLUMN" /> FROM t_org_user_app_push
+        WHERE deleted = FALSE AND userId IN <foreach collection="userIdList" open="(" separator="," close=")" item="userId">#{userId}</foreach>
+    </select>
+    
+    <insert id="addDeviceToken" parameterType="com.lifeshs.po.push.OrgUserDeviceTokenPO">
+        INSERT INTO t_org_user_app_push(deviceToken, userId, OS, systemVersion, deleted, createDate)
+        VALUES(#{deviceToken}, #{userId}, #{OS}, #{systemVersion}, FALSE, NOW());
+    </insert>
+    
+    <update id="delDeviceTokenByUserId">
+        UPDATE t_org_user_app_push SET deleted = TRUE WHERE userId = #{userId} AND deleted = FALSE;
+    </update>
+    
+    
+    
+    <select id="findDeviceToken" resultType="com.lifeshs.po.push.OrgUserDeviceTokenPO">
+        select p.id,p.deviceToken,p.userId,p.OS,p.systemVersion,p.deleted,p.createDate from t_org_user_app_push p 
+            where p.userId = #{userId} and p.OS = #{OS} and p.deviceToken= #{deviceToken} and p.systemVersion= #{systemVersion} 
+            limit 0,1
+    </select>
+    
+    <select id="findDeviceTokenList" resultType="com.lifeshs.po.push.UserDeviceTokenPO">
+        select p.id,p.deviceToken,p.userId,p.OS,p.systemVersion,p.deleted,p.createDate from t_org_user_app_push  p 
+        where p.userId = #{userId};
+    </select>
+    
+    <update id="updateTokenByUserId">
+        UPDATE t_org_user_app_push SET `deleted` = #{deleted} WHERE userId = #{userId} 
+        and OS = #{OS} and deviceToken= #{deviceToken} and systemVersion= #{systemVersion} ;
+    </update>
+    
+    
+    <sql id="T_ORG_USER_APP_PUSH_ALL_COLUMN">
+        id, deviceToken, userId, OS, systemVersion
+    </sql>
+</mapper>

@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lifeshs.dao1.vip.IVipWorkOrderDao">
+	<!-- 更新vip套餐次数 -->
+	<update id="updateComboNumber" parameterType="java.lang.Integer">
+		UPDATE t_vip_combo_item_record SET comboNumber = #{comboNumber}
+		WHERE userId = #{userId} AND comboItemId = #{comboItemId} and vipComboId=#{comboId} 
+	</update>
+	
+	<!-- 添加vip用户工单 -->
+	<insert id="addWorkOrder" parameterType="com.lifeshs.po.workOrder.WorkOrderPO" useGeneratedKeys="true" keyProperty="id">
+	    INSERT INTO t_vip_service_apply(userId,vipComboId,vipComboItemId,appoinDate,userRemark,status,createDate)
+        VALUES(#{userId},#{vipComboId},#{vipComboItemId},#{appoinDate},#{userRemark},#{status},NOW())
+	</insert>
+	
+	<!-- 获取vip用户工单总记录数 -->
+	<select id="countWorkOrder" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+	    SELECT COUNT(*) FROM t_vip_service_apply
+	    <where>
+	        <if test="userId != null">
+	            userId = #{userId}
+	        </if>
+	    </where>
+	</select>
+	
+	<!-- 获取vip用户工单列表 -->
+	<select id="findWorkOrderList" parameterType="java.lang.Integer" resultMap="workOrderVO">
+	    SELECT
+	        c.name AS comboItemName,
+	        a.id AS aId,
+	        a.userRemark AS aUserRemark,
+	        a.customerRemark AS aCustomerRemark,
+	        a.orgName AS aOrgName,
+	        a.address AS aAddress,
+	        a.appoinDate AS aAppoinDate,
+            a.vipComboId AS aVipComboId,
+	        a.vipComboItemId AS aVipComboItemId,
+	        a.sureDate AS aSureDate,
+	        a.userId AS aUserId,
+	        a.status AS aStatus
+	    FROM t_vip_service_apply a
+	    INNER JOIN t_vip_combo_item c ON a.vipComboItemId = c.id
+	    <where>
+	        <if test="userId != null">
+	            userId = #{userId}
+	        </if>
+	    </where>
+	    LIMIT #{startRow},#{pageSize}
+	</select>
+	
+	<resultMap type="com.lifeshs.vo.workOrder.WorkOrderVO" id="workOrderVO">
+	    <id property="id" column="aId"/>
+	    <result property="userRemark" column="aUserRemark"/>
+	    <result property="customerRemark" column="aCustomerRemark"/>
+	    <result property="orgName" column="aOrgName"/>
+	    <result property="address" column="aAddress"/>
+	    <result property="appoinDate" column="aAppoinDate"/>
+        <result property="vipComboId" column="aVipComboId"/>
+	    <result property="vipComboItemId" column="aVipComboItemId"/>
+	    <result property="sureDate" column="aSureDate"/>
+	    <result property="userId" column="aUserId"/>
+	    <result property="status" column="aStatus"/>
+	    <association property="item" javaType="com.lifeshs.po.vip.VipComboItemPO">
+	        <id property="id" column="aVipComboItemId"/>
+	        <result property="name" column="comboItemName"/>
+	    </association>
+	</resultMap>
+	
+	<insert id="addComboNumber" parameterType="java.lang.Integer">
+	    INSERT INTO t_vip_combo_item_record(userId,vipComboId,comboItemId,comboNumber)
+	    VALUES(#{userId},#{comboId},#{comboItemId},#{comboNumber})
+	</insert>
+	
+	<select id="findComboNumberById" resultType="java.lang.Integer">
+	    SELECT comboNumber FROM t_vip_combo_item_record
+	    WHERE userId=#{userId} and vipComboId=#{comboId} AND comboItemId=#{comboItemId}
+	</select>
+</mapper>

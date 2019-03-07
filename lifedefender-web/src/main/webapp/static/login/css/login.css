@@ -1,0 +1,229 @@
+/*
+* @Author: Administrator
+* @Date:   2017-03-14 10:08:33
+* @Last Modified by:   Administrator
+* @Last Modified time: 2017-03-14 20:38:59
+*/
+.item-content{
+	margin-top:0;
+	margin-bottom: 0;
+	/* background-color:#48c858; */
+	position: relative;
+	background: url(../../images/PC.jpg) no-repeat ;
+	background-size: 100% 100%;
+	min-height: 500px;
+}
+#item-login{
+	width:380px;
+	position: absolute;
+	left: 50%;
+	top:50%;
+	-webkit-transform: translate(-50%,-50%);
+	   -moz-transform: translate(-50%,-50%);
+	    -ms-transform: translate(-50%,-50%);
+	     -o-transform: translate(-50%,-50%);
+	        transform: translate(-50%,-50%);
+	background: #FFF;
+    border-radius: 16px;
+    box-shadow: 0 1px 6px 2px rgba(0, 0, 0, .2);
+    padding-left: 20px;
+    padding-right: 20px;
+}
+.loginContent li:first-child h3,#item-register .register-title h3{
+	margin-top: 0;
+    margin-bottom: 0;
+    line-height: 50px;
+    font-size: 24px;
+    font-weight: 500;
+    color:#333;
+}
+.loginContent li:first-child h3{
+	text-align:center;
+}
+.loginContent li{
+	margin-bottom: 30px;
+}
+.loginContent li input[type=text],
+.loginContent li input[type=password],
+.loginContent li input[type=submit]{
+	padding: 0 10px;
+    border: 1px solid #dddddd;
+    border-radius: 5px;
+    width: 100%;
+    height: 40px;
+    outline-color: #48c858;
+    box-sizing: border-box;
+}
+form li input[type=submit]{
+	font-size:16px;
+	background: #48c858;
+    color: white;
+    cursor: pointer;
+    border: none;
+    outline: none;
+}
+.magic-checkbox:checked + label:before{
+	border:1px solid #ddd;
+	background-color: transparent;
+}
+.magic-checkbox + label:after {
+	border-color:#48c858;
+}
+.setFlex {
+	 display: flex;
+  	 justify-content: space-between;
+}
+.certificateContent .setFlex div{
+	flex:1;
+}
+.certificateContent .setFlex div:first-child{
+	text-align:center;
+}
+/* ע��*/
+.item-content-register{
+	background-color:#ddd;
+	min-height: 900px;
+}
+#item-register{
+	background: #fff;
+    width: 500px;
+    border-radius: 6px;
+    box-shadow: 1px 2px 5px #ccc;
+    position: absolute;
+	left: 50%;
+	top:50%;
+	-webkit-transform: translate(-50%,-50%);
+	   -moz-transform: translate(-50%,-50%);
+	    -ms-transform: translate(-50%,-50%);
+	     -o-transform: translate(-50%,-50%);
+	        transform: translate(-50%,-50%);
+	background: #FFF;
+    padding-left: 30px;
+    padding-right: 30px;
+}
+#item-register .register-title{
+	margin:0 -30px 16px;
+	text-indent: 2em;
+	background-color: #f0f0f0;
+	border-top-left-radius: 5px;
+	border-top-right-radius: 5px;
+	
+}
+.regiterContent > li{
+	margin-bottom: 15px;
+}
+.regiterContent h5,.certificateContent h5{
+	line-height:2;
+	color:#333;
+	font-size:14px;
+	font-weight:500;
+}
+.regiterContent > li:last-child{
+	margin-bottom: 20px;
+	text-align:right;
+}
+.magic-radio + label:after {
+    top: 5px;
+    left: 5px;
+    box-sizing: border-box;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: #48c858;
+}
+.regiterContent li input[type=text],
+.regiterContent li input[type=password],
+.regiterContent li input[type=submit],
+.regiterContent li select{
+	width:100%;
+	height: 40px;
+	border:1px solid #ddd;
+	border-radius: 5px;
+	padding:0 10px;
+	outline-color: #48c858;
+	box-sizing: border-box;
+}
+.regiterContent li ol li{
+	display: inline-block;
+}
+.regiterContent li ol li label{
+	padding-right: 15px;
+}
+/* ������֤ */
+.certificate-content{
+	background-color:#ddd;
+	min-height: 700px;
+}
+.certificateContent li input[type=file]{
+	display: none;
+}
+.certificateContent > li{
+	margin-bottom: 15px;
+}
+
+.certificate-content li input[type=text],
+.certificate-content li input[type=submit]{
+	width:100%;
+	height: 40px;
+	border:1px solid #ddd;
+	border-radius: 5px;
+	padding:0 10px;
+	outline-color: #48c858;
+}
+.certificateContent li .regist_btn{
+	background-color: #48c858;
+	color: #fff;
+	border: none;
+	outline: none;
+	padding: 6px 20px;
+	border-radius: 4px;
+	margin-bottom: 6px;
+}
+.certificateContent .setFlex div:first-child{
+	margin-right: 16px;
+}
+/* ������֤ */
+/* 密码强度 */
+.psw_strenth {
+    text-align: right;
+    padding-right: 10%;
+}
+.psw_strenth div {
+    width: 70px;
+    height: 10px;
+    margin-right: 8px;
+    background-color: #ddd;
+    display: inline-block;
+}
+
+
+/* @media (min-width: 320px) and (max-width: 480px){
+	#item-login,#item-register{
+		width:280px;
+	}
+	#item-register{
+		padding-left: 15px;
+		padding-right: 15px
+	}
+	#item-register .register-title{
+		margin: 0 -15px;
+	}
+	.loginContent li{
+		margin-bottom: 20px;
+	}
+	.loginContent li input[type=text],
+	.loginContent li input[type=password],
+	.loginContent li input[type=submit],
+	.regiterContent li input[type=text],
+	.regiterContent li input[type=password],
+	.regiterContent li input[type=submit],
+	.regiterContent li select,
+	.certificateContent li input[type=text],
+	.certificateContent li input[type=submit]{
+		 height: 30px;
+	}
+	.psw_strenth div{
+		width:30px;
+		height: 6px;
+	}
+} */

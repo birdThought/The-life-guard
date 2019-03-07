@@ -1,0 +1,93 @@
+.group_list {
+	font-size: 16px;
+	height: 621px;
+	overflow-y: auto;
+}
+
+.group_list li {
+	padding: 8px 25px;
+	font-weight: bold;
+	cursor: pointer;
+}
+
+.group_list li.action {
+	background: #eaeaea;
+}
+
+.group_list li:hover {
+	background: #eaeaea;
+}
+
+#group_control_block {
+	position: relative;
+	min-height:710px;
+}
+
+#group_control_block .qunzu {
+	position: absolute;
+	width: 230px;
+	border: 1px solid #ddd;
+	min-height: 716px;
+}
+
+#group_control_block .qunzu .list {
+	font-size: 16px;
+}
+
+#group_control_block .qunzu .list .qunzu_text {
+	height: 45px;
+	line-height: 45px;
+	padding-left: 15px;
+	border-bottom: 1px solid #eee;
+}
+
+.group_details {
+	width: 680px;
+	min-height: 700px;
+	left: 230px;
+	position: relative;
+	padding-left: 15px;
+}
+
+.group_details .details_contain {
+	height: 200px;
+	border: 1px solid #ddd;
+	position: relative;
+}
+
+.group_details .details_contain .details_title {
+	height: 50px;
+	line-height: 50px;
+	padding-left: 15px;
+	font-size: 16px;
+	background: #eceeef;
+}
+
+.group_details .details_contain .details_img {
+	position: absolute;
+	width: 130px;
+	text-align: center;
+	padding-top: 15px;
+}
+
+.group_details .details_contain .right_details {
+	position: relative;
+	width: 560px;
+	left: 120px;
+	height: 150px;
+	padding: 15px 15px 15px 10px;
+	line-height: 35px;
+	font-size: 16px;
+	color: #6c6c6c;
+}
+
+.group_details .details_contain .right_details .group_name {
+	font-size: 20px;
+	color: #000;
+}
+
+.group_details .details_contain .right_details .group_name img {
+	float: right;
+	margin-right: 15px;
+	cursor: pointer;
+}

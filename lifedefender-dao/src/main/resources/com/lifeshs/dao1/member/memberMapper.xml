@@ -1,0 +1,426 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lifeshs.dao1.member.IMemberDao">
+    <!-- 获得单个用户信息 -->
+    <!--<select id="getMember" resultType="com.lifeshs.vo.FullUserVO">
+        SELECT u.*,r.*,r.gender as sex FROM t_user u,t_user_record r WHERE u.id=r.userId AND u.id=${memberId}
+    </select>-->
+    <!--<select id="getMember" resultType="com.lifeshs.vo.FullUserVO" parameterType="map">
+        SELECT
+        u.*,
+        ur.*,
+        ur.gender sex,
+        ifnull(o.userDiseasesName,"") userDiseasesName,
+        max(o.createDate),
+        o.serveId,
+        o.id orderId,
+        o.userRemark userRemark
+        FROM t_order o JOIN t_user u ON o.userId = u.id
+        JOIN t_user_record ur ON ur.userId = u.id
+        WHERE u.id = #{memberId}
+        and o.orgUserId in
+        <foreach collection="employeeIds" open="(" close=")" separator="," item="employeeId">
+            #{employeeId}
+        </foreach>
+    </select>-->
+    <select id="getDiseasesNameAndUserRemark" resultType="map" parameterType="map">
+        SELECT
+        ifnull(o.userDiseasesName,"") userDiseasesName,
+        ifnull(o.userRemark,"") userRemark,
+        o.id orderId
+        FROM t_order o JOIN t_user u ON o.userId = u.id
+        WHERE o.userId = #{memberId}
+        and o.orgUserId in
+        <foreach collection="employeeIds" open="(" close=")" separator="," item="employeeId">
+            #{employeeId}
+        </foreach>
+        and o.status in (3,4)
+        and u.status = 0
+        ORDER BY o.createDate DESC
+        LIMIT 0,1
+    </select>
+
+    <select id="getMember" resultType="com.lifeshs.vo.FullUserVO" parameterType="map">
+          SELECT
+            u.id id,
+            ifnull(u.userName,"") userName,
+            ifnull(u.realName,"") realName,
+            u.photo photo,
+            ur.height height,
+            ur.weight weight,
+            ur.gender sex,
+            ur.birthday birthday,
+            u.userCode userCode,
+            u.mobile mobile,
+            o.hasWarning hasWarning,
+            u.healthProduct healthProduct,
+            ur.waist waist,
+            ur.bust bust,
+            ur.hip hip,
+            o.serveId serveId,
+            o.id orderId,
+            o.id currentOrderId,
+            ifnull(o.userRemark,"") userRemark,
+            ifnull(o.userDiseasesName,"") userDiseasesName
+          FROM t_order o
+              JOIN t_user_record ur ON o.userId = ur.userId
+              JOIN t_user u ON o.userId = u.id
+          WHERE
+            o.userId = #{memberId}
+            and o.orgUserId in
+            <foreach collection="employeeIds" open="(" close=")" separator="," item="employeeId">
+                #{employeeId}
+            </foreach>
+            and o.status in (3,4)
+            and u.status = 0
+          ORDER BY o.createDate DESC
+          LIMIT 0,1
+    </select>
+
+
+    <!-- 分页获取门店/服务师所属的会员列表 -->
+    <select id="findMemberList" resultType="com.lifeshs.dto.manager.member.GetMemberListData">
+        SELECT u.id, u.realName, u.mobile, u.photo FROM t_user u,t_order o,t_project p WHERE u.id=o.userId and
+        o.projectCode=p.projectCode and u.status=0 and o.status=3
+        <if test="orgId != null">
+            and p.orgId=${orgId}
+        </if>
+        <if test="orgUserId != null">
+            and o.orgUserId=${orgUserId}
+        </if>
+        <if test="realName != null">
+            and u.realName like CONCAT('%',#{realName},'%' )
+        </if>
+        GROUP BY id
+        limit ${startRow},${lenght};
+    </select>
+    
+    
+    <!-- 分页获取门店/服务师所属的会员列表 -->
+    <select id="findMemberList1" resultType="com.lifeshs.dto.manager.member.GetMemberListData">
+        SELECT u.id, u.realName, u.mobile, u.photo FROM t_user u,t_order o,t_project p WHERE u.id=o.userId and
+        o.projectCode=p.projectCode and u.status=0 and o.status=3
+        <if test="orgId != null">
+            and p.orgId=${orgId}
+        </if>
+        <if test="orgUserId != null">
+            and o.orgUserId=${orgUserId}
+        </if>        
+        GROUP BY id        
+    </select>
+    
+
+    <!-- 获取门店/服务师所属的会员数量 -->
+    <select id="getMemberCount" resultType="Integer">
+        SELECT count(*) from (SELECT DISTINCT userId FROM t_user u,t_order o,t_project p WHERE u.id=o.userId and
+        o.projectCode=p.projectCode and u.status=0 and o.status=3
+        <if test="orgId != null">
+            and p.orgId=${orgId}
+        </if>
+        <if test="orgUserId != null">
+            and o.orgUserId=${orgUserId}
+        </if>
+        ) t
+    </select>
+
+    <!-- 获取健康课堂的用户成员 -->
+    <select id="findMemberListByLesson" resultType="com.lifeshs.dto.manager.serve.LessonUserInfo">
+        SELECT u.userName,u.photo,u.realName,ur.userId,u.userCode,u.mobile,ur.gender as sex,u.email FROM t_user u,t_order o,t_user_record ur WHERE u.id=o.userId and u.id=ur.userId and u.status=0 and o.status=3 and o.projectCode=#{projectCode}
+    </select>
+
+    <!-- 根据环信ID获取用户信息 -->
+    <select id="getUsersByHuanxinId" resultType="com.lifeshs.dto.manager.member.GetMemberByHXData">
+        SELECT u.id AS `userId`,u.userCode AS `huanxinId`,u.realName,u.photo FROM t_user u
+        WHERE u.userCode IN
+        <foreach collection="huanxinUserNames" open="(" close=")" separator="," index="index">
+            ${huanxinUserNames[index]}
+        </foreach>
+    </select>
+
+    <!--根据用户ID查询用户-->
+    <select id="getMemberById" resultType="com.lifeshs.vo.FullUserVO" parameterType="integer">
+        SELECT *
+        FROM t_user
+        WHERE id = #{memberId}
+    </select>
+
+    <!--获取有效订单且在服务器内的用户数目,根据服务ID分组-->
+    <select id="getMemberCountByServe" resultType="map" parameterType="map">
+        SELECT
+        p.projectType serveId,
+        count(DISTINCT o.userId) count
+        FROM t_order o LEFT JOIN t_user u on u.id = o.userId LEFT JOIN t_project p on p.projectCode = o.projectCode
+        WHERE o.orgUserId in
+        <foreach collection="orgUserIds" open="(" close=")" separator="," item="orgUserId">
+            #{orgUserId}
+        </foreach>
+        <if test="serveId != null">
+            and o.serveId = #{serveId}
+        </if>
+        <!-- 暂时取消 -->
+        <!-- and now() >= o.startDate
+        and o.endDate >= now() -->
+        and o.status = 3
+        and u.status = 0
+        group by p.projectType
+    </select>
+
+    <select id="getMemberCountByOrgIdWithServiceable" resultType="map" parameterType="map">
+        SELECT
+        0 serveId, /*0 => 所有服务*/
+        count(DISTINCT o.userId) count
+        FROM t_order o LEFT JOIN t_user u on u.id = o.userId
+        WHERE o.orgUserId in
+        <foreach collection="employeeIds" open="(" close=")" separator="," item="employeeId">
+            #{employeeId}
+        </foreach>
+        <!-- 暂时取消 -->
+        <!-- and now() >= o.startDate
+        and o.endDate >= now() -->
+        and o.status = 3
+        and u.status = 0
+    </select>
+
+    <select id="getMemberListWithServiceable" parameterType="map" resultType="com.lifeshs.vo.MemberVO">
+        SELECT
+        o.userId id,
+        ifnull(u.userName,"") userName,
+        ifnull(u.realName,"") realName,
+        ifnull(u.mobile,"") mobile,
+        ifnull(max(o.userDiseasesName),"") userDiseasesName,
+        ifnull(u.photo,"") photo,
+        o.serveId serveId,p.projectType,count(1) orderCount
+        FROM t_order o JOIN t_user u ON o.userId = u.id LEFT JOIN t_project p on p.projectCode = o.projectCode
+        WHERE o.orgUserId in
+        <foreach collection="orgUserIds" open="(" close=")" separator="," item="orgUserId">
+            #{orgUserId}
+        </foreach>
+        <if test="serveId != null">
+            and o.serveId = #{serveId}
+        </if>
+        <!-- 暂时取消 -->
+        <!-- AND now() >= o.startDate
+        AND o.endDate >= now() -->
+        AND o.status = 3
+        AND u.status = 0
+        group by o.userId;
+    </select>
+
+    <select id="getHistoricalMember" parameterType="map" resultType="com.lifeshs.vo.MemberVO">
+        SELECT
+        o.userId id,
+        o.userId userId,
+        ifnull(u.userName,"") userName,
+        ifnull(u.realName,"") realName,
+        ifnull(u.mobile,"") mobile,
+        /*ifnull(o.userDiseasesName,"") userDiseasesName,  通过getUserDiseasesNameAndUserRemark方法获取*/
+        ifnull(u.photo,"") photo,
+        o.serveId serveId,
+        /*o.id as orderId,修改原因请查看memberVO中的字段说明*/
+        o.id as currentOrderId,
+        u.userCode,
+        o.userDiseasesId,
+        ur.height,
+        ur.gender,
+        ur.birthday,
+        ur.waist,
+        ur.bust,
+        ur.hip
+        FROM t_order o
+        JOIN t_user u ON o.userId = u.id
+        JOIN t_user_record ur ON o.userId = ur.userId
+        WHERE o.orgUserId in
+        <foreach collection="employeeIds" open="(" close=")" separator="," item="employeeId">
+            #{employeeId}
+        </foreach>
+        AND now() &gt; o.endDate
+        AND o.status = 4
+        AND u.status = 0
+        group by o.userId
+        limit #{start},#{size}
+    </select>
+
+    <update id="clearUnusuallyCondition" parameterType="map">
+        update
+        t_order
+        set warningDate = NULL ,hasWarning = NULL
+        WHERE
+        userId = #{userId}
+        and orgUserId = #{orgUserId}
+        and date_format(warningDate,"%Y-%m-%d") = #{measureDate}
+    </update>
+
+    <update id="modifyMemberInfo" parameterType="map">
+        UPDATE
+        t_order
+        <set>
+            <if test="userRemark!=null">
+                userRemark = #{userRemark},
+            </if>
+            <if test="userDiseasesName!=null">
+              userDiseasesName = #{userDiseasesName},
+            </if>
+        </set>
+        where id = #{orderId}
+    </update>
+
+    <!--根据手机号码、账号、真实姓名获取用户列表（不使用模糊查询）-->
+    <select id="findUserList" resultMap="com.lifeshs.dao.member.IMemberDao.userDtoV3">
+        SELECT u.id as uId, u.userName, u.realName, u.mobile, u.userCode, u.photo, ur.id as rId, ur.gender,
+        ur.birthday, ur.height, ur.weight, ur.waist, ur.bust, ur.hip
+        FROM t_user u
+        INNER JOIN t_user_record ur ON u.id = ur.userId
+        WHERE userName = #{keyword}
+        OR realName = #{keyword}
+        OR mobile = #{keyword}
+    </select>
+
+    <!--根据账号、真实姓名获取用户数目-->
+    <select id="countUser" resultType="java.lang.Integer">
+        SELECT count(1) FROM t_user
+        WHERE userName = #{keyword}
+        OR realName = #{keyword}
+        OR mobile = #{keyword}
+    </select>
+
+    <!--获取各个设备异常值总和-->
+    <select id="getDeviceStatus" resultType="java.lang.Integer">
+        <include refid="getDeviceStatus"/>
+    </select>
+
+    <!--获取用户今日测量数据总数-->
+    <select id="getTodayDeviceMeasureTimes" resultType="java.lang.Integer">
+        <include refid="getTodayDeviceMeasureTimes"/>
+    </select>
+
+    <!--获取用户本月测量数据总数-->
+    <select id="getThisMonthDeviceMeasureTimes" resultType="java.lang.Integer">
+        <include refid="getThisMonthDeviceMeasureTimes"/>
+    </select>
+
+    <sql id="getDeviceStatus">
+        SELECT SUM(status) FROM (
+        SELECT status FROM t_measure_bloodlipid WHERE userId = #{userId} AND date_format(measureDate, '%Y-%m-%d') = #{measureDate}
+        UNION
+        SELECT status FROM t_measure_bloodpressure WHERE userId = #{userId} AND date_format(measureDate, '%Y-%m-%d') = #{measureDate}
+        UNION
+        SELECT status FROM t_measure_bodyfatscale WHERE userId = #{userId} AND date_format(measureDate, '%Y-%m-%d') = #{measureDate}
+        UNION
+        SELECT status FROM t_measure_ecg WHERE userId = #{userId} AND date_format(measureDate, '%Y-%m-%d') = #{measureDate}
+        UNION
+        SELECT status FROM t_measure_glucometer WHERE userId = #{userId} AND date_format(measureDate, '%Y-%m-%d') = #{measureDate}
+        UNION
+        SELECT status FROM t_measure_heartrate WHERE userId = #{userId} AND date_format(measureDate, '%Y-%m-%d') = #{measureDate}
+        UNION
+        SELECT status FROM t_measure_lunginstrument WHERE userId = #{userId} AND date_format(measureDate, '%Y-%m-%d') = #{measureDate}
+        UNION
+        SELECT status FROM t_measure_oxygen WHERE userId = #{userId} AND date_format(measureDate, '%Y-%m-%d') = #{measureDate}
+        UNION
+        SELECT status FROM t_measure_temperature WHERE userId = #{userId} AND date_format(measureDate, '%Y-%m-%d') = #{measureDate}
+        UNION
+        SELECT status FROM t_measure_ua WHERE userId = #{userId} AND date_format(measureDate, '%Y-%m-%d') = #{measureDate}
+        UNION
+        SELECT status FROM t_measure_uran WHERE userId = #{userId} AND date_format(measureDate, '%Y-%m-%d') = #{measureDate}
+        ) m
+    </sql>
+
+    <sql id="getTodayDeviceMeasureTimes">
+        SELECT COUNT(1) FROM (
+        SELECT 1 FROM t_measure_bloodlipid WHERE userId = #{userId} AND date_format(measureDate, '%Y-%m-%d') = curdate()
+        UNION
+        SELECT 1 FROM t_measure_bloodpressure WHERE userId = #{userId} AND date_format(measureDate, '%Y-%m-%d') = curdate()
+        UNION
+        SELECT 1 FROM t_measure_bodyfatscale WHERE userId = #{userId} AND date_format(measureDate, '%Y-%m-%d') = curdate()
+        UNION
+        SELECT 1 FROM t_measure_ecg WHERE userId = #{userId} AND date_format(measureDate, '%Y-%m-%d') = curdate()
+        UNION
+        SELECT 1 FROM t_measure_glucometer WHERE userId = #{userId} AND date_format(measureDate, '%Y-%m-%d') = curdate()
+        UNION
+        SELECT 1 FROM t_measure_heartrate WHERE userId = #{userId} AND date_format(measureDate, '%Y-%m-%d') = curdate()
+        UNION
+        SELECT 1 FROM t_measure_lunginstrument WHERE userId = #{userId} AND date_format(measureDate, '%Y-%m-%d') = curdate()
+        UNION
+        SELECT 1 FROM t_measure_oxygen WHERE userId = #{userId} AND date_format(measureDate, '%Y-%m-%d') = curdate()
+        UNION
+        SELECT 1 FROM t_measure_temperature WHERE userId = #{userId} AND date_format(measureDate, '%Y-%m-%d') = curdate()
+        UNION
+        SELECT 1 FROM t_measure_ua WHERE userId = #{userId} AND date_format(measureDate, '%Y-%m-%d') = curdate()
+        UNION
+        SELECT 1 FROM t_measure_uran WHERE userId = #{userId} AND date_format(measureDate, '%Y-%m-%d') = curdate()
+        ) m
+    </sql>
+
+    <sql id="getThisMonthDeviceMeasureTimes">
+        SELECT COUNT(1) FROM (
+        SELECT 1 FROM t_measure_bloodlipid WHERE userId = #{userId} AND date_format(measureDate, '%Y-%m-%d') &gt; date_add(curdate(), interval - day(curdate()) + 1 day)
+        UNION
+        SELECT 1 FROM t_measure_bloodpressure WHERE userId = #{userId} AND date_format(measureDate, '%Y-%m-%d') &gt; date_add(curdate(), interval - day(curdate()) + 1 day)
+        UNION
+        SELECT 1 FROM t_measure_bodyfatscale WHERE userId = #{userId} AND date_format(measureDate, '%Y-%m-%d') &gt; date_add(curdate(), interval - day(curdate()) + 1 day)
+        UNION
+        SELECT 1 FROM t_measure_ecg WHERE userId = #{userId} AND date_format(measureDate, '%Y-%m-%d') &gt; date_add(curdate(), interval - day(curdate()) + 1 day)
+        UNION
+        SELECT 1 FROM t_measure_glucometer WHERE userId = #{userId} AND date_format(measureDate, '%Y-%m-%d') &gt; date_add(curdate(), interval - day(curdate()) + 1 day)
+        UNION
+        SELECT 1 FROM t_measure_heartrate WHERE userId = #{userId} AND date_format(measureDate, '%Y-%m-%d') &gt; date_add(curdate(), interval - day(curdate()) + 1 day)
+        UNION
+        SELECT 1 FROM t_measure_lunginstrument WHERE userId = #{userId} AND date_format(measureDate, '%Y-%m-%d') &gt; date_add(curdate(), interval - day(curdate()) + 1 day)
+        UNION
+        SELECT 1 FROM t_measure_oxygen WHERE userId = #{userId} AND date_format(measureDate, '%Y-%m-%d') &gt; date_add(curdate(), interval - day(curdate()) + 1 day)
+        UNION
+        SELECT 1 FROM t_measure_temperature WHERE userId = #{userId} AND date_format(measureDate, '%Y-%m-%d') &gt; date_add(curdate(), interval - day(curdate()) + 1 day)
+        UNION
+        SELECT 1 FROM t_measure_ua WHERE userId = #{userId} AND date_format(measureDate, '%Y-%m-%d') &gt; date_add(curdate(), interval - day(curdate()) + 1 day)
+        UNION
+        SELECT 1 FROM t_measure_uran WHERE userId = #{userId} AND date_format(measureDate, '%Y-%m-%d') &gt; date_add(curdate(), interval - day(curdate()) + 1 day)
+        ) m
+    </sql>
+
+    <!--添加用户测量设备异常数据-->
+    <insert id="addHealthpackageWarning">
+        <selectKey resultType="java.lang.Integer" order="AFTER" keyProperty="id">
+            SELECT LAST_INSERT_ID() AS ID
+        </selectKey>
+        INSERT INTO t_user_healthpackage_measure
+        (userId, warningDevice, measureDate, `status`, createDate)
+        VALUES (#{userId}, #{healthPackageType}, #{measureDate}, 1, NOW())
+    </insert>
+    
+    <select id="getHealthPackageWarning" resultType="com.lifeshs.po.measure.HealthPackageMeasurePO">
+        SELECT id, userId, warningDevice, measureDate, `status`, createDate, modifyDate
+        FROM t_user_healthpackage_measure
+        WHERE userId = #{userId} AND measureDate = DATE_FORMAT(#{measureDate}, '%Y-%m-%d')
+    </select>
+    
+    <update id="updateHealthPackageWarning" parameterType="com.lifeshs.po.measure.HealthPackageMeasurePO">
+        UPDATE t_user_healthpackage_measure
+        SET modifyDate = NOW()
+        <if test="status != null">, `status` = #{status}</if>
+        <if test="warningDevice != null">, warningDevice = #{warningDevice}</if>
+        WHERE id = #{id}
+    </update>
+
+    <select id="listUserByIds" resultType="com.lifeshs.po.UserPO">
+        SELECT id, userName, realName, userCode from t_user WHERE id in
+        <foreach collection="ids" item="id" open="(" close=")" separator=",">
+            #{id}
+        </foreach>
+    </select>
+    
+    <insert id="addMessage" parameterType="com.lifeshs.po.push.PushMessagePO">
+        <selectKey resultType="java.lang.Integer" order="AFTER" keyProperty="id">
+            SELECT LAST_INSERT_ID() AS ID
+        </selectKey>
+        INSERT INTO t_push_message
+        (id,receiveId, userType, title, content, msgType,sendType,sendId,createDate)
+        VALUES (null,#{receiveId}, #{userType}, #{title}, #{content},#{msgType},#{sendType}, #{sendId}, NOW())
+    </insert>
+    
+    <insert id="addPushTask" parameterType="com.lifeshs.po.push.PushTaskMessagePo">
+    	INSERT INTO t_user_task_push
+        (id,send_id,receice_id,content, send_time, cycle,creact_time)
+        VALUES 
+        (null,#{sendId},#{receiceId}, #{content} ,#{sendTime}, #{cycle}, NOW()) 
+    </insert>
+
+</mapper>

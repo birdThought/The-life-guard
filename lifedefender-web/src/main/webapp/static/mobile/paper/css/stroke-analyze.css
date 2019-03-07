@@ -1,0 +1,140 @@
+@charset "utf-8";
+header {
+    padding: .2rem;
+}
+header .container{
+	position:relative;
+}
+/*header i {
+	left:0;
+    position: absolute;
+    width: .18rem;
+    height: .32rem;
+    background-image: url(../images/back-1.png);
+    background-size: .18rem .32rem;
+    margin: .1rem;
+}*/
+header .container p {
+    text-align: center;
+    color: #333;
+    font-size: .36rem;
+}
+.gradient{
+	width: 100%;
+	height: .14rem;
+	background-image:-webkit-linear-gradient(to bottom, #f1f1f1, #fefefe); background-image:linear-gradient(to bottom,#f1f1f1, #fefefe);
+}
+.main-content {
+	padding-left: .3rem;
+	padding-right: .3rem;
+}
+.main-content .tit{
+	color:#333;
+	font-weight: 500;
+	font-size: .28rem;
+	margin-top: .3rem;
+	margin-bottom: .7rem;
+}
+.risk-level{
+	position: relative;
+}
+.level-color li{
+	float: left;
+	width: calc(33.33333%);
+	height: .14rem;
+	background-color: #80c027;
+}
+.level-color li:nth-of-type(2){
+	background-color: #ff9200;
+}
+.level-color li:nth-of-type(3){
+	background-color: #ff4800;
+}
+.list-level li{
+	margin-top:.16rem;
+	float: left;
+	width: calc(33.33333%);
+	text-align: center;
+	font-size: .24rem;
+	color:#333;
+}
+.risk-level .point{
+	position: absolute;
+	left:calc(33.33333%/2);
+	top:-.12rem;
+	width:0;
+    height:0;
+    border-width:.12rem .12rem 0;
+    border-style:solid;
+    border-color: #80c027 transparent transparent;
+}
+.main-content .conclusion{
+	max-height: 100%;
+	font-size: .26rem;
+	color:#666;
+	margin-top: .5rem;
+	margin-bottom: .5rem;
+	letter-spacing: 2px;
+}
+.advice-tip div{
+	line-height: .35rem;
+	float: left;
+	color:#44c660;
+}
+.advice-tip div.cut{
+	width: 40%;
+}
+.advice-tip div.cut span{
+	width: 20%;
+	font-size: .22rem;
+}
+.advice-tip div.text{
+	width: 20%;
+	font-size: .26rem;
+	text-align: center; 
+}
+.advice-tip .cut-1:before,
+.advice-tip .cut-2:after{
+	content:"";
+	display: inline-block;
+	width:86%; 
+	vertical-align: middle;
+	font-size: 0;
+	height: 2px;
+	background-color: #44c660;
+}
+.advice-details{
+	margin-top: .4rem;
+}
+.advice-details h3{
+	color:#666;
+	font-weight: 500;
+	font-size: .26rem;
+	letter-spacing: 2px;
+	text-align: center;
+}
+.advice-details p{
+	max-height: 100%;
+	font-size: .26rem;
+	color:#666;
+	padding-left: 2px;
+	letter-spacing: 2px;
+	line-height: 1.8;
+}
+.retest{
+	margin-top: 3.2rem;
+	text-align: center;
+	padding-bottom: 1rem;
+}
+.retest button{
+	font-size: .3rem;
+	color: #fff;
+	width: 4rem;
+	height: .7rem;
+	line-height: .7rem;
+	text-align: center;
+	background-color: #44c660;
+	border-radius: .1rem;
+	border:none;
+	outline: none;
+}

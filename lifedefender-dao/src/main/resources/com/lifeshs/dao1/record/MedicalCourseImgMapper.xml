@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lifeshs.dao1.record.MedicalCourseImgDao">
+
+    <insert id="addImgList">
+        INSERT INTO t_record_medical_course_img(img, medicalCourseId, createDate)
+        VALUES
+            <foreach collection="imgList" item="img" separator=",">
+                (#{img}, #{medicalCourseId}, NOW())
+            </foreach>
+    </insert>
+
+    <delete id="delImgList">
+        DELETE FROM t_record_medical_course_img WHERE id IN <foreach collection="idList" item="id" open="(" close=")" separator=",">#{id}</foreach>
+    </delete>
+
+    <delete id="delImgByMedicalCourseIdList">
+        DELETE FROM t_record_medical_course_img WHERE medicalCourseId = #{medicalCourseId}
+    </delete>
+
+    <delete id="delImgByMedicalIdList">
+        DELETE img
+        FROM
+            t_record_medical_course_img AS img
+        INNER JOIN t_record_medical_course AS c ON c.id = img.medicalCourseId
+        WHERE
+            c.medicalId = #{medicalId}
+    </delete>
+
+    <update id="updateImgList">
+        UPDATE t_record_medical_course_img
+            SET img = CASE id
+                <foreach collection="imgList" item="i">
+                    WHEN #{i.id} THEN #{i.img}
+                </foreach>
+            END,
+            modifyDate = NOW()
+        WHERE
+            id IN <foreach collection="imgList" item="i" open="(" close=")" separator=",">#{i.id}</foreach>
+            AND medicalCourseId = #{medicalCourseId}
+    </update>
+
+</mapper>

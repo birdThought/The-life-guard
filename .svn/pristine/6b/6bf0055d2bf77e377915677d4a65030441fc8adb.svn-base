@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lifeshs.dao1.data.InvitationRecordDao">
+    <insert id="addUserInvitationRecord" parameterType="com.lifeshs.po.invitation.InvitationRecordPO">
+        INSERT INTO t_user_invitation_record(userId, invitationCodeId, createDate) VALUES(#{userId}, #{invitationCodeId}, NOW())
+    </insert>
+
+    <select id="findInvitationRecordByUserId" resultType="com.lifeshs.po.invitation.InvitationRecordPO">
+        SELECT <include refid="INVITATION_RECORD_ALL_COLUMN" /> FROM t_user_invitation_record record WHERE userId = #{userId}
+    </select>
+
+    <sql id="INVITATION_RECORD_ALL_COLUMN">id, userId, invitationCodeId, createDate</sql>
+</mapper>

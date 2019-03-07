@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lifeshs.dao1.vip.IVipComboDao" >
+
+    <!--获取vip套餐列表-->
+    <select id="findVipComboList" resultType="com.lifeshs.po.vip.VipComboPO">
+        SELECT * FROM t_vip_combo
+        <where>
+            <if test="idList != null">
+                id IN <foreach collection="idList" open="(" close=")" item="id" separator=",">#{id}</foreach>
+            </if>
+        </where>
+    </select>
+
+    <!-- 获取vip套餐 -->
+    <select id="getVipCombo" resultMap="vipComboVO">
+        SELECT
+            c.id AS cId,
+            c.name AS cName,
+            description, price, originalPrice, photo, validDay, c.detail AS cDetail,
+            suitablePeople, c.type, level,
+            c.createDate AS cCreateDate,
+            c.modifyDate AS cModifyDate,
+            i.id AS iId,
+            i.name AS iName,
+            i.createDate AS iCreateDate,
+            i.modifyDate AS iModifyDate,
+            i.icon AS iIcon,
+            i.itemDetail AS iItemDetail,
+            i.type as iType,
+            r.number as rNumber
+        FROM t_vip_combo c
+        INNER JOIN t_vip_combo_item_relation r ON c.id = r.vipComboId
+        INNER JOIN t_vip_combo_item i ON i.id = r.vipComboItemId
+        WHERE c.id = #{id}
+    </select>
+    
+    <!-- 获取vip套餐列表（添加套餐详细项） -->
+    <select id="findVipComboWithItemList" resultMap="vipComboVO">
+        SELECT
+            c.*,
+            i.id AS iId,
+            i.name AS iName,
+            i.createDate AS iCreateDate,
+            i.modifyDate AS iModifyDate,
+            i.type as iType,
+            r.number AS rNumber
+        FROM (
+            SELECT
+                id AS cId,
+                name AS cName,
+                description, price, originalPrice, photo, validDay, detail AS cDetail,
+                suitablePeople, type, level,
+                createDate AS cCreateDate,
+                modifyDate AS cModifyDate
+            FROM t_vip_combo
+	        <where>
+	        	<if test="l1 != null">l1 = #{l1}</if>
+	        	<if test="l2 != null">l2 = #{l2}</if>
+	        </where>
+            ORDER BY cId
+            LIMIT #{startRow}, #{pageSize}
+        ) AS c
+        INNER JOIN t_vip_combo_item_relation r ON c.cId = r.vipComboId
+        INNER JOIN t_vip_combo_item i ON i.id = r.vipComboItemId
+        ORDER BY  cId  desc  
+    </select>
+    
+    <resultMap type="com.lifeshs.vo.vip.VipComboVO" id="vipComboVO">
+        <id property="id" column="cId"/>
+        <result property="name" column="cName"/>
+        <result property="description" column="description"/>
+        <result property="price" column="price"/>
+        <result property="originalPrice" column="originalPrice"/>
+        <result property="photo" column="photo"/>
+        <result property="validDay" column="validDay"/>
+        <result property="detail" column="cDetail"/>
+        <result property="suitablePeople" column="suitablePeople"/>
+        <result property="type" column="type"/>
+        <result property="level" column="level"/>
+        <result property="createDate" column="cCreateDate"/>
+        <result property="modifyDate" column="cModifyDate"/>
+        <collection property="itemList" ofType="com.lifeshs.po.vip.VipComboItemPO" notNullColumn="iId">
+            <id property="id" column="iId"/>
+            <result property="name" column="iName"/>
+            <result property="createDate" column="iCreateDate"/>
+            <result property="modifyDate" column="iModifyDate"/>
+            <result property="icon" column="iIcon"/>
+            <result property="itemDetail" column="iItemDetail"/>
+            <result property="type" column="iType"/>
+            <result property="number" column="rNumber"/>
+        </collection>
+    </resultMap>
+
+    <select id="countVipCombo" resultType="java.lang.Integer">
+        SELECT count(1) FROM t_vip_combo
+        <where>
+        	<if test="l1 != null">l1 = #{l1}</if>
+        	<if test="l2 != null">l2 = #{l2}</if>
+        </where>
+    </select>
+
+    <select id="findByOrderComboDataList" resultType="com.lifeshs.vo.record.RecordSpreadComboVo">
+          SELECT count(1) count,sum(ov.price) price,date_format(ov.createDate,'%Y-%m') moon,
+	      ov.businessId
+          FROM
+            t_order_vip ov
+          INNER JOIN t_user u ON ov.userId = u.id
+          INNER JOIN t_vip_combo v ON ov.vipComboId = v.id
+          INNER JOIN t_business_user b ON ov.businessCardId = b.id
+          where ov.type = 3
+          and ov.`status` = 4
+          and DATE_FORMAT(ov.createDate,'%Y%m') =DATE_FORMAT(curdate(),'%Y%m')
+          GROUP BY ov.businessId
+    </select>
+
+    <insert id="saveRecordComboData">
+        INSERT INTO t_record_spread_combo(moon,count,amount,split,status,businessId,createDate)
+        VALUES
+        <foreach collection="list" item="vo" separator=",">
+            (#{vo.moon},#{vo.count},#{vo.amount},#{vo.split},#{vo.status},#{vo.businessId},#{vo.createDate})
+        </foreach>
+    </insert>
+
+    <select id="findByCountRecordCombo" resultType="int">
+        SELECT count(1) FROM t_record_spread_combo
+        WHERE  businessId = #{superior}
+        <if test="moon != null"> AND moon = #{moon}</if>
+    </select>
+
+    <select id="findByRecordComboList" resultType="com.lifeshs.vo.record.RecordComboVo">
+        SELECT <include refid="RecordComboList"></include> FROM t_record_spread_combo
+        WHERE businessId = #{superior}
+        <if test="moon != null">AND moon = #{moon}</if>
+        ORDER BY createDate
+        limit #{curPage},#{pageSize}
+    </select>
+
+    <select id="findByRecordDetails" resultType="com.lifeshs.vo.record.ComboOrderVo">
+        SELECT u.realName,v.name,b.name as buName,ov.price,ov.status,ov.createDate
+        FROM
+            t_order_vip ov
+        INNER JOIN t_user u ON ov.userId = u.id
+        INNER JOIN t_vip_combo v ON ov.vipComboId = v.id
+        INNER JOIN t_business_user b ON ov.businessCardId = b.id
+        WHERE ov.type = 3
+        AND ov.`status` = 4
+        and ov.businessId = #{superior}
+        AND DATE_FORMAT(ov.createDate,'%Y%m') = DATE_FORMAT(#{format},'%Y%m')
+    </select>
+    <sql id="RecordComboList">
+        id,moon,count,amount,split,status,businessId,createDate
+    </sql>
+    
+    <select id="findL1All" resultType="com.lifeshs.po.vip.VipComboPO">
+        SELECT l1 FROM T_VIP_COMBO WHERE 1=1 and l1 != '' GROUP BY l1
+    </select>
+    
+</mapper>

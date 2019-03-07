@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lifeshs.dao.shop.goods.PictureDao">
+	
+	<insert id="batchInsertPictures">
+		INSERT INTO t_shop_picture
+		(goodsId,pictureUrl,masterGraph,createTime)
+		VALUES
+		<foreach collection="pictures" item="pic" separator=",">
+			(#{pic.goodsId},#{pic.pictureUrl},#{pic.masterGraph},#{pic.createTime})
+		</foreach>
+	</insert>
+	
+	<delete id="removeByGid">
+		 DELETE FROM t_shop_picture WHERE goodsId=#{gid}
+	</delete>
+</mapper>

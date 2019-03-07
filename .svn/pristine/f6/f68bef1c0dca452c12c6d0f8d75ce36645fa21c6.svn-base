@@ -1,0 +1,12 @@
+# 第三方登录默认固定密码明文
+oauth.login.fix.password=life_keeper_oauth_login_fix_passwd654321
+#oauth.login.fix.password=654321
+
+
+jztx.appid = ee76070c66f58a36
+jztx.appsecert = 7f3aca10f6a963c1bda18e3f639c2100
+jztx.url = http://jztx.lnc.edu.cn/api/jtsh/
+
+
+
+

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- 用户的上门地址（应用于上门服务），不是用户信息中的地址 -->
+<mapper namespace="com.lifeshs.dao1.member.IMemberAddressDao" >
+    <!-- 得到用户的上门地址 -->
+    <select id="findUserAddress" parameterType="Integer" resultType="com.lifeshs.po.UserAddressPO">
+        SELECT * FROM t_user_address  WHERE selected=1 and userId = #{userId} LIMIT 0,1
+    </select>
+
+
+    <!-- 得到用户的上门地址 -->
+    <select id="findUserAddressById" parameterType="Integer" resultType="com.lifeshs.po.UserAddressPO">
+        SELECT * FROM t_user_address  WHERE selected=1 and id = #{id}  
+    </select>
+</mapper>

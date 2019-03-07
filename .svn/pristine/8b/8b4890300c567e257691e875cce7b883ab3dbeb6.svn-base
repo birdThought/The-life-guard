@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lifeshs.dao1.order.vip.VipUserOrderDao" >
+    <select id="getOrder" resultType="com.lifeshs.po.order.VipUserOrderPO">
+        SELECT <include refid="ORDER_ALL_COLUMN" />
+        FROM t_order_vip WHERE id = #{id}
+    </select>
+
+    <select id="findOrderByOrderNumber" resultType="com.lifeshs.po.order.VipUserOrderPO">
+        SELECT <include refid="ORDER_ALL_COLUMN" />
+        FROM t_order_vip WHERE orderNumber = #{orderNumber}
+    </select>
+
+    <select id="findOrderListWithCondition" resultType="com.lifeshs.po.order.VipUserOrderPO">
+        SELECT <include refid="ORDER_ALL_COLUMN" />
+        FROM t_order_vip
+        <where>
+            <if test="userId != null">userId = #{userId}</if>
+            <if test="vipComboId != null">AND vipComboId = #{vipComboId}</if>
+            <if test="status != null">AND status = #{status}</if>
+            <if test="type != null">AND type = #{type}</if>
+            <if test="businessId != null">AND businessId = #{businessId}</if>
+            <if test="deleted != null">AND deleted = #{deleted}</if>
+        </where>
+        ORDER BY id DESC
+        LIMIT #{startRow}, #{pageSize}
+    </select>
+
+    <sql id="ORDER_ALL_COLUMN">
+        id, orderNumber, userId, vipComboId, subject, body, price, `status`, businessCardId, type, businessIncome, businessId, deleted, createDate, modifyDate
+    </sql>
+
+    <insert id="addOrder" parameterType="com.lifeshs.po.order.VipUserOrderPO">
+        <selectKey resultType="java.lang.Integer" order="AFTER" keyProperty="id">
+            SELECT LAST_INSERT_ID() AS ID
+        </selectKey>
+        INSERT INTO t_order_vip(orderNumber, userId, vipComboId, subject, body, price, `status`, businessCardId, type, businessIncome, businessId, deleted, createDate)
+        VALUES(#{orderNumber}, #{userId}, #{vipComboId}, #{subject}, #{body}, #{price}, #{status}, #{businessCardId}, #{type}, #{businessIncome}, #{businessId}, FALSE, NOW())
+    </insert>
+
+    <update id="updateOrder" parameterType="com.lifeshs.po.order.VipUserOrderPO">
+        UPDATE t_order_vip
+        SET modifyDate = NOW()
+        <if test="status != null">, `status` = #{status}</if>
+        <if test="deleted != null">, deleted = #{deleted}</if>
+        <if test="businessIncome != null">, businessIncome = #{businessIncome}</if>
+        <if test="businessId != null">, businessId = #{businessId}</if>
+        <if test="sysUserNo != null">, sysUserNo = #{sysUserNo}</if>
+        <if test="sysIncome != null">, sysIncome = #{sysIncome}</if>
+        <if test="agentUserNo != null">, agentUserNo = #{agentUserNo}</if>
+        <if test="agentIncome != null">, agentIncome = #{agentIncome}</if>
+        <if test="salesmanUserNo != null">, salesmanUserNo = #{salesmanUserNo}</if>
+        <if test="salesmanIncome != null">, salesmanIncome = #{salesmanIncome}</if>
+        <if test="introduceOrgUserNo != null">, introduceOrgUserNo = #{introduceOrgUserNo}</if>
+        <if test="introduceOrgIncome != null">, introduceOrgIncome = #{introduceOrgIncome}</if>
+        <if test="serviceOrgUserNo != null">, serviceOrgUserNo = #{serviceOrgUserNo}</if>
+        <if test="serviceOrgIncome != null">, serviceOrgIncome = #{serviceOrgIncome}</if>
+        WHERE id = #{id}
+    </update>
+
+    <!--获取渠道商订单-->
+    <select id="findOrderListByBusinessId" resultType="com.lifeshs.vo.order.vip.VipUserOrderVO">
+        SELECT ov.id, ov.orderNumber, ov.userId, ov.price, ov.businessIncome, ov.type,
+        ov.deleted, ov.createDate, ov.modifyDate, u.userName, u.realName
+        FROM t_order_vip ov
+        LEFT JOIN t_user u ON ov.userId = u.id
+        WHERE ov.businessId = #{businessId}
+        AND ov.createDate &gt;= #{startDate}
+        AND ov.createDate &lt;= #{endDate}
+        AND ov.status = 4
+        limit #{startRow}, #{pageSize}
+    </select>
+
+    <!--获取渠道商订单总数-->
+    <select id="countOrderByBusinessId" resultType="java.lang.Integer">
+        SELECT COUNT(1) FROM t_order_vip ov
+        WHERE ov.businessId = #{businessId}
+        AND ov.createDate &gt;= #{startDate}
+        AND ov.createDate &lt;= #{endDate}
+        AND ov.status = 4
+    </select>
+
+    <!--获取渠道商分成总金额-->
+    <select id="countBusinessIncome" resultType="java.lang.Integer">
+        SELECT sum(ov.businessIncome) FROM t_order_vip ov
+        WHERE ov.businessId = #{businessId}
+        AND ov.createDate &gt;= #{startDate}
+        AND ov.createDate &lt;= #{endDate}
+        AND ov.status = 4
+    </select>
+
+    <!--获取渠道商应付服务卡金额-->
+    <select id="countBusinessPayCard" resultType="java.lang.Integer">
+        SELECT sum(ov.price) FROM t_order_vip ov
+        WHERE ov.businessId = #{businessId}
+        AND ov.createDate &gt;= #{startDate}
+        AND ov.createDate &lt;= #{endDate}
+        AND ov.status = 4
+        AND ov.type = 2
+    </select>
+    
+    <select id="findVipOrderOutOfEndDateList" resultType="map">
+        SELECT 
+        	v.id,v.createDate,v.`userId`,c.validDay,c.`name`,v.`vipComboId`
+		FROM t_order_vip v
+		INNER JOIN t_vip_combo c ON v.`vipComboId`=c.`id`
+		WHERE 1=1 
+		AND v.`status`=3
+		AND v.`deleted`=0
+		AND DATE_ADD(v.`createDate`,INTERVAL c.`validDay` DAY) &lt;= #{endTime,jdbcType=TIMESTAMP}
+		<if test="startTime != null">
+			AND DATE_ADD(v.`createDate`,INTERVAL c.`validDay` DAY) &gt; #{startTime,jdbcType=TIMESTAMP}  
+		</if>
+    </select>
+    
+    <update id="finishOrder">
+    	UPDATE t_order_vip SET STATUS=4,modifyDate=NOW() WHERE id =#{id}
+    </update>
+</mapper>

@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lifeshs.dao1.record.PhysicalDao">
+    <select id="getPhysical" resultMap="physicalVO">
+        SELECT
+            r.id,
+            r.userId,
+            r.title,
+            r.physicalsOrg,
+            r.physicalsDate,
+            r.createDate,
+            r.description,
+            i.id AS imgId,
+            i.img,
+            i.createDate AS imgCreateDate,
+            i.modifyDate AS imgModifyDate,
+            a.id AS aId,
+            a.recordPhysicalId,
+            a.doctorSign,
+            a.reply,
+            a.customerUserId,
+            a.deleted AS aDeleted,
+            a.createDate AS aCreateDate,
+            a.modifyDate AS aModifydate
+        FROM
+            t_record_physicals r
+        LEFT JOIN t_record_physical_img i ON i.physicalId = r.id
+        LEFT JOIN t_record_physical_analysis a ON a.recordPhysicalId = r.id AND a.reply IS NOT NULL AND a.deleted = FALSE
+        WHERE r.id = #{id}
+    </select>
+
+    <select id="findPhysicalListByUserId" resultMap="physicalVO">
+        SELECT
+            r.id,
+            r.userId,
+            r.title,
+            r.physicalsOrg,
+            r.physicalsDate,
+            r.createDate,
+            r.description,
+            i.id AS imgId,
+            i.img,
+            i.createDate AS imgCreateDate,
+            i.modifyDate AS imgModifyDate,
+            a.id AS aId,
+            a.recordPhysicalId,
+            a.doctorSign,
+            a.reply,
+            a.customerUserId,
+            a.deleted AS aDeleted,
+            a.createDate AS aCreateDate,
+            a.modifyDate AS aModifydate
+        FROM (
+            SELECT id, userId, title, physicalsOrg, physicalsDate, createDate, description
+            FROM t_record_physicals WHERE userId = #{userId}
+            ORDER BY physicalsDate DESC, id DESC
+            LIMIT #{startRow}, #{pageSize}
+        ) r
+        LEFT JOIN t_record_physical_img i ON i.physicalId = r.id
+        LEFT JOIN t_record_physical_analysis a ON a.recordPhysicalId = r.id AND a.reply IS NOT NULL AND a.deleted = FALSE
+        ORDER BY r.physicalsDate DESC, r.id DESC, i.createDate
+    </select>
+    
+    <resultMap type="com.lifeshs.vo.record.PhysicalVO" id="physicalVO">
+        <id property="id" column="id" />
+        <result property="userId" column="userId" />
+        <result property="title" column="title" />
+        <result property="physicalsOrg" column="physicalsOrg" />
+        <result property="physicalsDate" column="physicalsDate" />
+        <result property="createDate" column="createDate" />
+        <result property="description" column="description" />
+        <collection property="imgList" ofType="com.lifeshs.po.record.PhysicalImgPO" notNullColumn="imgId">
+            <id property="id" column="imgId" />
+            <result property="physicalId" column="id" />
+            <result property="img" column="img" />
+            <result property="createDate" column="imgCreateDate" />
+            <result property="modifyDate" column="imgModifyDate" />
+        </collection>
+        <collection property="analysisList" ofType="com.lifeshs.po.record.PhysicalAnalysisPO" notNullColumn="aId">
+            <id property="id" column="aId"/>
+            <result property="recordPhysicalId" column="id"/>
+            <result property="doctorSign" column="doctorSign"/>
+            <result property="reply" column="reply"/>
+            <result property="customerUserId" column="customerUserId"/>
+            <result property="userId" column="userId"/>
+            <result property="deleted" column="deleted"/>
+            <result property="createDate" column="aCreateDate"/>
+            <result property="modifyDate" column="aModifyDate"/>
+        </collection>
+    </resultMap>
+    
+    <select id="countPhysical" resultType="java.lang.Integer">
+        SELECT COUNT(1) FROM t_record_physicals WHERE userId = #{userId}
+    </select>
+    
+    <select id="findPhysicalByIdAndUserId" resultMap="physicalVO">
+        SELECT
+            r.id,
+            r.userId,
+            r.title,
+            r.physicalsOrg,
+            r.physicalsDate,
+            r.createDate,
+            r.description,
+            i.id AS imgId,
+            i.img,
+            i.createDate AS imgCreateDate,
+            i.modifyDate AS imgModifyDate,
+            a.id AS aId,
+            a.recordPhysicalId,
+            a.doctorSign,
+            a.reply,
+            a.customerUserId,
+            a.deleted AS aDeleted,
+            a.createDate AS aCreateDate,
+            a.modifyDate AS aModifydate
+        FROM
+            t_record_physicals r
+        LEFT JOIN t_record_physical_img i ON i.physicalId = r.id
+        LEFT JOIN t_record_physical_analysis a ON a.recordPhysicalId = r.id AND a.reply IS NOT NULL AND a.deleted = FALSE
+        WHERE r.id = #{id} AND r.userId = #{userId}
+    </select>
+    
+    <insert id="addPhysical" parameterType="com.lifeshs.po.record.PhysicalPO">
+        <selectKey resultType="java.lang.Integer" order="AFTER" keyProperty="id">
+            SELECT LAST_INSERT_ID() AS ID
+        </selectKey>
+        INSERT INTO t_record_physicals(userId, title, physicalsOrg, physicalsDate, createDate, description)
+        VALUES(#{userId}, #{title}, #{physicalsOrg}, #{physicalsDate}, NOW(), #{description})
+    </insert>
+    
+    <delete id="delPhysicalByIdAndUserId">
+        DELETE FROM t_record_physicals WHERE id = #{id} AND userId = #{userId} LIMIT 1
+    </delete>
+    
+    <update id="updatePhysical" parameterType="com.lifeshs.po.record.PhysicalPO">
+        UPDATE t_record_physicals SET
+        <trim>
+            <if test="title != null">title = #{title},</if>
+            <if test="physicalsOrg != null">physicalsOrg = #{physicalsOrg},</if>
+            <if test="physicalsDate != null">physicalsDate = #{physicalsDate},</if>
+            <if test="description != null">description = #{description},</if>
+        </trim>
+        modifyDate = NOW()
+        WHERE userId = #{userId} AND id = #{id}
+    </update>
+</mapper>

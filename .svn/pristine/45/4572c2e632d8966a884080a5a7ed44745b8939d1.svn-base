@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!-- 血氧设备单独映射表 -->
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lifeshs.dao.device.IDeviceDao">
+
+	<sql id="selectOxygenColumn">status,saturation,saturationArea,saturationStatusDescription,heartRate,heartRateArea,heartRateStatusDescription,measureDate
+	</sql>
+
+	<select id="selectOxygenWithSplit" parameterType="java.util.HashMap"
+		resultType="java.util.HashMap">
+		SELECT
+		<include refid="selectOxygenColumn" />
+		FROM t_measure_oxygen WHERE
+		userId = #{userId} AND
+		deviceType LIKE CONCAT(#{deviceType}, '%')
+		ORDER BY measureDate DESC LIMIT #{start},#{pageSize}
+	</select>
+
+	<select id="selectOxygenWithDay" parameterType="java.util.HashMap"
+		resultType="java.util.HashMap">
+		SELECT
+		<include refid="selectOxygenColumn" />
+		FROM t_measure_oxygen WHERE
+		userId = #{userId} AND
+		DATE_SUB(CURDATE(), INTERVAL 0 DAY) &lt;= date(measureDate) AND
+		DATE_SUB(CURDATE(), INTERVAL 0 DAY) &gt;= date(measureDate) AND
+		deviceType LIKE CONCAT(#{deviceType}, '%')
+		ORDER BY measureDate DESC
+	</select>
+
+	<select id="selectOxygenWithWeek" parameterType="java.util.HashMap"
+		resultType="java.util.HashMap">
+		SELECT
+		<include refid="selectOxygenColumn" />
+		FROM t_measure_oxygen WHERE
+		userId = #{userId} AND
+		DATE_SUB(CURDATE(), INTERVAL 1 WEEK) &lt; date(measureDate) AND
+		DATE_SUB(CURDATE(), INTERVAL 0 WEEK) &gt;= date(measureDate) AND
+		deviceType LIKE CONCAT(#{deviceType}, '%')
+		ORDER BY measureDate DESC
+	</select>
+
+	<select id="selectOxygenWithMonth" parameterType="java.util.HashMap"
+		resultType="java.util.HashMap">
+		SELECT
+		<include refid="selectOxygenColumn" />
+		FROM t_measure_oxygen WHERE
+		userId = #{userId} AND
+		DATE_SUB(CURDATE(), INTERVAL 1 MONTH) &lt; date(measureDate) AND
+		DATE_SUB(CURDATE(), INTERVAL 0 MONTH) &gt;= date(measureDate) AND
+		deviceType LIKE CONCAT(#{deviceType}, '%')
+		ORDER BY measureDate DESC
+	</select>
+
+	<select id="selectOxygenWithThreeMonth" parameterType="java.util.HashMap"
+		resultType="java.util.HashMap">
+		SELECT
+		<include refid="selectOxygenColumn" />
+		FROM t_measure_oxygen WHERE
+		userId = #{userId} AND
+		DATE_SUB(CURDATE(), INTERVAL 3 MONTH) &lt; date(measureDate) AND
+		DATE_SUB(CURDATE(), INTERVAL 0 MONTH) &gt;= date(measureDate) AND
+		deviceType LIKE CONCAT(#{deviceType}, '%')
+		ORDER BY measureDate DESC
+	</select>
+
+</mapper>

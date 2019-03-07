@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lifeshs.dao1.measure.UserInfoReadDao" >
+  <resultMap id="BaseResultMap" type="com.lifeshs.po.UserInfoRead" >
+    <constructor >
+      <idArg column="id" jdbcType="INTEGER" javaType="java.lang.Integer" />
+      <arg column="userId" jdbcType="INTEGER" javaType="java.lang.Integer" />
+      <arg column="orgUserId" jdbcType="INTEGER" javaType="java.lang.Integer" />
+      <arg column="device" jdbcType="INTEGER" javaType="java.lang.Integer" />
+      <arg column="hasWarning" jdbcType="INTEGER" javaType="java.lang.Integer" />
+      <arg column="isRead" jdbcType="BIT" javaType="java.lang.Boolean" />
+      <arg column="measureDate" jdbcType="TIMESTAMP" javaType="java.util.Date" />
+      <arg column="updateTime" jdbcType="TIMESTAMP" javaType="java.util.Date" />
+      <arg column="createTime" jdbcType="TIMESTAMP" javaType="java.util.Date" />
+    </constructor>
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, userId, orgUserId, device, hasWarning, isRead, measureDate, updateTime, createTime
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_userInfo_read
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from t_userInfo_read
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.lifeshs.po.UserInfoRead" >
+    insert into t_userInfo_read (id, userId, orgUserId, 
+      device, hasWarning, isRead, 
+      measureDate,  createTime
+      )
+    values (#{id,jdbcType=INTEGER}, #{userId,jdbcType=INTEGER}, #{orgUserId,jdbcType=INTEGER}, 
+      #{device,jdbcType=INTEGER}, #{hasWarning,jdbcType=INTEGER}, #{isRead,jdbcType=BIT}, 
+      #{measureDate,jdbcType=TIMESTAMP},  now()
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.lifeshs.po.UserInfoRead" >
+    insert into t_userInfo_read
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="userId != null" >
+        userId,
+      </if>
+      <if test="orgUserId != null" >
+        orgUserId,
+      </if>
+      <if test="device != null" >
+        device,
+      </if>
+      <if test="hasWarning != null" >
+        hasWarning,
+      </if>
+      <if test="isRead != null" >
+        isRead,
+      </if>
+      <if test="measureDate != null" >
+        measureDate,
+      </if>
+      <if test="createTime != null" >
+        createTime,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="userId != null" >
+        #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="orgUserId != null" >
+        #{orgUserId,jdbcType=INTEGER},
+      </if>
+      <if test="device != null" >
+        #{device,jdbcType=INTEGER},
+      </if>
+      <if test="hasWarning != null" >
+        #{hasWarning,jdbcType=INTEGER},
+      </if>
+      <if test="isRead != null" >
+        #{isRead,jdbcType=BIT},
+      </if>
+      <if test="measureDate != null" >
+        #{measureDate,jdbcType=TIMESTAMP},
+      </if>
+      now()
+    </trim>
+  </insert>
+
+  <update id="updateByPrimaryKeySelective" parameterType="com.lifeshs.po.UserInfoRead" >
+    update t_userInfo_read
+    <set >
+      <if test="userId != null" >
+        userId = #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="orgUserId != null" >
+        orgUserId = #{orgUserId,jdbcType=INTEGER},
+      </if>
+      <if test="device != null" >
+        device = #{device,jdbcType=INTEGER},
+      </if>
+      <if test="hasWarning != null" >
+        hasWarning = #{hasWarning,jdbcType=INTEGER},
+      </if>
+      <if test="isRead != null" >
+        isRead = #{isRead,jdbcType=BIT},
+      </if>
+      <if test="measureDate != null" >
+        measureDate = #{measureDate,jdbcType=TIMESTAMP}
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.lifeshs.po.UserInfoRead" >
+    update t_userInfo_read
+    set userId = #{userId,jdbcType=INTEGER},
+      orgUserId = #{orgUserId,jdbcType=INTEGER},
+      device = #{device,jdbcType=INTEGER},
+      hasWarning = #{hasWarning,jdbcType=INTEGER},
+      isRead = #{isRead,jdbcType=BIT},
+      measureDate = #{measureDate,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+
+  <select id="selectByUserId" resultType="com.lifeshs.po.UserInfoRead">
+    SELECT
+    <include refid="Base_Column_List"/>
+    FROM t_userInfo_read
+    WHERE userId = #{userId}
+    and date_format(measureDate,"%Y-%m-%d") = #{measureDate}
+  </select>
+
+  <insert id="batchInsert" parameterType="list">
+    <foreach collection="list" item="item" separator=";">
+      INSERT INTO t_userInfo_read (
+        userId, orgUserId,
+        device, hasWarning, isRead,
+        measureDate,  createTime
+      )
+      VALUES(
+        #{item.userId},
+        #{item.orgUserId},
+        #{item.device},
+        #{item.hasWarning},
+        #{item.isRead},
+        #{item.measureDate},
+        now()
+      )
+    </foreach>
+  </insert>
+
+  <update id="batchUpdate" parameterType="list">
+    <foreach collection="list" item="item" separator=";">
+      UPDATE t_userInfo_read
+      SET
+        device = #{item.device},
+        hasWarning = #{item.hasWarning},
+        isRead = #{item.isRead}
+    </foreach>
+  </update>
+
+  <select id="selectByUserIdAndOrgUserId" parameterType="map" resultType="com.lifeshs.po.UserInfoRead">
+    SELECT
+    <include refid="Base_Column_List"/>
+    FROM t_userInfo_read
+    WHERE userId = #{userId}
+    and orgUserId = #{orgUserId}
+    and date_format(measureDate,"%Y-%m-%d") = #{measureDate}
+  </select>
+
+  <update id="readUserInfo" parameterType="map">
+    UPDATE t_userInfo_read
+    SET
+      isRead = TRUE
+    WHERE userId = #{userId}
+    and orgUserId = #{orgUserId}
+    and date_format(measureDate,"%Y-%m-%d") = #{measureDate}
+  </update>
+
+</mapper>

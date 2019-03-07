@@ -1,0 +1,128 @@
+@charset "utf-8";
+header {
+    padding: .2rem;
+    margin-bottom: .3rem;
+}
+header .container{
+	position:relative;
+}
+header i {
+	left:0;
+    position: absolute;
+    width: .18rem;
+    height: .32rem;
+    background-image: url(/static/mobile/paper/image/back.png);
+    background-size: .18rem .32rem;
+    margin: .1rem;
+}
+header .container p {
+    text-align: center;
+    color: #fff;
+    font-size: .36rem;
+}
+body{
+	background-image: url(/static/mobile/paper/image/bg.png);
+	/*background-size: cover;*/
+	background-position: center;
+}
+article{
+	padding-left:.2rem;
+	padding-right: .2rem;
+}
+.progress{
+	margin-bottom: .4rem;
+	position:relative;
+	height:.2rem;
+	width:100%;
+	border-radius:.1rem;
+	background-color: #394956;
+	margin-top: 1rem;
+}
+.progress .step{
+	position:absolute;
+	left:0;
+	height:100%;
+	width:0.09rem;
+	border-radius:.1rem;
+	background-color:#ffeed5;
+}
+.count{
+	margin-bottom: .4rem;
+	color:#000;
+	font-size: .34rem;
+	text-align: center;
+}
+.count em{
+	margin-left: .2rem;
+	margin-right: .2rem;
+}
+.count i {
+	position: absolute;
+	right: 4%;
+	width: .66rem;
+	height: .66rem;
+	border-radius: 50%;
+	background-color: #ffeed5;
+	color: #333;
+	font-size: .2rem;
+	line-height: .66rem;
+	text-align: center;
+}
+.subject p{
+	color:#fff;
+	font-size: .28rem;
+	line-height: 1.8;
+	letter-spacing: 2px;
+	margin-bottom: .4rem;
+	word-break:break-all;
+	word-wrap:break-word;
+}
+.subject .answer{
+	float: right;
+	margin-right: 4%;
+	width:88%;
+}
+.answer li{
+	min-height:.8rem;
+	margin-bottom: .4rem;
+	position:relative;
+	display: flex;
+	justify-content:center;
+	align-items:center;
+	background-color: #ffeed5;
+	border-radius:.1rem;
+	font-size: .3rem;
+}
+.answer li i{
+	position:absolute;
+	left:-.36rem;
+	background-color: #394956;
+	height:.72rem;
+	width:.72rem;
+	border-radius: 50%;
+	color:#fff;
+	display: flex;
+	justify-content:center;
+	align-items:center;
+	font-size: .3rem;
+}
+.answer li span {
+	margin-left: 20px;
+}
+.refer-btn{
+	width:92%;
+	height:.8rem;
+	margin: .5rem 4% 0rem;
+	display:flex;
+	justify-content:center;
+	align-items:center;
+	background-color:#394956;
+	border-radius: .12rem;
+}
+.refer-btn a.answer-refer{
+	font-size: .3rem;
+	color:#fff;
+}
+.answer li.on {
+	background-color: rgba(245, 185, 98, 0.92);
+}

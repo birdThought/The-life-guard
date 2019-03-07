@@ -1,0 +1,183 @@
+@charset "utf-8";
+.main-content{
+	padding-left: 20px;
+}
+.vip-top{
+	border-bottom: 1px solid #eee;
+	position: relative;
+	padding-top: 32px;
+}
+.vip-top input{
+	width: 280px;
+	height: 40px;
+	background-color:#ddd;
+	border:none;
+	outline:none;
+	/* cursor: pointer; */
+	text-indent: 1em;
+	color: #333;
+}
+.vip-top input::-webkit-input-placeholder {
+	color:#999;
+	text-align: center;
+	font-size:14px;
+}
+.vip-top input::-moz-placeholder{
+	color:#999;
+	text-align: center;
+	font-size:14px;
+}
+.vip-top input:-ms-input-placeholder {
+	color:#999;
+	text-align: center;
+	font-size:14px;
+}
+.vip-top span{
+	position: absolute;
+	right: 14px;
+	bottom: 10px;
+	height: 40px;
+	width: 126px;
+	background: #40c98d url(../images/add.png) no-repeat 10px center;
+	color: #fff;
+	font-size: 16px;
+	text-align: center;
+	line-height: 40px;
+	border-radius: 4px;
+}
+.member-content{
+	padding-top: 20px;
+}
+.member-content .member-content-lists li {
+    width: 280px;
+    height: 78px;
+    line-height: 78px;
+    padding-left: 16px;
+	cursor: pointer;
+}
+.member-content .member-content-lists li.on {
+    background-color: #eee;
+}
+.member-content .member-content-lists li:before {
+    content: "";
+    width: 56px;
+    height: 56px;
+    display: inline-block;
+    vertical-align: middle;
+   /* background-image: url(../images/items.png);*/
+}
+.member-content .member-content-lists li a {
+    color: #333;
+    display: inline;
+    font-size: 14px;
+    padding-left: 60px;
+    width: 208px;
+    position: relative;
+}
+.member-content .member-content-lists li img{
+	width: 56px;
+	height: 56px;
+	margin-left: -50px;
+	border-radius: 6px;
+}
+.member-info{
+	width: 470px;
+	font-size: 16px;
+}
+.member-info dt{
+	color:#333;
+	font-weight: 600;
+	line-height: 76px;
+}
+.member-info dd{
+	color:#666;
+	margin-bottom: 30px; 
+}
+.member-info dd em{
+	color: #333;
+}
+.member-info dd .chose-status{
+	color:#10bb71;
+}
+.chose-status:after{
+	content:"";
+	display: inline-block;
+	vertical-align: bottom;
+	margin-left: 10px;
+	border-width:8px;
+    border-style:solid dashed dashed dashed;
+    border-color:#10bb71 transparent transparent transparent;
+}
+.member-info dd em.on:after{
+	vertical-align: top;
+	border-color: transparent transparent #10bb71 transparent;
+}
+.member-content .member-state{
+	margin-left: 26px;
+	width:620px;
+}
+.member-state ul{
+	margin-bottom: 40px;
+	display:flex;
+	justify-content:space-around;
+}
+.member-state ul li{
+	height:90px;
+	width:150px;
+	color:#fff;
+	border-radius: 6px;
+	display:flex;
+	flex-direction:column;
+	justify-content:center;
+	align-items:center;
+}
+.member-state ul li p{
+	font-size: 24px;
+	margin-bottom: 6px;
+}
+.member-state ul li span{
+	font-size: 14px;
+}
+.member-state ul li:nth-child(1){
+	background-color: #54baff;
+}
+.member-state ul li:nth-child(2){
+	background-color: #09d6a8;
+}
+.member-state ul li:nth-child(3){
+	background-color: #81d02c;
+}
+.member-state table{
+	width:100%;
+	border-collapse: collapse;
+}
+.member-state table td{
+	border:1px solid #ddd;
+	height:60px;
+	font-size: 16px;
+}
+.member-state table :not(.text-center){
+	padding-left: 12px;
+}
+.member-state table tr.text-center{
+	text-align: center;
+}
+.member-state table td .key{
+	color:#666;
+	display:inline-block;
+	width:90px;
+}
+.member-state table td .value{
+	color:#333;
+}
+.member-state table td select.value{
+	border:none;
+	font-size: 16px;
+	color:#10bb71;
+	width:80px;
+	outline:none;
+	appearance:none;
+	-moz-appearance:none; /* Firefox */
+	-webkit-appearance:none;
+	background: url(/static/platform/v2.2.0/images/org/org-collape.png) right 16px center no-repeat;
+}

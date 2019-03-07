@@ -1,0 +1,15 @@
+<ul class="navbar">
+    <li *ngFor="let helpColumn of helpColumns; let i = index" [class.selected]="helpColumn === selectedHelpColumn"
+        (click)="onSelect(helpColumn)">
+        <p>
+            <img src="/static/images/help/help-{{i+1}}.png" alt="">
+            {{helpColumn.name}}
+            <i [class.current]="helpColumn === selectedHelpColumn"></i>
+        </p>
+        <dl [class.show]="helpColumn === selectedHelpColumn">
+            <dd *ngFor="let help of helpColumn.helps">
+                <a [routerLink]="['/help', help.id]">{{help.title}}</a>
+            </dd>
+        </dl>
+    </li>
+</ul>

@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- 分析报告订单 -->
+<mapper namespace="com.lifeshs.dao1.order.reportAnalysis.IReportAnalysisOrderDao" >
+
+    <!-- 获取分析报告订单列表 -->
+    <select id="findOrderList" resultMap="reportAnalysisOrder">
+    SELECT o.*, rep.requestorType as rep_requestorType, rep.healthProduct as rep_healthProduct, rep.id as rep_id, rep.content as rep_content,
+        rep.doctorSign as rep_doctorSign, rep.reply as rep_reply, u.userName as u_userName, u.realName as u_realName,
+        u.mobile as u_mobile, bu.name as bu_name
+    FROM t_order_report_analysis o
+    INNER JOIN t_user_report_analysis rep ON o.userReportAnalysisId = rep.id
+    INNER JOIN t_business bu ON o.businessUserId = bu.id
+    INNER JOIN t_user u ON o.userId = u.id
+    <where>
+        <if test="businessId != null">
+            o.businessUserId = #{businessId}
+        </if>
+        <if test="status != null">
+            AND o.status = #{status}
+        </if>
+        <if test="status == null and businessId == null">
+            AND o.status in (3, 4)
+        </if>
+        <if test="status == null and businessId != null">
+            AND o.status in (1, 3, 4)
+        </if>
+        <if test="keyword != null">
+            AND (u.userName LIKE CONCAT('%',#{keyword},'%')
+            OR u.realName LIKE CONCAT('%',#{keyword},'%')
+            OR u.mobile LIKE CONCAT('%',#{keyword},'%')
+            OR bu.name LIKE CONCAT('%',#{keyword},'%'))
+        </if>
+        <if test="startDate != null">
+            AND o.createDate &gt;= #{startDate}
+        </if>
+        <if test="endDate != null">
+            AND o.createDate &lt;= #{endDate}
+        </if>
+    </where>
+        ORDER BY o.createDate DESC
+        limit #{pageIndex}, #{pageSize}
+    </select>
+
+    <!-- 分析报告订单VO映射 -->
+    <resultMap id="reportAnalysisOrder" type="com.lifeshs.vo.order.reportAnalysis.ReportAnalysisOrderVO">
+        <id property="id" column="id"/>
+        <result property="orderNumber" column="orderNumber"/>
+       <!-- <result property="userId" column="userId"/>-->
+        <result property="businessUserId" column="businessUserId"/>
+        <result property="businessName" column="bu_name"/>
+        <result property="status" column="status"/>
+        <result property="price" column="price"/>
+        <result property="createDate" column="createDate"/>
+        <result property="modifyDate" column="modifyDate"/>
+        <association property="reportAnalysisPO" javaType="com.lifeshs.po.user.ReportAnalysisPO">
+            <id property="id" column="rep_id"/>
+            <result property="requestorType" column="rep_requestorType"/>
+            <result property="healthProduct" column="rep_healthProduct"/>
+            <result property="content" column="rep_content"/>
+            <result property="reply" column="rep_reply"/>
+            <result property="doctorSign" column="rep_doctorSign"/>
+        </association>
+        <association property="userPO" javaType="com.lifeshs.po.UserPO">
+            <id property="id" column="userId"/>
+            <result property="userName" column="u_userName"/>
+            <result property="realName" column="u_realName"/>
+            <result property="mobile" column="u_mobile"/>
+        </association>
+    </resultMap>
+
+    <!-- 获取分析报告订单数量 -->
+    <select id="countOrder" resultType="java.lang.Integer">
+        SELECT count(1)
+        FROM t_order_report_analysis o
+        INNER JOIN t_user_report_analysis rep ON o.userReportAnalysisId = rep.id
+        INNER JOIN t_business bu ON o.businessUserId = bu.id
+        INNER JOIN t_user u ON o.userId = u.id
+        <where>
+            <if test="businessId != null">
+                o.businessUserId = #{businessId}
+            </if>
+            <if test="status != null">
+                AND o.status = #{status}
+            </if>
+            <if test="status == null and businessId == null">
+                AND o.status in (3, 4)
+            </if>
+            <if test="status == null and businessId != null">
+                AND o.status in (1, 3, 4)
+            </if>
+            <if test="keyword != null">
+                AND (u.userName LIKE CONCAT('%',#{keyword},'%')
+                OR u.realName LIKE CONCAT('%',#{keyword},'%')
+                OR u.mobile LIKE CONCAT('%',#{keyword},'%')
+                OR bu.name LIKE CONCAT('%',#{keyword},'%'))
+            </if>
+            <if test="startDate != null">
+                AND o.createDate &gt;= #{startDate}
+            </if>
+            <if test="endDate != null">
+                AND o.createDate &lt;= #{endDate}
+            </if>
+        </where>
+    </select>
+
+    <!--获取单个订单实体（不做关联）-->
+    <select id="getOrder" resultType="com.lifeshs.po.order.ReportAnalysisOrderPO">
+        SELECT * FROM t_order_report_analysis WHERE id = #{id}
+    </select>
+
+    <select id="getOrderByOrderNumber" resultType="com.lifeshs.po.order.ReportAnalysisOrderPO">
+        SELECT * FROM t_order_report_analysis WHERE orderNumber = #{orderNumber}
+    </select>
+
+    <!--更新分析报告订单状态-->
+    <update id="updateOrder">
+        UPDATE t_order_report_analysis
+        SET modifyDate = NOW()
+        <if test="status != null">
+            ,status = #{status}
+        </if>
+        WHERE id = #{id}
+    </update>
+
+    <!--新增订单-->
+    <insert id="addOrder" parameterType="com.lifeshs.po.order.ReportAnalysisOrderPO">
+        <selectKey resultType="java.lang.Integer" order="AFTER" keyProperty="id">
+            SELECT LAST_INSERT_ID() AS ID
+        </selectKey>
+        INSERT INTO t_order_report_analysis
+        (orderNumber, userId, businessUserId, userReportAnalysisId, status, price, subject, body, createDate)
+        VALUES(#{orderNumber}, #{userId}, #{businessUserId}, #{userReportAnalysisId}, 1, #{price}, #{subject}, #{body}, NOW())
+    </insert>
+</mapper>

@@ -1,0 +1,31 @@
+
+body, body * {
+    max-height: 1000000px;
+}
+body{
+	background-image: url(/static/mobile/paper/image/bg-stroke.png);
+}
+/*header i{
+	background-image: url(../images/back-1.png);
+}*/
+header .container p{
+	color:#333;
+}
+.subject p{
+	color:#333;
+	margin-bottom: .3rem;
+	margin-left: .3rem;
+	max-height:99999px;
+}
+.answer li{
+	min-height: .82rem;
+	margin-bottom: .3rem;
+}
+.answer li i{
+	background-color: #fa7f3d;
+}
+.refer-btn{
+	margin:1.4rem 4% .4rem;
+	background-color: #fa7f3d;
+	box-shadow: 0 2px 0 1px rgba(0,0,0,.2);
+}

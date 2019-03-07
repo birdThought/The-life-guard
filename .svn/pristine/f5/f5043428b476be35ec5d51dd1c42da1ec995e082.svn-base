@@ -1,0 +1,184 @@
+/*
+* @Author: Administrator
+* @Date:   2017-04-18 09:48:57
+* @Last Modified by:   Administrator
+* @Last Modified time: 2017-04-20 10:23:54
+*/
+.user-infor{
+	padding-top: 60px;
+	padding-left: 110px;
+}
+.user-infor li{
+	margin-bottom: 34px;
+}
+.user-infor li:after{
+	content:"";
+	display: block;
+	clear:both;
+	height:0;
+	visibility: hidden;;
+}
+.user-infor li h5{
+	line-height: 40px;
+	font-weight: 500;
+	float: left;
+	width:100px;
+	text-align: right;
+	color:#666;
+	font-size: 16px;
+	margin-right: 20px;
+}
+/* head-layer */
+.head-layer{
+	display: none;
+}
+.head-layer p{
+	margin-top: 20px;
+	color:#666;
+	font-size: 12px;
+}
+.head-layer > div{
+	padding:20px 10px;
+	float: left;
+	width: 60%
+}
+.head-layer > div.yourself{
+	width:40%;
+	text-align: center;
+}
+.head-layer > div.yourself img{
+	width:110px;
+	height: 110px;
+	border-radius: 50%;
+}
+.head-layer input[type=file]{
+	display: none;
+}
+.head-layer a{
+	margin-top: 10px;
+	display: inline-block;
+}
+.head-layer span{
+	display: inline-block;
+	width:120px;
+	height: 30px;
+	line-height:30px;
+	text-align: center;
+	border:1px solid #ddd;
+	font-size: 14px;
+	border-radius: 4px;
+	color:#333;
+}
+.layui-layer-btn{
+	padding: 0 16px 30px !important;
+}
+.layui-layer-btn .layui-layer-btn0{
+	background-color:#10bb71 !important;
+}
+/* head-layer */
+
+.user-infor li.set-head h5{
+	margin-top: 50px;
+}
+.user-infor li.set-head >div{
+	float: left;
+	padding-left: 50px;
+}
+.user-infor li.set-head .photo{
+	text-align: center;
+}
+.user-infor li.set-head .photo img{
+	width:110px;
+	height: 110px;
+	border-radius: 50%;
+}
+.user-infor li.set-head  span{
+	display: inline-block;
+	width: 140px;
+	height: 34px;
+	border:1px solid #ddd;
+	border-radius: 4px;
+	text-align: center;
+	line-height: 32px;
+	margin-top: 20px;
+}
+.user-infor li input[type=text],
+.user-infor li input[type=password],
+.user-infor li select{
+	width: 380px;
+	height: 40px;
+	border:1px solid #cacaca;
+	text-indent: 16px;
+	outline-color: #369239;
+	float: left;
+	font-size: 14px;
+}
+.user-infor li div.msg-lay{
+	color: #999;
+    font-size: 14px;
+   	margin-left: 20px;
+    height: 40px;
+    line-height: 40px;
+    float: left;
+}
+.user-infor li:nth-of-type(3) dl dd{
+	display: inline-block;
+	margin-right: 50px;
+	padding-top: 10px;
+}
+/* radio */
+
+.magic-radio + label:after {
+    top: 5px;
+    left: 5px;
+    box-sizing: border-box;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background-color: #369239;
+    border-color: #369239;
+}
+.user-infor li.sanwei input{
+	width: 118px;
+	margin-right: 13px;
+}
+.user-infor li.refer-to{
+	padding-top: 70px;
+}
+.user-infor li.refer-to a.btn{
+	display: inline-block;
+	width: 280px;
+	height: 50px;
+	line-height: 50px;
+	text-align: center;
+	color:#fff;
+	font-size: 18px;
+	background-color:#369239;
+	border-radius: 8px;
+	margin-left: 160px;
+}
+.user-infor li.refer-to a.btn-green{
+	background-color: #86be88;
+}
+/* change-number */
+.user-infor .change-num a{
+	display: inline-block;
+	color :#fff;
+	width: 120px;
+	height: 40px;
+	line-height: 40px;
+	text-align: center;
+	background-color:#86be88;
+	margin-left: 120px;
+	font-size: 15px;
+}
+/* change-mail */
+.user-infor .mail-code input[type=button]{
+	height: 40px;
+	width: 120px;
+	color:#333;
+	font-size: 14px;
+	background-color: #e0e0e0;
+	border:1px solid #cacaca;
+	cursor: pointer;
+}

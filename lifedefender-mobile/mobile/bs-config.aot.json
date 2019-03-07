@@ -1,0 +1,14 @@
+{
+  "open": false,
+  "logLevel": "silent",
+  "port": 3001,
+  "server": {
+    "baseDir": "aot",
+    "routes": {
+      "/node_modules": "node_modules"
+    },
+    "middleware": {
+      "0": null
+    }
+  }
+}

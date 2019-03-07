@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lifeshs.dao.data.IHealthReasonDao" >
+
+    <select id="getReason" resultType="com.lifeshs.pojo.data.ReasonDTO">
+        SELECT
+            hr.id, hr.reason, hp.value AS `healthParamBinaryValue`, hr.status
+        FROM
+            t_data_health_reason hr
+            INNER JOIN t_data_health_package_param hp ON hp.id = hr.healthPackageParamId
+        WHERE
+            hr.`status` = #{status}
+            AND hp.value = #{healthParamBinaryValue}
+            AND hr.professional = #{professional}
+    </select>
+    
+    <select id="listReason" resultType="com.lifeshs.pojo.data.ReasonDTO">
+        SELECT
+            hr.id, hr.reason, hp.value AS `healthParamBinaryValue`, hr.status
+        FROM
+            t_data_health_reason hr
+            INNER JOIN t_data_health_package_param hp ON hp.id = hr.healthPackageParamId
+            INNER JOIN t_data_health_package_param_relation r ON r.healthPackageParamId = hp.id
+            INNER JOIN t_data_health_package h ON h.id = r.healthPackageId
+        WHERE
+            h.value = #{healthPackageBinaryValue}
+            AND hr.professional = #{professional}
+    </select>
+
+</mapper>

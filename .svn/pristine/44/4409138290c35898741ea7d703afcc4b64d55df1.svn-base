@@ -1,0 +1,226 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ehcache updateCheck="false">
+
+    <diskStore path="/home/lifedefender/lifedefender-cache/app"/>
+
+    <defaultCache
+            maxElementsInMemory="10000"
+            overflowToDisk="true"
+            eternal="false"
+            memoryStoreEvictionPolicy="LRU"
+            maxElementsOnDisk="10000000"
+            diskExpiryThreadIntervalSeconds="600"
+            timeToIdleSeconds="3600"
+            timeToLiveSeconds="100000"
+            diskPersistent="false"/>
+
+    <!--
+       name:缓存名称。
+       maxElementsInMemory：缓存最大个数。
+       eternal:对象是否永久有效，一但设置了，timeout将不起作用。
+       timeToIdleSeconds：设置对象在失效前的允许闲置时间（单位：秒）。仅当eternal=false对象不是永久有效时使用，可选属性，默认值是0，也就是可闲置时间无穷大。
+       timeToLiveSeconds：设置对象在失效前允许存活时间（单位：秒）。最大时间介于创建时间和失效时间之间。仅当eternal=false对象不是永久有效时使用，默认是0.，也就是对象存活时间无穷大。
+       overflowToDisk：当内存中对象数量达到maxElementsInMemory时，Ehcache将会对象写到磁盘中。
+       diskSpoolBufferSizeMB：这个参数设置DiskStore（磁盘缓存）的缓存区大小。默认是30MB。每个Cache都应该有自己的一个缓冲区。
+       maxElementsOnDisk：硬盘最大缓存个数。
+       diskPersistent：是否缓存虚拟机重启期数据 Whether the disk store persists between restarts of the Virtual Machine. The default value is false.
+       diskExpiryThreadIntervalSeconds：磁盘失效线程运行时间间隔，默认是120秒。
+       memoryStoreEvictionPolicy：当达到maxElementsInMemory限制时，Ehcache将会根据指定的策略去清理内存。默认策略是LRU（最近最少使用）。你可以设置为FIFO（先进先出）或是LFU（较少使用）。
+       clearOnFlush：内存数量最大时是否清除。
+     -->
+
+    <!-- 资讯访问量缓存 -->
+    <cache name="newsLookCache"
+           maxElementsInMemory="0"
+           eternal="true"
+           overflowToDisk="true"
+           diskPersistent="true"
+           memoryStoreEvictionPolicy="LFU"
+    >
+    </cache>
+
+    <!-- 热门资讯的缓存 -->
+    <cache name="hotNewsCache"
+           maxElementsInMemory="10"
+           eternal="false"
+           timeToIdleSeconds="3600"
+           timeToLiveSeconds="0"
+           overflowToDisk="false"
+           statistics="true">
+    </cache>
+
+
+    <!-- 登录记录缓存 锁定5分钟 -->
+    <cache name="passwordRetryCache"
+           maxElementsInMemory="2000"
+           eternal="false"
+           timeToIdleSeconds="3600"
+           timeToLiveSeconds="300"
+           overflowToDisk="false"
+           statistics="true">
+    </cache>
+
+    <cache name="authorizationCache"
+           maxElementsInMemory="2000"
+           eternal="false"
+           timeToIdleSeconds="3600"
+           timeToLiveSeconds="0"
+           overflowToDisk="false"
+           statistics="true">
+    </cache>
+
+    <cache name="authenticationCache"
+           maxElementsInMemory="2000"
+           eternal="false"
+           timeToIdleSeconds="3600"
+           timeToLiveSeconds="0"
+           overflowToDisk="false"
+           statistics="true">
+    </cache>
+
+    <cache name="shiro-activeSessionCache"
+           maxElementsInMemory="2000"
+           eternal="false"
+           timeToIdleSeconds="3600"
+           timeToLiveSeconds="0"
+           overflowToDisk="false"
+           statistics="true">
+    </cache>
+
+    <!-- 注册     有效时长5分钟 -->
+    <cache name="registeryValidCache"
+           maxElementsInMemory="2000"
+           eternal="false"
+           timeToIdleSeconds="3600"
+           timeToLiveSeconds="300"
+           overflowToDisk="false"
+           statistics="true">
+    </cache>
+
+    <!-- 发送电子围栏短信缓存 有效时间30分钟 -->
+    <cache name="sendFenceWarningSMSCache"
+           maxElementsInMemory="2000"
+           eternal="false"
+           timeToLiveSeconds="1800"
+           overflowToDisk="false"
+           statistics="true">
+    </cache>
+
+    <!-- 找回密码   有效时长5分钟 -->
+    <cache name="resetPasswordCache"
+           maxElementsInMemory="2000"
+           eternal="false"
+           timeToIdleSeconds="3600"
+           timeToLiveSeconds="300"
+           overflowToDisk="false"
+           statistics="true">
+    </cache>
+
+    <!-- 设备TOKEN    有效时长7天 60*60*24*7 -->
+    <cache name="tokenCache"
+           eternal="false"
+           timeToLiveSeconds="604800"
+           diskPersistent="true"
+           maxBytesLocalHeap="100M"
+           statistics="true">
+    </cache>
+
+    <!-- 发送健康预警短信缓存 有效时长1分钟 -->
+    <cache name="sendHealthWarningSMSCache"
+           maxElementsInMemory="10000"
+           eternal="false"
+           timeToIdleSeconds="60"
+           timeToLiveSeconds="60"
+           overflowToDisk="false"
+           statistics="true">
+    </cache>
+
+    <!-- 修改手机号缓存        有效时长5分钟 -->
+    <cache name="modifyMobileCache"
+           maxElementsInMemory="2000"
+           eternal="false"
+           timeToIdleSeconds="3600"
+           timeToLiveSeconds="300"
+           overflowToDisk="false"
+           statistics="true">
+    </cache>
+
+    <!-- 修改邮箱缓存     有效时长5分钟 -->
+    <cache name="modifyEmailCache"
+           maxElementsInMemory="2000"
+           eternal="false"
+           timeToIdleSeconds="3600"
+           timeToLiveSeconds="300"
+           overflowToDisk="false"
+           statistics="true">
+    </cache>
+
+    <!-- APP修改手机号与邮箱缓存      有效时长5分钟 -->
+    <cache name="modifyMobileEmailCache"
+           maxElementsInMemory="2000"
+           eternal="false"
+           timeToIdleSeconds="3600"
+           timeToLiveSeconds="300"
+           overflowToDisk="false"
+           statistics="true">
+    </cache>
+
+    <!-- 定位数据的缓存 -->
+    <cache name="locationCache"
+           maxElementsInMemory="2000"
+           eternal="true"
+           timeToIdleSeconds="0"
+           timeToLiveSeconds="0"
+           overflowToDisk="false"
+           statistics="true">
+    </cache>
+
+    <!-- 短信休息一天 缓存 -->
+    <cache name="SMSBreakOneDayCache"
+           maxElementsInMemory="2000"
+           eternal="false"
+           timeToLiveSeconds="86400"
+           overflowToDisk="false"
+           statistics="true">
+    </cache>
+
+    <!-- 短信次数记录缓存 -->
+    <cache name="SMSBreakTimesCache"
+           maxElementsInMemory="2000"
+           eternal="true"
+           timeToLiveSeconds="0"
+           overflowToDisk="false"
+           statistics="true">
+    </cache>
+
+    <!-- 用户共享数据缓存区 最大缓存数量为10,000 存活时间30分钟 每次刷新增长10分钟 -->
+    <cache name="userShareData"
+           maxElementsInMemory="10000"
+           eternal="false"
+           timeToLiveSeconds="1800"
+           timeToIdleSeconds="600"
+           diskPersistent="true"
+           overflowToDisk="true"
+           statistics="false">
+    </cache>
+
+    <!--第三方登录认证-->
+    <cache name="oauthCache"
+           maxElementsInMemory="100"
+           eternal="false"
+           timeToIdleSeconds="600"
+           timeToLiveSeconds="600"
+           overflowToDisk="false"
+           statistics="false">
+    </cache>
+
+    <!--注册验证Token缓存30分钟-->
+    <cache name="registerTokenCache"
+           maxElementsInMemory="100"
+           eternal="false"
+           timeToIdleSeconds="36000"
+           timeToLiveSeconds="36000"
+           overflowToDisk="false"
+           statistics="false">
+    </cache>
+</ehcache>

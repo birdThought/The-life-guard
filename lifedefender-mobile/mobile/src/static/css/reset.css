@@ -1,0 +1,32 @@
+/* 初始化 */
+body,div,ul,li,ol,h1,h2,h3,h4,h5,h6,input,textarea,select,p,dl,dt,dd,a,img,button,form,table,th,tr,td,tbody,article,aside,details,figcaption,figure,footer,header,hgroup,menu,nav,section{margin:0;padding:0;}
+body{font:normal 14px/1.5 "Microsoft Yahei",Tahoma,"Lucida Grande",Verdana,STXihei,hei;}
+em,i{font-style:normal;}
+strong{font-weight:normal;}
+a{text-decoration:none;color:#666666;font-family:Microsoft yahei,Tahoma,Arial,sans-serif;}
+ul,ol{list-style:none;}
+h1,h2,h3,h4,h5,h6{font-size:100%;font-family:Microsoft yahei;}
+img{border:none;vertical-align:middle;max-width: 100%;height: auto;}
+
+*,*:before,*:after{
+	box-sizing:border-box;
+	-moz-box-sizing:border-box; /* Firefox */
+	-webkit-box-sizing:border-box; /* Safari */
+}
+.fl{float:left;}
+.fr{float:right;}
+.clearfix:before,
+.clearfix:after{
+	content:"";        
+    display:block;        
+    height:0;        
+    clear:both;        
+    visibility:hidden; 
+}
+.wrap{
+	margin: 0 auto;
+}
+.banxin{
+	width: 1200px;
+	margin: 0 auto;
+}

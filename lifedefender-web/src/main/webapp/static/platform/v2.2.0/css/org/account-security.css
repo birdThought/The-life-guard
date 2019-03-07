@@ -1,0 +1,144 @@
+
+/*
+* @Author: Administrator
+* @Date:   2017-05-11 17:58:08
+* @Last Modified by:   Administrator
+* @Last Modified time: 2017-05-11 20:33:04
+*/
+.main-content{
+	background-color:#fff; 
+}
+.account-security li{
+	margin-bottom: 40px;
+}
+.account-security{
+	margin-top: 80px;
+	margin-left: 100px;
+}
+.account-security li:after{
+	content:"";
+	display: block;
+	clear: both;
+	height: 0;
+	visibility: hidden;
+}
+.account-security li label{
+	float: left;
+	width: 180px;
+	line-height: 46px;
+	text-align: right;
+	color:#666;
+	font-size: 16px;
+	margin-right: 30px;
+}
+.account-security li >div{
+	float: left;
+	line-height: 46px;
+}
+.account-security li input{
+	text-indent: 1em;
+	float: left;
+	width: 378px;
+	height: 44px;
+	border:1px solid #ddd;
+	outline-color:#17b06d;
+	font-size: 14px;
+	color: #333;
+}
+.account-security-ul li a:hover {
+	border-bottom: 1px dashed #000;
+}
+li input::-webkit-input-placeholder,
+li input::-moz-placeholder,
+li input::-moz-placeholder,
+li input:-ms-input-placeholder{
+	color:#999;
+}
+div.psd-progress{
+	height: 16px;
+	width: 300px;
+	margin-top: 15px;
+	background-color: #dcdcdc;
+	border-radius: 10px;
+	position: relative;
+	margin-right: 30px;
+}
+div.psd-progress div{
+	background-color: #ff3030;
+	width: 36%;
+	position: absolute;
+	left: 0;
+	top:0;
+	height: 100%;
+	border-radius: 10px;
+}
+.strength span{
+	color:#ff3030;
+	font-size: 16px;
+	
+}
+.account-security li div a{
+	color:#17b06d;
+	font-size: 14px;
+	margin-left: 36px;
+}
+/* security-href */
+.security-href{
+	line-height: 50px;
+	font-size: 16px;
+	padding-left: 22px;
+}
+.security-href a,.security-href span{
+	color:#666;
+}
+.security-href em{
+	margin-left: 6px;
+	margin-right: 6px;
+	color:#666;
+}
+.remind p{
+	padding-left: 100px;
+	color:#666;
+	font-size: 16px;
+}
+.save a{
+	display: inline-block;
+	width: 340px;
+	height: 50px;
+	text-align: center;
+	line-height: 50px;
+	color:#fff;
+	font-size: 18px;
+	background: #10bb71;
+	margin-left: 210px;
+	border-radius: 8px;
+}
+/* bind email */
+li input[type=button].fl{
+	width: 98px;
+    border: 1px solid #cacaca;
+    height: 44px;
+    font-size: 14px;
+    color: #666;
+    cursor: pointer;
+    outline: none;
+}
+li input.fl[type=text]{
+	width: 278px;
+    border: 1px solid #cacaca;
+    height: 44px;
+    text-indent: 16px;
+    outline-color: #369239;
+    font-size: 14px;
+}
+li select{
+	float: left;
+	width: 128px;
+    border: 1px solid #cacaca;
+    height: 44px;
+    outline-color: #369239;
+    font-size: 14px;
+    text-indent: 10px;
+    color:#333;
+}
+

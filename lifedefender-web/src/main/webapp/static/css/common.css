@@ -1,0 +1,211 @@
+.layui-btn:not(.layui-btn-lg ):not(.layui-btn-sm):not(.layui-btn-xs) {
+    height: 34px;
+    line-height: 34px;
+    padding: 0 8px;
+}
+* {
+				font-size: 1rem;
+				margin: 0;
+				padding: 0;
+				/*outline: 1px solid red;*/
+			}
+			.header{
+				width: 100%;
+				height: 100px;
+				position: fixed;
+				top: 0;
+				background: white;
+				z-index: 10;
+			}
+			.home_header {
+				width: 1200px;
+				margin: 0 auto;
+				list-style-type: none;
+				color: black;
+				background-color: white;
+				text-align: center;
+				display: flex;
+				justify-content: space-between;
+			}
+			.home_header li {
+				display: flex;
+				align-items: center;
+				font-size: 1rem;
+			}
+			.home_header li div{
+				margin-left: 20px;
+			}
+			/*导航栏*/
+			.Nav{
+				width: 100%;
+				height: 110px;
+				background: #10bb71;
+				margin-top:100px ;
+			}
+			.Nav ul{
+				width: 1350px;
+				height: 100%;
+				margin: 0 auto;
+			}
+			.Nav ul li{
+				width: 20%;
+				height: 100%;
+				float: left;
+				margin-left: 20px;
+				line-height: 110px;
+			}
+			.Nav ul li img{
+				width: 80px;
+				height: 80px;
+			}
+			
+			/*左侧菜单*/
+			
+			.content-left {
+				width: 210px;
+				font-size: 0.8rem;
+				text-align: center;
+				float: left;
+				border: 1px solid #DEDEDE;
+			}
+			
+			.content-left li {
+				padding: 0.8rem 0 0.8rem 0;
+				border-bottom: 1px solid #DEDEDE;
+			}
+			
+			.content-left {
+				/*float: left;*/
+				overflow: hidden;
+				height: 100%;
+			}
+			/*右侧内容*/
+			.table,.content-right{
+				width: 1090px;
+				float: left;
+				overflow: hidden;
+			}
+			.content-right li{
+				display: none;
+			}
+			.table td {
+				font-size: 0.6rem;
+				text-align: center;
+			}
+			
+			.block_btn {
+				text-align: right;
+			}
+			
+			.block_btn label {
+				margin-top: 0.5rem;
+				margin-bottom: 0.5rem;
+				text-align: center;
+				padding: 0.5rem 0.5rem 0.5rem 0.5rem;
+				border-radius: 0.5rem;
+				background-color: #40c98d;
+			}
+			.select{
+				background: #40C98D;
+			}
+			#box-content{
+				width: 100%;
+				height: auto;
+			}
+			.content{
+				width: 1350px;
+				margin: 0 auto;
+			}
+			.addShop{
+				width: 100%;
+			}
+			.addShop p{
+				width: 120px;
+				height: 40px;
+				line-height: 40px;
+				text-align: center;
+				background: #64be5e;
+				float: right;
+				margin: 10px 0;
+				border-radius: 8px;
+				color: white;
+				cursor:pointer;
+			}
+			.layui-table-cell img{
+				width: 30px;
+				height: 30px;
+			}
+			.laytable-cell-numbers{
+				display: none !important; 
+			}
+			.addSub{
+				position: fixed;
+				top: 50%;
+				left: 50%;
+				width: 400px;
+				height: 300px;
+				background: #40c98d;
+				opacity: 0.9;
+				margin-left: -200px;
+				margin-top: -150px;
+				z-index: 10;
+				display: none;
+			}
+			.addSub ul{
+				width: 300px;
+				margin: 30px auto;
+			}
+			.addSub ul li{
+				width: 100%;
+				height: 40px;
+				margin-bottom: 20px;
+			}
+			.addSub ul li span{
+				width: 80px;
+				font-size: 16px;
+				display: block;
+				float: left;
+			}
+			.addSub ul li input{
+				width: 150px;
+				height: 30px;
+				float: left;
+				margin-left: 0px;
+				font-size: 12px;
+			}
+			.codeBtn{
+				float: right;
+				font-size: 12px;
+			}
+			.firm,.cancel{
+				width: 80px;
+				font-size: 16px;
+				margin-left: 45px;
+			}
+			.empInfo{
+				position: fixed;
+				top: 50%;
+				left: 50%;
+				width: 1200px;
+				height: 500px;
+				background: black;
+				opacity: 1;
+				margin-left: -600px;
+				margin-top: -250px;
+				z-index: 10;
+				display: none;
+				font-size: 14px;
+			}
+			.empInfo table{
+				width: 750px;
+				margin: 30px 30px;
+			}
+			.empInfo table tr td{
+				font-size: 12px !important;
+			}
+			.closeEmpInfo{
+				float: right;
+				color: red;
+				cursor: pointer;
+			}
+			

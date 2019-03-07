@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--机构-会员管理-->
+<mapper namespace="com.lifeshs.dao.org.member.IMemberManageDao">
+    <!--获取与服务师有关的会员列表-->
+    <select id = "listMemberByOrgUser" resultType="com.lifeshs.pojo.org.OrgMemberDTO">
+        select
+        MAX(o.id) AS orderId, u.id as userId, u.userName, u.mobile, u.photo,u.userCode, u.realName, r.gender, r.birthday, o.projectCode as code, p.projectType
+        ,r.waist, r.bust, r.hip, r.height, o.userRemark, o.serveId, o.userDiseasesId, o.userDiseasesName
+        from
+        t_user u, t_user_record r, t_order o, t_project p
+        WHERE
+        o.orgUserId = #{orgUserId}
+        AND
+        o.`status` = #{status}
+        AND
+        o.userId = u.id AND o.projectCode=p.projectCode
+        AND
+        u.id = r.userId
+        GROUP BY
+        o.serveId, u.userName
+    </select>
+
+    <!--获取服务师旗下会员数量-->
+    <select id="getCountOfMemberByOrgUser" resultType="java.lang.Integer">
+        SELECT
+            COUNT(DISTINCT(o.userId))
+        FROM
+            t_order o
+        WHERE
+            o.orgUserId = #{orgUserId}
+        AND
+            o.status = #{status}
+    </select>
+    
+    <select id="countMemberByOrgId" resultType="java.lang.Integer">
+        SELECT COUNT(DISTINCT(o.userId)) FROM t_order o
+            INNER JOIN t_org_user ou ON ou.id = o.orgUserId
+        WHERE
+            ou.orgId = #{orgId}
+            AND o.status = 3
+            AND o.orderType = 1
+    </select>
+
+    <select id = "listMemberByOrg" resultMap="memberDTO">
+        select
+        MAX(o.id) AS orderId, u.id as userId, u.userName, u.mobile, u.photo,u.userCode, u.realName, r.gender, r.birthday, o.projectCode as code,p.projectType
+        ,r.waist, r.bust, r.hip, r.height, o.userRemark, o.`serveId`, o.userDiseasesId, o.userDiseasesName
+        from
+        t_user u, t_user_record r, t_order o,t_project p
+        WHERE
+        o.orgUserId in (SELECT id FROM t_org_user WHERE orgId = #{orgId})
+        AND
+        o.`status` = #{status}
+        AND
+        o.userId = u.id AND o.projectCode=p.projectCode
+        AND
+        u.id = r.userId
+        GROUP BY
+        o.serveId, u.userName
+    </select>
+
+    <resultMap id = "memberDTO" type="com.lifeshs.pojo.org.OrgMemberDTO">
+        <id property= "code" column="code"/>
+        <association property="projectName" column="code" select="getProjectNameByCode"/>
+    </resultMap>
+
+    <select id="getProjectNameByCode" resultType="java.lang.String">
+        SELECT
+            name
+        FROM
+            t_project p
+        WHERE
+            p.projectCode = #{code}
+    </select>
+</mapper>

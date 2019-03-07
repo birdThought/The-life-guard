@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lifeshs.dao1.business.TemporaryDao">
+	<select id="findByInteger" parameterType="int" resultType="java.lang.Integer">
+		SELECT count(1) FROM(
+		SELECT
+		ov.userId, ov.price,ov.vipComboId,ov.businessId,ov.createDate,ov.`status`,u.userName,v.`name`,b.`name` as bname
+		FROM
+		t_order_vip ov
+		INNER JOIN t_user u ON ov.userId = u.id
+		INNER JOIN t_vip_combo v on ov.vipComboId = v.id
+		INNER JOIN t_business_user b on ov.businessCardId = b.id
+		<where><if test="type == 0">b.superior = #{superior}</if></where>
+		<where><if test="type != 0">b.id = #{id}</if></where>
+		<if test="name != null">
+			AND v.`name` = #{name}
+		</if>
+		<if test="date != null">
+			AND DATE_FORMAT(ov.createDate,'%Y-%m')= #{date}
+		</if>
+		<if test="bname != null and superior == 0">
+			AND b.`name` = #{bname}
+		</if>
+		)m
+    </select>
+	<select id="findByAllData" resultType="com.lifeshs.vo.business.TemporaryDataVO">
+        SELECT
+			ov.userId,ov.price,ov.vipComboId,ov.businessId,ov.createDate,ov.`status`,u.userName,v.`name`,b.`name` as bname
+		FROM
+			t_order_vip ov
+		INNER JOIN t_user u ON ov.userId = u.id
+		INNER JOIN t_vip_combo v on ov.vipComboId = v.id
+		INNER JOIN t_business_user b on ov.businessCardId = b.id
+		<where><if test="type == 0">b.superior = #{superior}</if></where>
+		<where><if test="type != 0">b.id = #{id}</if></where>
+		<if test="name != null">
+			AND v.`name` = #{name}
+		</if>
+		<if test="date != null">
+			AND DATE_FORMAT(ov.createDate,'%Y-%m')= #{date}
+		</if>
+		<if test="bname != null and superior == 0 ">
+			AND b.`name` = #{bname}
+		</if>
+		limit #{curPage},#{pageSize}
+	</select>
+</mapper>

@@ -1,0 +1,75 @@
+/*
+* @Author: Administrator
+* @Date:   2017-06-29 14:13:49
+* @Last Modified by:   Marte
+* @Last Modified time: 2017-07-31 17:19:50
+*/
+@charset "utf-8";
+
+header {
+    padding: .2rem .3rem;
+    background-color: #44c660;
+}
+header .container{
+	position: relative;
+}
+header i {
+    position: absolute;
+    left:0;
+    width: .18rem;
+    height: .32rem;
+    background-image: url(../images/back.png);
+    background-size: .18rem .32rem;
+    margin: .1rem;
+}
+header .container p {
+    text-align: center;
+    color: #fff;
+    font-size: .36rem;
+}
+ .operate-notice{
+	margin-top: .2rem;
+	width: 100%;
+	height: 5.6rem;
+	background-color: #f0f0f0;
+}
+ .operate-notice embed{
+    width:100%;
+    height:100%;
+ }
+
+.eq-1{
+    background: #fff url(../images/heart-rate.jpg) no-repeat;
+}
+.eq-2{
+    background:#fff url(../images/body.jpg) no-repeat;
+}
+.eq-3{
+    background:#fff url(../images/lung.jpg) no-repeat;
+}
+.eq-4{
+    background:#fff url(../images/accu-chek.jpg) no-repeat;
+}
+.eq-5{
+    background:#fff url(../images/blood-pressure.jpg) no-repeat;
+}
+.eq-6{
+    background:#fff url(../images/blood-oxygen.jpg) no-repeat;
+}
+.eq-7{
+    background:#fff url(../images/purine-trione.jpg) no-repeat;
+}
+.eq-8{
+    background:#fff url(../images/urine.jpg) no-repeat;
+}
+.eq-9{
+    background:#fff url(../images/temperature.jpg) no-repeat;
+}
+.eq-10{
+    background:#fff url(../images/blood-fat.jpg) no-repeat;
+}
+.equipment-oper{
+    height: 15.21rem;
+    background-size:auto 15.21rem;
+    background-position: center center;
+}

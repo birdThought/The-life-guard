@@ -1,0 +1,154 @@
+/*
+* @Author: Administrator
+* @Date:   2017-05-03 16:24:01
+* @Last Modified by:   Administrator
+* @Last Modified time: 2017-05-08 14:26:06
+*/
+.main-content{
+	/*background-color: white;*/
+}
+.user-infor li.set-head >div{
+	padding-left: 200px;
+}
+.user-infor li textarea{
+	resize: none;
+	width: 470px;
+	height: 130px;
+	color:#999;
+	font-size: 14px;
+	line-height: 1.8;
+}
+.user-infor li p.count{
+	text-align: center;
+	padding-left: 100px;
+	color:#999;
+	font-size: 14px;
+}
+.magic-radio + label:after{
+	top: 3px;
+	left: 3px;
+}
+.user-infor li span.change{
+	color:#17b06d;
+	font-size: 14px;
+	margin-left: 10px;
+	line-height: 40px;
+}
+
+.user-infor li.org-btn a.btn-1{
+	display: inline-block;
+	width:230px;
+	height: 50px;
+	line-height: 50px;
+	text-align: center;
+	border-radius: 6px;
+	color:#fff;
+	background-color:#10bb71; 
+	margin-right: 10px;
+	margin-left: 180px;
+}
+.user-infor li.org-btn a.btn-2{
+	color:#10bb71; 
+	padding-top: 10px;
+	display: inline-block;
+	line-height: 30px;
+	font-size: 12px;
+	border-bottom: 1px dashed #10bb71; 
+}
+
+/* 资料更改 */
+.change-infor{
+	padding-top: 60px;
+    padding-left: 110px;
+}
+.change-infor p.bind-tit{
+	color: #333;
+	font-size: 16px;
+	margin-bottom: 30px; 
+	padding-left: 1em;
+}
+.change-infor div.change-tip{
+	margin-bottom: 40px;
+	color: #333;
+	font-size: 16px;
+}
+.change-infor div.change-tip p{
+	margin-bottom: 30px;
+}
+.change-infor li:after{
+	content: '';
+	display: block;
+	height: 0;
+	visibility: hidden;
+	clear: both;
+}
+.change-infor li{
+	margin-bottom: 40px;
+}
+.change-infor li h5{
+	line-height: 40px;
+    font-weight: 500;
+    float: left;
+    width: 100px;
+    text-align: right;
+    color: #666;
+    font-size: 16px;
+    margin-right: 20px;
+}
+.change-infor li input.ipt{
+	width: 378px;
+    height: 38px;
+    border: 1px solid #cacaca;
+    text-indent: 16px;
+    outline-color: #369239;
+    float: left;
+    font-size: 14px;
+}
+.change-infor li select{
+	width: 128px;
+	border: 1px solid #cacaca;
+	height: 38px;
+	outline-color: #369239;
+    float: left;
+    font-size: 14px;
+    text-indent: 10px;
+}
+.change-infor li input[type=text].fl{
+	width: 278px;
+	border: 1px solid #cacaca;
+	height: 38px;
+    text-indent: 16px;
+    outline-color: #369239;
+    font-size: 14px;
+
+}
+.change-infor li input[type=button].fl{
+	width: 98px;
+	border: 1px solid #cacaca;
+	height: 38px;
+	font-size: 14px;
+	color: #666;
+	cursor: pointer;
+	outline: none;
+}
+.change-infor li.refer-btn a.bind-btn{
+	margin-top: 100px;
+	display: inline-block;
+	width: 340px;
+	height: 50px;
+	margin-left: 120px;
+	background-color: #369239;
+	color: #fff;
+	font-size: 18px;
+	line-height: 50px;
+	text-align: center;
+	border-radius: 8px;
+}
+.user-infor li.refer-to a.btn-mail{
+	background-color:#86be88;
+}
+.items-link {
+	padding-left: 20px;
+	background-color: #fff;
+	line-height: 50px;
+}

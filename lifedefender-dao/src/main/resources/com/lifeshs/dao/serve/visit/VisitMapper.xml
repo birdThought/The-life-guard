@@ -1,0 +1,297 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lifeshs.dao.serve.visit.VisitDao">
+
+    <select id="listLagerNumberOfBuyer" resultMap="RecommendedCombo">
+        SELECT
+            c.id,p.serveId,
+            COUNT(DISTINCT(o.userId)) AS buyerCount
+        FROM
+            t_project_combo c
+        <include refid="INNER_JOIN_ONLINE_PROJECT" />
+        <include refid="INNER_JOIN_NORMAL_ORG" />
+        <include refid="LEFT_JOIN_VALID_ORDER" />
+        <where>
+            <if test="longitude != null and latitude != null">
+                (ABS(org.longitude - #{longitude}) &lt;= 1 AND ABS(org.latitude - #{latitude}) &lt;= 1)
+            </if>
+        </where>
+        <!-- GROUP BY c.id -->
+        GROUP BY c.projectCode
+        ORDER BY
+            <!-- 购买者数量 -->
+            buyerCount DESC
+            <!-- 距离 -->
+            <if test="longitude != null and latitude != null">
+                ,(ABS(org.longitude - #{longitude}) + ABS(org.latitude - #{latitude}))
+            </if>
+            , c.id
+        LIMIT #{limit}
+    </select>
+
+    <resultMap type="com.lifeshs.pojo.serve.visit.RecommendedComboDTO" id="RecommendedCombo">
+        <result column="buyerCount" property="buyerCount"/>
+        <association property="combo" column="id" select="selectCombo" />
+    </resultMap>
+    
+    <select id="selectCombo" resultMap="ServiceCombo">
+        SELECT * FROM t_project_combo c 
+        INNER JOIN t_project p on c.projectCode = p.projectCode 
+        WHERE c.id = #{id}  and p.`status`!=3 
+    </select>
+    
+    <resultMap type="com.lifeshs.pojo.org.service.ServiceComboDTO" id="ServiceCombo">
+        <result column="projectCode" property="projectCode" />
+        <association property="visitServe" column="projectCode" select="com.lifeshs.dao.org.service.IOrgServiceManageDao.getVisitServiceByCode" />
+    </resultMap>
+    
+    <select id="countVisitServeWithCondition" resultType="java.lang.Integer">
+        SELECT COUNT(DISTINCT(c.id))
+        FROM t_project_combo c
+        <include refid="INNER_JOIN_ONLINE_PROJECT" />
+        <include refid="INNER_JOIN_NORMAL_ORG" />
+        <include refid="LEFT_JOIN_VALID_ORDER" />
+        INNER JOIN t_data_serve_type2 AS st ON p.serveId = st.id
+        INNER JOIN t_data_serve_type AS st1 ON st1.Id = st.serveId
+        <where>
+            <include refid="searchVisitServeCondition" />
+        </where>
+    </select>
+    
+    <select id="listVisitServeWithCondition" resultMap="RecommendedCombo">
+        SELECT
+            c.id,p.serveId,
+            COUNT(DISTINCT(o.userId)) AS buyerCount
+        FROM t_project_combo c
+        <include refid="INNER_JOIN_ONLINE_PROJECT" />
+        <include refid="INNER_JOIN_NORMAL_ORG" />
+        <include refid="LEFT_JOIN_VALID_ORDER" />
+        INNER JOIN t_data_serve_type2 AS st ON p.serveId = st.id
+        INNER JOIN t_data_serve_type AS st1 ON st1.Id = st.serveId
+        <where>
+            <include refid="searchVisitServeCondition" />
+        </where>
+        GROUP BY c.projectCode
+        <!-- 默认排序 -->
+        <if test="sort.value == 0">
+            ORDER BY case when (ABS(org.longitude - #{longitude}) + ABS(org.latitude - #{latitude})) is null then 1 else 0 end ,(ABS(org.longitude - #{longitude}) + ABS(org.latitude - #{latitude})), buyerCount DESC, id
+        </if>
+        <if test="sort.value == 1">
+            ORDER BY buyerCount DESC, case when (ABS(org.longitude - #{longitude}) + ABS(org.latitude - #{latitude})) is null then 1 else 0 end ,(ABS(org.longitude - #{longitude}) + ABS(org.latitude - #{latitude})), id
+        </if>
+        <if test="sort.value == 2">
+            <!-- 分数暂未实现 -->
+            
+        </if>
+        <if test="sort.value == 3">
+            ORDER BY (ABS(org.longitude - #{longitude}) + ABS(org.latitude - #{latitude})), buyerCount DESC, id
+        </if>
+        LIMIT #{startIndex}, #{pageSize}
+    </select>
+
+    <!-- 正常的项目 -->
+    <sql id="INNER_JOIN_ONLINE_PROJECT">
+        INNER JOIN t_project_visit p ON p.code = c.projectCode AND p.`status` = 2
+    </sql>
+
+    <!-- 正常的机构 -->
+    <sql id="INNER_JOIN_NORMAL_ORG">
+        <!-- 此处的连接条件使用了别名p，代表t_project_visit表，同时用org表示t_org表 -->
+        INNER JOIN t_org org ON org.id = p.orgId
+        AND org.orgVerified = 1
+        AND org.`status` = 0 AND org.isPublic=0
+    </sql>
+    
+    <!-- 有效的订单 -->
+    <sql id="LEFT_JOIN_VALID_ORDER">
+        <!-- 此处的连接条件使用了别名p，代表t_project_visit表，同时用o表示t_order表 -->
+        LEFT JOIN t_order o ON o.projectCode = p.`code`
+        AND o.`status` IN (3, 4)
+    </sql>
+    
+    <sql id="INNER_JOIN_ORG_USER_RELATION">
+        INNER JOIN t_project_orguser_relation r ON r.projectCode = p.`code`
+    </sql>
+    
+    <sql id="searchVisitServeCondition">
+         1=1
+        <!-- 价格 -->
+        <if test="priceType != null">
+            <choose>
+                <when test="priceType == 'equals'">
+                    AND c.price = #{startPrice}
+                </when>
+                <when test="priceType == 'notEquals'">
+                    AND c.price &lt;&gt; #{startPrice}
+                </when>
+                <when test="priceType == 'between'">
+                    AND (#{startPrice} &lt;= c.price AND c.price &lt;= #{endPrice})
+                </when>
+                <when test="priceType == 'over'">
+                    AND c.price &gt; #{endPrice}
+                </when>
+                <when test="priceType == 'overInclude'">
+                    AND c.price &gt;= #{endPrice}
+                </when>
+                <when test="priceType == 'under'">
+                    AND c.price &lt; #{startPrice}
+                </when>
+                <when test="priceType == 'underInclude'">
+                    AND c.price &lt;= #{startPrice}
+                </when>
+            </choose>
+        </if>
+        <!-- 经纬度一定有的 -->
+        AND org.longitude is not NULL AND org.latitude  is not NULL
+        <!-- 地区编码 -->
+        <if test="areaCodeRegex != null">
+            AND CONCAT(org.province, org.city, org.district) REGEXP #{areaCodeRegex}
+        </if>
+        <!-- 类型 -->
+        <if test="type != null and type.length()==4">
+            AND st.code = #{type}
+        </if>
+        <if test="type != null and type.length()==2">
+            AND st1.code = #{type}
+        </if>
+        <!-- 服务名称筛选 -->
+        <if test="likeName != null">
+            AND p.`name` REGEXP CONCAT('^.*', #{likeName}, '.*\\[.+\\]$')
+        </if>
+        <if test="projectType != null">
+            AND p.projectType = #{projectType}
+        </if>
+    </sql>
+    
+    
+    <select id="findComboDetail" resultMap="RecommendedVisitDetailVO">
+        SELECT
+            c.id AS comboId,
+            p.image,
+            IFNULL(SUM(co.score), 0) AS scoreTotal,
+            p.`name` AS visitServeName,
+            c.price,
+            c.marketPrice,
+            org.orgName,
+            org.street AS orgAddress,
+            org.longitude, org.latitude, org.tel AS orgTel,
+            p.userType,
+            p.appointment,
+            p.`introduce` AS detail,
+            COUNT(co.id) AS commentCount,
+            p.`code` AS projectCode,
+            p.`projectType` AS serveCode,
+            m.id AS mId,
+            m.pictureOne, m.pictureTwo, m.pictureThree, m.pictureFour, m.videoOne, m.videoTwo
+        FROM
+            t_project_combo c
+        INNER JOIN t_project_visit p ON p.`code` = c.projectCode AND p.`status` = 2
+        INNER JOIN t_org org ON org.id = p.orgId AND org.`status` = 0 AND org.orgVerified = 1
+        LEFT JOIN t_order o ON o.projectCode = p.`code` AND o.`status` IN (3, 4) AND o.price &gt;= 0
+        LEFT JOIN t_order_comments co ON co.orderId = o.id
+        INNER JOIN t_project_media m ON m.projectCode = p.`code`
+        WHERE c.id = #{id}
+    </select>
+    
+    <resultMap type="com.lifeshs.vo.serve.visit.RecommendedVisitDetailVO" id="RecommendedVisitDetailVO">
+        <id column="comboId" property="comboId" />
+        <result column="image" property="image" />
+        <result column="scoreTotal" property="scoreTotal" />
+        <result column="visitServeName" property="visitServeName" />
+        <result column="price" property="price" />
+        <result column="marketPrice" property="marketPrice" />
+        <result column="orgAddress" property="orgAddress" />
+        <result column="userType" property="userType" />
+        <result column="appointment" property="appointment" />
+        <result column="detail" property="detail" />
+        <result column="commentCount" property="commentCount" />
+        <result column="projectCode" property="projectCode" />
+        <result column="serveCode" property="serveCode" />
+        <result column="orgName" property="orgName" />
+        <result column="longitude" property="longitude" />
+        <result column="latitude" property="latitude" />
+        <result column="orgTel" property="orgTel" />
+        <association property="media" javaType="com.lifeshs.pojo.org.service.ServiceMediaDTO">
+            <id column="mId" property="id" />
+            <result column="projectCode" property="projectCode" />
+            <result column="pictureOne" property="pictureOne" />
+            <result column="pictureTwo" property="pictureTwo" />
+            <result column="pictureThree" property="pictureThree" />
+            <result column="pictureFour" property="pictureFour" />
+            <result column="videoOne" property="videoOne" />
+            <result column="videoTwo" property="videoTwo" />
+        </association>
+    </resultMap>
+    
+    <select id="findComboByProjectCode" resultType="com.lifeshs.vo.serve.visit.ComboVO">
+        SELECT id AS comboId, price, name, `introduce`, marketPrice FROM t_project_combo c
+        WHERE c.projectCode = #{projectCode}
+    </select>
+    
+    <select id="findVisitServeByOrgId" resultMap="RecommendedCombo">
+        SELECT
+            c.id,p.serveId,
+            COUNT(DISTINCT(o.userId)) AS buyerCount
+        FROM
+            t_project_combo c
+        <include refid="INNER_JOIN_ONLINE_PROJECT" />
+        <include refid="LEFT_JOIN_VALID_ORDER" />
+        WHERE
+            p.orgId = #{orgId}
+            <if test="projectType != null">
+                p.`projectType` = #{projectType}
+            </if>
+        GROUP BY c.projectCode
+        ORDER BY c.id
+    </select>
+    
+    <select id="findVisitServeByServeUserId" resultMap="RecommendedCombo">
+        SELECT
+            c.id,p.serveId,
+            COUNT(DISTINCT(o.userId)) AS buyerCount
+        FROM
+            t_project_combo c
+        <include refid="INNER_JOIN_ONLINE_PROJECT" />
+        <include refid="LEFT_JOIN_VALID_ORDER" />
+        <include refid="INNER_JOIN_ORG_USER_RELATION" />
+        WHERE
+            r.orgUserId = #{serveUserId}
+            <if test="projectType != null">
+                p.`projectType` = #{projectType}
+            </if>
+        GROUP BY c.projectCode
+        ORDER BY c.id
+    </select>
+    
+    <select id="findVisitServe" resultMap="RecommendedCombo">
+        SELECT
+            c.id,p.serveId,
+            COUNT(DISTINCT(o.userId)) AS buyerCount
+        FROM
+            t_project_combo c
+        <include refid="INNER_JOIN_ONLINE_PROJECT" />
+        <include refid="LEFT_JOIN_VALID_ORDER" />
+        <include refid="INNER_JOIN_ORG_USER_RELATION" />
+        WHERE
+            c.id = #{id}
+    </select>
+
+    <select id="findVisit" resultType="com.lifeshs.po.VisitPO">
+        SELECT * FROM t_project_visit WHERE code = #{code}
+    </select>
+
+    <!--修改线下、上门服务项目-->
+    <select id="updateVisit" parameterType="com.lifeshs.po.VisitPO">
+        UPDATE t_project_visit
+        <trim prefix="set" suffixOverrides=",">
+            <if test="image!=null">image=#{image},</if>
+            <if test="name!=null">name=#{name},</if>
+            <if test="serveId!=null">serveId=#{serveId},</if>
+            <if test="userType!=null">userType=#{userType},</if>
+            <if test="appointment!=null">appointment=#{appointment},</if>
+            <if test="introduce!=null">introduce=#{introduce},</if>
+            modifyDate = NOW()
+        </trim>
+        WHERE code = #{code}
+    </select>
+</mapper>

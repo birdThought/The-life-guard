@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lifeshs.dao1.record.MedicalCourseDao">
+
+    <select id="findCourseByIdAndUserId" resultMap="medicalCourseVO">
+        SELECT
+            c.id AS courseId, c.courseType, c.remark AS courseRemark, c.visitingDate AS courseVisitingDate,
+            c.createDate AS courseCreateDate, c.modifyDate AS courseModifyDate,
+            i.id AS imgId, i.img, i.createDate AS imgCreateDate, i.modifyDate AS imgModifyDate
+        FROM t_record_medical_course c
+        INNER JOIN t_record_medical r ON r.id = c.medicalId
+        LEFT JOIN t_record_medical_course_img i ON i.medicalCourseId = c.id
+        WHERE c.id = #{id} AND r.userId = #{userId}
+        ORDER BY i.createDate DESC
+    </select>
+
+    <resultMap type="com.lifeshs.vo.record.MedicalCourseVO" id="medicalCourseVO">
+        <id property="id" column="courseId"/>
+        <result property="medicalId" column="id"/>
+        <result property="courseType" column="courseType"/>
+        <result property="remark" column="courseRemark"/>
+        <result property="visitingDate" column="courseVisitingDate"/>
+        <result property="createDate" column="courseCreateDate"/>
+        <result property="modifyDate" column="courseModifyDate"/>
+        <collection property="imgList" ofType="com.lifeshs.po.record.MedicalCourseImgPO" notNullColumn="imgId">
+            <id property="id" column="imgId"/>
+            <result property="medicalCourseId" column="courseId"/>
+            <result property="img" column="img"/>
+            <result property="createDate" column="imgCreateDate"/>
+            <result property="modifyDate" column="imgModifyDate"/>
+        </collection>
+    </resultMap>
+
+    <insert id="addCourse" parameterType="com.lifeshs.po.record.MedicalCoursePO">
+        <selectKey resultType="java.lang.Integer" order="AFTER" keyProperty="id">
+            SELECT LAST_INSERT_ID() AS ID
+        </selectKey>
+        INSERT INTO t_record_medical_course(medicalId, courseType, remark, visitingDate, createDate)
+        VALUES(#{medicalId}, #{courseType}, #{remark}, #{visitingDate}, NOW())
+    </insert>
+
+    <insert id="addCourseList">
+        INSERT INTO t_record_medical_course(medicalId, courseType, remark, visitingDate, createDate)
+        VALUES
+            <foreach collection="medicalCourseList" item="course" separator=",">
+                (#{medicalId}, #{course.courseType}, #{course.remark}, #{course.visitingDate}, NOW())
+            </foreach>
+    </insert>
+
+    <delete id="delCourseByIdAndUserId">
+        DELETE c
+        FROM
+            t_record_medical_course AS c
+        INNER JOIN t_record_medical AS m ON m.id = c.medicalId
+        WHERE
+            c.id = #{id}
+        AND m.userId = #{userId}
+    </delete>
+
+    <delete id="delCourseByMedicalIdAndUserIdList">
+        DELETE c
+        FROM
+            t_record_medical_course AS c
+        INNER JOIN t_record_medical AS m ON m.id = c.medicalId
+        WHERE
+            m.id = #{medicalId}
+        AND m.userId = #{userId}
+    </delete>
+
+    <update id="updateCourseByIdAndUserId">
+        UPDATE
+            t_record_medical_course AS c
+            INNER JOIN t_record_medical AS m ON m.id = c.medicalId
+        SET
+            <if test="course.courseType != null">c.courseType = #{course.courseType},</if>
+            <if test="course.remark != null">c.remark = #{course.remark},</if>
+            <if test="course.visitingDate != null">c.visitingDate = #{course.visitingDate},</if>
+            c.modifyDate = NOW()
+        WHERE
+            m.userId = #{userId}
+        AND c.id = #{course.id}
+    </update>
+
+</mapper>

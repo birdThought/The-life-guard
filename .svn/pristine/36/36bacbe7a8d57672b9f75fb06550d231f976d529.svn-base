@@ -1,0 +1,322 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lifeshs.dao1.measure.BloodLipidDao" >
+  <resultMap id="BaseResultMap" type="com.lifeshs.po.BloodLipidPO" >
+    <constructor >
+      <idArg column="id" jdbcType="INTEGER" javaType="java.lang.Integer" />
+      <arg column="userId" jdbcType="INTEGER" javaType="java.lang.Integer" />
+      <arg column="status" jdbcType="BIGINT" javaType="java.lang.Long" />
+      <arg column="HDL" jdbcType="REAL" javaType="java.lang.Float" />
+      <arg column="HDLArea" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="HDLStatusDescription" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="LDL" jdbcType="REAL" javaType="java.lang.Float" />
+      <arg column="LDLArea" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="LDLStatusDescription" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="TG" jdbcType="REAL" javaType="java.lang.Float" />
+      <arg column="TGArea" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="TGStatusDescription" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="TC" jdbcType="REAL" javaType="java.lang.Float" />
+      <arg column="TCArea" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="TCStatusDescription" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="bloodLipidRatio" jdbcType="REAL" javaType="java.lang.Float" />
+      <arg column="bloodLipidRatioArea" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="bloodLipidStatusDescription" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="measureDate" jdbcType="TIMESTAMP" javaType="java.util.Date" />
+      <arg column="createDate" jdbcType="TIMESTAMP" javaType="java.util.Date" />
+      <arg column="deviceType" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="dataType" jdbcType="SMALLINT" javaType="java.lang.Short" />
+    </constructor>
+  </resultMap>
+
+  <!-- 血脂仪-->
+  <sql id="Base_Column_List" >
+    id, userId, status, HDL, HDLArea, HDLStatusDescription, LDL, LDLArea, LDLStatusDescription, 
+    TG, TGArea, TGStatusDescription, TC, TCArea, TCStatusDescription, bloodLipidRatio, 
+    bloodLipidRatioArea, bloodLipidStatusDescription, measureDate, createDate, deviceType, 
+    dataType
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_measure_bloodlipid
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from t_measure_bloodlipid
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.lifeshs.po.BloodLipidPO" >
+    insert into t_measure_bloodlipid (id, userId, status, 
+      HDL, HDLArea, HDLStatusDescription, 
+      LDL, LDLArea, LDLStatusDescription, 
+      TG, TGArea, TGStatusDescription, 
+      TC, TCArea, TCStatusDescription, 
+      bloodLipidRatio, bloodLipidRatioArea, bloodLipidStatusDescription, 
+      measureDate, createDate, deviceType, 
+      dataType)
+    values (#{id,jdbcType=INTEGER}, #{userId,jdbcType=INTEGER}, #{status,jdbcType=BIGINT}, 
+      #{HDL,jdbcType=REAL}, #{HDLArea,jdbcType=VARCHAR}, #{HDLStatusDescription,jdbcType=VARCHAR}, 
+      #{LDL,jdbcType=REAL}, #{LDLArea,jdbcType=VARCHAR}, #{LDLStatusDescription,jdbcType=VARCHAR}, 
+      #{TG,jdbcType=REAL}, #{TGArea,jdbcType=VARCHAR}, #{TGStatusDescription,jdbcType=VARCHAR}, 
+      #{TC,jdbcType=REAL}, #{TCArea,jdbcType=VARCHAR}, #{TCStatusDescription,jdbcType=VARCHAR}, 
+      #{bloodLipidRatio,jdbcType=REAL}, #{bloodLipidRatioArea,jdbcType=VARCHAR}, #{bloodLipidStatusDescription,jdbcType=VARCHAR}, 
+      #{measureDate,jdbcType=TIMESTAMP}, #{createDate,jdbcType=TIMESTAMP}, #{deviceType,jdbcType=VARCHAR}, 
+      #{dataType,jdbcType=SMALLINT})
+  </insert>
+  <insert id="insertSelective" parameterType="com.lifeshs.po.BloodLipidPO" >
+    insert into t_measure_bloodlipid
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="userId != null" >
+        userId,
+      </if>
+      <if test="status != null" >
+        status,
+      </if>
+      <if test="HDL != null" >
+        HDL,
+      </if>
+      <if test="HDLArea != null" >
+        HDLArea,
+      </if>
+      <if test="HDLStatusDescription != null" >
+        HDLStatusDescription,
+      </if>
+      <if test="LDL != null" >
+        LDL,
+      </if>
+      <if test="LDLArea != null" >
+        LDLArea,
+      </if>
+      <if test="LDLStatusDescription != null" >
+        LDLStatusDescription,
+      </if>
+      <if test="TG != null" >
+        TG,
+      </if>
+      <if test="TGArea != null" >
+        TGArea,
+      </if>
+      <if test="TGStatusDescription != null" >
+        TGStatusDescription,
+      </if>
+      <if test="TC != null" >
+        TC,
+      </if>
+      <if test="TCArea != null" >
+        TCArea,
+      </if>
+      <if test="TCStatusDescription != null" >
+        TCStatusDescription,
+      </if>
+      <if test="bloodLipidRatio != null" >
+        bloodLipidRatio,
+      </if>
+      <if test="bloodLipidRatioArea != null" >
+        bloodLipidRatioArea,
+      </if>
+      <if test="bloodLipidStatusDescription != null" >
+        bloodLipidStatusDescription,
+      </if>
+      <if test="measureDate != null" >
+        measureDate,
+      </if>
+      <if test="createDate != null" >
+        createDate,
+      </if>
+      <if test="deviceType != null" >
+        deviceType,
+      </if>
+      <if test="dataType != null" >
+        dataType,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="userId != null" >
+        #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=BIGINT},
+      </if>
+      <if test="HDL != null" >
+        #{HDL,jdbcType=REAL},
+      </if>
+      <if test="HDLArea != null" >
+        #{HDLArea,jdbcType=VARCHAR},
+      </if>
+      <if test="HDLStatusDescription != null" >
+        #{HDLStatusDescription,jdbcType=VARCHAR},
+      </if>
+      <if test="LDL != null" >
+        #{LDL,jdbcType=REAL},
+      </if>
+      <if test="LDLArea != null" >
+        #{LDLArea,jdbcType=VARCHAR},
+      </if>
+      <if test="LDLStatusDescription != null" >
+        #{LDLStatusDescription,jdbcType=VARCHAR},
+      </if>
+      <if test="TG != null" >
+        #{TG,jdbcType=REAL},
+      </if>
+      <if test="TGArea != null" >
+        #{TGArea,jdbcType=VARCHAR},
+      </if>
+      <if test="TGStatusDescription != null" >
+        #{TGStatusDescription,jdbcType=VARCHAR},
+      </if>
+      <if test="TC != null" >
+        #{TC,jdbcType=REAL},
+      </if>
+      <if test="TCArea != null" >
+        #{TCArea,jdbcType=VARCHAR},
+      </if>
+      <if test="TCStatusDescription != null" >
+        #{TCStatusDescription,jdbcType=VARCHAR},
+      </if>
+      <if test="bloodLipidRatio != null" >
+        #{bloodLipidRatio,jdbcType=REAL},
+      </if>
+      <if test="bloodLipidRatioArea != null" >
+        #{bloodLipidRatioArea,jdbcType=VARCHAR},
+      </if>
+      <if test="bloodLipidStatusDescription != null" >
+        #{bloodLipidStatusDescription,jdbcType=VARCHAR},
+      </if>
+      <if test="measureDate != null" >
+        #{measureDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createDate != null" >
+        #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="deviceType != null" >
+        #{deviceType,jdbcType=VARCHAR},
+      </if>
+      <if test="dataType != null" >
+        #{dataType,jdbcType=SMALLINT},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.lifeshs.po.BloodLipidPO" >
+    update t_measure_bloodlipid
+    <set >
+      <if test="userId != null" >
+        userId = #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=BIGINT},
+      </if>
+      <if test="HDL != null" >
+        HDL = #{HDL,jdbcType=REAL},
+      </if>
+      <if test="HDLArea != null" >
+        HDLArea = #{HDLArea,jdbcType=VARCHAR},
+      </if>
+      <if test="HDLStatusDescription != null" >
+        HDLStatusDescription = #{HDLStatusDescription,jdbcType=VARCHAR},
+      </if>
+      <if test="LDL != null" >
+        LDL = #{LDL,jdbcType=REAL},
+      </if>
+      <if test="LDLArea != null" >
+        LDLArea = #{LDLArea,jdbcType=VARCHAR},
+      </if>
+      <if test="LDLStatusDescription != null" >
+        LDLStatusDescription = #{LDLStatusDescription,jdbcType=VARCHAR},
+      </if>
+      <if test="TG != null" >
+        TG = #{TG,jdbcType=REAL},
+      </if>
+      <if test="TGArea != null" >
+        TGArea = #{TGArea,jdbcType=VARCHAR},
+      </if>
+      <if test="TGStatusDescription != null" >
+        TGStatusDescription = #{TGStatusDescription,jdbcType=VARCHAR},
+      </if>
+      <if test="TC != null" >
+        TC = #{TC,jdbcType=REAL},
+      </if>
+      <if test="TCArea != null" >
+        TCArea = #{TCArea,jdbcType=VARCHAR},
+      </if>
+      <if test="TCStatusDescription != null" >
+        TCStatusDescription = #{TCStatusDescription,jdbcType=VARCHAR},
+      </if>
+      <if test="bloodLipidRatio != null" >
+        bloodLipidRatio = #{bloodLipidRatio,jdbcType=REAL},
+      </if>
+      <if test="bloodLipidRatioArea != null" >
+        bloodLipidRatioArea = #{bloodLipidRatioArea,jdbcType=VARCHAR},
+      </if>
+      <if test="bloodLipidStatusDescription != null" >
+        bloodLipidStatusDescription = #{bloodLipidStatusDescription,jdbcType=VARCHAR},
+      </if>
+      <if test="measureDate != null" >
+        measureDate = #{measureDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createDate != null" >
+        createDate = #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="deviceType != null" >
+        deviceType = #{deviceType,jdbcType=VARCHAR},
+      </if>
+      <if test="dataType != null" >
+        dataType = #{dataType,jdbcType=SMALLINT},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.lifeshs.po.BloodLipidPO" >
+    update t_measure_bloodlipid
+    set userId = #{userId,jdbcType=INTEGER},
+      status = #{status,jdbcType=BIGINT},
+      HDL = #{HDL,jdbcType=REAL},
+      HDLArea = #{HDLArea,jdbcType=VARCHAR},
+      HDLStatusDescription = #{HDLStatusDescription,jdbcType=VARCHAR},
+      LDL = #{LDL,jdbcType=REAL},
+      LDLArea = #{LDLArea,jdbcType=VARCHAR},
+      LDLStatusDescription = #{LDLStatusDescription,jdbcType=VARCHAR},
+      TG = #{TG,jdbcType=REAL},
+      TGArea = #{TGArea,jdbcType=VARCHAR},
+      TGStatusDescription = #{TGStatusDescription,jdbcType=VARCHAR},
+      TC = #{TC,jdbcType=REAL},
+      TCArea = #{TCArea,jdbcType=VARCHAR},
+      TCStatusDescription = #{TCStatusDescription,jdbcType=VARCHAR},
+      bloodLipidRatio = #{bloodLipidRatio,jdbcType=REAL},
+      bloodLipidRatioArea = #{bloodLipidRatioArea,jdbcType=VARCHAR},
+      bloodLipidStatusDescription = #{bloodLipidStatusDescription,jdbcType=VARCHAR},
+      measureDate = #{measureDate,jdbcType=TIMESTAMP},
+      createDate = #{createDate,jdbcType=TIMESTAMP},
+      deviceType = #{deviceType,jdbcType=VARCHAR},
+      dataType = #{dataType,jdbcType=SMALLINT}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+
+  <select id="selectMeasureDatesByUserId" resultType="com.lifeshs.po.BloodLipidPO" parameterType="map">
+    SELECT measureDate,status
+    from t_measure_bloodlipid
+    where userId = #{userId}
+    and DATE_ADD(#{queryDate},interval 1 month) &gt;= measureDate
+    and measureDate &gt;= #{queryDate}
+  </select>
+
+  <select id="getLastDateByUserId" resultType="date" parameterType="integer">
+    SELECT measureDate
+    FROM t_measure_bloodlipid
+    WHERE userId = #{userId}
+    Order by measureDate desc
+    limit 1
+  </select>
+
+  <select id="getLastData" resultType="com.lifeshs.po.BloodLipidPO">
+    SELECT * FROM t_measure_bloodlipid
+    WHERE userId = #{userId}
+    ORDER BY measureDate desc
+    limit 1
+  </select>
+</mapper>

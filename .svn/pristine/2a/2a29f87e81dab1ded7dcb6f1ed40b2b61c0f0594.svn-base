@@ -1,0 +1,129 @@
+
+.main-content{
+	padding:20px 26px;
+}
+.main-content .news-tab{
+	line-height: 38px;
+	margin-bottom: -1px;
+	
+}
+.main-content .news-tab ul li{
+	display: inline-block;
+	font-size: 16px;
+	color:#999;
+	width: 130px;
+	box-sizing: border-box;
+	text-align: center;
+	position: relative;
+}
+.main-content .news-tab ul li i{
+	width: 14px;
+	height: 14px;
+	line-height: 14px;
+	position: absolute;
+	right: 10px;
+	top:4px;
+	color:#fff;
+	background-color:#f00;
+	border-radius: 50%;
+	font-size: 12px;
+}
+.main-content .news-tab ul li.current{
+	color: #10bb71;
+	border:1px solid #ddd;
+	background-color:#fff; 
+	border-bottom:1px solid #fff;
+	border-top-left-radius: 6px;
+	border-top-right-radius: 6px;
+}
+.main-content .news-content {
+	border: 1px solid #ddd;
+	border-top-right-radius: 6px;
+	border-bottom-left-radius: 6px;
+	border-bottom-right-radius:6px; 
+	background-color: #fff;
+	min-height: 780px;
+}
+.main-content span{
+	display: inline-block;
+	margin-right: 36px;
+	font-size: 14px;
+	color:#999;
+}
+.main-content .del:before{
+	content: "";
+	/*background-image: url(../images/org-home.png);*/
+	background-position: -106px -258px;
+	display: inline-block;
+	width:13px;
+	height: 16px;
+	margin-right: 10px;
+}
+/* 勾选 */
+.magic-radio + label:before, .magic-checkbox + label:before{
+	width: 16px;
+	height: 16px;
+}
+.magic-checkbox + label:after{
+	width: 6px;
+    height: 16px;
+    border-width: 2px;
+}
+.magic-checkbox:checked + label:before{
+	background: #fff;
+	
+}
+.magic-radio + label, .magic-checkbox + label{
+	display: inline;
+}
+.magic-checkbox + label:after{
+	border-color:#10bb71;
+}
+.magic-checkbox:checked + label:before{
+	border:1px solid #10bb71;
+}
+/* 勾选 */
+.news-content ol {
+	padding:0 20px 20px;
+}
+
+.news-content ol li{
+	padding-top: 40px;
+	padding-bottom: 20px;
+	/*border-bottom: 1px dashed #ddd;*/
+}
+.news-content ol li a{
+	display: flex;
+}
+.news-content ol li a .news-img{
+	width:50px;
+	text-align: center;
+}
+.news-content ol li a h4{
+	font-size: 14px;
+	color: #333;
+	margin-bottom: 4px;
+}
+.news-content ol li a p{
+	font-size: 12px;
+	color:#999;
+}
+.news-content ol .replace-check{
+	padding-top: 20px;
+	margin-right: 35px;
+}
+
+#systemPageManager>span {
+    display: inline;
+    color: #000;
+    font-size: 14px;
+    margin-right: 2px;
+}
+/*
+.serve-message .serve-message-no:first-child {
+	display: block;
+}*/
+
+.message-title:hover {
+	color: #10bb71;
+}

@@ -1,0 +1,9 @@
+APP-测量，内嵌设备使用H5，http://www.lifekeepers.cn/app/appweb/operate-band
+
+APP上显示APP下载页： http://lifekeepers.cn/app/appweb/download
+
+APP主页，推荐资讯： http://www.lifeshs.com/api/app/index/v24/index.do
+
+环信前端配置地址： static/plugins/hx/v1.4.13/webim.config.js
+
+t_org.isPublic设置门店的可见级别，机构及服务是否公开，0_公开，1_仅扫码可见，2_完全不可见(预留,用户只能由门店自己添加)

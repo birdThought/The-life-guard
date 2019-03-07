@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lifeshs.dao.org.manage.OrgManageDao" >
+
+    <select id="countChildOrg" resultType="java.lang.Integer">
+        {CALL countOrgChildManagement(#{id})}
+    </select>
+
+    <select id="countOrgChildServiceAndMember" resultType="com.lifeshs.pojo.org.management.OrgServiceAndMemberDO">
+        {CALL countOrgChildServiceAndMember(#{id})}
+    </select>
+    
+    <!-- 根据用户所在的机构id寻找该机构的类型 -->
+    <select id="findOrgType" parameterType="int" resultType="int">
+        select type from t_org where id= ${value}
+    </select>
+    
+    <!-- 排序查找员工列表 -->
+    <select id="getEmployList" parameterType="java.util.HashMap" resultType="java.util.HashMap">
+        select ${columnNames} from ${table} 
+        <where>
+            <foreach collection="condition.keys" item="key" index="index" separator="and">
+                <choose>
+                    <when test="key=='birthday'">
+                        DATE_FORMAT(birthday,'%Y-%m-%d') = #{condition[${key}]}
+                    </when>
+                    <when test="key=='realName'">
+                        realName like #{condition[${key}]}
+                    </when>
+                    <when test="key=='userType'">
+                        userType IN (#{condition[${key}]},2)
+                    </when>
+                    <otherwise>
+                        ${key} = #{condition[${key}]}
+                    </otherwise>
+                </choose>
+            </foreach>
+        </where>
+        ORDER BY id DESC
+        LIMIT ${begin},${dPage}
+    </select>
+    
+    <!-- 根据父机构的ID获取子机构的id与名字，机构类型 -->
+    <select id="selectChildOrgTreeByParentId" resultType="com.lifeshs.pojo.org.management.OrgTreeVO">
+        {CALL selectChildOrgTreeByParentId(#{parentId})}
+    </select>
+    
+    <!-- 查看机构详细信息 -->
+    <select id="selectOrgDetailById" resultType="com.lifeshs.pojo.org.management.OrgDetailVO">
+        {CALL selectOrgDetailById(#{parentId})}
+    </select>
+    
+    <!-- <select id="selectAmountOfChildOrgByParentAndType" resultType="java.lang.Integer">
+        SELECT COUNT(1) FROM t_org WHERE `parent` = #{parentId} AND `type` = #{type}
+    </select>
+    
+    <select id="selectChildOrgByParentAndTypeWithPage" resultType="com.lifeshs.entity.org.TOrg">
+        SELECT id, orgName, contacts, contactInformation
+            FROM t_org WHERE `parent` = #{parentId} AND `type` = #{type}
+            ORDER BY createDate ASC, id ASC
+            LIMIT #{startIndex},#{pageSize}
+    </select> -->
+    
+    <select id="isThisOrgBelongToAnotherOne" resultType="java.lang.Integer">
+        {CALL isThisOrgBelongToAnotherOne(#{parentId},#{childId})}
+    </select>
+    
+    
+    <resultMap type="com.lifeshs.entity.org.TOrg" id="orgDetail">
+        <id column="id" property="id"/>
+        <result column="mobile" property="contactInformation"/>
+        <result column="contact" property="contacts"/>
+    </resultMap>
+    
+    <!-- 获取机构公司信息(该机构没logo便获取上级机构logo) -->
+    <select id="getOrgDetail" parameterType="int" resultMap="orgDetail">
+        {CALL selectOrgDetailById(#{parentId})}
+    </select>
+    
+    <select id="getUserServesIdAndName" resultType="java.util.HashMap">
+        SELECT
+            os.id,
+            s. NAME
+        FROM
+            t_org_group_orguser ogu
+        INNER JOIN t_org_group og ON og.id = ogu.groupId
+        INNER JOIN t_org_serve os ON os.id = og.orgServeId
+        INNER JOIN t_serve s ON s.id = os.serveId
+        WHERE
+            ogu.orgUserId = #{orgUserId} 
+    </select>
+    
+    <select id="listUserCode" resultType="java.lang.String">
+        SELECT userCode FROM t_org_user WHERE id IN
+        <trim prefix="(" suffix=")">
+            <foreach collection="orgUserIds" item="item" index="index"
+                separator=",">#{item}</foreach>
+        </trim>
+    </select>
+
+    <update id="updateOrg" >
+      UPDATE  t_org
+      SET
+        <trim>
+            <if test="bankAccount != null">bankAccount = #{bankAccount},</if>
+            <if test="bankDistrict != null">bankDistrict = #{bankDistrict},</if>
+            <if test="bankBranch != null">bankBranch = #{bankBranch},</if>
+            <if test="contacts != null">contacts = #{contacts},</if>
+            <if test="contactInformation != null">contactInformation = #{contactInformation},</if>
+            <if test="legalPerson != null">legalPerson = #{legalPerson},</if>
+            <if test="legalPersonGender != null">legalPersonGender = #{legalPersonGender},</if>
+            <if test="legalPersonIdCard != null">legalPersonIdCard = #{legalPersonIdCard},</if>
+            <if test="legalPersonPicOne != null">legalPersonPicOne = #{legalPersonPicOne},</if>
+            <if test="legalPersonPicTwo != null">legalPersonPicTwo = #{legalPersonPicTwo},</if>
+            <if test="logo != null">logo = #{logo},</if>
+            <if test="parentId != null">parentId = #{parentId},</if>
+            modifyDate = NOW()
+        </trim>
+      WHERE t_org.id = #{id}
+    </update>
+
+	
+	<update id="updataOrgById">
+    	UPDATE t_org 
+    	SET 
+	    	<if test="netPath != null">
+	            banner = #{netPath},
+	        </if>
+	        <if test="startTime != null">
+	            startTime = #{startTime},
+	        </if>
+	        <if test="endTime != null">
+	            endTime = #{endTime},
+	        </if>
+	        <if test="statusMap != null">
+	            statusMap = #{statusMap},
+	        </if>
+        where 
+        id = #{orgId}
+    </update>
+
+</mapper>

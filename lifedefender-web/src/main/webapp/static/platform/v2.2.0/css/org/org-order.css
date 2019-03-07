@@ -1,0 +1,270 @@
+/*
+* @Author: Administrator
+* @Date:   2017-05-05 10:01:52
+* @Last Modified by:   Administrator
+* @Last Modified time: 2017-05-08 09:28:33
+*/
+.service-items {
+	background-color:#fff;
+	padding-top: 46px;
+	padding-bottom: 10px;
+}
+.service-items li{
+	text-align: center;
+	float:left;
+	width: 33.3%;
+}
+.service-items li a {
+	width: 150px;
+	height: 150px;
+	display: inline-block;
+	padding-top: 20px;
+}
+.service-items li a.on{
+	background-color:#eee;	
+}
+.service-items li div{
+	margin:0 auto;
+	width: 82px;
+	height: 82px;
+	background-image: url(/static/platform/v2.2.0/images/org/org-service.png);
+}
+.service-items li:nth-of-type(2) div{
+	background-position: left -86px;
+}
+.service-items li:nth-of-type(3) div{
+	background-position: left -172px;
+}
+.service-items li p{
+	color:#333;
+	font-size: 18px;
+	margin-top: 10px;
+}
+.service-items li p.on{
+	color:#10bb71;
+}
+.service-search{
+	padding-right: 30px;
+	text-align: right;
+	margin-bottom: 7px;
+	margin-top: -32px;
+}
+.service-search input{
+	width: 208px;
+	height: 36px;
+	border:1px solid #10bb71;
+	background:#10bb71 url(/static/platform/v2.2.0/images/org/org-magnifier.png) no-repeat right 5px center;
+	color:#fff;
+	border-radius: 18px;
+	padding-left:20px;
+	padding-right: 20px;
+	outline: none;
+}
+.service-search input::-webkit-input-placeholder{
+	color:#fff;
+}
+.service-search input::-moz-placeholder{
+	color:#fff;
+}
+.service-search input::-ms-input-placeholder{
+	color:#fff;
+}
+.service-type{
+	line-height: 40px;
+	padding-left: 48px;
+	margin-top: 15px;
+}
+.service-type label{
+	color:#666;
+	font-size: 14px;
+	margin-right: 10px;
+}
+.service-type select{
+	width: 100px;
+	height: 22px;
+	border:1px solid #ddd;
+	color:#666;
+	font-size: 14px;
+}
+.service-details{
+	padding:20px 10px;
+	background-color:#fff;
+	display: flex;
+}
+.service-details dt{
+	flex:1;
+	text-align: center;
+	padding-right: 10px;
+}
+.service-details dt img{
+	width: 140px;
+	height: 130px;
+}
+.service-details dd.items-details{
+	flex:3;
+}
+.service-details dd.items-btn{
+	flex:1;
+	display: flex;
+	justify-content: space-around;
+	align-items: center;
+	flex-direction: column;
+}
+.items-details p{
+	color:#333;
+	font-size: 14px;
+	line-height: 2;
+}
+.service-details dd.items-btn span{
+	display: block;
+	width: 90px;
+	height: 40px;
+	color:#fff;
+	font-size: 14px;
+	line-height: 40px;
+	text-align: center;
+	background: #10bb71;
+	border-radius: 6px;
+	cursor: pointer;
+}
+.service-details dd.items-btn p{
+	color:#333;
+	font-size: 14px;
+}
+.service-details dd.items-btn a{
+	color:#10bb71;
+	font-size: 15px;
+}
+/* 查看详情 */
+.org-service-details{
+	background: #fff;
+	padding:20px 40px;
+}
+.look-for{
+	line-height: 50px;
+    border-bottom: 1px solid #ccc;
+    margin-bottom: 12px;
+}
+.status{
+	line-height: 50px;
+	border-bottom: 1px dashed #ccc;
+}
+.status .go-pay{
+	color:#10bb71;
+}
+.order-details{
+	display: flex;
+	padding-top: 20px;
+	margin-bottom: 20px;
+}
+.order-details div:nth-of-type(1){
+	flex: 1;
+	padding-right: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.order-details div:nth-of-type(2){
+	flex: 7;
+    font-size: 15px;
+    line-height: 2;
+    padding-right: 40px;
+    word-break: break-all;
+}
+div.order-common {
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    margin-top: 10px;
+}
+div.order-common > div {
+    line-height: 40px;
+    background-color: #eee;
+    font-size: 14px;
+    font-weight: 500;
+    padding-left: 1em;
+    display: flex;
+}
+div.order-common > div span {
+    flex: 1;
+}
+div.order-common dl {
+    padding-left: 1em;
+    font-size: 12px;
+    display: flex;
+    line-height: 54px;
+}
+div.order-common dd {
+    flex: 1;
+}
+
+/* 服务评价 */
+.order-degree h5{
+	font-weight: 500;
+}
+.order-degree .star li{
+	margin-top: 4px;
+    display: inline-block;
+    width: 15px;
+    height: 15px;
+    margin-right: 6px;
+    background-image: url(/static/platform/v2.2.0/images/org/org-star.png);
+}
+.order-degree .star li.light{
+	background-position: left bottom;
+}
+.commend-area {
+	margin-top: 10px;
+	padding-left: 1em;
+}
+.commend-area h5{
+	font-weight: 500;
+}
+.commend-area >div{
+	width: 860px;
+}
+.commend-area p{
+	width: 100%;
+	line-height: 1.8;
+	color:#666;
+	font-size: 14px;
+}
+.commend-img{
+	margin-top: 10px;
+}
+.commend-img span{
+	display: inline-block;
+	margin-right: 20px;
+}
+.reply {
+	background: #fff;
+	margin-top: 20px;
+    padding: 10px 40px;
+    position:relative;
+}
+.reply textarea{
+	width: 100%;
+	resize: none;
+	color:#666;
+	font-size: 16px;
+	height: 164px;
+	padding:12px;
+	margin-top:10px;
+	line-height: 1.8; 
+}
+.reply span{
+	position:absolute;
+	right: 60px;
+	bottom: 25px;
+	color: #10bb71;
+	cursor: pointer;
+}
+.reply-dialog{
+	padding:40px 40px 20px;
+	background: #fff;
+	font-size: 16px;
+	color:#666;
+}
+.reply-dialog span{
+	color:#10bb71;
+	letter-spacing: 1px;
+}

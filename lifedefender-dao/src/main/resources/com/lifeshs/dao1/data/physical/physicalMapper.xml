@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lifeshs.dao1.data.PhysicalItemDao">
+    <select id="countPhysicalItem" resultType="java.lang.Integer">
+        SELECT COUNT(1) FROM t_data_physical_item
+    </select>
+
+    <select id="getPhysicalItem" resultType="com.lifeshs.po.data.PhysicalPO">
+        SELECT id, name, content, createDate, modifyDate FROM t_data_physical_item
+        WHERE id = #{id}
+    </select>
+
+    <select id="findPhysicalItemWithConditionList" resultType="com.lifeshs.po.data.PhysicalPO">
+        SELECT id, name, content, createDate, modifyDate FROM t_data_physical_item
+        ORDER BY id DESC
+        LIMIT #{startRow}, #{pageSize}
+    </select>
+</mapper>

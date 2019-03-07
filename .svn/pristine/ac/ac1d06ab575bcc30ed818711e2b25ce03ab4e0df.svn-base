@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lifeshs.dao1.business.IBusinessBindUserDao">
+
+    <!-- 获取渠道商绑定的用户总记录数 -->
+    <select id="getUserTotalRecord" resultType="int">
+        SELECT COUNT(*)
+        FROM t_user u
+        INNER JOIN t_user_record r ON u.id = r.userId 
+        WHERE u.businessId = #{businessId}
+        <if test="realName != null">AND u.realName LIKE CONCAT(#{realName}, '%')</if>
+    </select>
+    
+    <!-- 获取渠道商绑定的用户列表 -->
+    <select id="findBusinessBindUserList" resultType="com.lifeshs.vo.business.BusinessUserVO">
+        SELECT u.id AS id,u.realName AS realName, u.createDate AS createDate, u.joinDate AS joinDate, r.gender AS gender,
+        TIMESTAMPDIFF(YEAR, r.birthday, CURDATE()) AS age
+        FROM t_user u
+        INNER JOIN t_user_record r ON u.id = r.userId 
+        WHERE u.businessId = #{businessId}
+        <if test="realName != null">AND u.realName LIKE CONCAT(#{realName}, '%')</if>
+        LIMIT #{startRow},#{pageSize}
+    </select>
+    
+    <!-- 获取用户当月消费清单总记录数 -->
+    <select id="getDetailTotalRecord" resultType="int">
+        SELECT COUNT(*)
+        FROM t_user u
+        INNER JOIN t_order o ON o.userId = u.id
+        INNER JOIN t_serve s ON s.id = o.serveId
+        WHERE DATE_FORMAT(o.startDate, '%Y%m' ) = DATE_FORMAT( CURDATE( ) , '%Y%m' ) AND u.id = #{userId} AND u.businessId = #{businessId}
+    </select>
+    
+    <!-- 获取用户当月消费清单列表-->
+    <select id="findExpenseDetailList" resultType="com.lifeshs.vo.business.ExpenseDetailVO">
+        SELECT o.startDate AS startDate,u.id AS id,o.price AS price,o.price AS payMoney,s.`name` AS serveName
+        FROM t_user u
+        INNER JOIN t_order o ON o.userId = u.id
+        INNER JOIN t_serve s ON s.id = o.serveId
+        WHERE DATE_FORMAT(o.startDate, '%Y%m' ) = DATE_FORMAT( CURDATE( ) , '%Y%m' ) AND o.startDate>u.joinDate AND u.id = #{userId} AND u.businessId = #{businessId}
+         ORDER BY o.startDate DESC
+        LIMIT #{startRow},#{pageSize} 
+    </select>
+    
+    <!-- 统计所有绑定用户当月的总消费记录 -->
+    <select id="countMonthCost" resultType="com.lifeshs.vo.business.ExpenseDetailVO">
+        SELECT u.businessId AS id, COUNT(*) AS number, SUM(o.price) AS price, SUM(o.price) AS payMoney
+        FROM t_user u
+        INNER JOIN t_order o ON u.id = o.userId
+        WHERE DATE_FORMAT(o.startDate, '%Y%m' ) = DATE_FORMAT( CURDATE( ) , '%Y%m' ) AND u.businessId = #{businessId}
+    </select>
+    
+    <!-- 获取每个绑定用户当月的消费总记录数 -->
+    <select id="getMonthCostTotalRecord" resultType="int">
+        SELECT COUNT(*)
+        FROM t_order o
+        INNER JOIN t_user u ON o.userId = u.id
+        INNER JOIN t_serve s ON s.id = o.serveId
+        WHERE DATE_FORMAT(o.startDate, '%Y%m' ) = DATE_FORMAT( CURDATE( ) , '%Y%m' ) AND o.startDate>u.joinDate AND u.businessId = #{businessId}
+    </select>
+    
+    <!-- 获取每个绑定用户当月的消费列表 -->
+    <select id="findMonthCostList" resultType="com.lifeshs.vo.business.ExpenseDetailVO">
+        SELECT o.startDate AS startDate,u.realName AS realName,s.name AS serveName,o.price AS price,o.price AS payMoney
+        FROM t_order o
+        INNER JOIN t_user u ON o.userId = u.id
+        INNER JOIN t_serve s ON s.id = o.serveId
+        WHERE DATE_FORMAT(o.startDate, '%Y%m' ) = DATE_FORMAT( CURDATE( ) , '%Y%m' ) AND o.startDate>u.joinDate AND u.businessId = #{businessId}
+        ORDER BY o.startDate DESC
+        LIMIT #{startRow},#{pageSize}
+    </select>
+    
+    <!-- 获取结算表总记录数 -->
+    <select id="getAccountTotalRecord" resultType="int">
+        SELECT COUNT(*)
+        FROM t_business_account_record
+        WHERE businessId = #{businessId}
+    </select>
+    
+    <!-- 获取结算列表 -->
+    <select id="findAccountList" resultType="com.lifeshs.po.business.BusinessAccountPO">
+        SELECT id,businessId,months,number,price,payMoney,`status` AS status,percentage,settleAccounts,closeDate
+        FROM t_business_account_record
+        WHERE businessId = #{businessId}
+        ORDER BY months DESC
+        LIMIT #{startRow},#{pageSize}
+    </select>
+    
+    <!-- 获取当月所有用户的消费总记录数 -->
+    <select id="getAllUserTotalRecord" resultType="int">
+        SELECT COUNT(*)
+        FROM t_user u
+        INNER JOIN t_order o ON o.userId = u.id
+        INNER JOIN t_serve s ON s.id = o.serveId
+        WHERE DATE_FORMAT(o.startDate, '%Y%m' ) = DATE_FORMAT(#{months},'%Y%m') AND u.businessId = #{businessId}
+    </select>
+    
+    <!-- 获取当月所有用户的消费列表 -->
+    <select id="findAllUserList" resultType="com.lifeshs.vo.business.ExpenseDetailVO">
+        SELECT u.id AS id,o.startDate AS startDate,u.realName AS realName,s.name AS serveName,o.price AS price,o.price AS payMoney
+        FROM t_user u
+        INNER JOIN t_order o ON o.userId = u.id
+        INNER JOIN t_serve s ON s.id = o.serveId
+        WHERE DATE_FORMAT(o.startDate, '%Y%m' ) = DATE_FORMAT(#{months},'%Y%m') AND u.businessId = #{businessId}
+        ORDER BY o.startDate DESC
+        LIMIT #{startRow},#{pageSize}
+    </select>
+    
+    <!-- 用户统计 -->
+    <!-- 本月 -->
+    <select id="getLastMonth" resultType="com.lifeshs.vo.business.StatisticVO">
+        SELECT businessId AS id, joinDate AS months, COUNT(joinDate) AS userNumber
+        FROM t_user  
+        WHERE DATE_FORMAT(joinDate, '%Y%m' ) = DATE_FORMAT( CURDATE( ) , '%Y%m' ) AND businessId = #{businessId} GROUP BY joinDate ORDER BY joinDate DESC
+    </select>
+    
+    <!-- 近三月 -->
+    <select id="getRecentlyThreeMonths" resultType="com.lifeshs.vo.business.StatisticVO">
+        SELECT businessId AS id, joinDate AS months, COUNT(joinDate) AS userNumber
+        FROM t_user
+        WHERE  joinDate BETWEEN date_sub(now(),interval 3 month) AND now() AND businessId = #{businessId} GROUP BY joinDate ORDER BY joinDate DESC
+    </select>
+    
+    <!-- 近半年 -->
+    <select id="getHalfYear" resultType="com.lifeshs.vo.business.StatisticVO">
+        SELECT businessId AS id, joinDate AS months, COUNT(joinDate) AS userNumber
+        FROM t_user
+        WHERE  joinDate BETWEEN date_sub(now(),interval 6 month) AND now() AND businessId = #{businessId} GROUP BY joinDate ORDER BY joinDate DESC
+    </select>
+    
+    <!-- 近一年 -->
+    <select id="getAlmostYear" resultType="com.lifeshs.vo.business.StatisticVO">
+        SELECT businessId AS id, joinDate AS months, COUNT(joinDate) AS userNumber
+        FROM t_user
+        WHERE  joinDate BETWEEN date_sub(now(),interval 12 month) AND now() AND businessId = #{businessId} GROUP BY joinDate ORDER BY joinDate DESC
+    </select>
+
+</mapper>

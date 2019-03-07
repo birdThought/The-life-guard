@@ -1,0 +1,120 @@
+@chartset "utf-8";
+*:before,*:after,*{
+	box-sizing:border-box;
+}
+.container{
+	margin:20px 40px;
+	width:918px;
+	border:1px solid #ddd;
+	height:840px
+}
+.container > h3{
+	height:60px;
+	line-height:60px;
+	font-size:18px;
+	font-weight:400;
+	margin:0 30px 20px;
+	border-bottom:1px dashed #ddd;
+}
+section{
+	margin:30px 30px;
+	overflow:hidden;
+	border: 1px solid #ddd;
+
+}
+.top{
+	padding-left:20px;
+	height:160px;
+	border-bottom:1px solid #ddd;
+}
+
+.addE{
+	
+	padding-top:20px;
+}
+.addE img{
+	cursor:pointer;
+	margin-left:52px;
+	margin-bottom:10px;
+}
+.addE p{
+	cursor:pointer;
+	text-align:center;
+}
+
+.HLseries .top{
+	border-bottom:1px solid #ddd;
+	height:160px;
+}
+.HLseries .left{
+	height:160px;
+	background:url(../images/HL-03.png) no-repeat center left;
+	background-size:110px 140px;
+	width:79%;
+	float:left;
+	padding-left:140px;
+	padding-right:30px;
+	padding-top:20px;
+	border-right:1px solid #ddd;
+}
+.down{
+	padding-left:20px;
+	font-size:16px;
+	height:60px;
+	width:100%;
+	background:#e4e7ec;
+	line-height:60px;
+}
+.down li:first-child{
+	float:left;
+}
+.down li:last-child{
+	float:right;
+	cursor:pointer;
+}
+.down li:last-child span{
+	background:#48c858;
+	padding:6px 18px;
+	border-radius:5px;
+	color:#fff;
+	margin-right:34px;
+	border:1px solid #48c858;
+}
+.down li:last-child span:active{
+	background:#36b646;
+}
+.down span em{
+	cursor:pointer;
+	color:#48c858;
+	border-bottom:1px solid #48c858;
+}
+.Cseries .top{
+	border-bottom:1px solid #ddd;
+	height:160px;
+}
+.Cseries .left{
+	height:160px;
+	background:url(../images/shouhuan.png) no-repeat center left;
+	background-size:110px 140px;
+	width:79%;
+	float:left;
+	padding-left:140px;
+	padding-right:30px;
+	padding-top:20px;
+	border-right:1px solid #ddd;
+}
+/* 弹窗 */
+.infor,.Cs{
+	padding:12px 30px 10px 30px;
+	font-size:16px;
+}
+.infor li,.Cs li{margin-bottom:10px;}
+.infor .infor_2 input,.Cs li input{
+	width:400px;
+	height:40px;
+	border-radius:3px;
+	padding:0 8px;
+	border:1px solid #ddd;
+	margin-top:5px
+}
+.infor .chose span{margin-right:40px;}

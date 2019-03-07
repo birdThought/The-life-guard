@@ -1,0 +1,36 @@
+/*定义选项栅格及按钮块*/
+
+.tabbar {
+	position: fixed;
+	bottom: 0;
+	left: 0;
+	margin: 0;
+	padding: 0;
+	list-style-type: none;
+	display: table;
+	border-top: 2px solid #f1f1f1;
+	background-color: white;
+}
+
+
+/*1.柵格系統4個成行*/
+
+
+/*2.item內部中心居中*/
+
+.tabbar_item {
+	position: relative;
+	display: table-cell;
+	vertical-align: middle;
+	text-align: center;
+	/*outline: 1px solid red;*/
+}
+
+
+/*3.居中块(包含点击及文本)*/
+
+.tabbar_item>figure {
+	display: inline-block;
+	width: 2rem;
+}
+

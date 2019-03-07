@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lifeshs.dao.shop.goods.ShopGoodsDao">
+
+	<insert id="insertGoods" parameterType="com.lifeshs.shop.GoodsDTO" useGeneratedKeys="true" keyProperty="id">
+		INSERT INTO t_shop_goods
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="shopId != null">shopId,</if>
+			<if test="goodsName != null">goodsName,</if>
+			<if test="status != null">`status`,</if>
+			<if test="labelIds != null">label_ids,</if>
+			<if test="createTime != null">createTime,</if>
+			<if test="stateTime != null">state_time,</if>
+			<if test="details != null">details,</if>
+			<if test="instructions != null">Instructions,</if>
+			<if test="categoryId != null">category_id,</if>
+			<if test="specType != null">spec_type,</if>
+			<if test="marketPrice != null">market_price,</if>
+			<if test="favorablePrice != null">favorable_price,</if>
+			<if test="inventory != null">inventory,</if>
+			<if test="braCode != null and braCode neq ''">bra_code,</if>
+			<if test="limitBuy != null">limit_buy,</if>
+			<if test="areaCode != null">area_code,</if>
+			<if test="invoice != null">invoice,</if>
+			<if test="warranty != null">warranty,</if>
+		</trim>
+		VALUES
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="shopId != null">#{shopId},</if>
+			<if test="goodsName != null">#{goodsName},</if>
+			<if test="status != null">#{status},</if>
+			<if test="labelIds != null">#{labelIds},</if>
+			<if test="createTime != null">#{createTime},</if>
+			<if test="stateTime != null">#{stateTime},</if>
+			<if test="details != null">#{details},</if>
+			<if test="instructions != null">#{Instructions},</if>
+			<if test="categoryId != null">#{categoryId},</if>
+			<if test="specType != null">#{specType},</if>
+			<if test="marketPrice != null">#{marketPrice},</if>
+			<if test="favorablePrice != null">#{favorablePrice},</if>
+			<if test="inventory != null">#{inventory},</if>
+			<if test="braCode != null and braCode neq ''">#{braCode},</if>
+			<if test="limitBuy != null">#{limitBuy},</if>
+			<if test="areaCode != null">#{areaCode},</if>
+			<if test="invoice != null">#{invoice},</if>
+			<if test="warranty != null">#{warranty},</if>
+		</trim>
+	</insert>
+	
+	
+	<select id="goodsListByCondition" resultType="map">
+		SELECT 
+		g.`id`
+		,g.`goodsName`
+		,g.`status`
+		,g.createTime
+		,g.state_time AS stateTime
+		,g.spec_type AS specType
+		,g.market_price AS marketPrice
+		,g.favorable_price AS favorablePrice
+		,g.inventory
+		,g.bra_code AS braCode
+		,g.sales_volume AS salesVolume
+		,p.pictureUrl
+		,s.`shopName`
+		,s.`userName`
+		FROM t_shop_goods g
+		LEFT JOIN t_shop_picture p ON g.id=p.goodsId AND p.masterGraph=0
+		LEFT JOIN t_shop s ON g.`shopId`=s.`id`
+		<where>
+		 <if test="shopId != null">and s.id=#{shopId}</if>
+	     <if test="status !=null and status != 0 ">
+	       and g.status =#{status}
+	     </if>
+	     <if test="goodsName !=null and goodsName != ''">
+	       and g.goodsName like CONCAT('%', #{goodsName}, '%') 
+	     </if>
+	     <if test="shopName !=null and shopName != ''">
+	       and s.shopName like CONCAT('%', #{shopName}, '%') 
+	     </if>
+	     <if test="userName !=null and userName != ''">
+	       and s.userName like CONCAT('%', #{userName}, '%') 
+	     </if>
+    	</where>
+    	order by g.createTime DESC
+    	limit #{startRow},#{pageSize}
+	</select>
+
+	<select id="pagingGoodsTotal" resultType="int">
+      SELECT  COUNT(1) from t_shop_goods go 
+      LEFT JOIN t_shop sh on sh.id=go.shopId
+      <where>
+      	<if test="shopId != null">and sh.id=#{shopId}</if>
+       <if test="status !=null and status!=0">
+         and go.status =#{status}
+       </if>
+       <if test="goodsName !=null and goodsName != ''">
+         and go.goodsName like CONCAT('%', #{goodsName}, '%') 
+       </if>
+       <if test="shopName !=null and shopName != ''">
+         and sh.shopName like CONCAT('%', #{shopName}, '%') 
+       </if>
+       <if test="userName !=null and userName != ''">
+	       and sh.userName like CONCAT('%', #{userName}, '%') 
+	     </if>
+      </where>
+  </select>
+  
+	<resultMap type="com.lifeshs.shop.GoodsDTO" id="goodsMap">
+		<id column="id" property="id" />
+		<id column="shopId" property="shopId" />
+		<id column="goodsName" property="goodsName" />
+		<result column="status" property="status" />
+		<result column="createTime" property="createTime" />
+		<result column="labelIds" property="labelIds" />
+		<result column="details" property="details" />
+		<result column="categoryId" property="categoryId" />
+		<result column="Instructions" property="instructions" />
+		<result column="specType" property="specType" />
+		<result column="marketPrice" property="marketPrice" />
+		<result column="favorablePrice" property="favorablePrice" />
+		<result column="inventory" property="inventory" />
+		<result column="braCode" property="braCode" />
+		<result column="otherPics" property="otherPics" />
+		<result column="mainPic" property="mainPic" />
+		<result column="areaCode" property="areaCode" />
+		<result column="invoice" property="invoice" />
+		<result column="warranty" property="warranty" />
+		<!-- 类目 -->
+		<association property="category" javaType="com.lifeshs.shop.CategoryDTO">
+			<id column="categoryId" property="id"/>
+			<result column="cName" property="cName"/>
+			<result column="idPath" property="idPath"/>
+		</association>
+	</resultMap>
+	
+	<select id="getGoodsById" resultMap="goodsMap">
+	 SELECT 
+	   g.`id`,g.`shopId`,g.`goodsName`,g.`status`,g.`createTime`,g.`label_ids` AS labelIds
+	   ,g.`details`,g.`category_id` AS categoryId,c.`cName`,c.id_path AS idPath,g.`Instructions`,g.`spec_type` AS specType
+	   ,g.market_price AS marketPrice,g.`favorable_price` AS favorablePrice,g.`inventory`,g.bra_code AS braCode,g.`limit_buy` AS limitBuy
+	   ,g.`area_code` AS areaCode,g.`invoice`,g.warranty
+		,GROUP_CONCAT(IF(p.masterGraph = 1,p.pictureUrl,NULL) SEPARATOR '|') AS otherPics
+   		,IF(p.masterGraph = 0,p.pictureUrl,NULL) AS mainPic
+	   FROM t_shop_goods g 
+	   LEFT JOIN t_shop_category c ON g.`category_id`=c.`id`
+	   LEFT JOIN t_shop_picture p on g.id=p.goodsId
+	   WHERE g.id=#{gid}
+	   GROUP BY g.id
+	</select>
+
+	<update id="updateGoods" parameterType="com.lifeshs.shop.GoodsDTO">
+		UPDATE t_shop_goods g
+		<trim prefix="SET" suffixOverrides=",">
+			<if test="shopId != null">g.shopId=#{shopId},</if>
+			<if test="goodsName != null">g.goodsName=#{goodsName},</if>
+			<if test="status != null">g.`status`=#{status},</if>
+			<if test="labelIds != null">g.label_ids=#{labelIds},</if>
+			<if test="createTime != null">g.createTime=#{createTime},</if>
+			<if test="stateTime != null">g.state_time=#{stateTime},</if>
+			<if test="details != null">g.details=#{details},</if>
+			<if test="instructions != null">g.Instructions=#{instructions},</if>
+			<if test="categoryId != null">g.category_id=#{categoryId},</if>
+			<if test="specType != null">g.spec_type=#{specType},</if>
+			<if test="marketPrice != null">g.market_price=#{marketPrice},</if>
+			<if test="favorablePrice != null">g.favorable_price=#{favorablePrice},</if>
+			<if test="inventory != null">g.inventory=#{inventory},</if>
+			<if test="braCode != null and braCode neq ''">g.bra_code=#{braCode},</if>
+			<if test="limitBuy != null">g.limit_buy=#{limitBuy},</if>
+			<if test="areaCode != null">g.area_code=#{areaCode},</if>
+			<if test="invoice != null">g.invoice=#{invoice},</if>
+			<if test="warranty != null">g.warranty=#{warranty},</if>
+		</trim>
+		WHERE id=#{id}
+	</update>
+	
+	<!-- 上下架 -->
+	<update id="changeGoodsStatus">
+		update t_shop_goods 
+		<if test="action == 2">set status=#{action},state_time=NOW() where id=#{id} and (status=1 OR status=3)</if><!-- 上架 -->
+		<if test="action == 3">set status=#{action},state_time=NOW() where id=#{id} and status=2</if> <!-- 下架 -->
+	</update>
+	
+	<!-- 获取商品及其商铺关联 -->
+	<select id="getOneById" resultType="map">
+		SELECT g.*,s.`user_id` AS userId
+		FROM t_shop_goods g
+		LEFT JOIN t_shop s ON s.`id`=g.`shopId`
+		WHERE g.`id`=#{id} 
+		limit 1
+	</select>
+	
+</mapper>

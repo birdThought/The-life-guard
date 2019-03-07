@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lifeshs.dao1.systemManage.SportManageDao">
+		
+	<!-- 查询食物列表 -->
+	<select id="findSport" resultMap="SportVo">
+		SELECT
+			a.id AS aId,
+			a.kind AS aKind,
+			a.kcal AS aKcal,
+			a.`name` AS aName,
+			b.id AS bId,
+			b.`name` AS bName
+		FROM
+			t_data_Sport a
+		INNER JOIN t_data_Sport_kind b 
+		ON a.kind = b.id
+		<where>
+		<if test="kind !=null">
+			a.kind = #{kind}
+		</if>
+		<if test="name != null">
+			AND a.`name` LIKE CONCAT(#{name}, '%')
+		</if>
+		</where>
+		LIMIT #{startRow},#{pageSize}
+	</select>
+	
+	<!--统计食物数量 -->
+	<select id="countSport" resultType="java.lang.Integer">
+		SELECT COUNT(1)
+		FROM
+			t_data_Sport a
+		INNER JOIN t_data_Sport_kind b 
+		ON a.kind = b.id
+		<where>
+		<if test="kind !=null">
+			a.kind = #{kind}
+		</if>
+		<if test="name != null">
+			AND a.`name` LIKE CONCAT(#{name}, '%')
+		</if>
+		</where>	
+	</select>
+	
+	<!-- 添加食物 -->
+	<insert id="addSport" parameterType="com.lifeshs.vo.systemManage.SportVo">
+		INSERT INTO t_data_Sport(kind,kcal,name)
+		VALUES(#{kind},#{kcal},#{name})
+	</insert>
+	
+	<!-- 编辑食物 -->
+	<update id="updateSport" parameterType="com.lifeshs.vo.systemManage.SportVo">
+		UPDATE t_data_Sport 
+		<set>
+			<if test="kind != null">
+				kind = #{kind},
+			</if>
+			<if test="kcal != null">
+				kcal = #{kcal},
+			</if>
+			<if test="name != null">
+				name = #{name}
+			</if>
+		</set>
+		WHERE id = #{id}
+	</update>
+	
+	<!-- 删除食物 -->
+	<delete id="deleteSport">
+		DELETE FROM t_data_Sport WHERE id = #{id}
+	</delete>
+	
+	 <resultMap type="com.lifeshs.vo.systemManage.SportVo" id="SportVo">  
+        <id column="aId" property="id"/>  
+        <result column="aKind" property="kind"/>   
+		<result column="aKcal" property="kcal"/>
+		<result column="aName" property="name"/>    
+        <association property="SportKind" notNullColumn="bId"
+        	javaType="com.lifeshs.entity.data.TDataSportKind">  
+            <id column="bId" property="id"/>  
+            <result column="bName" property="name"/>   
+        </association>  
+    </resultMap>  
+</mapper>

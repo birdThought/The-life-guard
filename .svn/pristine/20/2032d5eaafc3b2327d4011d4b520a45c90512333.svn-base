@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lifeshs.dao.order.CommentDao" >
+    <!-- 查询 -->
+    <!-- 按照id -->
+    <select id="getComment" resultMap="OrderCommentDTO">
+        SELECT <include refid="commentAllColumn" /> FROM t_order_comments WHERE id = #{id}
+    </select>
+    
+    <!-- 按照订单id -->
+    <select id="getCommentByOrderId" resultMap="OrderCommentDTO">
+        SELECT <include refid="commentAllColumn" /> FROM t_order_comments WHERE orderId = #{orderId}
+    </select>
+    
+    <!-- 保存 -->
+    <insert id="save" parameterType="com.lifeshs.pojo.order.OrderCommentDTO">
+        <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+        INSERT INTO t_order_comments(createDate,orderId,status,comment,reply,score)
+        VALUES(NOW(),#{orderId},#{status},#{comment},#{reply},#{score})
+    </insert>
+    
+    <!-- 更新 -->
+    <update id="update" parameterType="com.lifeshs.pojo.order.OrderCommentDTO">
+        UPDATE t_order_comments SET modifyDate = NOW()
+            <if test="status != null">, `status` = #{status}</if>
+            <if test="comment != null">, comment = #{comment}</if>
+            <if test="reply != null">, reply = #{reply}</if>
+            <if test="score != null">, score = #{score}</if>
+            <if test="replyDate != null">, replyDate = NOW()</if>
+        WHERE orderId = #{orderId}
+    </update>
+    
+    <select id="listCommentByProjectCode" resultType="com.lifeshs.vo.order.comment.CommentVO">
+        SELECT u.photo AS head, u.realName AS name, IFNULL(c.score, 0) AS score FROM t_order o
+        INNER JOIN t_order_comments c ON c.orderId = o.id
+        INNER JOIN t_user u ON u.id = o.userId
+        WHERE
+            o.projectCode = #{projectCode}
+            <!-- 服务师 -->
+            <if test="serveUserId != null">
+                AND o.orgUserId = #{serveUserId}
+            </if>
+            <!-- 只需要搜索状态为已完成的订单 -->
+            AND o.status = 4 AND o.price &gt;= 0
+        ORDER BY c.createDate DESC
+        LIMIT #{startIndex}, #{pageSize}
+    </select>
+    
+    <!-- 评论的全字段 -->
+    <sql id="commentAllColumn">
+        id, orderId, status, comment, reply, score, createDate, replyDate
+    </sql>
+    <!-- 结果集 -->
+    <resultMap type="com.lifeshs.pojo.order.OrderCommentDTO" id="OrderCommentDTO">
+        <id column="id" property="id"/>
+        <collection property="image" ofType="java.lang.String" column="id" select="selectCommentImage" />
+    </resultMap>
+    <select id="selectCommentImage" resultType="java.lang.String">
+        SELECT image FROM t_order_comments_image WHERE orderCommentId = #{id}
+    </select>
+    
+    
+    <select id="findCommentPO" resultType="com.lifeshs.po.CommentPO">
+        SELECT * FROM t_order_comments WHERE id = #{id}
+    </select>
+    
+    <select id="findCommentPOByOrderId" resultType="com.lifeshs.po.CommentPO">
+        SELECT * FROM t_order_comments WHERE orderId = #{orderId}
+    </select>
+    
+    
+    
+    
+    
+    
+    
+    
+</mapper>

@@ -1,0 +1,330 @@
+﻿
+.main-content{
+    background-color:#f2f2f2;
+}
+
+.income-top{
+    margin-top: 20px;
+}
+.income-top >div{
+    background-color:#fff;
+    float: left;
+}
+.income-top >div:first-child{
+    margin-right: 20px;
+    width: 260px;
+    height: 410px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+.income-top >div:last-child{
+    width: 688px;
+    height: 410px;
+}
+.income-count:nth-of-type(1) i{
+    width: 34px;
+    height: 31px;
+    margin-left: 30px;
+    margin-bottom: 8px;
+    display: block;
+    background-image: url(../../images/org/store-home.png);
+    background-position: -84px -255px;
+}
+
+.income-count:nth-of-type(2) i{
+    content:"";
+    display:inline-block;
+    width:21px;
+    height:28px;
+    background-image: url(../../images/org/income.png);
+    margin-left: 40px;
+}
+.income-count p{
+    color:#679df2;
+    font-size: 18px;
+}
+.income-count+p{
+    margin-top: 10px;
+    color:#ff3f36;
+    font-size: 20px;
+}
+.income-count+p em{
+    font-size: 30px;
+}
+.data-show{
+    height: 90px;
+    line-height: 90px;
+}
+.data-show ul{
+    padding-left: 10px;
+    float: left;
+}
+.data-show ul li{
+    font-size: 16px;
+    display: inline-block;
+    width: 66px;
+    text-align: center;
+    cursor: pointer;
+}
+.data-show ul li.on{
+    color:#55a9e9;
+}
+.data-show div{
+    float: right;
+    padding-right: 20px;
+}
+.data-show div input{
+    border:1px solid #ddd;
+    width: 128px;
+    height: 28px;
+    text-indent: 1em;
+    font-size: 14px;
+    color:#333;
+    border-radius: 4px;
+    outline-color: #10bb71;
+    cursor: pointer;
+    background: url(../../images/org/icon_date.png) no-repeat right 4px center;
+}
+#container{
+    height: 320px;
+    width: 100%;
+}
+.income-notice{
+    padding-bottom: 20px;
+}
+.income-notice label{
+    line-height: 50px;
+    padding-left: 20px;
+    color:#666;
+    font-size: 16px;
+}
+.income-notice p{
+    background: #fff;
+    color:#666;
+    font-size: 14px;
+    padding:8px 20px 20px;
+    line-height: 1.8;
+}
+.income-notice table{
+    width: 100%;
+    background: #fff;
+    border-collapse: collapse;
+}
+
+.income-notice .order-table{
+    width: 100%;
+    background: #fff;
+    border-collapse: collapse;
+}
+.order-table thead tr{
+    text-align: center;
+}
+/* shouyi与jiekuan */
+.main-content .member-task li{
+    background-color:#fff;
+    width:100%; 
+    float: left;
+    height: 210px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+/*.main-content .member-task li:first-child{
+    margin-right: 2%;
+}*/
+.main-content .member-task li dl{
+    font-size: 16px;
+}
+.main-content .member-task li dt{
+    color:#10bb71;
+    font-size: 18px;
+}
+.main-content .member-task li dt:before{
+    content:"";
+    display:inline-block;
+    width:21px;
+    height:28px;
+    background-image: url(../../images/org/income.png);
+    margin-right: 6px;
+}
+.main-content .member-task li dd.count{
+    font-size: 22px;
+    color:#ff3f36;
+}
+.main-content .member-task li dd.manage{
+    margin-top: 20px;
+}
+.main-content .member-task li dd em{
+    font-size: 28px;
+}
+.income-notice div{
+    text-align: center;
+    background: #fff;
+    height: 150px;
+    line-height: 150px;
+}
+/*.income-notice div span{
+    display: inline-block;
+    width: 198px;
+    height: 38px;
+    border:1px solid #10bb71;
+    background-color: rgba(16,187,113,.1);
+    color: #10bb71;
+    text-align: center;
+    line-height: 38px;
+    border-radius: 6px;
+    font-size: 18px;
+}*/
+.income-notice table tr{
+    height: 60px;
+    border-bottom: 1px solid #ddd;
+}
+.income-notice .store-info td:first-child{
+    text-align: center;
+    color:#333;
+    font-size: 16px;
+    border-right: 1px solid #ddd;
+    width: 262px;
+}
+.income-notice .store-info td:last-child{
+    padding-left: 258px;
+}
+/* 绑定银行信息 */
+/*
+
+.order-list {
+    background-color: #fff;
+    padding-top:50px;
+}
+.order-lists{
+    border-top:1px solid #ddd;
+    border-bottom: 1px solid #ddd;
+
+}
+.order-lists span{
+    color:#333;
+}*/
+.order-content li{
+    display:flex;
+    line-height: 60px;
+    font-size: 16px;
+    width:100%;
+}
+.order-content li {
+    line-height: 40px;
+    font-size: 14px;
+}
+.orders {
+    background-color: #fff;
+    padding-top: 10px;
+    margin-bottom: 40px;
+}
+.orders .order-lists {
+    border-top: 1px solid #ddd;
+    border-bottom: 1px solid #ddd;
+}
+.order-content {
+    /*margin-bottom: 50px;*/
+    height: 350px;
+    overflow: auto;
+}
+.order-lists span, .order-content span{
+    flex:1;
+    color:#666;
+    text-align:center;
+}
+.order-lists span{
+    color:#333;
+}
+ .order-lists {
+    display: flex;
+    line-height: 60px;
+    font-size: 16px;
+    width: 100%;
+}
+.order-content li {
+    line-height: 40px;
+    font-size: 14px;
+}
+.order-content li span {
+    overflow: hidden;
+    text-overflow:ellipsis;
+    white-space: nowrap;
+}
+.bind-account {
+    display: inline-block;
+    width: 198px;
+    height: 38px;
+    border: 1px solid #10bb71;
+    background-color: rgba(16,187,113,.1);
+    color: #10bb71;
+    text-align: center;
+    line-height: 38px;
+    border-radius: 6px;
+    font-size: 18px;
+}
+
+/*重写layui-tab样式*/
+.layui-tab-title {
+    border-bottom: 3px solid #40c98d !important;
+}
+.layui-this:after {
+    border: 0px !important;
+}
+.layui-this {
+    color: #f5f5f5 !important;
+    background-color: #40c98d;
+}
+
+.layui-tab-brief {
+    background-color: white;
+}
+.layui-tab-title li {
+    min-width: 35px !important;
+}
+/*end*/
+.year-date-btn {
+    width: 80px; padding: 6px;
+    border-radius: 6px;
+    border: 1px solid #dddddd;
+    background: url(/static/platform/v2.2.0/images/org/icon_date.png) no-repeat right 4px center;
+    margin-right: 50px;
+    cursor: pointer;
+    float: right;
+    margin-top: -25px;
+
+}
+.bill-table {
+    width: 100%;
+}
+.bill-table td {
+    border-bottom: 1px solid #dddddd;
+    border-left: 1px solid #dddddd;
+    border-right: 1px solid #dddddd;
+    height: 60px;
+    text-align: center;
+    width: 11.5%;
+}
+
+.bill-table tbody tr .status span:hover {
+    border-bottom: 1px dashed #009688;
+}
+
+.bill-table tbody tr .details span {
+    color: #009688;
+    cursor: pointer;
+}
+
+.bill-table tbody tr .details span:hover {
+    border-bottom: 1px dashed #009688;
+}
+
+.bill-none {
+    text-align: center;
+    padding: 10px;
+    color: gray;
+    font-size: 15px;
+    padding-bottom: 50px;
+}

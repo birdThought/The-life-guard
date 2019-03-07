@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lifeshs.dao1.measure.MeasureAnalysisDao" >
+    <select id="getAnalysis" resultType="com.lifeshs.po.measure.MeasureAnalysisPO">
+        SELECT <include refid="MEASURE_ANALYSIS_ALL_COLUMN" /> FROM t_measure_analysis WHERE id = #{id}
+    </select>
+
+    <select id="findAnalysisListByUserIdAndMeasueDate" resultType="com.lifeshs.po.measure.MeasureAnalysisPO">
+        SELECT <include refid="MEASURE_ANALYSIS_ALL_COLUMN" /> FROM t_measure_analysis
+        WHERE userId = #{userId} AND measureDate = DATE_FORMAT(#{measureDate}, '%Y-%m-%d')
+    </select>
+
+    <select id="findAnalysisListWithCondition" resultType="com.lifeshs.po.measure.MeasureAnalysisPO">
+        SELECT <include refid="MEASURE_ANALYSIS_ALL_COLUMN" /> FROM t_measure_analysis
+        <where>
+            <if test="userId != null">userId = #{userId}</if>
+            <if test="measureDate != null">AND measureDate = DATE_FORMAT(#{measureDate}, '%Y-%m-%d')</if>
+            <if test="healthProduct != null">AND healthProduct = #{healthProduct}</if>
+            <if test="customerUserId != null">AND customerUserId = #{customerUserId}</if>
+            <if test="read != null">AND `read` = #{read}</if>
+            <if test="reply != null">
+                <choose>
+                    <when test="reply">AND reply IS NOT NULL</when>
+                    <otherwise>AND reply IS NULL</otherwise>
+                </choose>
+            </if>
+        </where>
+        ORDER BY id, userId, measureDate DESC
+        LIMIT #{startRow}, #{pageSize}
+    </select>
+
+    <select id="countAnalysisWithCondition" resultType="java.lang.Integer">
+        SELECT COUNT(1) FROM t_measure_analysis
+        <where>
+            <if test="userId != null">userId = #{userId}</if>
+            <if test="measureDate != null">AND measureDate = DATE_FORMAT(#{measureDate}, '%Y-%m-%d')</if>
+            <if test="healthProduct != null">AND healthProduct = #{healthProduct}</if>
+            <if test="customerUserId != null">AND customerUserId = #{customerUserId}</if>
+            <if test="read != null">AND `read` = #{read}</if>
+            <if test="reply != null">
+                <choose>
+                    <when test="reply">AND reply IS NOT NULL</when>
+                    <otherwise>AND reply IS NULL</otherwise>
+                </choose>
+            </if>
+        </where>
+    </select>
+
+    <sql id="MEASURE_ANALYSIS_ALL_COLUMN">
+        id, userId, customerUserId, doctorSign, measureDate, healthProduct, reply, `read`, createDate, modifyDate, deleted
+    </sql>
+
+    <insert id="addAnalysis" parameterType="com.lifeshs.po.measure.MeasureAnalysisPO">
+        <selectKey order="AFTER" resultType="java.lang.Integer" keyProperty="id">
+            SELECT LAST_INSERT_ID() AS id
+        </selectKey>
+        INSERT INTO t_measure_analysis(userId, customerUserId, doctorSign, measureDate, healthProduct, reply, `read`, createDate, deleted)
+        VALUES(#{userId}, #{customerUserId}, #{doctorSign}, #{measureDate}, #{healthProduct}, #{reply}, #{read}, NOW(), FALSE)
+    </insert>
+
+    <update id="updateAnalysis" parameterType="com.lifeshs.po.measure.MeasureAnalysisPO">
+        UPDATE t_measure_analysis
+        SET modifyDate = NOW()
+        <if test="customerUserId != null">,customerUserId = #{customerUserId}</if>
+        <if test="doctorSign != null">,doctorSign = #{doctorSign}</if>
+        <if test="measureDate != null">,measureDate = #{measureDate}</if>
+        <if test="healthProduct != null">,healthProduct = #{healthProduct}</if>
+        <if test="reply != null">,reply = #{reply}</if>
+        <if test="read != null">,`read` = #{read}</if>
+        <if test="deleted != null">,deleted = #{deleted}</if>
+        WHERE id = #{id}
+    </update>
+    
+    <update id="updateAnalysisListByUserIdAndMeasureDate">
+        UPDATE t_measure_analysis
+        SET modifyDate = NOW()
+        <if test="read != null">,`read` = #{read}</if>
+        <if test="deleted != null">,deleted = #{deleted}</if>
+        WHERE userId = #{userId} AND measureDate = DATE_FORMAT(#{measureDate}, '%Y-%m-%d')
+        <!-- 如果是修改为已读状态，需要限定reply字段不能为空，避免客服还没有回复就更新为已读 -->
+        <if test="read">AND `reply` IS NOT NULL</if>
+    </update>
+</mapper>

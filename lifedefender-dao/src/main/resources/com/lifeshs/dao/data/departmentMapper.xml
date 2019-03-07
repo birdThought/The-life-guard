@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lifeshs.dao.data.IDepartmentDao" >
+
+	<select id="selectChildDepartmentsDataByParentId" resultType="tDataDepartment">
+		SELECT id, name, parentId FROM t_data_department WHERE parentId = #{parentDepartmentId}
+	</select>
+	
+	<select id="selectParentsDepartmentByChildId" statementType="CALLABLE" resultType="tDataDepartment">
+		{CALL selectParentsDepartmentByChildId(#{childDepartmentId})}
+	</select>
+	
+	<select id="selectTopDepartmentByChildId" resultType="tDataDepartment">
+		{CALL selectTopDepartmentByChildId(#{childDepartmentId})}
+	</select>
+
+	<select id="selectAllDepartments" resultType="tDataDepartment">
+		SELECT id, name, parentId FROM t_data_department;
+	</select>
+</mapper>

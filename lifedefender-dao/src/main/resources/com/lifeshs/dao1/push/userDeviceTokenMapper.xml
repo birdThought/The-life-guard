@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lifeshs.dao1.push.UserDeviceTokenDao">
+    <select id="findDeviceTokenByUserId" resultType="com.lifeshs.po.push.UserDeviceTokenPO">
+        SELECT <include refid="T_USER_APP_PUSH_ALL_COLUMN" /> FROM t_user_app_push
+        WHERE userId = #{userId} AND `display` = TRUE
+        ORDER BY id DESC LIMIT 1
+    </select>
+    
+    <select id="findDeviceTokenByUserIdList" resultType="com.lifeshs.po.push.UserDeviceTokenPO">
+        SELECT <include refid="T_USER_APP_PUSH_ALL_COLUMN" /> FROM t_user_app_push
+        WHERE `display` = TRUE AND userId IN <foreach collection="userIdList" open="(" separator="," close=")" item="userId">#{userId}</foreach>
+    </select>
+    
+    <!-- 根据查询条件获取用户的设备推送token -->
+    <select id="findUserDeviceTokenPOList" resultType="com.lifeshs.po.push.UserDeviceTokenPO">
+        SELECT us.id as userId,app.deviceToken,app.OS from t_order o
+        LEFT JOIN t_project p on o.projectCode = p.projectCode
+        LEFT JOIN t_user_record u on u.userId = o.userId
+        LEFT JOIN t_user us on us.id = o.userId
+        LEFT JOIN t_user_app_push app on app.userId = us.id AND app.display = TRUE 
+        WHERE p.orgId = #{orgId}
+        <if test="projectCode != null">
+            AND p.projectCode = #{projectCode}
+        </if>
+        <if test="diseasesId != null">
+            AND o.userDiseasesId = #{diseasesId}
+        </if>
+        <if test="gender != null">
+            AND u.gender = #{gender}
+        </if>
+        <if test="startAge != null">
+            AND u.birthday &gt; #{startAge}
+        </if>
+        <if test="endAge != null">
+            AND u.birthday &lt; #{endAge}
+        </if>
+        <if test="mobile != null">
+            AND us.mobile LIKE CONCAT('%',#{mobile},'%')
+        </if>
+        group by app.deviceToken 
+    </select>
+    
+    <insert id="addDeviceToken" parameterType="com.lifeshs.po.push.UserDeviceTokenPO">
+        INSERT INTO t_user_app_push(deviceToken, userId, OS, systemVersion, `display`, createDate)
+        VALUES(#{deviceToken}, #{userId}, #{OS}, #{systemVersion}, TRUE, NOW());
+    </insert>
+    
+    <select id="findDeviceToken" resultType="com.lifeshs.po.push.UserDeviceTokenPO">
+        select p.id,p.deviceToken,p.userId,p.OS,p.systemVersion,p.display,p.createDate from t_user_app_push  p 
+        where p.userId = #{userId} and p.OS = #{OS} and p.deviceToken= #{deviceToken} and p.systemVersion= #{systemVersion} 
+            limit 0,1;
+    </select>
+    
+    <select id="findDeviceTokenList" resultType="com.lifeshs.po.push.UserDeviceTokenPO">
+        select p.id,p.deviceToken,p.userId,p.OS,p.systemVersion,p.display,p.createDate from t_user_app_push  p 
+        where p.userId = #{userId};
+    </select>
+    
+    <update id="updateTokenByUserId">
+        UPDATE t_user_app_push SET `display` = #{display} WHERE userId = #{userId} 
+        and OS = #{OS} and deviceToken= #{deviceToken} and systemVersion= #{systemVersion} ;
+    </update>
+    
+    <update id="delDeviceTokenByUserId">
+        UPDATE t_user_app_push SET `display` = FALSE WHERE userId = #{userId} AND `display` = TRUE;
+    </update>
+    
+    <sql id="T_USER_APP_PUSH_ALL_COLUMN">
+        id, deviceToken, userId, OS, systemVersion, createDate
+    </sql>
+</mapper>

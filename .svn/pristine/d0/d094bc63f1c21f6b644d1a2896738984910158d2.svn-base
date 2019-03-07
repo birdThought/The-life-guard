@@ -1,0 +1,154 @@
+﻿
+.main-content{
+	background-color:#f2f2f2;
+}
+.store-href{
+	line-height: 50px;
+    font-size: 16px;
+    padding-left: 22px;
+}
+.store-href a{
+	color: #666;
+}
+.store-href span{
+	color:#333;
+}
+.income-top{
+	margin-top: 20px;
+}
+.income-top >div{
+	background-color:#fff;
+}
+.income-top >div{
+	width: 100%;
+	height: 410px;
+}
+.data-show{
+	height: 90px;
+	line-height: 90px;
+}
+.data-show ul{
+	padding-left: 10px;
+	float: left;
+}
+.data-show ul li{
+	font-size: 16px;
+	display: inline-block;
+	width: 66px;
+	text-align: center;
+	cursor: pointer;
+}
+.data-show ul li.on{
+	color:#55a9e9;
+}
+.data-show div{
+	float: right;
+	padding-right: 20px;
+}
+.data-show div input{
+	border:1px solid #ddd;
+	width: 128px;
+	height: 28px;
+	text-indent: 1em;
+	font-size: 14px;
+	color:#333;
+	border-radius: 4px;
+	outline-color: #10bb71;
+	cursor: pointer;
+	background: url(/static/platform/v2.2.0/images/org/icon_date.png) no-repeat right 4px center;
+}
+#container{
+	height: 320px;
+	width: 100%;
+}
+
+/* shouyi与jiekuan */
+.main-content .member-task li{
+	background-color:#fff;
+	width:49%; 
+	float: left;
+	height: 210px;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+.main-content .member-task li:first-child{
+	margin-right: 2%;
+}
+.main-content .member-task li dl{
+	font-size: 16px;
+}
+.main-content .member-task li dt{
+	color:#10bb71;
+	font-size: 18px;
+}
+.main-content .member-task li dt:before{
+	content:"";
+	display:inline-block;
+	width:17px;
+	height:20px;
+	background-image:url(/static/platform/v2.2.0/images/org/org-per-store.png);
+	vertical-align: middle;
+	margin-right: 10px;
+}
+.main-content .member-task li.income dt:before{
+	background-position: 0 0;
+}
+.main-content .member-task li.later-7 dt:before{
+	background-position: left -24px;
+}
+.main-content .member-task li.shouyi dt:before{
+	width:21px;
+	height:28px;
+	background-position: left -50px;
+}
+.main-content .member-task li.shouyi-7 dt:before{
+	width:22px;
+	height:20px;
+	background-position: left -84px;
+}
+.main-content .member-task li dd.count{
+	font-size: 22px;
+	color:#ff3f36;
+}
+.main-content .member-task li dd.manage{
+	margin-top: 20px;
+}
+.main-content .member-task li dd em{
+	font-size: 28px;
+}
+.income-notice {
+	background-color: #fff;
+	padding-top:50px;
+}
+.order-content {
+	/*margin-bottom: 50px;*/
+	height: 350px;
+	overflow: auto;
+}
+.order-content li,.order-lists{
+	display:flex;
+	line-height: 60px;
+	font-size: 16px;
+	width:100%;
+}
+.order-content li {
+	line-height: 40px;
+	font-size: 14px;
+}
+.order-lists{
+	border-top:1px solid #ddd;
+	border-bottom: 1px solid #ddd;
+
+}
+.order-content li span,.order-lists span{
+	flex:1;
+	color:#666;
+	text-align:center;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	overflow: hidden;
+}
+.order-lists span{
+	color:#333;
+}

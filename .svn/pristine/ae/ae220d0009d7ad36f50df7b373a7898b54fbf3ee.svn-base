@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lifeshs.dao.shop.CategoryDao">
+	<select id="selectCategoryByPid" resultType="com.lifeshs.shop.CategoryDTO">
+		SELECT 
+		c.id,c.cName,c.pid,c.parentNode,c.sort,c.labelId,c.id_path AS idPath,lb.labelName
+		FROM t_shop_category c
+		left join t_shop_label lb on c.labelId=lb.id
+		WHERE c.pid=#{pid}
+		AND c.deleted=1
+		#ORDER BY c.sort ASC
+	</select>
+	
+	<select id="getById" resultType="com.lifeshs.shop.CategoryDTO">
+		SELECT 
+		c.id,c.cName,c.pid,c.parentNode,c.sort,c.labelId,c.id_path AS idPath,lb.labelName
+		FROM t_shop_category c
+		left join t_shop_label lb on c.labelId=lb.id
+		WHERE c.id=#{id}
+	</select>
+	 
+	<select id="getAllCategory" resultType="com.lifeshs.shop.CategoryDTO">
+		SELECT 
+			c.id,c.cName,c.pid,c.parentNode,c.sort,c.labelId,c.id_path AS idPath
+			FROM t_shop_category c
+		 WHERE deleted = 1
+	</select>
+	
+	<insert id="createCategory" parameterType="com.lifeshs.shop.CategoryDTO" useGeneratedKeys="true" keyProperty="id">
+		insert into t_shop_category
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="cName != null">cName,</if>
+			<if test="pid != null">pid,</if>
+			<if test="parentnode != null">parentNode,</if>
+			<if test="sort != null">sort,</if>
+			<if test="labelId != null">labelId,</if>
+			<if test="idPath != null">id_path,</if>
+			<if test="deleted != null">deleted,</if>
+		</trim>
+		VALUES
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="cName != null">#{cName},</if>
+			<if test="pid != null">#{pid},</if>
+			<if test="parentnode != null">#{parentnode},</if>
+			<if test="sort != null">#{sort},</if>
+			<if test="labelId != null">#{labelId},</if>
+			<if test="idPath != null">#{idPath},</if>
+			<if test="deleted != null">#{deleted},</if>
+		</trim>
+	</insert>
+	
+	<update id="removeById">
+		update t_shop_category
+		set deleted=0
+		where id=#{id}
+	</update>
+	
+	<update id="removeByIdPath">
+		update t_shop_category
+		set deleted=0
+		where id_path like CONCAT(#{idPath},'%')
+	</update>
+	
+	<update id="updateCategory" parameterType="com.lifeshs.shop.CategoryDTO">
+		update t_shop_category
+		<trim prefix="SET" suffixOverrides=",">
+			<if test="cName != null">cName=#{cName},</if>
+			<if test="pid != null">pid=#{pid},</if>
+			<if test="parentnode != null">parentNode=#{parentnode},</if>
+			<if test="sort != null">sort=#{sort},</if>
+			<if test="labelId != null">labelId=#{labelId},</if>
+			<if test="idPath != null">id_path=#{idPath},</if>
+			<if test="deleted != null">deleted=#{deleted},</if>
+		</trim>
+		where id=#{id}
+	</update>
+</mapper>

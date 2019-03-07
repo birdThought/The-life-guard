@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lifeshs.dao1.systemManage.DepartmentManageDao">
+
+	<!-- 根据父id获取科室(包括子科室) -->
+	<select id="findDepartment" resultMap="departmentVo">
+		SELECT
+		a.id AS aId,
+		a. NAME AS aName,
+		a.parentId AS aParentId,
+		b.id AS
+		bId,
+		b. NAME AS bName,
+		b.parentId AS bParentId
+		FROM
+		t_data_department a
+		LEFT JOIN t_data_department b ON a.id = b.parentId
+		<where>
+			<if test="parentId != null">
+				a.parentId = #{parentId}
+			</if>
+		</where>
+		ORDER BY a.id
+		LIMIT #{startRow},#{pageSize}
+	</select>
+
+	<!-- 统计科室数量 -->
+	<select id="countDepartment" resultType="int">
+		SELECT COUNT(1)
+		FROM
+		t_data_department a
+		LEFT JOIN t_data_department b ON a.id = b.parentId
+		<where>
+			<if test="parentId != null">
+				a.parentId = #{parentId}
+			</if>
+		</where>
+	</select>
+
+	<!-- 根据id获取子科室 -->
+	<select id="getChildDepartmentById" resultType="com.lifeshs.vo.systemManage.DepartmentVo">
+		SELECT * FROM
+		t_data_department WHERE parentId = #{id};
+	</select>
+	
+	<!-- 添加科室 -->
+	<insert id="addDepartment" parameterType="com.lifeshs.vo.systemManage.DepartmentVo">
+		INSERT INTO
+		t_data_department(name,parentId)
+		VALUES (#{name},#{parentId})
+	</insert>
+	
+	<!-- 更改科室 -->
+	<update id="updateDepartment" parameterType="com.lifeshs.vo.systemManage.DepartmentVo">
+		UPDATE t_data_department
+		<set>
+			<if test="name != null">
+				name = #{name},
+			</if>
+			<if test="parentId !=null">
+				parentId = #{parentId}
+			</if>
+		</set>
+		WHERE id= #{id}
+	</update>
+	
+	<!-- 删除科室	 -->
+	<delete id="deleteDepartment">
+		DELETE FROM t_data_department WHERE id = #{id}
+	</delete>
+	<resultMap type="com.lifeshs.vo.systemManage.DepartmentVo"
+		id="departmentVo">
+		<id property="id" column="aId" />
+		<result property="name" column="aName" />
+		<result property="parentId" column="aParentId" />
+		<collection property="itemList" column="aId"
+			ofType="com.lifeshs.entity.data.TDataDepartment">
+			<id property="id" column="bId" />
+			<result property="name" column="bName" />
+			<result property="parentId" column="bParentId" />
+		</collection>
+	</resultMap>
+
+</mapper>

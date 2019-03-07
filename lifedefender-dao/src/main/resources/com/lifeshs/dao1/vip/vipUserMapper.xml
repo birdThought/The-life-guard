@@ -1,0 +1,272 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lifeshs.dao1.vip.IVipUserDao" >
+    <!--渠道商获取vip用户-->
+    <select id="findVipUserListByBusiness" resultMap="vipUserVO">
+        SELECT u.id as u_id, u.userName as u_userName, u.realName as u_realName, u.mobile as u_mobile, u.userCode as u_userCode,
+        ur.gender as ur_gender, ur.birthday as ur_birthday, ur.height as ur_height, ur.waist as ur_waist,
+        ur.bust as ur_bust, ur.hip as ur_hip, ur.weight as ur_weight, vc.id as vc_id, vc.name as vc_name, uv.id as uv_id, uv.createDate as uv_createDate,
+        uv.status as uv_status, uv.endTime as uv_endTime
+        FROM t_order_vip ov
+        INNER JOIN t_business_card bc ON ov.businessCardId = bc.id
+        INNER JOIN t_user u ON ov.userId = u.id
+        INNER JOIN t_user_vip uv ON ov.userId = uv.userId
+        INNER JOIN t_user_record ur ON ov.userId = ur.userId
+        INNER JOIN t_vip_combo vc ON ov.vipComboId = vc.id
+        WHERE bc.businessId = #{businessId}
+        AND uv.status = #{status}
+        <if test="gender != null">
+            AND ur.gender = #{gender}
+        </if>
+        <if test="endAge != null">
+            AND DATEDIFF(NOW(), ur.birthday) &lt; #{endAge} * 365
+        </if>
+        <if test="startAge != null">
+            AND DATEDIFF(NOW(), ur.birthday) &gt; #{startAge} * 365
+        </if>
+        <if test="vipComboId != null">
+            AND ov.vipComboId = #{vipComboId}
+        </if>
+        <if test="keyword != null">
+            AND (u.realName LIKE CONCAT("%", #{keyword} ,"%") OR u.userName LIKE CONCAT("%", #{keyword} ,"%"))
+        </if>
+        <if test="isEndTime != null">
+            AND DATEDIFF(uv.endTime, NOW()) &gt;= 0 AND DATEDIFF(uv.endTime, NOW()) &lt; 4
+        </if>
+        ORDER BY ov.createDate DESC limit #{startRow}, #{pageSize}
+    </select>
+
+    <!--渠道商获取vip用户数量-->
+    <select id="countVipUserByBusiness" resultType="java.lang.Integer">
+        SELECT count(1)
+        FROM t_order_vip ov
+        INNER JOIN t_business_card bc ON ov.businessCardId = bc.id
+        INNER JOIN t_user u ON ov.userId = u.id
+        INNER JOIN t_user_vip uv ON ov.userId = uv.userId
+        INNER JOIN t_user_record ur ON ov.userId = ur.userId
+        INNER JOIN t_vip_combo vc ON ov.vipComboId = vc.id
+        WHERE bc.businessId = #{businessId}
+        AND uv.status = #{status}
+        <if test="gender != null">
+            AND ur.gender = #{gender}
+        </if>
+        <if test="endAge != null">
+            AND DATEDIFF(NOW(), ur.birthday) &lt; #{endAge} * 365
+        </if>
+        <if test="startAge != null">
+            AND DATEDIFF(NOW(), ur.birthday) &gt; #{startAge} * 365
+        </if>
+        <if test="vipComboId != null">
+            AND ov.vipComboId = #{vipComboId}
+        </if>
+        <if test="keyword != null">
+            AND (u.realName LIKE CONCAT("%", #{keyword} ,"%") OR u.userName LIKE CONCAT("%", #{keyword} ,"%"))
+        </if>
+        <if test="isEndTime != null">
+            AND DATEDIFF(uv.endTime, NOW()) &gt;= 0 AND DATEDIFF(uv.endTime, NOW()) &lt; 4
+        </if>
+    </select>
+
+    <!--客服获取vip用户-->
+    <select id="findVipUserListByCustomer" resultMap="vipUserVO">
+        SELECT u.id as u_id, u.userName as u_userName, u.realName as u_realName, u.mobile as u_mobile, u.userCode as u_userCode, uv.createDate as uv_createDate, u.photo as u_photo,
+        ur.gender as ur_gender, ur.birthday as ur_birthday, ur.height as ur_height, ur.waist as ur_waist,
+        ur.bust as ur_bust, ur.hip as ur_hip, ur.weight as ur_weight, vc.id as vc_id, vc.name as vc_name, uv.id as uv_id,
+        uv.status as uv_status, uv.endTime as uv_endTime
+        FROM t_user_vip uv
+        INNER JOIN t_user u ON uv.userId = u.id
+        INNER JOIN t_user_record ur ON uv.userId = ur.userId
+        INNER JOIN t_vip_combo vc ON uv.vipComboId = vc.id
+        <if test="todayAbnormal != null">
+            LEFT JOIN t_user_healthpackage_measure uhm ON uv.userId = uhm.userId
+        </if>
+        WHERE uv.status = #{status}
+        <if test="gender != null">
+            AND ur.gender = #{gender}
+        </if>
+        <if test="endAge != null">
+            AND DATEDIFF(NOW(), ur.birthday) &lt; #{endAge} * 365
+        </if>
+        <if test="startAge != null">
+            AND DATEDIFF(NOW(), ur.birthday) &gt; #{startAge} * 365
+        </if>
+        <if test="vipComboId != null">
+            AND uv.vipComboId = #{vipComboId}
+        </if>
+        <if test="keyword != null">
+            AND (u.realName LIKE CONCAT("%", #{keyword} ,"%") OR u.userName LIKE CONCAT("%", #{keyword} ,"%"))
+        </if>
+
+        <if test="todayAbnormal != null">
+            AND (uhm.status = 1 AND date_format(uhm.measureDate, '%Y-%m-%d') = CURDATE())
+        </if>
+        <if test="isEndTime != null">
+            AND DATEDIFF(uv.endTime, NOW()) &gt;= 0 AND DATEDIFF(uv.endTime, NOW()) &lt; 4
+        </if>
+        <if test="todayNotMeasure != null">
+            AND u.id NOT IN (SELECT DISTINCT(userId)
+            FROM t_user_healthpackage_measure
+            WHERE date_format(measureDate, '%Y-%m-%d') = CURDATE())
+        </if>
+        <if test="monthNotMeasure != null">
+            AND u.id NOT IN (
+            SELECT DISTINCT(userId)
+            FROM t_user_healthpackage_measure
+            WHERE date_format(measureDate, '%Y-%m-%d') &gt;= date_add(curdate(), interval - day(curdate()) + 1 day)
+            )
+        </if>
+        ORDER BY uv.createDate DESC limit #{startRow}, #{pageSize}
+    </select>
+
+    <select id="countVipUserByCustomer" resultType="java.lang.Integer">
+        SELECT count(1)
+        FROM t_user_vip uv
+        INNER JOIN t_user u ON uv.userId = u.id
+        INNER JOIN t_user_record ur ON uv.userId = ur.userId
+        INNER JOIN t_vip_combo vc ON uv.vipComboId = vc.id
+        <if test="todayAbnormal != null">
+            LEFT JOIN t_user_healthpackage_measure uhm ON uv.userId = uhm.userId
+        </if>
+        WHERE uv.status = #{status}
+        <if test="gender != null">
+            AND ur.gender = #{gender}
+        </if>
+        <if test="endAge != null">
+            AND DATEDIFF(NOW(), ur.birthday) &lt; #{endAge} * 365
+        </if>
+        <if test="startAge != null">
+            AND DATEDIFF(NOW(), ur.birthday) &gt; #{startAge} * 365
+        </if>
+        <if test="vipComboId != null">
+            AND uv.vipComboId = #{vipComboId}
+        </if>
+        <if test="keyword != null">
+            AND (u.realName LIKE CONCAT("%", #{keyword} ,"%") OR u.userName LIKE CONCAT("%", #{keyword} ,"%"))
+        </if>
+
+        <if test="todayAbnormal != null">
+            AND (uhm.status = 1 AND date_format(uhm.measureDate, '%Y-%m-%d') = CURDATE())
+        </if>
+        <if test="isEndTime != null">
+            AND DATEDIFF(uv.endTime, NOW()) &gt;= 0 AND DATEDIFF(uv.endTime, NOW()) &lt; 4
+        </if>
+        <if test="todayNotMeasure != null">
+            AND u.id NOT IN (SELECT DISTINCT(userId)
+            FROM t_user_healthpackage_measure
+            WHERE date_format(measureDate, '%Y-%m-%d') = CURDATE())
+        </if>
+        <if test="monthNotMeasure != null">
+            AND u.id NOT IN (
+            SELECT DISTINCT(userId)
+            FROM t_user_healthpackage_measure
+            WHERE date_format(measureDate, '%Y-%m-%d') &gt;= date_add(curdate(), interval - day(curdate()) + 1 day)
+            )
+        </if>
+    </select>
+
+    <resultMap id="vipUserVO" type="com.lifeshs.vo.vip.VipUserVO">
+        <id property="userId" column="u_id"/>
+        <result property="userName" column="u_userName"/>
+        <result property="realName" column="u_realName"/>
+        <result property="userCode" column="u_userCode"/>
+        <result property="mobile" column="u_mobile"/>
+        <result property="photo" column="u_photo"/>
+        <result property="gender" column="ur_gender"/>
+        <result property="birthday" column="ur_birthday"/>
+        <result property="height" column="ur_height"/>
+        <result property="weight" column="ur_weight"/>
+        <result property="waist" column="ur_waist"/>
+        <result property="bust" column="ur_bust"/>
+        <result property="hip" column="ur_hip"/>
+        <result property="createDate" column="uv_createDate"/>
+        <association property="vipUserPO" javaType="com.lifeshs.po.vip.VipUserPO">
+            <id property="id" column="uv_id"/>
+            <result property="userId" column="u_id"/>
+            <result property="endTime" column="uv_endTime"/>
+            <result property="status" column="uv_status"/>
+        </association>
+        <association property="vipComboPO" javaType="com.lifeshs.po.vip.VipComboPO">
+            <id property="id" column="vc_id"/>
+            <result property="name" column="vc_name"/>
+        </association>
+    </resultMap>
+
+    <!-- 添加vip用户 -->
+    <insert id="addVipUser" parameterType="com.lifeshs.po.vip.VipUserPO">
+        <selectKey resultType="java.lang.Integer" order="AFTER" keyProperty="id">
+            SELECT LAST_INSERT_ID() AS ID
+        </selectKey>
+        INSERT INTO t_user_vip(userId, endTime, status, vipComboId, createDate)
+        VALUES(#{userId}, #{endTime}, #{status}, #{vipComboId}, NOW())
+    </insert>
+    
+    <!-- 更新vip用户 -->
+    <update id="updateVipUser" parameterType="com.lifeshs.po.vip.VipUserPO">
+        UPDATE t_user_vip
+        SET modifyDate = NOW()
+        <if test="endTime != null">, endTime = #{endTime}</if>
+        <if test="status != null">, status = #{status}</if>
+        WHERE id = #{id}
+    </update>
+    
+    <!-- 批量更新 -->
+    <update id="updateVipUserStatusList">
+        UPDATE t_user_vip
+        SET
+            `status` = CASE id
+                <foreach collection="userList" item="u">
+                    WHEN #{u.id} THEN #{u.status}
+                </foreach>
+            END,
+            modifyDate = NOW()
+        WHERE
+            id IN <foreach collection="userList" item="u" open="(" close=")" separator=",">#{u.id}</foreach>
+    </update>
+    
+    <!-- 查找用户的vip列表 -->
+    <select id="findVipUserListWithCondition" resultType="com.lifeshs.po.vip.VipUserPO">
+        SELECT id, userId, endTime, `status`, vipComboId, createDate, modifyDate
+        FROM t_user_vip
+        <where>
+            <if test="userId != null">userId = #{userId}</if>
+            <if test="status != null">AND `status` = #{status}</if>
+            <if test="remainDay != null">AND endTime &lt;= DATE_SUB(NOW(),INTERVAL #{remainDay} DAY)</if>
+        </where>
+    </select>
+    
+    <!-- 获取剩余套餐次数 -->
+    <select id="getComboNumberById" parameterType="int" resultType="java.lang.Integer">
+    	SELECT comboNumber FROM t_vip_combo_item_record
+        <where>
+            <if test="userId !=null">
+                userId = #{userId}
+            </if>
+            <if test="comboId !=null">
+                AND vipComboId = #{comboId} 
+            </if>
+            <if test="comboItemId !=null">
+                AND comboItemId = #{comboItemId}
+            </if>
+        </where>
+    </select>
+
+    <!-- 客服消息推送获取vip用户 -->
+    <select id="findByUserVipList" resultType="com.lifeshs.vo.StatisticsVO">
+        SELECT u.realName,u.mobile,r.weight,r.gender,r.birthday,v.userId FROM
+        t_user_vip v
+        INNER JOIN  t_user u ON u.id = v.userId
+        INNER JOIN  t_user_record r ON  r.userId = v.userId
+        WHERE  v.status = '0'
+        ORDER BY r.birthday DESC
+        LIMIT #{startRow},#{pageSize}
+    </select>
+
+    <!-- 客服消息推送获取vip用户数量 -->
+    <select id="getUserVipCount" parameterType="int" resultType="java.lang.Integer">
+      SELECT count(1) FROM
+        t_user_vip v
+        INNER JOIN  t_user u ON u.id = v.userId
+        INNER JOIN  t_user_record r ON  r.userId = v.userId
+        WHERE  v.status = '0'
+    </select>
+</mapper>

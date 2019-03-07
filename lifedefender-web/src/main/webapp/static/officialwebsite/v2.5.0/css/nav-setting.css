@@ -1,0 +1,25 @@
+div,h1,h2,h3,h4,h5,h6,p {
+	margin:0;
+	padding:0;
+}
+a {
+  text-decoration: none;
+  color:#333;
+}
+a:hover {
+	text-decoration: none;
+	color:#44c660;
+}
+img {
+  border:none;
+  max-width: 100%;
+}
+ul li {
+  list-style: none;
+}
+body {
+	font-family: "Microsoft YaHei",sans-serif;
+	color:#333;
+	background-color: #f7fcff;
+}
+

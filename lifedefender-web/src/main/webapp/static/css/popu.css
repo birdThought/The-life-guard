@@ -1,0 +1,59 @@
+		* {
+			/*outline: 1px solid red;*/
+		}
+		
+		body {
+			margin: 0;
+			padding: 0;
+		}
+		
+		.block_popu {
+			position: fixed;
+			width: 25rem;
+			height: 20rem;
+			top: 50%;
+			left: 50%;
+			margin-top: -10rem;
+			margin-left: -12.5rem;
+			border: 1px solid #DEDEDE;
+			background-color: white;
+		}
+		/*弹出框头*/
+		
+		.popu_title {
+			text-align: center;
+			padding: 1rem 0 1rem 1rem;
+			background-color: #64be5e;
+		}
+		/*弹出框内容*/
+		
+		.popu_content_bar {
+			padding: 0.5rem 0.5rem 0.5rem 0.5rem;
+			text-align: center;
+		}
+		/*弹出框输入框*/
+		
+		.popu_input {
+			height: 1rem;
+		}
+		
+		.popu_input:hover {
+			border: 1px solid #64be5e;
+		}
+		
+		.popu_bottom {
+			width: 100%;
+			position: absolute;
+			bottom: 0;
+			text-align: center;
+		}
+		
+		.popu_bottom_bar {
+			padding: 0.5rem 10rem 0.5rem 10rem;
+		}
+		
+		.popu_btn {
+			border-radius: 0.5rem;
+			background-color: #64be5e;
+			padding: 0.5rem 0 0.5rem 0;
+		}

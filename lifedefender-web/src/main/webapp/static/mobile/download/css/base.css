@@ -1,0 +1,59 @@
+/*
+Name锛氱Щ鍔ㄧ涓嬭浇閾炬帴椤甸潰閫氱敤css閮ㄥ垎
+CreateDate锛�2017/8/22
+*/
+@charset "utf-8";
+*,::before,::after {
+    font-size:14px;
+    margin:0;
+    padding:0;
+    /*娓呮ios绔粯璁ょ殑楂樹寒鏁堟灉閫忔槑鏄剧ず*/
+    -webkit-tap-highlight-color: transparent;
+    /*鐩掑瓙妯″瀷*/
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    font-family:'寰蒋闆呴粦',sans-serif;
+}
+/*娓呴櫎input鏍囩鐨勯粯璁ゆ牱寮�*/
+input {
+    border:none;
+    -webkit-appearance: none;
+    outline:none;
+}
+/*a鏍囩鐨勪笅鍒掔嚎*/
+a {
+    text-decoration: none;
+}
+/*鍘绘帀灏忓渾鐐�*/
+ol,ul {
+    list-style: none;
+}
+/*宸︽诞鍔ㄥ拰鍙虫诞鍔�*/
+.f_l{float-left}
+.f_r{float-right}
+/*娓呮娴姩*/
+.clearfix::before,
+.clearfix::after{
+    content: '';
+    display: block;
+    line-height:0;
+    height:0;
+    visibility: hidden;
+    clear:both;
+}
+.cb {
+    clear:both;
+}
+.b_l{
+    border-left:1px solid #eee;
+}
+.b_r{
+    border-right: 1px solid #ccc;
+}
+.b_t{
+    border-top: 1px solid #eeeeee;
+}
+.b_b{
+    border-bottom:1px solid #eeeeee;
+}

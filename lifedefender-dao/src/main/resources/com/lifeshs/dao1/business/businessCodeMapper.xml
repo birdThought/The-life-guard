@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lifeshs.dao1.business.IBusinessCodeDao">
+
+    <insert id="saveCodePackage" parameterType="com.lifeshs.po.business.BusinessCodePO">
+        INSERT INTO t_code_package(name,orgName,bsId,ageId,superior,createDate,modifyDate,projectType)
+        VALUES (#{name},#{orgName},#{bsId},#{ageId},#{superior},NOW(),#{modifyDate},#{projectType})
+    </insert>
+
+    <select id="findByIdName" resultType="com.lifeshs.po.vip.VipComboPO">
+        SELECT id,`name`,price FROM t_vip_combo WHERE type = 6
+    </select>
+    
+    <select id="findL1All" resultType="com.lifeshs.po.vip.VipComboPO">
+        SELECT l1 FROM T_VIP_COMBO GROUP BY l1
+    </select>
+
+    <select id="findByName" resultType="java.lang.String">
+        SELECT `name` FROM t_vip_combo WHERE id =#{ageId}
+    </select>
+    <select id="findByPackageName" resultType="java.lang.String">
+        select tr.userName from t_business tb INNER JOIN t_org_user tr on tb.orgUserId = tr.id where tb.id=#{id}
+    </select>
+
+    <select id="findCountData" parameterType="int" resultType="java.lang.Integer">
+        select count(*) from t_code_package
+        <where><if test="type != 0">bsId =#{id}</if></where>
+        <where><if test="type == 0">superior =#{superior}</if></where>
+    </select>
+
+    <select id="findListPackage" resultType="com.lifeshs.po.business.BusinessCodePO">
+        select
+        <include refid="ReturnResult"></include>
+        from t_code_package
+        <where><if test="type != 0">bsId =#{id}</if></where>
+        <where><if test="type == 0">superior =#{superior}</if></where>
+        ORDER BY createDate
+        desc limit #{curPage},#{pageSize}
+    </select>
+
+    <delete id="deletePackage" parameterType="java.lang.Integer">
+        delete FROM t_code_package where id =#{id}
+    </delete>
+    
+    <sql id="ReturnResult">
+        id,name,orgName,bsId,ageId,superior,createDate,modifyDate,projectType
+    </sql>
+
+    <update id="updateSellData">
+        UPDATE t_business_user set userName=#{userName},`name`=#{name} where id=#{id}
+    </update>
+</mapper>

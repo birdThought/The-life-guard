@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lifeshs.dao.org.user.OrgUserDao">
+
+    <update id="updateBaseProfile" parameterType="com.lifeshs.pojo.org.profile.BaseProfileDTO">
+        UPDATE t_org_user SET
+        <if test="expertise != null">expertise = #{expertise},</if>
+        <if test="about != null">about = #{about},</if>
+        <if test="address != null">address = #{address},</if>
+        <if test="email != null">email = #{email},</if>
+        modifyDate = NOW()
+        WHERE id = #{userId}
+    </update>
+
+    <select id="getOrgUsersByOrgId" parameterType="integer" resultType="integer">
+        SELECT id
+        FROM t_org_user
+        WHERE orgId = #{orgId} and status = 0
+    </select>
+    
+    <select id="findUserByUserName" resultType="com.lifeshs.po.org.user.OrgUserPO">
+        SELECT * FROM t_org_user WHERE userName = #{userName} AND `status` != 2
+    </select>
+    
+    <select id="getEmployListByRealName" resultType="com.lifeshs.po.org.user.OrgUserPO">
+        SELECT u.id,concat(u.realName,'-',u.mobile) realName FROM t_org_user u 
+        WHERE u.realName like CONCAT('%',#{rName},'%' ) 
+        AND `status` != 2
+         <if test="orgId != 0"> AND u.orgId = #{orgId} </if>
+    </select>
+    
+    <select id="getOrgUserByRealName" resultType="com.lifeshs.po.org.user.OrgUserPO">
+        SELECT o.orgName as userName ,u.id,u.realName  FROM t_org o 
+        INNER JOIN t_org_user u on o.id = u.orgId and u.`status`=0
+        where 1=1 and u.realName =#{rName} and o.type !=0 and o.`status`=0 and o.orgVerified=1 
+    </select>
+    
+    <select id="findComboOrgUserRelation" resultType="com.lifeshs.po.org.user.OrgUserPO">
+        SELECT o.orgName as userName ,u.id,u.realName  FROM t_org o 
+        INNER JOIN t_org_user u on o.id = u.orgId 
+        inner JOIN t_vip_combo_orguser_relation r on r.orgUserId = u.id  
+        where 1=1   and u.`status`=0 and o.type !=0 and u.userType!=0 
+         and r.vipComboId=#{comboId} and r.vipComboItemId = #{vipComboItemId}
+    </select>
+    
+    <select id="findComboServeUserRelation" resultMap="comboServeUserRelationMap">
+        select u.id,u.realName,o.id as oid,o.orgName from t_org_user u 
+        inner JOIN t_org o on o.id = u.orgId 
+        inner join t_vip_combo_orguser_relation r on r.orgUserId = u.id 
+        and r.vipComboId = #{comboId} and r.vipComboItemId = #{vipComboItemId} 
+    </select>
+    
+    <resultMap type="com.lifeshs.pojo.org.OrgUserDTO" id="comboServeUserRelationMap">
+        <id property="id" column="id"/>
+        <result property="realName" column="realName"/>
+        <association property="org" javaType="com.lifeshs.pojo.org.OrgDTO">
+            <id property="id" column="oid"/>
+            <result property="orgName" column="orgName"/>
+        </association>
+        
+    </resultMap>
+    
+    
+    <select id="findUserByVerifyMobile" resultType="com.lifeshs.po.org.user.OrgUserPO">
+        SELECT * FROM t_org_user WHERE mobile = #{mobile} AND mobileVerified = TRUE AND `status` != 2
+    </select>
+    <select id="findUserByVerifyId" resultType="com.lifeshs.po.org.user.OrgUserPO">
+        SELECT id, about, address, birthday,createDate,detail,email, emailVerified,  mobile, mobileVerified,modifyDate,
+        openId, orgId,password, permissionSet, photo, realName,sex,status,tel,token, userCode, userName,
+        userType FROM  t_org_user where id = #{id}
+    </select>
+    
+    <select id="getOrgUserCountByOrgId" parameterType="int" resultType="java.lang.Integer">
+        SELECT count(u.id) 
+        FROM  t_org o
+        INNER JOIN t_org_user u on u.orgId = o.id 
+        where o.id = #{orgId}
+    </select>
+    
+    <select id="findOrgUserByOrgId" resultType="com.lifeshs.po.org.user.OrgUserPO">
+        SELECT u.id,u.realName,u.sex,u.mobile,u.email, u.userType , u.userName, o.type as openId
+        	,u.password,u.photo
+        FROM  t_org o
+        INNER JOIN t_org_user u on u.orgId = o.id 
+        where o.id = #{orgId} 
+    </select>
+    
+    <update id="updateOrgUserPwdByUserId" parameterType="java.util.Map">
+        update t_org_user set PASSWORD = #{pwd},modifyDate = NOW() WHERE id = #{id}
+    </update>
+    
+    <select id="findOrgUserByParam" resultType="com.lifeshs.po.org.user.OrgUserPO">
+        select *from t_org_user ou 
+        where 1=1 
+        <if test="userNo != null"> and ou.userNo=#{userNo} </if>
+        <if test="orgId != null and orgId != 0"> and ou.id = #{orgId} </if>
+    </select>
+    
+    <select id="getShopByOrgId" resultType="com.lifeshs.shop.ShopDTO">
+    	SELECT s.id,s.state FROM t_shop s WHERE s.orgId = #{orgId} LIMIT 1
+    </select>
+    
+</mapper>

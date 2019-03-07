@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!-- 病程单独映射表 -->
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lifeshs.dao.record.IRecordDao">
+	<select id="selectMedicalCourseByMedicalId" resultType="java.util.HashMap">
+		Select *
+		From t_record_medical_course
+		Where medicalId = #{medicalId}
+		Order By
+		visitingDate ASC, id ASC
+	</select>
+	<select id="selectMedicalCourseByMedicalIdPageSplit" resultType="java.util.HashMap">
+		Select * From t_record_medical_course
+		Where medicalId =#{medicalId}
+		Order By id DESC LIMIT #{startIndex},#{pageSize}
+	</select>
+	<select id="selectMedicalCourseByCourseType" resultType="java.util.HashMap">
+		Select *
+		From t_record_medical_course
+		Where courseType =#{courseType} AND
+		medicalId = #{medicalId}
+		Order By visitingDate DESC
+	</select>
+	<select id="selectMedicalCourseByCourseTypePageSplit"
+		resultType="java.util.HashMap">
+		Select * From t_record_medical_course
+		Where courseType
+		=#{courseType}
+		Order By visitingDate DESC LIMIT
+		#{startIndex},#{pageSize}
+	</select>
+	<select id="selectMedicalCourseCountByMedicalId" resultType="java.lang.Integer">
+		Select Count(*) From t_record_medical
+		Where medicalId =#{medicalId}
+	</select>
+</mapper>

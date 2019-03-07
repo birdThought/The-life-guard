@@ -1,0 +1,69 @@
+.c-r-t, .workspace {
+    padding-top: 20px;
+    width: 100%;
+    color: #333;
+    font-size: 16px;
+    height: 54px;
+    border-bottom: 1px dashed #ccc;
+}
+.c-r-t > p:nth-child(1) {
+    width: 100%;
+}
+.icon-cursor {
+    color: #3cbaff;
+    padding-left: 10px;
+}
+.orderCenter {
+    color: #3cbaff;
+}
+
+.account-security {
+    margin-top: 80px;
+    margin-left: 100px;
+}
+.account-security li {
+    margin-bottom: 40px;
+}
+.remind p {
+    padding-left: 100px;
+    color: #666;
+    font-size: 16px;
+}
+.account-security li label {
+    float: left;
+    width: 180px;
+    line-height: 46px;
+    text-align: right;
+    color: #666;
+    font-size: 16px;
+    margin-right: 30px;
+}
+.account-security li input {
+    text-indent: 1em;
+    float: left;
+    width: 378px;
+    height: 44px;
+    border: 1px solid #ddd;
+    outline-color: #17b06d;
+    font-size: 14px;
+    color: #333;
+}
+.save a {
+    display: inline-block;
+    width: 340px;
+    height: 50px;
+    text-align: center;
+    line-height: 50px;
+    color: #fff;
+    font-size: 18px;
+    background: #3cbaff;
+    margin-left: 210px;
+    border-radius: 8px;
+}
+.account-security li:after {
+    content: "";
+    display: block;
+    clear: both;
+    height: 0;
+    visibility: hidden;
+}

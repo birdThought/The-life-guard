@@ -1,0 +1,197 @@
+@charset "utf-8";
+*:before,*:after,*{box-sizing:border-box;
+    -moz-box-sizing:border-box; /* Firefox */
+    -webkit-box-sizing:border-box; /* Safari */
+}
+.container{
+    width:918px;
+    min-height:840px;
+    border:1px solid #ddd;
+    margin:20px 40px;
+    padding:0px 20px 20px;
+}
+.healthInfor{
+    font-weight:500;
+    height: 60px;
+    line-height: 60px;
+    font-size: 18px;
+    border-bottom: 2px solid #48c858;
+}
+.healthInfor:after{
+    content:"";
+    display:block;
+    height:0;
+    visibility: hidden;
+    clear:both;
+}
+.healthInfor h3{
+    float: left;
+    font-weight: 500;
+}
+.healthInfor div{
+    float:right;
+}
+.healthInfor div input[type='search']{
+    width: 280px;
+    height: 36px;
+    padding: 0 8px;
+    font-size: 16px;
+    border: 1px solid #ddd;
+}
+.healthInfor div button{
+    width: 80px;
+    height: 36px;
+    background: #48c858;
+    border-radius: 4px;
+    font-size: 18px;
+    color: #fff;
+    border:none;
+}
+.item-nav{
+    border-bottom:1px solid #ddd;
+    padding:14px 0;
+}
+.item-nav li{
+    display:inline-block;
+    width:90px;
+}
+.item-nav li a{
+    display:block;
+    color:inherit;
+    font-size:16px;
+}
+.item-nav li.on{
+    color:#48c858;
+}
+.item-content{
+    position: relative;
+}
+.item-content-left{
+    width:580px;
+    padding:20px 0;
+}
+.item-content-left li{
+    overflow: hidden;
+    position: relative;
+    margin-bottom: 20px;
+    padding:0 0 20px;
+    border-bottom: 1px solid #ddd;
+}
+.item-content-left li .item-img {
+    float:left;
+    padding:10px 0;
+}
+.item-content-left .item-img img{
+    width:130px;
+    height:90px;
+}
+.item-content-left li .item-news{
+    margin-left:140px;
+    position: relative;
+}
+.item-news h3{
+    font-weight:500;
+    font-size:16px;
+    margin-bottom:10px;
+}
+.item-news p{
+    color:#ccc;
+    margin-bottom: 10px;
+}
+.item-news span{
+    float:right;
+    color:#ccc;
+}
+.item-news span:after{
+    content:"";
+    display: block;
+    height:0;
+    visibility: hidden;
+    clear:both;
+}
+.item-content-left li .spread{
+    position:absolute;
+    top:0;
+    right:0;
+    padding:2px 14px;
+    border:1px solid #48c858;
+    color:#48c858;
+}
+/*右侧健康推荐*/
+.item-content-right{
+    position: absolute;
+    top:0;
+    right: 0;
+    width:280px;
+    padding:20px 0;
+}
+.item-content-top{
+    margin-bottom: 20px;
+}
+.item-content-top .ystuijian{
+    margin-bottom: 10px;
+    border-bottom:1px solid #ddd;
+}
+.item-content-top p a{
+    color:inherit;
+}
+.item-content-top  p.small-title{
+    font-size:16px;
+    width:70px;
+    padding-bottom: 2px;
+    border-bottom: 2px solid #48c858;
+}
+.slide-main img{
+    width:280px;
+    height:150px;
+}
+.slider-extra{
+    padding-left:30px;
+    width:80%;
+    margin:0 auto;
+}
+.slider-extra li{
+    display:inline-block;
+    margin-right:10px;
+    width:24px;
+    height:6px;
+    background-color:#ccc;
+}
+
+.hotNews li{
+    border-bottom: 1px dashed #ddd;
+}
+.hotNews li:first-child{
+    padding-bottom: 20px;
+}
+.hotNews li.news-title {
+    padding:20px 0;
+}
+
+.hotNews li a div{
+    float:left;
+    padding:10px 0;
+}
+.hotNews li img{
+    width:80px;
+    height:60px;
+}
+.hotNews li a p{
+    margin-left:92px;
+}
+
+/*我的收藏*/
+.collect{
+    border-bottom:1px solid #ddd !important;
+}
+.item-content-collect{
+    width:100% !important;;
+}
+.collectBg{
+    background-color:#ccc;
+    border:none !important;
+    border-radius: 4px;
+}
+.collectBg a{
+    color:#fff !important;
+}

@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lifeshs.dao.org.OrgDao" >
+
+    <!-- 获取机构对象 -->
+    <select id="getOrg" resultType="com.lifeshs.pojo.org.v2.OrgDTO">
+        SELECT * FROM t_org WHERE id = #{id}
+    </select>
+
+    <!--获取门店信息-->
+    <select id = "getOrgInfo" resultType="com.lifeshs.pojo.org.profile.OrgProfileDTO">
+        SELECT
+        o.id, o.logo, o.orgName, o.legalPerson, o.contacts, o.contactInformation, o.orgType, o.about, o.province as provinceCode,
+        o.city as cityCode, o.district as districtCode, o.street, o.longitude, o.latitude, o.detail
+        FROM
+        t_org o WHERE o.id = #{orgId}
+    </select>
+
+    <!--更新门店信息-->
+    <update id="updateOrgInfo" parameterType="com.lifeshs.pojo.org.profile.OrgProfileDTO">
+        <selectKey keyProperty="id" resultType="java.lang.Integer">
+            SELECT @@IDENTITY AS id
+        </selectKey>
+        UPDATE
+        t_org o
+        SET
+
+        <if test="logo != null">
+            o.logo = #{logo},
+        </if>
+        <if test="contacts != null">
+            o.contacts = #{contacts},
+        </if>
+        <if test="contactInformation != null">
+            o.contactInformation = #{contactInformation},
+        </if>
+        <if test="about != null">
+            o.about = #{about},
+        </if>
+        <if test="detail != null">
+            o.detail = #{detail},
+        </if>
+        o.modifyDate = NOW()
+        WHERE
+        o.id = #{id}
+    </update>
+ 
+    <update id="updateOrgBankInfo" parameterType="com.lifeshs.pojo.org.bank.BankInfoDTO">
+        UPDATE t_org SET modifyDate = NOW()
+        <if test="bankAccount != null">, bankAccount = #{bankAccount}</if>
+        <if test="bankDistrict != null">, bankDistrict = #{bankDistrict}</if>
+        <if test="bankBranch != null">, bankBranch = #{bankBranch}</if>
+        WHERE id = #{orgId}
+    </update>
+ 
+    <select id="findRecomandedStoreList" resultType="com.lifeshs.pojo.org.v2.OrgDTO">
+        SELECT * FROM t_org o
+        WHERE o.isRecommend = 1 AND o.orgVerified = 1 AND o.`status` = 0 AND o.type = 1
+        ORDER BY id DESC
+        <if test="limit != null">
+            LIMIT #{limit}
+        </if>
+    </select>
+</mapper>

@@ -1,0 +1,8 @@
+table.layui-table {
+    table-layout: auto !important;
+}
+table tbody a:hover {
+    border-bottom: 1px dashed #1E9FFF;
+    color: #1E9FFF;
+    cursor: pointer;
+}

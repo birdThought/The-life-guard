@@ -1,0 +1,8 @@
+<ul class="gongyi-content">
+    <li *ngFor="let gongyiLesson of gongyiLessons; let i = index">
+        <p>
+            {{gongyiLesson.title}}
+        </p>
+        <a href="{{gongyiLesson.url}}"><img src="{{gongyiLesson.img}}" alt="{{gongyiLesson.title}}"/></a>
+    </li>
+</ul>

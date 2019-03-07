@@ -1,0 +1,282 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns="http://www.springframework.org/schema/beans"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans.xsd
+    ">
+    <!-- 配置缓存管理 -->
+    <bean id="cacheManager" class="org.apache.shiro.cache.ehcache.EhCacheManager">
+        <property name="cacheManagerConfigFile" value="classpath:shiro-ehcache.xml"/>
+    </bean>
+    <!-- 凭证匹配器 -->
+    <bean id="credentialsMatcher" class="com.lifeshs.customer.security.credential.CustomCredentials">
+    </bean>
+    <!-- 自定义realm -->
+    <bean id="userRealm" class="com.lifeshs.customer.security.realm.UserRealm" scope="singleton">
+        <property name="cacheManager" ref="cacheManager"/>
+        <property name="cachingEnabled" value="true"/>
+        <property name="credentialsMatcher" ref="credentialsMatcher"/>
+         <property name="authenticationCachingEnabled" value="true"/>
+         <property name="authenticationCacheName" value="authenticationCache"/>
+        <property name="authorizationCachingEnabled" value="true"/>
+        <property name="authorizationCacheName" value="authorizationCache"/>
+    </bean>
+    <!-- session的id生成器 -->
+    <bean id="sessionIdGenerator" class="org.apache.shiro.session.mgt.eis.JavaUuidSessionIdGenerator"/>
+    <!-- 配置sessionId的cookie -->
+    <bean id="sessionIdCookie" class="org.apache.shiro.web.servlet.SimpleCookie">
+        <constructor-arg value="sid"/>
+        <property name="httpOnly" value="true"/>
+        <property name="maxAge" value="2592000"/><!-- 180000 -->
+    </bean>
+    <!-- 配置session缓存Dao -->
+    <bean id="sessionDAO" class="org.apache.shiro.session.mgt.eis.EnterpriseCacheSessionDAO">
+        <property name="activeSessionsCacheName" value="shiro-activeSessionCache"/>
+        <property name="sessionIdGenerator" ref="sessionIdGenerator"/>
+    </bean>
+    <!-- 配置自动登录的cookie -->
+    <bean id="rememberMeCookie" class="org.apache.shiro.web.servlet.SimpleCookie">
+        <constructor-arg value="rememberMe"/>
+        <property name="httpOnly" value="true"/>
+        <property name="maxAge" value="2592000"/><!-- 2592000 -->
+        <!--  30天 -->
+    </bean>
+    <!-- 配置自动登录 -->
+    <bean id="rememberMeManager" class="org.apache.shiro.web.mgt.CookieRememberMeManager">
+        <property name="cipherKey"
+                  value="#{T(org.apache.shiro.codec.Base64).decode('4AvVhmFLUs0KTA3Kprsdag==')}"/>
+        <property name="cookie" ref="rememberMeCookie"/>
+    </bean>
+    <!--   配置sessionManager -->
+    <bean id="sessionManager" class="org.apache.shiro.web.session.mgt.DefaultWebSessionManager">
+        <property name="globalSessionTimeout" value="1800000"/><!-- 1800000 ：30分钟 450000 -->
+        <property name="deleteInvalidSessions" value="true"/>
+        <property name="sessionDAO" ref="sessionDAO"/>
+        <property name="sessionIdCookieEnabled" value="true"/>
+        <property name="sessionIdCookie" ref="sessionIdCookie"/>
+    </bean>
+    <!--配置安全管理器-->
+    <bean id="securityManager" class="org.apache.shiro.web.mgt.DefaultWebSecurityManager">
+        <property name="realm" ref="userRealm"/>
+        <property name="cacheManager" ref="cacheManager"/>
+        <property name="rememberMeManager" ref="rememberMeManager"/>
+        <property name="sessionManager" ref="sessionManager"/>
+    </bean>
+    <!-- 配置shiro过滤 -->
+    <bean id="shiroFilter" class="org.apache.shiro.spring.web.ShiroFilterFactoryBean">
+        <property name="securityManager" ref="securityManager"/>
+        <property name="loginUrl" value="/login"/>
+        <property name="successUrl" value="/"/>
+        <property name="unauthorizedUrl" value="/login"/>
+        <property name="filters">
+            <map>
+                <entry key="authc">
+                    <bean class="com.lifeshs.customer.security.filter.PassThruFilter" />
+                </entry>
+                <entry key="perms">
+                    <bean class="com.lifeshs.customer.security.filter.MyPermissionFilter" />
+                </entry>
+                <entry key="orroles">
+                    <bean class="com.lifeshs.customer.security.filter.OrRolesFilter" />
+                </entry>
+            </map>
+        </property>
+        <property name="filterChainDefinitions">
+            <value>
+                /static/** = anon
+                /login/** = anon
+                /register/** = anon
+                /test/** = anon
+                /index/** = authc
+                /common/** = authc
+                /datalist/** = authc
+                /user/info = authc
+                
+                /member/page = perms[member:get]
+                /member/data/list/** = perms[member:get]
+                /member/offline/page = perms[member_offline:get]
+                /member/offline/register/** = perms[member_offline:get]
+                /member/data/offline/** = perms[member_offline:get]
+                
+                /member/count/page = perms[member:count]
+                /member/data/count/** = perms[member:count]
+                /member/c3/page = perms[member_c3:get]
+                /member/data/c3/** = perms[member_c3:get]
+                /member/hx/page = perms[member_hx:get]
+                /member/data/hx/** = perms[member_hx:get]
+                /member/report/page = perms[member_report:get]
+                /member/data/report/** = perms[member_report:get]
+                /member/data/report/del/** = perms[member_report:del]
+                /member/data/report/update = perms[member_report:edit]
+                /org/page = perms[org:get]
+                /org/add/page = perms[org:get]
+                /org/addOrg = perms[org:add]             
+                /org/data/list/** = perms[org:get]
+                /org/data/operate/recommend/** = perms[org:recommend]
+                /org/data/operate/status/** = perms[org:status]
+                /orgUser/list = perms[org:orguser]
+                /orgUser/listByRealName = perms[org:orguser]
+                /orgUser/updatePwd = perms[org:orguser]
+                /org/check/page = perms[org:check]
+                /org/data/check/** = perms[org:check]
+                /org/data/operate/orgVerify/** = perms[org:check]
+                /org/data/operate/delVeryRecord/** = perms[org:check]
+                /org/recommend/page = perms[org:recommend]
+                /serve/page = perms[serve:get]
+                /serve/projectes/** = perms[serve:get]
+                /serve/statistics/page = perms[serve:statistics]
+                /order/page = perms[order:get]
+                /order/data/** = perms[order:get]
+                /order/count/page = perms[order:count]
+                /order/count/data/** = perms[order:count]
+                /order/flow/page = perms[order_flow:get]
+                /order/flow/data/list/** = perms[order_flow:get]
+                /order/flow/details = perms[order_flow:get]
+                /order/flow/count/page = perms[order_flow:count]
+                /order/flow/count/data/** = perms[order_flow:count]
+                /order/statement/page = perms[order:statement]
+                /order/statement/data/list/** = perms[order:statement]
+                /news/page = perms[news:get]
+                /news/data/list/** = perms[news:get]
+                /news/get = perms[news:get]
+                /news/add = perms[news:add]
+                /news/del = perms[news:del]
+                /news/update = perms[news:edit]
+                /news/column/page = perms[news_column:get]
+                /news/column/data/list/** = perms[news:get]
+                /news/column/getChild = perms[news:get]
+                /news/column/add = perms[news_column:add]
+                /news/column/del = perms[news_column:del]
+                /news/column/update = perms[news_column:edit]
+                /combo/page = perms[combo:get]
+                /combo/list/** = perms[combo:get]
+                /combo/edit = perms[combo:edit]
+                /combo/delete = perms[combo:del]
+                /combo/add = perms[combo:add]
+                /combo/item/page = perms[combo_item:get]
+                /combo/item/list = perms[combo_item:get]
+                /combo/item/work-list/** = perms[combo_item:get]
+                /combo/item/add = perms[combo_item:add]
+                /combo/item/edit = perms[combo_item:edit]
+                /combo/item/delete = perms[combo_item:del]
+                /combo/member/page = perms[combo_member:get]
+                /combo/member/data/** = perms[combo_member:get]
+                /combo/invite-code/page = perms[combo:code]
+                /combo/invite-code/list/** = perms[combo:code]
+                /combo/invite-code/apply = perms[combo:code]
+                /combo/member/worklist/page = perms[combo_member_worklist:get]
+                /combo/member/worklist/data/** = perms[combo_member_worklist:get]
+                /combo/member/worklist/finish/** = perms[combo_member_worklist:finish]
+                /report-analysis/page = perms[analysis:get]
+                /report-analysis/list-order/** = perms[analysis:get]
+                /report-analysis/reply-order = perms[analysis:finish]
+                /drugs/page = perms[drugs:get]
+                /drugs/data/** = perms[drugs:get]
+                /drugs/synchro = perms[drugs:sync]
+                /drugs/order/page = perms[drugs:order]
+                /drugs/order/data/** = perms[drugs:order]
+                /sms/page = perms[push:get]
+                /sms/send/page = perms[push:sms]
+                /sms/data/list/** = perms[push:get]
+                /sms/data/send = perms[push:sms]
+                /push/page = perms[push:get]
+                /push/app = perms[push:app]
+                /push/sms = perms[push:sms]
+                /coupon/index = perms[coupon:get]
+                /coupon/add = perms[coupon:add]
+                /coupon/list/** = perms[coupon:get]
+                /coupon/del/** = perms[coupon:del]
+                /coupon/orgId/** = perms[coupon:get]
+                /coupon/store/** = perms[coupon:get]
+                /coupon/business/** = perms[coupon:get]
+                /coupon/package/index = perms[coupon_pkg:get]
+                /coupon/package/list/** = perms[coupon_pkg:get]
+                /coupon/package/add = perms[coupon_pkg:add]
+                /coupon/package/del/** = perms[coupon_pkg:del]
+                /business/page = perms[business:get]
+                /business/list/** = perms[business:get]
+                /business/add/page = perms[business:add]
+                /business/add = perms[business:add]
+                /business/user/list = perms[business:user]
+                /business/user/edit = perms[business:user]
+                /agent/page = perms[agent:get]
+                /agent/list/** = perms[agent:get]
+                /agent/add/page = perms[agent:add]
+                /agent/add = perms[agent:add]
+                /pv/visit/page = perms[visit:get]
+                /pv/visit/list/** = perms[visit:get]
+                /pv/back/login/page = perms[back_visit:login]
+                /pv/back/login/** = perms[back_visit:login]
+                /pv/back/visit/page = perms[back_visit:visit]
+                /pv/back/visit/** = perms[back_visit:visit]               
+                
+                
+                /commodity/page = perms[commodity:get]  
+                /commodity/data/list/** = perms[commodity:get]
+                /commodity_cif/page = perms[commodity_cif:get]
+                /commodity_cif/data/list/** = perms[commodity_cif:get]
+                
+                
+                /commodity/goods/page = perms[commodity:get]
+                <!-- 
+                /commodity/goods/list/** = perms[commodity:list]
+                /commodity/goods/toAdd = perms[commodity:add]
+                /commodity/goods/addInit = perms[commodity:addInit]
+                 -->
+                /commodity/goods/** = perms[commodity:opera]
+                /combo/uploadFile/img = perms[commodity:upload]
+                /commodity/classify/page = perms[commodity_cif:get]
+                /commodity/shop/page = perms[commodity_shop:get]
+                /commodity/order/page = perms[commodity_order:get]
+                /commodity/order/** = perms[commodity_order:opera]
+               /commodity/recommend/category = perms[commodity_tuijian:category]
+                /commodity/recommend/advert = perms[commodity_tuijian:advert]
+                
+                /user/page = perms[user_manage:get]
+                /user/list/** = perms[user_manage:get]
+                /user/add = perms[user_manage:add]
+                /account/security/page = perms[user:get]
+                /account/security/password = perms[user:pwd]
+                /role/page = perms[role:get]
+                /role/data = perms[role:get]
+                /role/del/** = perms[role:del]
+                /role/select/** = perms[role:get]
+                /permission/page = perms[permiss:get]
+                /permission/get/** = perms[permiss:get]
+                /permission/getOperation = perms[permiss:get]
+                /permission/save = perms[permiss:save]
+                /permission/del = perms[permiss:del]
+                
+                <!-- +++++++++++++++++++++++++++++++ -->
+                
+                /permission/savePermission = perms[permiss:add]
+                /permission/delPermiss = perms[permiss:get]
+                /permiss/pagePermission = perms[role:get]
+                /role/updateRolePermission = perms[permiss:update]
+                /permission/addOperation = perms[permiss:add]
+                /permission/delOperationList = perms[permiss:del]
+                /permission/updatePermission = perms[permiss:add]
+                /role/updateRolePermission2 = perms[role:update]
+                
+                <!-- +++++++++++++++++++++++++++++++++ -->
+                
+                /data/department/** = perms[data:department]
+                /data/foodKind/** = perms[data:foodKind]
+                /data/food/** = perms[data:food]
+                /data/sport/** = perms[data:sport]
+                /data/sportKind/** = perms[data:sportKind]
+                /data/measure-suggection/** = perms[data:suggection]
+                /data/measure-reason/** = perms[data:reason]
+                /app-version/** = perms[data:app]
+                /weixin/** = perms[data:weixin]
+
+                <!--/** = authc-->
+                /** = roles[super]
+            </value>
+        </property>
+    </bean>
+    <!-- Shiro生命周期处理器-->
+    <bean id="lifecycleBeanPostProcessor" class="org.apache.shiro.spring.LifecycleBeanPostProcessor"/>
+
+
+</beans>

@@ -1,0 +1,214 @@
+/*
+* @Author: Administrator
+* @Date:   2017-04-06 15:42:28
+* @Last Modified by:   Administrator
+* @Last Modified time: 2017-04-11 11:35:05
+*/
+@charset "uft-8";
+body{
+background: url(../images/login-bg.png) no-repeat;
+max-width: 100%;
+}
+html {
+    overflow-x: hidden;
+    overflow-y: auto;
+}
+.login_content{
+	height: 960px;
+}
+.g-right{
+	position: absolute;
+	right: 20%;
+	top: 196px;
+}
+.login_form{
+	background-color: rgba(255,255,255,.6);
+	width: 480px;
+	padding-left: 44px;
+	padding-right: 44px;
+	box-shadow: 2px 2px 10px rgba(0,0,0,.2);
+	border-radius: 10px;
+	position: relative;
+
+}
+.magic-checkbox:checked + label:before{
+	border:1px solid #48c858;
+	background-color: transparent;
+}
+.magic-checkbox + label:after {
+	border-color:#48c858;
+}
+.login_header {
+	height: 100px;
+}
+.login_header .login-switch{
+	position: absolute;
+	right: 0;
+	top: 0;
+}
+.login_header .login-switch .login_icon{
+	cursor: pointer;
+	width: 76px;
+	height: 76px;
+	display: block;
+	overflow: hidden;
+	background-image: url(../images/icon/login-icon.png);
+}
+.login_header .login-switch .quick{
+	background-position: right 0;
+}
+.login_header .login-switch .static{
+	background-position: right -76px;
+	display: none;
+
+}
+.login_header h3{
+	text-align: center;
+	line-height: 100px;
+	font-size: 24px;
+	color: #333;
+	font-weight: 500;
+}
+.static-form ul > li{
+	font-size: 16px;
+	margin-bottom: 30px;
+}
+.static-form ul >li:nth-last-child(2){
+	margin-bottom: 20px;
+}
+.static-form li input{
+	width: 100%;
+	height: 42px;
+	border: 1px solid #ccc;
+	border-radius: 4px;
+	outline-color: #48c858;
+	text-indent: 2em;
+	font-size: 16px;
+}
+.static-form li input:focus{
+	/* color: #48c858; */
+	border-color:#48c858;
+}
+.static-form li input[type=submit]{
+	background-color:#369239; 
+	color: #fff;
+	letter-spacing: 2px;
+	border: 1px solid #369239;
+	cursor: pointer;
+	text-indent:0;
+}
+.setFlex {
+	 display: flex;
+  	 justify-content: space-between;
+  	 font-size: 16px;
+}
+.thirdParty{
+	margin-top: 40px;
+	font-size: 16px;
+}
+.thirdParty li:first-child{
+	position: relative;
+	padding-left: 120px;
+	color: #333;
+}
+.thirdParty li:first-child:before{
+	content: "";
+	position: absolute;
+	top: 50%;
+	left: 22px;
+	height: 1px;
+	width: 88px;
+	background:-webkit-linear-gradient(right,#777,#fff);
+}
+.thirdParty li:first-child:after{
+	content: "";
+	position: absolute;
+	top: 50%;
+	right: 22px;
+	height: 1px;
+	width: 88px;
+	background:-webkit-linear-gradient(left,#777,#fff);
+}
+.thirdParty_list{
+	height: 150px;
+	width: 100%;
+	display: flex;
+	justify-content: space-around;
+	align-items: center;
+}
+.thirdParty_list span{
+	cursor: pointer;
+	display: block;
+	width: 54px;
+	height: 54px;
+	background-image:url(../images/icon/login-icon.png) ;
+}
+.thirdParty_list a:first-child span{
+	margin-left: 10px;
+	background-position: left top;
+}
+.thirdParty_list a:last-child span{
+	margin-left: -70px;
+	background-position: -57px top;
+}
+.thirdParty_list a:first-child span:hover{
+	background-position: left -57px;
+}
+.thirdParty_list a:last-child span:hover{
+	background-position: -57px -57px;
+}
+.register-now:hover{
+	color:#44c660;
+	border-bottom:1px dashed #44c660;
+}
+
+/*  QR code style*/
+.qrcode-img{
+	text-align: center;
+}
+.qrcode-mod {
+	padding-bottom: 150px;
+}
+.qrcode-main{
+	position: relative;
+}
+.qrcode-main .msg-err{
+	width: 140px;
+    height: 140px;
+    background: rgba(255,255,255,.95);
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    -ms-transform:translate(-50%, -50%);/* Internet Explorer */
+	-moz-transform:translate(-50%, -50%); /* Firefox */
+	-webkit-transform:translate(-50%, -50%); /* Safari 鍜� Chrome */
+	-o-transform:translate(-50%, -50%); /* Opera */
+    z-index: 9999;
+}
+.qrcode-main .msg-err h6{
+	color: #3c3c3c;
+    margin-top: 38px;
+    margin-bottom: 8px;
+    text-align: center;
+}
+.qrcode-main .refresh{
+	width: 100px;
+    height: 36px;
+    line-height: 36px;
+    text-align: center;
+    margin: 0 auto;
+    background: #f40;
+    display: block;
+    color: #fff;
+    border-radius: 3px;
+}
+.none{
+	display: none;
+}
+.qrcode-mod h3{
+	font-size: 16px;
+	font-weight: 500;
+	text-align: center;
+	margin-top: 26px;
+}

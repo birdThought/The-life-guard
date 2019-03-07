@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lifeshs.dao.org.manage.ManageOrgDao" >
+    
+    
+    <!-- 获取机构数量 -->
+    <select id="getCountOfOrg" resultType="java.lang.Integer">
+        SELECT count(1) FROM t_org WHERE parent = #{orgId} 
+        <if test="orgName!= null and orgName !='' ">
+            or orgName like CONCAT('%',#{orgName},'%' )
+        </if>
+    </select>
+    
+    <!-- 获取机构信息 -->
+    <select id="listManageOrg" resultType="com.lifeshs.entity.org.TOrg">
+        SELECT parent,id,orgName,orgType,logo,tel,contactInformation,type,province,city,district,street FROM t_org WHERE parent = #{orgId}
+        <if test="orgName!= null and orgName !='' ">
+            or orgName like CONCAT('%',#{orgName},'%' )
+        </if>
+    </select>
+
+    <!-- 根据机构id查找下级机构 -->
+    <select id="findOrgListByOrgId" resultType="com.lifeshs.entity.org.TOrg">
+        SELECT parent,id,orgName,orgType,logo,tel,contactInformation,type,province,city,district,street FROM t_org WHERE parent = #{orgId}
+    </select>
+    
+    <!-- 根据机构id查找员工 -->
+    <select id="findOrgUserByOrgId" resultType="com.lifeshs.po.org.user.OrgUserPO">
+        SELECT u.id,u.realName,u.sex,u.mobile,u.email, u.userType , u.userName
+        FROM  t_org o
+        INNER JOIN t_org_user u on u.orgId = o.id 
+        where o.id = #{orgId} 
+    </select>
+    
+    <!--更新门店信息-->
+    <update id="updateOrgByMobile" parameterType="com.lifeshs.pojo.org.profile.OrgProfileDTO">
+        <selectKey keyProperty="id" resultType="java.lang.Integer">
+            SELECT @@IDENTITY AS id
+        </selectKey>
+        UPDATE
+        t_org o
+        SET
+        parent = #{orgId},
+        o.modifyDate = NOW() 
+        WHERE
+        o.contactInformation=#{mobile}
+    </update>
+    
+    <select id="getOrgById" resultType="com.lifeshs.entity.org.TOrg" >
+    	SELECT * FROM t_org 
+    	WHERE id = #{orgId}
+    </select>
+    
+</mapper>

@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lifeshs.dao1.employee.IEmployeeDao" >
+    <!-- 获得单个用户信息 -->
+    <select id="getEmployeeList" resultType="com.lifeshs.dto.manager.employee.GetEmployeeListData">
+        SELECT * FROM t_org_user WHERE orgId=${orgId} and status=0 and userType=1
+        <if test="realName != null">
+            and realName like CONCAT('%',#{realName},'%' )
+        </if>
+        limit ${startRow},${lenght};
+    </select>
+
+    <select id="getEmployeeCount" resultType="java.lang.Integer">
+        SELECT count(*) FROM t_org_user WHERE orgId=${orgId} and status=0 and userType=1
+    </select>
+
+    <select id="getEmployee" resultType="com.lifeshs.po.EmployeePO">
+        SELECT * FROM t_org_user WHERE id=${employeeId}
+    </select>
+
+    <!-- 获取健康课堂的服务师成员 -->
+    <select id="findEmployeeListByLesson" resultType="com.lifeshs.dto.manager.serve.LessonUserInfo">
+        SELECT u.userName,u.photo,u.realName,u.id as userId,u.userCode,u.mobile,u.sex,u.email,u.tel FROM t_org_user u WHERE u.id in(SELECT orgUserId FROM t_order WHERE projectCode=#{projectCode} GROUP BY orgUserId)
+    </select>
+
+    <!-- 更新个人信息(仅地址、简介、专长） -->
+    <select id="updateEmployeeMine" resultType="java.lang.Integer">
+        UPDATE t_org_user SET address=#{address},about=#{about},expertise=#{expertise} WHERE id=${employeeId}
+    </select>
+
+    <!-- 员工离职 -->
+    <select id="leaveJob" resultType="java.lang.Integer">
+        UPDATE t_org_user SET status=4 WHERE id=${employeeId}
+    </select>
+
+    <!--获取管理员-->
+    <select id="findManage" resultType="com.lifeshs.po.EmployeePO">
+        SELECT * FROM t_org_user o WHERE o.orgId = #{orgId} AND (o.userType = 0 OR o.userType = 2) AND o.`status` = 0 order by id desc limit 1
+    </select>
+
+    <!--根据用户的订单获取所属服务师id列表-->
+    <select id="findEmployeeListByUserId" resultType="java.lang.Integer">
+        SELECT o.orgUserId
+        FROM t_order o
+        WHERE o.userId = #{userId} AND o.status = 3 AND orderType = 1
+        GROUP BY o.orgUserId
+    </select>
+
+</mapper>

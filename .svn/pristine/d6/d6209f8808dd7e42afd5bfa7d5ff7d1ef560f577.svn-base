@@ -1,0 +1,8 @@
+"use strict";
+var GongyiLessonResponse = (function () {
+    function GongyiLessonResponse() {
+    }
+    return GongyiLessonResponse;
+}());
+exports.GongyiLessonResponse = GongyiLessonResponse;
+//# sourceMappingURL=gongyi-lesson-response.js.map

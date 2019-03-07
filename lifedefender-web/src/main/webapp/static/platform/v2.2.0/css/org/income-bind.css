@@ -1,0 +1,69 @@
+/*
+* @Author: Administrator
+* @Date:   2017-05-13 17:52:35
+* @Last Modified by:   Administrator
+* @Last Modified time: 2017-05-13 17:59:28
+*/
+.main-content{
+	background: #fff;
+}
+.store-href{
+	line-height: 50px;
+    font-size: 16px;
+    padding-left: 22px;
+}
+.store-href a,.store-href span{
+	color: #666;
+}
+.store-href em{
+	margin-left: 6px;
+    margin-right: 6px;
+    color: #666;
+}
+.store-infor{
+	margin-top: 80px;
+    margin-left: 100px;
+}
+
+.store-infor li label{
+	float: left;
+    width: 180px;
+    line-height: 46px;
+    text-align: right;
+    color: #666;
+    font-size: 16px;
+    margin-right: 30px;
+}
+.store-infor li{
+    margin-bottom: 40px;
+}
+.store-infor li input{
+	text-indent: 1em;
+    float: left;
+    width: 378px;
+    height: 44px;
+    border: 1px solid #ddd;
+    outline-color: #17b06d;
+    font-size: 14px;
+    color: #333
+}
+.save a {
+    display: inline-block;
+    width: 340px;
+    height: 50px;
+    text-align: center;
+    line-height: 50px;
+    color: #fff;
+    font-size: 18px;
+    background: #10bb71;
+    margin-left: 210px;
+    border-radius: 8px;
+}
+.store-infor li:after{
+	 content: "";
+    display: block;
+    clear: both;
+    height: 0;
+    visibility: hidden;
+}
+   

@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lifeshs.dao1.combo.ComboDao">
+
+
+    <!-- 根据id获取套餐 -->
+    <select id="getCombovoById" resultType="com.lifeshs.vo.combo.ComboVo">
+        SELECT * FROM t_vip_combo WHERE id=#{id}
+    </select>
+    
+	<!-- 根据id获取套餐 -->
+	<select id="getCombo">
+		SELECT * FROM t_vip_combo WHERE id=#{id}
+	</select>
+	<!-- 统计套餐数量 -->
+	<select id="countCombo" resultType="java.lang.Integer">
+		SELECT COUNT(1) FROM
+		t_vip_combo
+	</select>
+	<!--统计套餐中的套餐项目数量 -->
+	<select id="countComboItem" resultType="java.lang.Integer">
+		SELECT COUNT(1) FROM 
+		t_vip_combo_item_relation 
+		WHERE vipComboId=#{vipComboId}
+	</select>
+	
+
+	<!-- 获取套餐列表 -->
+	<select id="findComboList" resultType="com.lifeshs.vo.combo.ComboVo">
+		SELECT
+		id,`name`,description,price,originalPrice,photo,validDay,detail,suitablePeople,type,createDate,l1 
+		FROM t_vip_combo  
+        order by createDate desc 
+		LIMIT #{startRow},#{pageSize}
+	</select>
+
+	<!-- 更改套餐 -->
+	<update id="updateCombo">
+		UPDATE t_vip_combo SET
+		<if test="name != null">
+			name = #{name},
+		</if>
+		<if test="description != null">
+			description = #{description},
+		</if>
+		<if test="price != null">
+			price = #{price},
+		</if>
+		<if test="originalPrice != null">
+			originalPrice = #{originalPrice},
+		</if>
+		<if test="photo != null">
+			photo = #{photo},
+		</if>
+		<if test="validDay != null">
+			validDay = #{validDay},
+		</if>
+		<if test="detail != null">
+			detail = #{detail},
+		</if>
+		<if test="type != null">
+			type = #{type},
+		</if>
+        <if test="l1 != null">
+            l1 = #{l1},
+        </if>
+		modifyDate = NOW()
+		WHERE id = #{id}
+	</update>
+	<!-- 删除套餐 -->
+	<delete id="delCombo" parameterType="int">
+		DELETE FROM t_vip_combo
+		WHERE id = #{id}
+	</delete>
+	<!--添加套餐 -->
+	<insert id="addCombo" parameterType="com.lifeshs.vo.combo.ComboVo">
+		<selectKey resultType="java.lang.Integer" order="AFTER" keyProperty="id">
+            SELECT LAST_INSERT_ID() AS ID
+        </selectKey>
+		INSERT INTO
+		t_vip_combo
+		(`name`,description,price,originalPrice,photo,validDay,detail,suitablePeople,type,l1,createDate)
+		VALUES
+		(#{name},#{description},#{price},#{originalPrice},#{photo},#{validDay},#{detail},#{suitablePeople},#{type},#{l1},NOW())
+	</insert>
+	<!-- 查询套餐项目列表 -->
+	<select id="findItemList" resultType="com.lifeshs.vo.combo.ComboItemListVo">
+		SELECT id,name FROM t_vip_combo_item
+	</select>
+	
+	<resultMap 
+		type="com.lifeshs.vo.combo.ComboVo" id="comboVO">
+		<id property="id" column="aId"/>
+		<result property="name" column="aName"/>
+		<result property="description" column="description"/>
+		<result property="price" column="price"/>
+		<result property="originalPrice" column="originalPrice"/>
+		<result property="photo" column="photo"/>
+		<result property="validDay" column="validDay"/>
+		<result property="detail" column="detail"/>
+		<result property="suitablePeople" column="suitablePeople"/>
+		<result property="type" column="type"/>
+		<result property="createDate" column="createDate"/>
+		<collection property="ComboItemList" notNullColumn="cId"
+            ofType="com.lifeshs.vo.combo.ComboItemListVo">
+            <id property="id" column="cId"/>
+            <result property="name" column="cName"/>
+            <result property="number" column="bNumber"/>
+            </collection>
+		</resultMap>
+
+
+</mapper>

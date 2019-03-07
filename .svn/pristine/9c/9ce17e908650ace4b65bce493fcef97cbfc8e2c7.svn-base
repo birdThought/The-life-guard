@@ -1,0 +1,20 @@
+@charset "utf-8";
+ *:before,*:after,*{box-sizing:border-box;} 
+.container{
+	width:918px;
+	height:840px;
+	border:1px solid #ddd;
+	margin:20px 40px;
+}
+.container h3{
+	height:60px;
+	line-height:60px;
+	font-size:18px;
+	font-weight:400;
+	margin:0 30px 20px;
+	border-bottom:1px dashed #ddd;
+}
+.container p{
+	text-align:center;
+	font-size:16px;
+}

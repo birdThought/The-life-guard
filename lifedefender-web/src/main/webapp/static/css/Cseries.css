@@ -1,0 +1,698 @@
+@charset "utf-8";
+*,*:before,*:after{
+	box-sizing:border-box;
+	-moz-box-sizing:border-box; /* Firefox */
+	-webkit-box-sizing:border-box; /* Safari */
+}
+.container{
+	margin:20px 40px;
+	width:918px;
+	border:1px solid #ddd;
+	min-height:1100px;
+}
+.container .introduce{
+	height:60px;
+	line-height:60px;
+	font-size:18px;
+	margin:0 20px 20px;
+	border-bottom:1px dashed #ddd;
+}
+.introduce h3{
+	font-weight:400;
+}
+.container .Cseries_nav,.container .HLseries_nav{
+	margin-left:20px;
+	line-height:50px;
+	font-size:16px;
+	background:#f1f1f1;
+	width:160px;
+	text-align:center;
+	position: absolute;
+}
+.container .Cseries_nav li,.container .HLseries_nav li{
+	cursor:pointer;
+	transition:background-color 0.3s;
+}
+.container .Cseries_nav li.action,.container .HLseries_nav li.action{
+	background-color:#fff;
+	color:#48c858;
+	border-left:6px solid #48c858;
+}
+.container .Cseries_nav li:not(.action):hover,.container .HLseries_nav li:not(.action):hover{
+	background-color:#fff;
+	color:#48c858;
+	border-left:6px solid #48c858;
+	border-right:none
+}
+
+.Cseries_nav .CsTitle,.HLseries_nav .HLTitle{
+	background:#e4e7ec;
+	font-size: 18px;
+	text-align: left;
+	text-indent: 1.5em;
+}
+.container .Cseries_nav li.CsTitle:hover,.container .HLseries_nav li.HLTitle:hover{
+	background:#e4e7ec;
+	cursor:default;
+	border:none;
+	color:#6c6c6c
+}
+.CsContent,.HLContent{
+	width:700px;
+	margin-right:18px;
+	position: relative;
+	left:150px;
+}
+.item-fr{
+	float: right;
+}
+.CsTitle a{
+	cursor: default !important;
+}
+.Cseries_nav a{
+	cursor: pointer;
+}
+/* Map */
+#allmap,#allmap2,#allmap3{
+	width: 700px;
+	height: 500px;
+	overflow: hidden;
+	margin:0;
+	font-family:"微软雅黑";
+}
+/* 当前定位 */
+.searchLocate{
+	font-size:16px;
+	margin-bottom:10px;
+}
+.searchLocate input:first-child{
+	height:30px;
+	padding:0 8px;
+	border-radius:3px;
+	border:1px solid #ddd
+}
+.greenBtn{
+	cursor:pointer;
+	width:80px;
+	height:28px;
+	line-height:28px;
+	background:#48c858;
+	border:none;
+	color:#fff;
+	font-size:14px;
+	border-radius:3px;
+	text-align:center;
+	outline:none
+}
+.greenBtn:active{
+	background:#34af44;
+}
+.whiteBtn{
+	width:80px;
+	height:28px;
+	background:#f1f1f2;
+	border:1px solid #ddd;
+	color:#666;
+	font-size:14px;
+	border-radius:5px;
+	text-align:center;
+}
+
+/* 电子围栏 &轨迹回放*/
+.noticeBorder{
+	border: 1px solid #48c858 !important;
+}
+.electricFence,.orbitRun{
+	position: relative;
+}
+.electricFence .createFance,
+.orbitRun .createFance{
+	background-color:#f1f1f2;
+	padding-left:20px;
+	overflow:hidden;
+	border-bottom:1px solid #ddd;
+}
+.electricFence .createFance li,
+.orbitRun .createFance li{
+	margin:10px auto;
+	float:left;
+	margin-right: 20px;
+	border:1px solid #ddd;
+	padding:4px 20px;
+	border-radius:5px;
+}
+ .createFance li:hover{
+	background: #fff;
+	color:#48c858
+}
+
+.electricFence .setFance,
+.orbitRun .setFance{
+	/*height:502px;*/
+	width:260px;
+	background:#f1f1f2;
+	overflow-y:auto;
+	overflow-x:hidden;
+	padding-left:20px;
+	padding-right:20px;
+	position: absolute;
+	top:90px;
+	z-index:1;
+	display: none;
+}
+.setFance li input{
+	width:192px;
+	height:28px;
+	border:1px solid #ddd;
+	border-radius:3px;
+	padding:0 8px
+}
+.setFance h3{
+	font-size:20px;
+	line-height:40px;
+	font-weight:500;
+	padding-top:6px;
+	border-bottom:1px solid #ddd;
+}
+.orbitRun .setFance li:first-child{
+	height:320px;
+} 
+.orbitRun .setFance li:last-child{
+	border:none;
+}
+.orbitBtn{
+	border: 1px solid #ddd;
+    padding: 6px 18px;
+    border-radius: 5px;
+    cursor:pointer;
+}
+.setFance ul{
+	margin-bottom:20px;
+}
+.setFance li{
+	border-bottom:1px dashed #ddd;
+	line-height:20px;
+	padding-bottom:10px;
+	margin-bottom:5px;
+}
+.setFance li em{
+	margin-right:8px;
+}
+.setFance li table{
+	font-size:16px;
+	line-height:36px;
+	width:250px;
+	text-align:left;
+}
+.setFance li:nth-of-type(6){
+	text-align:center;
+	padding-bottom:10px;
+	border-bottom:1px solid #ddd;
+}
+.setFance li:nth-of-type(7){
+	border:none;
+}
+.setFance li:nth-of-type(6) span{
+	border:1px solid #ddd;
+	padding:6px 18px;
+	border-radius:5px;
+	cursor:pointer
+}
+
+.setFance li:nth-of-type(7) span{
+	padding:6px 24px;
+	border:1px solid #ddd;
+	border-radius:5px;
+	margin-right:10px;
+}
+.setFance li td{
+	border:none;
+}
+.setFance td input{
+	background:url(../plugins/My97DatePicker/skin/datePicker.gif) no-repeat right;
+	text-indent:10px;
+	width:80px;
+	height:28px;
+	border:1px solid #ddd;
+	border-radius: 5px;
+}
+.setFance td em{
+	margin-left:8px;
+	margin-right:8px;
+}
+
+
+/* 实时监听 */
+.monitor span{
+	display:none;
+	margin: 0px;
+}
+.monitor_show span{
+	display: block;
+	cursor: pointer;
+}
+.monitor_td{
+	width: 120px;
+	text-align: center;
+	
+}
+.CsContent dl,.HLContent dl{
+	font-size:16px;
+	margin-bottom: 10px;
+}
+.CsContent dl dd,.HLContent dl dd{
+
+	font-size:14px;
+
+}
+.CsContent dl dd:nth-of-type(2n-1){
+	margin-top:10px;
+}
+.CsContent table,.HLContent table{
+	border-collapse:collapse;
+	line-height:40px;
+	width:700px;
+	text-align:center;
+}
+table th,table td{
+	border-bottom:1px solid #ddd;
+
+}
+table thead{
+	background:#ddd;
+}
+.monitor td span{
+	margin-left: 20px;
+}
+.monitor th ul{
+	width:100px;
+	position: absolute;
+	top:100%;
+	left:50%;
+	border:1px solid #848a93;
+	z-index:999;
+	color:white;
+	background-color:rgba(0,0,0,0.8);
+}
+.monitor th ul li{
+	line-height:40px;
+	height:40px;
+	cursor:pointer;
+	font-weight: normal;
+}
+.monitor th img{
+	transition:all 0.8s;
+	margin-left:8px;
+	cursor:pointer
+}
+.monitor th ul li:hover{
+	background-color:#000
+}
+/* 设备号码修改 */
+.changeNumber p{
+	margin-bottom:20px;
+	font-size:16px;
+}
+.changeNumber p.firstAlign{
+	margin-top:40px;
+	padding-left:20px;
+}
+.changeNumber p input{
+	width:220px;
+	height:40px;
+	border:1px solid #ddd;
+	border-radius:3px;
+	margin-left:30px;
+	padding:0 8px
+}
+.changeNumber p span{
+	color:skyblue;
+	margin-left:20px;
+	border-bottom:1px solid skyblue;
+	cursor: pointer;
+}
+.changeNumber_form li{
+	margin-bottom:10px;
+}
+.changeNumber_form li input{
+	width:290px;
+	height:40px;
+	border:1px solid #ddd;
+	border-radius:5px;
+	padding:0 8px;
+	margin-top:6px;
+	margin-left:15px;
+}
+.changeNumber_form .li_error{
+	color: #96120E;
+	margin-left: 15px;
+	margin-top: 10px;
+}
+button{
+	cursor:pointer;
+	font-weight:500;
+	background:#48c858;
+	color:#fff;
+	width:120px;
+	height:35px;
+	line-height:35px;
+	border:none;
+	font-family:微软雅黑;
+	border-radius:5px;
+	font-size:16px;
+	outline:none;
+}
+button:active{
+	background:#35b345;
+}
+/* 监控频率 */
+.monitorRate ul{
+	font-size:16px;
+	margin-top:40px;
+}
+.monitorRate ul li{
+	margin-bottom:30px;
+}
+.monitorRate li select{
+	border:1px solid #ddd;
+	border-radius:5px;
+	width:80px;
+	height:30px;
+	margin:0 15px;
+	outline-color:#48c858
+}
+.monitorRate li button:first-child{
+	background:#fff;
+	color:black;
+	margin-right:16px;
+	border:1px solid #ccc
+}
+/* 提醒设置 */
+.remind ul {
+	line-height:50px;
+	font-size:16px;
+}
+.remind ul li {
+	float:left;
+
+}
+.remind ul li:last-child{
+	float:right ;
+	/* margin-right:30px; */
+}
+.remind li:last-child span{
+	padding:6px 20px 6px 40px;
+	border:1px solid #ddd;
+	border-radius:3px;
+	cursor:pointer;
+	background: url(../../static/images/add.png) no-repeat 12px center;
+}
+.set_notice,.del_notice{
+	cursor: pointer;
+}
+.ui-slide {
+	width: 300px;
+	margin-bottom:10px;
+	margin-left: 98px;
+	text-align: center;
+	position:relative;
+}
+.ui-slide label{
+	position:absolute;
+	left:-96px;
+	top:-4px;
+}
+.slider-track {
+	width: 80%;
+	height: 15px;
+	border-radius: 1em;
+	border: 1px solid #AAAAAA;
+	background: linear-gradient(to right, #fff, #D8FCD9);
+	position: relative;
+}
+
+.ui-slide .slider-thumb {
+	display: block;
+	width: 22px;
+	height: 22px;
+	border: 1px solid grey;
+	border-radius: 1em;
+	box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+	background: linear-gradient(#FAFAFA, #F6F6F6) repeat scroll 0 0 #FFFFFF;
+	position: absolute;
+	/*left: 0;*/
+	top: 50%;
+	margin: -12px 0 0 -12px;
+}
+
+.ui-slide input[type="text"] {
+	float: right;
+	margin-top: -0.5em;
+	margin-right:8px;
+	width: 3em;
+	text-align: center;
+}
+.ui-slide input[type="text"]:after{
+	display:block;
+	content:'';
+	width:0;
+	height:10px;
+	vertical:hidden;
+	clear:both;
+}
+/* 黑名单 */
+.blackList_add{
+	margin-bottom: 13px;
+}
+.blackList_add>span{
+	padding: 6px 20px 6px 40px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    cursor: pointer;
+    background: url(../../static/images/add.png) no-repeat 12px center;
+}
+.blackList_delete{
+	cursor: pointer;
+}
+.blackList_form li{
+	margin-bottom:10px;
+}
+.blackList_form li input{
+	width:290px;
+	height:40px;
+	border:1px solid #ddd;
+	border-radius:5px;
+	padding:0 8px;
+	margin-top:6px;
+	margin-left:15px;
+}
+.blackList_form .li_error{
+	color: #96120E;
+	margin-left: 15px;
+	margin-top: 10px;
+}
+/* 亲情号码 */
+.familyList_add{
+	margin-bottom: 13px;
+}
+.familyList_add>span{
+	padding: 6px 20px 6px 40px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    cursor: pointer;
+    background: url(../../static/images/add.png) no-repeat 12px center;
+}
+.familyList_delete{
+	cursor: pointer;
+}
+.familyList_form li{
+	margin-bottom:10px;
+}
+.familyList_form li input{
+	width:290px;
+	height:40px;
+	border:1px solid #ddd;
+	border-radius:5px;
+	padding:0 8px;
+	margin-top:6px;
+	margin-left:15px;
+}
+.familyList_form .li_error{
+	color: #96120E;
+	margin-left: 15px;
+	margin-top: 10px;
+}
+.addContact{
+		border: 1px solid #ddd; 
+		padding: 7px;
+		border-radius: 5px;
+	}
+
+
+.runMode{
+	margin-bottom: 20px;
+}
+/* 运行模式 */
+.remindSecond li input{
+	background:url(../plugins/My97DatePicker/skin/datePicker.gif) no-repeat right;
+	text-indent:10px;
+	width:80px;
+	height:28px;
+	border:1px solid #ddd;
+	border-radius: 5px;
+}
+.runMode ul{
+	margin-bottom: 20px;
+}
+.runMode >ul li{
+	position:relative;
+	height:60px;
+	margin-bottom: 15px;
+	border-bottom: 1px dashed #ddd;
+}
+.runMode ul li dl{
+	position: absolute;
+	top:0%;
+	left:5%;
+}
+.runMode .remindDate{
+	border:1px solid #ddd;
+	padding:10px 34px;
+}
+.runMode .remindDate .remindFirst{
+	overflow:hidden;
+	margin-top:10px;
+}
+.runMode .remindDate .remindFirst li{
+	float:left;
+	margin-right:20px;
+}
+.runMode li select{
+	border-radius:3px;
+	width:80px;
+	height:30px;
+	margin:0 15px;
+	outline-color:#48c858;
+	padding:0 5px;
+}	
+.runMode .remindSecond li{
+	margin-bottom:20px;
+}
+.runMode .remindDate{
+	display:none;
+}
+.runMode button{
+	margin-top:15px;
+	margin-left:34px;
+}
+.nav_none{
+	display:none;
+}
+
+
+/* HLseries */
+.bloodPressure .nav_tab{
+	width:214px;
+}
+.period{
+	width:320px;
+}
+.bloodPressure .nav_tab, .period{
+	height:30px;
+	line-height:30px;
+	border:1px solid #ddd;
+	margin:0 auto;
+	border-radius:5px;
+	overflow:hidden;
+}
+.nav_tab li,.period li{
+	cursor:pointer;
+	float:left;
+	width:106px;
+	text-align:center;
+	border-right:1px solid #ddd;
+}
+.nav_tab .border_none,.period .border_none{
+	border-right:none;
+}
+.current{background:#48c858;}
+.current a{color:#fff;}
+
+/*分页*/
+ *{ 
+	margin:0;
+	padding:0; 
+	list-style:none;
+	}
+a{ 
+	text-decoration:none;
+	}
+a:hover{
+	text-decoration:none;
+	}
+div[class$="PageCode"] {
+	padding: 15px 20px;
+	text-align: left;
+	color: #ccc;
+	text-align:center;
+	}
+div[class$="PageCode"] a{
+	display: inline-block;
+	color: #428bca;
+	display: inline-block;
+	height:25px;	
+	line-height: 25px;	
+	padding: 0 10px;
+	border: 1px solid #ddd;
+	margin: 0 2px;
+	border-radius: 4px;
+	vertical-align: middle;
+	}
+div[class$="PageCode"] a:hover{
+	text-decoration: none;
+	border: 1px solid #428bca;
+	}
+div[class$="PageCode"] span.current{
+	display: inline-block;
+	height: 25px;
+	line-height:25px;
+	padding: 0 10px;
+	margin: 0 2px;
+	color: #fff;
+	background-color: #428bca;	
+ 	border: 1px solid #428bca;
+ 	border-radius: 4px;
+ 	vertical-align: middle;
+ 	}
+div[class$="PageCode"] span.disabled{
+	display: inline-block;
+	height: 25px;
+	line-height: 25px;
+	padding: 0 10px;
+	margin: 0 2px;
+	color: #bfbfbf;
+	background: #f2f2f2;
+	border: 1px solid #bfbfbf;
+	border-radius: 4px;
+	vertical-align: middle
+	}
+	.detail{
+	margin:15px 0
+}
+.detail button{
+	border:none;
+	background:none;
+	cursor:pointer;
+	color:#000;
+	width:auto;
+	height:auto;
+	line-height:normal;
+	font-size:14px;
+	border-radius:3px;
+	font-family:"Microsoft YaHei";
+	margin-left:15px;
+	outline:none
+}
+.detail button:hover{
+	color:#48c858
+}

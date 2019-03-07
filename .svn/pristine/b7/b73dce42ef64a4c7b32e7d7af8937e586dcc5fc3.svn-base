@@ -1,0 +1,6 @@
+注(dengfeng)
+dto：数据传输对象，此项目中dto用于向app返回的数据对象，适用于app需要的数据字段远少于service返回的VO数据字段，为了节省流量，在Controller里转换成dto再传回，
+如果vo与dto字段差不多，则可直接把vo当dto使用。
+
+manager里放管理APP接口的返回数据类
+member里放应用APP接口的返回数据类

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lifeshs.dao1.smsRemind.SmsRemindDao">
+    <insert id="addSMSRemain" parameterType="com.lifeshs.pojo.member.UserSMSRemainDTO">
+        <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+        INSERT INTO t_user_sms_remain(userId, remainNumber, userType, createDate)
+        VALUES(#{userId}, #{remainNumber}, #{userType}, NOW())
+    </insert>
+
+    <update id="updateSMSRemain" parameterType="com.lifeshs.pojo.member.UserSMSRemainDTO">
+        UPDATE t_user_sms_remain SET remainNumber = #{remainNumber}, modifyDate = NOW() WHERE userId = #{userId} AND userType = #{userType} LIMIT 1
+    </update>
+
+    <select id="findSMSRemainByUserIdAndUserType" resultType="com.lifeshs.pojo.member.UserSMSRemainDTO">
+        SELECT <include refid="SMS_REMIND_ALL_COLUMN" /> FROM t_user_sms_remain WHERE userId = #{userId} AND userType = #{userType}
+    </select>
+
+    <sql id="SMS_REMIND_ALL_COLUMN">id, userId, remainNumber, userType</sql>
+</mapper>

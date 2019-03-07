@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html>
+	<!--step5:填写表单-->
+
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="initial-scale=1,maximum-scale=1, minimum-scale=1">
+		<title></title>
+		<link rel="stylesheet" href="/static/platform/v2.2.0/css/thirdpart/jztx/home_index.css" />
+		<link rel="stylesheet" href="/static/platform/v2.2.0/css/thirdpart/jztx/bootstrap.css" />
+		<script type="text/javascript" src="/static/platform/v2.2.0/js/thirdpart/jztx/jq.js"></script>
+		<script type="text/javascript" src="/static/platform/v2.2.0/js/thirdpart/jztx/vue.js"></script>
+		<!-- 引入样式 -->
+		<link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+		<!-- 引入组件库 -->
+		<script src="https://unpkg.com/element-ui/lib/index.js"></script>
+		<style>
+			.form-group {
+				width: 25%;
+				float: left;
+			}
+			
+			.form-group select {
+				width: 100%;
+			}
+		</style>
+		<script type="text/javascript" src="js/distpicker.data.js"></script>
+		<script type="text/javascript" src="js/distpicker.js"></script>
+		<script type="text/javascript" src="js/main.js"></script>
+		<script type="text/javascript" src="js/json.js"></script>
+	</head>
+
+	<body>
+		<div class="bg"></div>
+		<div style="position: fixed;width: 100%;z-index: 1000;top:1.5rem;">
+			<div id="block_alert" style="text-align: center;display: flex;justify-content: center;">
+				<el-alert v-if="show" title="手机号出错了" type="warning" center show-icon style="width: 20rem;"></el-alert>
+			</div>
+		</div>
+		<div id="block_form" style="height: 40rem;">
+			<!--表单背景-->
+			<div class="block_form_bg"></div>
+			<!--end 表单背景-->
+
+			<div class="block_img">
+				<img src="img/woman.png" style="width: 5rem;height: 5rem;" />
+			</div>
+
+			<!--提示-->
+			<div class="block_tip">
+				<label style="color: orange;"><b>step 5</b></label>
+				<div>{{title}}</div>
+				<div>请选择您需要的服务项目</div>
+			</div>
+			<!--end 提示-->
+			<!--选择框块-->
+			<div class="block_option" style="text-align: center;">
+				<span class="demonstration">你的称呼</span>
+				<el-input v-model="user.name" placeholder="请填写你的姓名" style="display: inline-block;width: 20rem;"></el-input>
+			</div>
+			<!--end 选择框块-->
+
+			<div class="block_option" style="text-align: center;">
+				<span class="demonstration">详细街道</span>
+				<el-input v-model="user.street" placeholder="请输入详细街道" style="display: inline-block;width: 20rem;"></el-input>
+			</div>
+
+			<!--选择框块-->
+			<div class="block_option" style="text-align: center;">
+				<span class="demonstration">手机号码</span>
+				<el-input @blur="blurPhone" v-model="user.phone" placeholder="请填写你的手机号码" style="display: inline-block;width: 20rem;"></el-input>
+			</div>
+			<!--end 选择框块-->
+
+			<!--地址框-->
+			<div class="block_option" style="text-align: center;overflow: hidden;height: 5rem;">
+				<div data-toggle="distpicker" style="height: 5rem;">
+					<div class="form-group" style="text-align:right;width: 20%;height: 3rem;line-height: 3rem;">地址</div>
+					<div class="form-group" style="display: inline-block;">
+						<label class="sr-only" for="province1">Province</label>
+						<select class="form-control" id="province1" @change="clickPro($event)"></select>
+					</div>
+					<div class="form-group" style="display: inline-block;">
+						<label class="sr-only" for="city1">City</label>
+						<select class="form-control" id="city1" @change="clickCity($event)"></select>
+					</div>
+					<div class="form-group" style="display: inline-block;">
+						<label class="sr-only" for="district1">District</label>
+						<select class="form-control" id="district1" @change="clickArea($event)"></select>
+					</div>
+					<div class="form-group" style="width: 10%;"></div>
+				</div>
+			</div>
+			<!--end 地址框-->
+			<!--验证码-->
+			<div class="block_option" style="clear:both;text-align: center;">
+				<span class="demonstration" style="width: 3.5rem;">验证码</span>
+				<el-input v-model="user.code" placeholder="请输入验证码" style="display: inline-block;width: 11.5rem;"></el-input>
+				<el-button type="primary" plain>发送</el-button>
+			</div>
+			<!--end 验证码-->
+		</div>
+
+		<!--按钮块-->
+		<div id="block_btn" class="block_btn">
+			<div>
+				<div @click="back($event)">上一步</div>
+			</div>
+			<div>
+				<div @click="forword($event)">完成</div>
+			</div>
+		</div>
+		<!--end 按钮块-->
+
+		<script>
+			var temp = sessionStorage.getItem('step1_temp');
+			var title = sessionStorage.getItem('title');
+			//字符串转数组
+			function toArrBoolean(str) {
+				//判空
+				str = str == null ? '' : str;
+				var arrBool = str.split(',');
+				return arrBool;
+			}
+
+			function splitAddressCode(data) {
+				var arr = [];
+				arr[0] = parseInt(data / 10000);
+				arr[1] = parseInt(data / 100 % 100);
+				arr[2] = parseInt(data % 100);
+				return arr;
+			}
+
+			//数据转换
+			function toJsonApi(step1_temp, step2_index, step3, step4, user, arrAddress) {
+				json.jobTypeID = step1_temp;
+				json.smalljob = step2_index;
+				//开始服务时间，时长。
+				if(step3 != null) {
+					json.workDate = step3.date;
+					json.workDate2 = step3.content;
+					console.log(step3);
+					switch(temp) {
+						case 1:
+							json.restWay = step3.restway;
+							json.restDay = step3.restday;
+							break;
+						case 2:
+							json.goWorkTimeStart = step3.starttime;
+							json.goWorkTimeEnd = step3.endtime;
+							break;
+						case 3:
+							json.goWorkTimeStart = step3.starttime;
+							break;
+						case 4:
+							json.isHome = step3.ishome;
+							json.ziLiSex = step3.babysex;
+							json.ziLi = step3.zili;
+							break;
+						case 5:
+							json.ziLiSex = step3.babysex;
+							json.babyAge = step3.babyage;
+							break;
+						case 6:
+							json.yuChanQi = step3.content;
+							break;
+					}
+
+				}
+				json.readMe = step4;
+				json.fullName = user.name;
+				json.tel = user.phone;
+				json.street = user.street;
+
+				json.areap = arrAddress[0];
+				json.areac = arrAddress[1];
+				json.aread = arrAddress[2];
+
+				return json;
+			}
+		</script>
+
+		<script>
+			var vue = new Vue({
+				el: '#block_form',
+				data: {
+					pro: '',
+					city: '',
+					area: '',
+					address: '',
+					title,
+					//默认北京市
+					user: {
+						name: '',
+						phone: '',
+						street: '',
+						code: '',
+						addresscode: '110101'
+					}
+
+				},
+				methods: {
+					blurPhone: function(event) {
+						var myreg = /^[1][3,4,5,7,8][0-9]{9}$/;
+						if(!myreg.test(this.user.phone)) {
+							block_alert.show = true;
+						} else {
+							block_alert.show = false;
+						}
+					},
+					clickPro: function(e) {
+						this.pro = e.target.value;
+						this.address = this.pro + this.city + this.area;
+						this.user.addresscode = e.srcElement.options[e.srcElement.selectedIndex].dataset.code;
+					},
+					clickCity: function(e) {
+						this.city = e.target.value;
+						this.address = this.pro + this.city + this.area;
+						this.user.addresscode = e.srcElement.options[e.srcElement.selectedIndex].dataset.code;
+					},
+					clickArea: function(e) {
+						this.area = e.target.value;
+						this.address = this.pro + this.city + this.area;
+						this.user.addresscode = e.srcElement.options[e.srcElement.selectedIndex].dataset.code;
+					}
+				}
+			});
+
+			var block_alert = new Vue({
+				el: '#block_alert',
+				data: {
+					show: false
+				}
+			});
+
+			var block_btn = new Vue({
+				el: '#block_btn',
+				methods: {
+					back: function(event) {
+						window.location = 'textarea.html';
+					},
+					forword: function(event) {
+						console.log(vue.user.name);
+						sessionStorage.setItem('step5', JSON.stringify(vue.user));
+						window.location = '#';
+						//获取前5步信息
+						//step1:数组下标及temp类型
+						var step1_temp = sessionStorage.getItem('step1_temp');
+						//step2:点击数组状态
+						var step2_index = sessionStorage.getItem('step2_index');
+						//step3:时间对象
+						var step3 = sessionStorage.getItem('step3');
+						//step4:内容
+						var step4 = sessionStorage.getItem('step4');
+						//step5:表单对象
+						var step5 = sessionStorage.getItem('step5');
+						
+						//待提交的json数据团---------
+						var objJson = toJsonApi(step1_temp, step2_index, JSON.parse(step3), step4, JSON.parse(step5), splitAddressCode(vue.user.addresscode));
+						//待做:ajax请求json
+						axios.post('https://api.coindesk.com/v1/bpi/currentprice.json', {
+							objJson:objJson
+						}).then(response => {
+							
+						}).catch(error => {
+							console.log(error)
+						});
+					}
+				}
+			});
+		</script>
+	</body>
+
+</html>

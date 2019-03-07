@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lifeshs.dao1.smsRecord.SmsRecordDao">
+
+    <insert id="addSmsRecord" parameterType="com.lifeshs.po.SmsRecordPO">
+        <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+        INSERT INTO t_sms(sendType, sendId, content, receiveMobile, status, ip, createDate)
+        VALUES(#{sendType}, #{sendId}, #{content}, #{receiveMobile}, #{status}, #{ip}, NOW())
+    </insert>
+
+    <insert id="addSmsRecordList">
+        INSERT INTO t_sms(sendType, sendId, content, receiveMobile, status, ip, createDate)
+        VALUES
+            <foreach collection="recordList" item="r" separator=",">
+                (#{r.sendType}, #{r.sendId}, #{r.content}, #{r.receiveMobile}, #{r.status}, #{r.ip}, NOW())
+            </foreach>
+    </insert>
+    
+    <select id="getSmsRecordTotalRecord" resultType="int">
+        SELECT COUNT(*) FROM t_sms s INNER JOIN t_user u ON s.sendId = u.id
+        <where>
+            <if test="userName != null">u.userName LIKE CONCAT(#{userName}, '%')</if>
+            <if test="receiveMobile != null">AND s.receiveMobile LIKE CONCAT(#{receiveMobile}, '%')</if>
+        </where>
+    </select>
+    
+    <select id="findSmsRecordList" resultType="com.lifeshs.vo.sms.SmsRecordVO">
+        SELECT s.id AS id, s.sendType AS sendType, s.sendId AS sendId, s.content AS content,
+        s.receiveMobile AS receiveMobile, s.status AS status, s.ip AS ip, s.createDate AS createDate, u.userName AS userName
+        FROM t_sms s INNER JOIN t_user u ON s.sendId = u.id
+        <where>
+            <if test="userName != null">u.userName LIKE CONCAT(#{userName}, '%')</if>
+            <if test="receiveMobile != null">AND s.receiveMobile LIKE CONCAT(#{receiveMobile}, '%')</if>
+        </where>
+        ORDER BY s.createDate DESC
+        LIMIT #{startRow},#{pageSize}
+    </select>
+
+</mapper>

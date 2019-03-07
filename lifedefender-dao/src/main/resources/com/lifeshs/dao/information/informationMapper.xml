@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lifeshs.dao.information.IInformationDao">
+    <!--获取资讯分类-->
+    <select id="loadColumnsByParentName" parameterType="String" resultType="com.lifeshs.entity.consult.TInfomationColumn">
+      select c.* from t_information_column p,t_information_column c where p.name=#{value} AND c.parentId=p.id;
+    </select>
+
+    <select id="findColumnByParentId" resultType="com.lifeshs.entity.consult.TInfomationColumn">
+      select * from t_information_column where parentId = #{parentColumnId};
+    </select>
+
+    <sql id="ZiXun">
+        <where>
+            <foreach collection="condition.keys" item="key" index="index" separator="and">
+                <choose>
+                    <when test="key=='title'">
+                        title like CONCAT('%', #{condition[${key}]},'%')
+                    </when>
+                    <when test="key=='mutiColumn'">
+                        <foreach collection="condition[key]" item="ht" index="ubdex"
+                                 separator="," open=" columnId IN (" close=")">
+                            ${ht}
+                        </foreach>
+                    </when>
+                    <otherwise>
+                        ${key} = #{condition[${key}]}
+                    </otherwise>
+                </choose>
+            </foreach>
+        </where>
+    </sql>
+
+    <resultMap type="com.lifeshs.entity.consult.TInformation" id="TInformation">
+        <id property="id" column="id"/>
+        <result property="columnId" column="columnId"/>
+        <association property="c" column="columnId" javaType="com.lifeshs.entity.consult.TInfomationColumn" select="selectTInfomationColumnById"/>
+    </resultMap>
+
+    <!--资讯列表-->
+    <select id="loadInformationList" resultMap="TInformation">
+        SELECT id, substring_index(image,',',1) image,title,source,createDate,substr(content,1,1000) content, columnId from t_information
+        <include refid="ZiXun"></include>
+        ORDER BY createDate desc
+        limit #{startPage},#{maxLimit}
+    </select>
+
+    <!--资讯列表数量-->
+    <select id="getCountFromInformation" resultType="java.lang.Integer">
+        select COUNT(1) from t_information
+        <include refid="ZiXun"></include>
+    </select>
+
+    <select id="selectTInfomationColumnById" resultType="com.lifeshs.entity.consult.TInfomationColumn">
+		select * FROM t_information_column WHERE id = #{id}
+	</select>
+
+    <!-- 查询热门的资讯 -->
+    <select id="findHotInformation" parameterType="int" resultType="com.lifeshs.entity.consult.TInformation">
+        select id, substring_index(image,',',1) image,title,source,createDate,substr(content,1,1000) content, columnId from t_information where id in(select t.information_id from (select COUNT(*) look_count,information_id FROM t_information_look GROUP BY information_id ORDER BY look_count desc LIMIT #{value})as t )
+    </select>
+
+
+    <!-- 删除浏览对应资讯的ip -->
+    <delete id="deleteExistNewsVisitor" >
+        delete from t_information_look WHERE information_id=#{newsId} AND
+        <foreach collection="ipList" item="ht" index="ubdex"
+                 separator="," open=" ip in (" close=")">
+            #{ht}
+        </foreach>
+    </delete>
+
+    <select id="listInformationName" resultType="com.lifeshs.entity.consult.TInformation">
+        SELECT
+          id, title, columnId
+        FROM
+          t_information
+        WHERE
+          columnId in
+        <foreach item="item" index="index" collection="columnIds" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </select>
+
+    <!--添加资讯收藏信息-->
+    <insert id = "addInformationCollect" parameterType="com.lifeshs.pojo.information.InformationCollectDTO">
+        INSERT INTO
+          t_information_collect (userId, informationId, createDate)
+        VALUES
+          (#{userId}, #{informationId}, NOW())
+    </insert>
+
+    <!--删除资讯收藏信息（支持批量删除）-->
+    <delete id="deleteInformationCollect">
+        DELETE from
+          t_information_collect
+        WHERE
+          userId = #{userId}
+        AND
+          informationId IN
+        <foreach item="item" index="index" collection="ids" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </delete>
+
+    <!--根据具体条件获取收藏列表-->
+    <select id = "listInformationCollects" resultType="com.lifeshs.pojo.information.InformationCollectDTO">
+        SELECT
+          *
+        FROM
+          t_information_collect
+        <where>
+            <if test="userId != null">userId = #{userId}</if>
+        </where>
+    </select>
+
+    <!--根据用户收藏列表获取资讯信息-->
+    <select id = "listInformationByCollect" resultType="com.lifeshs.pojo.information.InformationDTO">
+        SELECT
+          i.id as informationId, i.source,i.image,i.title
+        FROM
+          t_information_collect c, t_information i
+        WHERE
+          c.informationId = i.id
+        AND
+          c.userId = #{userId}
+        ORDER BY
+          c.createDate
+        limit #{pageIndex}, #{pageSize}
+    </select>
+
+    <!--判断资讯是否已被用户收藏-->
+    <select id="isCollectedOfInformation" resultType="java.lang.Integer">
+        SELECT COUNT(1)
+        FROM
+          t_information i , t_information_collect c
+        WHERE
+          c.informationId = i.id
+        AND
+          userId = #{userId}
+        AND
+          i.id = #{informationId}
+    </select>
+
+</mapper>

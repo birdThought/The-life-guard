@@ -1,0 +1,247 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lifeshs.dao1.org.OrgDao" >
+
+    <!-- 获取机构对象 -->
+    <select id="getOrg" resultType="com.lifeshs.po.OrgPO">
+        SELECT * FROM t_org WHERE id = #{id}
+    </select>
+
+    <!--获取门店信息-->
+    <select id = "getOrgInfo" resultType="com.lifeshs.pojo.org.profile.OrgProfileDTO">
+        SELECT
+        o.id, o.logo, o.orgName, o.legalPerson, o.contacts, o.contactInformation, o.orgType, o.about, o.province as provinceCode,
+        o.city as cityCode, o.district as districtCode, o.street, o.longitude, o.latitude, o.detail
+        FROM
+        t_org o WHERE o.id = #{orgId}
+    </select>
+
+    <!--更新门店信息-->
+    <update id="updateOrgInfo" parameterType="com.lifeshs.pojo.org.profile.OrgProfileDTO">
+        <selectKey keyProperty="id" resultType="java.lang.Integer">
+            SELECT @@IDENTITY AS id
+        </selectKey>
+        UPDATE
+        t_org o
+        SET
+
+        <if test="logo != null">
+            o.logo = #{logo},
+        </if>
+        <if test="contacts != null">
+            o.contacts = #{contacts},
+        </if>
+        <if test="contactInformation != null">
+            o.contactInformation = #{contactInformation},
+        </if>
+        <if test="about != null">
+            o.about = #{about},
+        </if>
+        <if test="detail != null">
+            o.detail = #{detail},
+        </if>
+        o.modifyDate = NOW()
+        WHERE
+        o.id = #{id}
+    </update>
+ 
+    <update id="updateOrgBankInfo" parameterType="com.lifeshs.pojo.org.bank.BankInfoDTO">
+        UPDATE t_org SET modifyDate = NOW()
+        <if test="bankAccount != null">, bankAccount = #{bankAccount}</if>
+        <if test="bankDistrict != null">, bankDistrict = #{bankDistrict}</if>
+        <if test="bankBranch != null">, bankBranch = #{bankBranch}</if>
+        WHERE id = #{orgId}
+    </update>
+ 
+    <select id="findRecomandedStoreList" resultType="com.lifeshs.po.OrgPO">
+        SELECT * FROM t_org o
+        WHERE o.isRecommend = 1 AND o.orgVerified = 1 AND o.`status` = 0 AND o.type = 1
+        ORDER BY id DESC
+        <if test="limit != null">
+            LIMIT #{limit}
+        </if>
+    </select>
+
+    <select id="findStoreList" resultType="com.lifeshs.po.OrgPO">
+        SELECT
+            o.*
+        FROM
+            t_org o
+        <!-- 避免门店尚未开通项目 -->
+        INNER JOIN t_project p ON p.orgId = o.id AND p.`status` = 2
+        WHERE
+            o.orgVerified = 1
+        AND o.`status` = 0
+        AND o.isPublic = 0
+        AND o.type IN (1, 2)
+        GROUP BY
+            o.id
+        ORDER BY
+            o.id DESC
+        <if test="limit != null">
+            LIMIT #{limit}
+        </if>
+    </select>
+
+    <select id="findStoreByParentIdList" resultType="com.lifeshs.po.OrgPO">
+        SELECT * FROM t_org WHERE parent = #{parentId}
+    </select>
+
+    <select id="findStoreListByName" resultType="com.lifeshs.po.OrgPO">
+        SELECT * FROM t_org
+        WHERE
+            `status` = 0 AND orgVerified = 1 AND type IN (1, 2)
+        <if test="name != null">
+            AND orgName LIKE CONCAT(#{name}, '%')
+        </if>
+    </select>
+
+    <sql id="Base_Column_List">
+        id, orgName, orgCode, logo, orgVerified, verifiedCause, tel, orgType, contacts, contactInformation,
+        businessLicense, accountType, account, status, type, parent, province, city, district,
+        street, longitude, latitude, about, createDate, modifyDate, isRecommend, businessLicenseNumber,
+        businessLicenseTwo, workField, bankName, bankAccount, bankDistrict, bankBranch, legalPerson,
+        legalPersonGender, legalPersonIdCard, legalPersonPicOne, legalPersonPicTwo
+    </sql>
+    <sql id="Blob_Column_List">
+        detail
+    </sql>
+    <select id="findByListData" resultType="com.lifeshs.po.OrgPO">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM t_org WHERE 1=1
+        <if test="userNo!=null">
+            AND parentId=#{userNo}
+        </if>
+        <if test="orgName!=null">
+            AND orgName LIKE CONCAT('%',#{orgName},'%' ) 
+        </if>
+
+        <if test="province!=null">
+            and province = #{province}
+            <if test="city!=null">
+                and city = #{city}
+                <if test="district!=null">
+                    and district = #{district}
+                </if>
+            </if>
+        </if>
+        limit #{curPage},#{pageSize}
+
+
+    </select>
+
+    <select id="getListCount" parameterType="int" resultType="java.lang.Integer">
+        SELECT count(1)
+        FROM t_org WHERE 1 = 1
+        <if test="userNo!=null">
+            AND parentId = #{userNo}
+        </if>
+        <if test="orgName!=null">
+            AND orgName LIKE CONCAT('%',#{orgName},'%' ) 
+        </if>
+
+        <if test="province!=null">
+            and province = #{province}
+            <if test="city!=null">
+                and city = #{city}
+                <if test="district!=null">
+                    and district = #{district}
+                </if>
+            </if>
+        </if>
+    </select>
+
+    <select id="selectByPrimaryKey" resultType="com.lifeshs.po.OrgPO">
+        select
+        <include refid="Base_Column_List"/>
+        ,
+        <include refid="Blob_Column_List"/>
+        from t_org
+        where id = #{id}
+    </select>
+
+    <update id="updateOrgBoolean">
+         update
+        t_org
+         set
+        isRecommend=#{isRecommend}
+         where
+        id=#{id}
+    </update>
+    <update id="findByStatus">
+         update
+        t_org
+         set
+        status=#{status}
+         where
+        id=#{id}
+    </update>
+
+    <select id="getOrgListByOption" resultType="com.lifeshs.po.OrgPO">
+        select
+        <include refid="Base_Column_List"/>
+        FROM t_org 
+        where 1=1 
+        <if test="param != null">
+            and orgVerified = #{param}
+        </if>
+        <if test="param == null">
+            and orgVerified in (0,2)
+        </if>
+        and parentId=#{userNo} 
+        limit #{curPage},#{pageSize}
+    </select>
+
+    <select id="getOrgCountByOption" resultType="java.lang.Integer">
+        select
+        COUNT(1)
+        FROM t_org 
+        WHERE 1=1 
+        <if test="param != null">
+             and orgVerified = #{param}
+        </if>
+        <if test="param == null">
+             and orgVerified in (0,2)
+        </if>
+        and parentId=#{userNo} 
+    </select>
+
+    <update id="updateOrgId">
+        update
+        t_org
+    set
+        <if test="reason != null">
+            verifiedCause = #{reason},
+        </if>
+        orgVerified = #{orgVerified}
+    where
+        id = #{id}
+    </update>
+    <update id="updateOrgDelId">
+        update
+        t_org
+    set
+        orgVerified = #{orgVerified}
+    where
+        id = #{id}
+    </update>
+
+    <select id="getOrgRcm" parameterType="int" resultType="java.lang.Integer">
+       select count(*) from t_org o where o.isRecommend= 1 and o.parentId =#{userNo}
+    </select>
+
+    <select id="getOrgRcmDataList" resultType="com.lifeshs.vo.member.OrgRcmVo">
+    select
+       *
+    from
+        t_org o
+    where
+        o.isRecommend= 1 
+        and o.parentId =#{userNo}
+    group by
+        o.id
+   limit #{curPage},#{pageSize}
+    </select>
+
+</mapper>

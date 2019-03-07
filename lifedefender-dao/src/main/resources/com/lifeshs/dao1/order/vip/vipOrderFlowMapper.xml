@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lifeshs.dao1.order.vip.VipOrderFlowDao" >
+    <select id="findOrderFlowByOrderNumber" resultType="com.lifeshs.po.order.VipOrderFlowPO">
+        SELECT id, orderNumber, payType, cost, payCost, tradeNo, payAccount, sellerAccount, businessIncome, createDate, modifyDate
+        FROM t_order_vip_flow WHERE orderNumber = #{orderNumber}
+    </select>
+
+    <insert id="addOrderFlow" parameterType="com.lifeshs.po.order.VipOrderFlowPO">
+        <selectKey resultType="java.lang.Integer" order="AFTER" keyProperty="id">
+            SELECT LAST_INSERT_ID() AS ID
+        </selectKey>
+        INSERT INTO t_order_vip_flow(orderNumber, payType, cost, payCost, tradeNo, payAccount, sellerAccount, businessIncome,
+        sysIncome,agentIncome,serviceOrgIncome,introduceOrgIncome,salesmanIncome, 
+        sysProfitShare,agentProfitShare,salesmanProfitShare,introduceOrgProfitShare,serviceOrgProfitShare,
+        createDate)
+        VALUES(#{orderNumber}, #{payType}, #{cost}, #{payCost}, #{tradeNo}, #{payAccount}, #{sellerAccount}, #{businessIncome},
+        #{sysIncome},#{agentIncome},#{serviceOrgIncome},#{introduceOrgIncome},#{salesmanIncome}, 
+        #{sysProfitShare},#{agentProfitShare},#{salesmanProfitShare},#{introduceOrgProfitShare},#{serviceOrgProfitShare}, 
+        NOW())
+    </insert>
+</mapper>

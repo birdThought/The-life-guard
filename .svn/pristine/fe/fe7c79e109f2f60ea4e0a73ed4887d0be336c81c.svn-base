@@ -1,0 +1,236 @@
+@charset "utf-8";
+
+*:before, *:after, * {
+    box-sizing: border-box;
+    -moz-box-sizing: border-box; /* Firefox */
+    -webkit-box-sizing: border-box; /* Safari */
+}
+
+.container {
+    width: 918px;
+    min-height: 840px;
+    border: 1px solid #ddd;
+    margin: 20px 40px;
+}
+
+.healthCon {
+    margin: 20px;
+    border: 1px solid #ddd;
+    overflow: auto;
+    zoom: 1;
+}
+
+.healthCon li {
+    float: left;
+}
+
+.healthCon li:nth-of-type(1) {
+    padding: 20px;
+    width: 15%;
+}
+
+.healthCon li:nth-of-type(1) img {
+    width: 80px;
+    height: 80px;
+}
+
+.healthCon li:nth-of-type(2) {
+    padding: 20px 0;
+    width: 60%;
+}
+
+.healthCon li:nth-of-type(2) span {
+    font-size: 16px;
+    font-weight: 600;
+    paddong-bottom: 8px;
+}
+
+.healthCon li:nth-of-type(3) div {
+    padding: 20px 40px;
+    text-align: center;
+    line-height: 28px;
+    font-size: 16px;
+}
+
+.healthCon li:nth-of-type(3) p {
+    font-weight: 600;
+}
+
+.servicePrice, .service-team, .serviceGroup {
+    border: 1px solid #ddd;
+    margin: 0 20px 20px;
+    padding: 4px 20px 30px;
+}
+
+.servicePrice h3, .service-team h3, .serviceGroup h3 {
+    font-size: 16px;
+    line-height: 40px;
+}
+
+.servicePrice .priceBtn li {
+    display: inline-block;
+    border: 1px solid #ddd;
+    width: 108px;
+    height: 36px;
+    line-height: 36px;
+    text-align: center;
+    margin-right: 10px;
+    cursor: pointer;
+}
+
+.servicePrice .priceBtn li.choose-action {
+    border: 1px solid #f50;
+    position: relative;
+}
+
+.servicePrice .priceBtn li.choose-action:after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    width: 24px;
+    height: 24px;
+    background: url('../../static/images/choose.png');
+}
+
+.serviceGroup>ul.groupBtn>li {
+    display: inline-block;
+    border: 1px solid #ddd;
+    width: 153px;
+    height: 36px;
+    line-height: 36px;
+    text-align: center;
+    margin-right: 5px;
+    margin-left: 5px;
+    cursor: pointer;
+}
+
+.serviceGroup>ul.groupBtn>li.choose-action {
+    border: 1px solid #f50;
+    position: relative;
+}
+
+.serviceGroup>ul.groupBtn>li.choose-action:after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    width: 24px;
+    height: 24px;
+    background: url('../../static/images/choose.png');
+}
+
+.countBtn:after {
+    content: " ";
+    display: block;
+    height: 0;
+    visibility: hidden;
+    clear: both;
+}
+
+.countBtn div {
+    float: left;
+}
+
+.countBtn div a {
+    float: left;
+    width: 34px;
+    height: 24px;
+    border: 1px solid #ddd;
+    background-color: #f0f0f0;
+    text-align: center;
+}
+
+.countBtn div input {
+    float: left;
+    height: 24px;
+    width: 50px;
+    outline-color: #ddd;
+    text-align: center;
+}
+
+.countBtn button {
+    float: right;
+    background-color: #ffe4d0;
+    width: 140px;
+    height: 40px;
+    border: 1px solid #fbcb11;
+    color: #ff4502;
+    font-size: 18px;
+    font-weight: 500;
+    letter-spacing: 2px;
+    margin-right: 20px;
+    outline: none;
+    cursor: pointer;
+    font-family: "Microsoft YaHei";
+}
+
+.countBtn button:active {
+    background-color: #ffdfab;
+}
+
+.serviceDoctor {
+    overflow: auto;
+    zoom: 1;
+    padding: 20px 0;
+    border: 1px solid #ddd;
+    margin-bottom: 20px;
+}
+
+.serviceDoctor li {
+    float: left;
+}
+
+.serviceDoctor li:nth-of-type(1) {
+    padding-left: 20px;
+    width: 16%;
+}
+
+.serviceDoctor li:nth-of-type(1) img {
+    -webkit-border-radius: 50%;
+    -moz-border-radius: 50%;
+    border-radius: 50%;
+    width: 100px;
+    height: 100px;
+}
+
+.serviceDoctor li:nth-of-type(2) p {
+    font-size: 18px;
+    margin-bottom: 12px;
+}
+
+.serviceDoctor li:nth-of-type(2) span {
+    margin-right: 10px;
+}
+
+.serviceDoctor li:nth-of-type(2) .doctor-bg {
+    background: #ffeed1;
+    padding: 6px 16px;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    border-radius: 5px;
+    color: #fb8f1c;
+}
+
+.serviceDoctor li:nth-of-type(2) dl {
+    margin-top: 12px;
+}
+
+dl a {
+    color: #48c858;
+    margin-left: 10px;
+}
+
+.serviceDoctor li:nth-of-type(2) {
+    width: 58%;
+    margin-right: 20px;
+}
+
+.serviceDoctor li:nth-of-type(3) {
+    padding-top: 30px;
+}
+
+.serviceDoctor li:nth-of-type(3)>div {
+    border-left: 1px solid #e6e6e6;
+    padding-left: 20px;
+}
